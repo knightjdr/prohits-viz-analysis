@@ -13,19 +13,25 @@ import (
 
 func main() {
 	// command line flag arguments
+	baitArg := flag.String("bait", "", "Bait column")
+	controlArg := flag.String("control", "", "Control column")
 	filesArg := flag.String("file", "", "Input files as comma-separated list")
-	headerArg := flag.String("header", "", "Header columns to use as comma-separated list")
 	logFile := flag.String("log", "", "Log file")
+	preyArg := flag.String("prey", "", "Prey column")
 	flag.Parse()
 
-	// exit if no file or header columns specified
+	// exit if required args are missing
 	argsError := false
 	if *filesArg == "" {
 		logmessage.Write(*logFile, "No input file specified")
 		argsError = true
 	}
-	if *headerArg == "" {
-		logmessage.Write(*logFile, "No headers specified")
+	if *baitArg == "" {
+		logmessage.Write(*logFile, "No bait column")
+		argsError = true
+	}
+	if *preyArg == "" {
+		logmessage.Write(*logFile, "No prey column")
 		argsError = true
 	}
 	if argsError == true {
@@ -35,11 +41,14 @@ func main() {
 	// split filesArg to array of files
 	files := strings.Split(*filesArg, ",")
 
-	// split headerArg to array of column names
-	columns := strings.Split(*headerArg, ",")
+	// creating mapping of column names to keys
+	columnMap := map[string]string{
+		"bait":    *baitArg,
+		"control": *controlArg,
+		"prey":    *preyArg,
+	}
 
 	// read files and write columns to new file
-	columnparser.Readfile(files, columns, *logFile)
+	columnparser.Readfile(files, columnMap, *logFile)
 	fmt.Println("file:", files)
-	fmt.Println("columns:", columns)
 }

@@ -4,7 +4,11 @@ package logmessage
 import (
 	"log"
 	"os"
+
+	"github.com/spf13/afero"
 )
+
+var appFs = afero.NewOsFs()
 
 func Write(file string, message string) {
 	// exit and print to console if no log file specified
@@ -14,7 +18,7 @@ func Write(file string, message string) {
 	}
 
 	// open log file
-	f, err := os.OpenFile(file, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	f, err := appFs.OpenFile(file, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatalf("error opening log file: %v", err)
 	}

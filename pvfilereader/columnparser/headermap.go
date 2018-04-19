@@ -3,24 +3,28 @@ package columnparser
 import "errors"
 
 // creates a map of specified headers to column numbers
-func Headermap(columns []string, header []string) (map[string]int, error) {
+func Headermap(columnMap map[string]string, header []string) (map[string]int, error) {
 	columnsFound := 0 // tracks header columns found
-	columnLen := len(columns)
 	headerLen := len(header)
 	headerMap := make(map[string]int) // return map
 	// map columns to header
-	for i := 0; i < columnLen; i++ {
-		for j := 0; j < headerLen; j++ {
-			if columns[i] == header[j] {
-				columnsFound++
-				headerMap[columns[i]] = j
-				continue
+	for k, v := range columnMap {
+		if v != "" { // ignore empty map values
+			for i := 0; i < headerLen; i++ {
+				if v == header[i] {
+					columnsFound++
+					headerMap[k] = i
+					continue
+				}
 			}
+		} else {
+			columnsFound++ // empty map values get treated as found
 		}
 	}
+
 	// check if any specified columns were not found
 	var err error
-	if columnsFound != columnLen {
+	if columnsFound != len(columnMap) {
 		err = errors.New("Missing header column")
 	}
 	return headerMap, err
