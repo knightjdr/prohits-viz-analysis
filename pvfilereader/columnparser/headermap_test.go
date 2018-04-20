@@ -14,11 +14,11 @@ func TestHeadermap(t *testing.T) {
 		"key2": "column3",
 	}
 	header := []string{"column1", "column2", "column3"}
+	headerMap, err := Headermap(columnMap, header)
 	var want = map[string]int{
 		"key1": 0,
 		"key2": 2,
 	}
-	headerMap, err := Headermap(columnMap, header)
 	assert.Nil(t, err, "expected no error, got %s", err)
 	assert.True(
 		t,

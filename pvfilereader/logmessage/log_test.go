@@ -9,23 +9,24 @@ import (
 	"testing"
 
 	"github.com/bouk/monkey"
+	"github.com/knightjdr/prohits-viz-analysis/pvfilereader/fs"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFiletype(t *testing.T) {
 	// mock fs
-	oldFs := appFs
-	defer func() { appFs = oldFs }()
-	appFs = afero.NewMemMapFs()
+	oldFs := fs.Instance
+	defer func() { fs.Instance = oldFs }()
+	fs.Instance = afero.NewMemMapFs()
 
 	// create test directory and files
-	appFs.MkdirAll("test", 0755)
-	afero.WriteFile(appFs, "test/logfile.txt", []byte(""), 0644)
+	fs.Instance.MkdirAll("test", 0755)
+	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644)
 
 	// TEST1: message logged to file
 	Write("test/logfile.txt", "test message")
-	logfile, _ := afero.ReadFile(appFs, "test/logfile.txt")
+	logfile, _ := afero.ReadFile(fs.Instance, "test/logfile.txt")
 	want := "test message"
 	matched, _ := regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "message not being logged")
@@ -53,12 +54,12 @@ func TestFiletype(t *testing.T) {
 	defer fatalPatch.Unpatch()
 
 	// mock OpenFile
-	file, _ := appFs.Open("test/logfile.txt")
+	file, _ := fs.Instance.Open("test/logfile.txt")
 	fakeOpenFile := func(*afero.MemMapFs, string, int, os.FileMode) (afero.File, error) {
 		return file, errors.New("Test open error")
 	}
-	monkey.PatchInstanceMethod(reflect.TypeOf(appFs), "OpenFile", fakeOpenFile)
-	defer monkey.UnpatchInstanceMethod(reflect.TypeOf(appFs), "OpenFile")
+	monkey.PatchInstanceMethod(reflect.TypeOf(fs.Instance), "OpenFile", fakeOpenFile)
+	defer monkey.UnpatchInstanceMethod(reflect.TypeOf(fs.Instance), "OpenFile")
 
 	// exit if file can't be opened
 	assert.PanicsWithValue(

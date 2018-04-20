@@ -3,28 +3,19 @@ package columnparser
 import (
 	"encoding/csv"
 	"fmt"
-	"os"
 
+	"github.com/knightjdr/prohits-viz-analysis/pvfilereader/fs"
 	"github.com/knightjdr/prohits-viz-analysis/pvfilereader/logmessage"
 )
 
-// accepted input file types
+// accepted input file types with delimiter
 var acceptedTypes = map[string]rune{
 	"text/csv":                  ',',
 	"text/plain":                '\t',
 	"text/tab-separated-values": '\t',
 }
 
-type Columns struct {
-	abundance  string
-	bait       string
-	control    string
-	prey       string
-	preyLength int
-	score      float64
-}
-
-// reads specified header columns from csv formatted files to struct
+// reads specified header columns from csv formatted files to array
 func Parsecsv(
 	files []string,
 	filetype []string,
@@ -32,28 +23,32 @@ func Parsecsv(
 	logFile string,
 ) []map[string]string {
 	data := make([]map[string]string, 0) // return array map
-	fileno := len(files)
-	for i := 0; i < fileno; i++ {
+	for i, filename := range files {
 		// only parse a file if it's an accepted type
 		if delimiter, ok := acceptedTypes[filetype[i]]; ok {
-			file, err := os.Open(files[i])
+			file, err := fs.Instance.Open(filename)
 			if err != nil {
 				// skip if file can't be opened
-				logmessage.Write(logFile, fmt.Sprintf("%s: could not be opened", files[i]))
+				logmessage.Write(logFile, fmt.Sprintf("%s: could not be opened", filename))
 				continue
 			}
 
 			// read file
 			reader := csv.NewReader(file)
 			reader.Comma = delimiter // set delimiter
-			lines, _ := reader.ReadAll()
+			lines, err := reader.ReadAll()
+			if err != nil {
+				// skip if file can't be read
+				logmessage.Write(logFile, fmt.Sprintf("%s: could not be read", filename))
+				continue
+			}
 			file.Close()
 
 			// get header map
 			headerMap, err := Headermap(columnMap, lines[0])
 			if err != nil {
 				// skip if columns missing from file
-				logmessage.Write(logFile, fmt.Sprintf("%s: missing header columns", files[i]))
+				logmessage.Write(logFile, fmt.Sprintf("%s: missing header columns", filename))
 				continue
 			}
 

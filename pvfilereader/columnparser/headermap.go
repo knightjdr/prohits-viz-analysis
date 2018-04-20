@@ -4,16 +4,15 @@ import "errors"
 
 // creates a map of specified headers to column numbers
 func Headermap(columnMap map[string]string, header []string) (map[string]int, error) {
-	columnsFound := 0 // tracks header columns found
-	headerLen := len(header)
+	columnsFound := 0                 // tracks header columns found
 	headerMap := make(map[string]int) // return map
 	// map columns to header
-	for k, v := range columnMap {
-		if v != "" { // ignore empty map values
-			for i := 0; i < headerLen; i++ {
-				if v == header[i] {
+	for i, definedName := range columnMap {
+		if definedName != "" { // ignore empty map values
+			for j, columnName := range header {
+				if definedName == columnName {
 					columnsFound++
-					headerMap[k] = i
+					headerMap[i] = j
 					continue
 				}
 			}

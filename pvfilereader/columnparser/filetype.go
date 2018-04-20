@@ -5,16 +5,14 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/knightjdr/prohits-viz-analysis/pvfilereader/fs"
 	"github.com/knightjdr/prohits-viz-analysis/pvfilereader/logmessage"
-	"github.com/spf13/afero"
 )
-
-var appFs = afero.NewOsFs()
 
 // returns the mime type of a file
 func Filetype(filename string, logFile string) (string, error) {
 	// open file
-	file, err := appFs.Open(filename)
+	file, err := fs.Instance.Open(filename)
 	if err != nil {
 		// return unknown if file cannot be opened
 		logmessage.Write(logFile, fmt.Sprintf("%s: could not be opened", filename))
