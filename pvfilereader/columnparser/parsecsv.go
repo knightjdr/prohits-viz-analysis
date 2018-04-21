@@ -8,14 +8,14 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pvfilereader/logmessage"
 )
 
-// accepted input file types with delimiter
+// acceptedTypes contains input file types with delimiter
 var acceptedTypes = map[string]rune{
 	"text/csv":                  ',',
 	"text/plain":                '\t',
 	"text/tab-separated-values": '\t',
 }
 
-// reads specified header columns from csv formatted files to array
+// Parsecsv reads specified header columns from csv formatted files to slice
 func Parsecsv(
 	files []string,
 	filetype []string,
@@ -28,7 +28,7 @@ func Parsecsv(
 		if delimiter, ok := acceptedTypes[filetype[i]]; ok {
 			file, err := fs.Instance.Open(filename)
 			if err != nil {
-				// skip if file can't be opened
+				// skip if file cannot be opened
 				logmessage.Write(logFile, fmt.Sprintf("%s: could not be opened", filename))
 				continue
 			}
@@ -38,7 +38,7 @@ func Parsecsv(
 			reader.Comma = delimiter // set delimiter
 			lines, err := reader.ReadAll()
 			if err != nil {
-				// skip if file can't be read
+				// skip if file cannot be read
 				logmessage.Write(logFile, fmt.Sprintf("%s: could not be read", filename))
 				continue
 			}
@@ -52,7 +52,7 @@ func Parsecsv(
 				continue
 			}
 
-			// read file into data array
+			// read file into data slice
 			data = append(data, Maplines(lines[1:], headerMap)...)
 		}
 	}

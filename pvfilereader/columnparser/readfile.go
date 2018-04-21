@@ -3,7 +3,7 @@ package columnparser
 
 import "errors"
 
-// Readfile will read a csv file(s) into an array and filter based on criteria
+// Readfile will read a csv file(s) into a slice
 func Readfile(files []string, columnMap map[string]string, logFile string) ([]map[string]string, error) {
 	// get mime type for each file
 	filetype := make([]string, len(files))
@@ -11,10 +11,10 @@ func Readfile(files []string, columnMap map[string]string, logFile string) ([]ma
 		filetype[i], _ = Filetype(filename, logFile)
 	}
 
-	// read required header columns from files to array map
+	// read required header columns from files to slice map
 	parsed := Parsecsv(files, filetype, columnMap, logFile)
 
-	// if parsed array is empty, return error
+	// if parsed slice is empty, return error
 	var err error
 	if len(parsed) == 0 {
 		err = errors.New("No parsed results")

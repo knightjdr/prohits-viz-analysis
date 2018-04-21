@@ -2,7 +2,7 @@ package columnparser
 
 import "errors"
 
-// creates a map of specified headers to column numbers
+// Headermap creates a map of specified headers to column numbers
 func Headermap(columnMap map[string]string, header []string) (map[string]int, error) {
 	columnsFound := 0                 // tracks header columns found
 	headerMap := make(map[string]int) // return map

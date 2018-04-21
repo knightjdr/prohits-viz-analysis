@@ -48,7 +48,7 @@ func TestFiletype(t *testing.T) {
 
 	// TEST4: intergration with logger
 	writePatch.Unpatch()
-	mimetype, err = Filetype("test/missing", "test/logfile.txt")
+	Filetype("test/missing", "test/logfile.txt")
 	logfile, _ := afero.ReadFile(fs.Instance, "test/logfile.txt")
 	want = "could not be opened"
 	matched, _ := regexp.MatchString(want, string(logfile))

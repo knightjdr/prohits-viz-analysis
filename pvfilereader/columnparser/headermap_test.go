@@ -31,7 +31,7 @@ func TestHeadermap(t *testing.T) {
 		"key1": "column1",
 		"key2": "column4",
 	}
-	headerMap, err = Headermap(columnMap, header)
+	_, err = Headermap(columnMap, header)
 	assert.NotNil(t, err, "expected error when a column cannot be found in the header")
 
 	// TEST3: empty map values should be ignored

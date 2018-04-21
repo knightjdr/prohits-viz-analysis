@@ -9,7 +9,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pvfilereader/logmessage"
 )
 
-// returns the mime type of a file
+// Filetype returns the mime type of a file
 func Filetype(filename string, logFile string) (string, error) {
 	// open file
 	file, err := fs.Instance.Open(filename)

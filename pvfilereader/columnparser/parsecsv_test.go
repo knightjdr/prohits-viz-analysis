@@ -92,7 +92,7 @@ func TestParsecsv(t *testing.T) {
 	// TEST4: missing file logs message (intergration with logger)
 	files = []string{"test/missing.txt"}
 	filetype = []string{"text/plain"}
-	data = Parsecsv(files, filetype, columnMap, "test/logfile.txt")
+	Parsecsv(files, filetype, columnMap, "test/logfile.txt")
 	logfile, _ := afero.ReadFile(fs.Instance, "test/logfile.txt")
 	wantMessage := "could not be opened"
 	matched, _ := regexp.MatchString(wantMessage, string(logfile))
@@ -108,7 +108,7 @@ func TestParsecsv(t *testing.T) {
 	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644) // clear log
 	files = []string{"test/testfile1.txt"}
 	filetype = []string{"text/plain"}
-	data = Parsecsv(files, filetype, columnMap, "test/logfile.txt")
+	Parsecsv(files, filetype, columnMap, "test/logfile.txt")
 	logfile, _ = afero.ReadFile(fs.Instance, "test/logfile.txt")
 	wantMessage = "missing header columns"
 	matched, _ = regexp.MatchString(wantMessage, string(logfile))
