@@ -12,7 +12,7 @@ func TestPreys(t *testing.T) {
 		{"bait": "bait1", "prey": "prey2"},
 	}
 
-	// TEST1: filter by a single prey
+	// TEST1: filter by a single prey.
 	preys := []string{"prey2"}
 	want := []map[string]string{
 		{"bait": "bait1", "prey": "prey2"},
@@ -24,7 +24,7 @@ func TestPreys(t *testing.T) {
 		"Single prey filter is not correct",
 	)
 
-	// TEST1: filter by multiple preys
+	// TEST1: filter by multiple preys.
 	preys = []string{"prey1", "prey2"}
 	want = data
 	assert.Equal(

@@ -15,30 +15,30 @@ import (
 )
 
 func TestFiletype(t *testing.T) {
-	// mock fs
+	//Mock filesystem
 	oldFs := fs.Instance
 	defer func() { fs.Instance = oldFs }()
 	fs.Instance = afero.NewMemMapFs()
 
-	// create test directory and files
+	// Create test directory and files.
 	fs.Instance.MkdirAll("test", 0755)
 	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644)
 
-	// TEST1: message logged to file
+	// TEST1: message logged to file.
 	Write("test/logfile.txt", "test message")
 	logfile, _ := afero.ReadFile(fs.Instance, "test/logfile.txt")
 	want := "test message"
 	matched, _ := regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "message not being logged")
 
-	// mock exit
+	// Mock exit.
 	fakeExit := func(int) {
 		panic("os.Exit called")
 	}
 	exitPatch := monkey.Patch(os.Exit, fakeExit)
 	defer exitPatch.Unpatch()
 
-	// TEST2: exit if no file specified
+	// TEST2: exit if no file specified.
 	assert.PanicsWithValue(
 		t,
 		"os.Exit called",
@@ -46,14 +46,14 @@ func TestFiletype(t *testing.T) {
 		"os.Exit was not called when missing file",
 	)
 
-	// mock fatal
+	// Mock fatal.
 	fakeFatal := func(string, ...interface{}) {
 		panic("log.Fatalf called")
 	}
 	fatalPatch := monkey.Patch(log.Fatalf, fakeFatal)
 	defer fatalPatch.Unpatch()
 
-	// mock OpenFile
+	// Mock OpenFile.
 	file, _ := fs.Instance.Open("test/logfile.txt")
 	fakeOpenFile := func(*afero.MemMapFs, string, int, os.FileMode) (afero.File, error) {
 		return file, errors.New("Test open error")
@@ -61,7 +61,7 @@ func TestFiletype(t *testing.T) {
 	monkey.PatchInstanceMethod(reflect.TypeOf(fs.Instance), "OpenFile", fakeOpenFile)
 	defer monkey.UnpatchInstanceMethod(reflect.TypeOf(fs.Instance), "OpenFile")
 
-	// exit if file can't be opened
+	// Exit if file can't be opened.
 	assert.PanicsWithValue(
 		t,
 		"log.Fatalf called",

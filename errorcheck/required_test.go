@@ -10,16 +10,16 @@ import (
 )
 
 func TestRequired(t *testing.T) {
-	// mock fs
+	// Mock filesystem.
 	oldFs := fs.Instance
 	defer func() { fs.Instance = oldFs }()
 	fs.Instance = afero.NewMemMapFs()
 
-	// create test directory and files
+	// Create test directory and files.
 	fs.Instance.MkdirAll("test", 0755)
 	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644)
 
-	// TEST1: filter typical data slice
+	// TEST1: filter typical data slice.
 	data := []map[string]interface{}{
 		{"abundance": "2", "bait": "a", "control": "1|5|2", "prey": "b", "preyLength": "10", "score": 0.5},
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
@@ -28,7 +28,7 @@ func TestRequired(t *testing.T) {
 	err := Required(data, "dotplot", "controlColumn", "preyLengthColumn", "test/logfile.txt")
 	assert.Nil(t, err, "Valid input should not produce an error")
 
-	// TEST2: no data returns an error
+	// TEST2: no data returns an error.
 	data = []map[string]interface{}{}
 	err = Required(data, "dotplot", "controlColumn", "preyLengthColumn", "test/logfile.txt")
 	assert.NotNil(t, err, "No data returns an error")
@@ -38,7 +38,7 @@ func TestRequired(t *testing.T) {
 	assert.True(t, matched, "Message not being logged when there is no data")
 	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644) // empty log file
 
-	// TEST3: not enough baits
+	// TEST3: not enough baits.
 	data = []map[string]interface{}{
 		{"abundance": "2", "bait": "a", "control": "1|5|2", "prey": "b", "preyLength": "10", "score": 0.5},
 	}
@@ -50,7 +50,7 @@ func TestRequired(t *testing.T) {
 	assert.True(t, matched, "Message not being logged when there are not enough baits")
 	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644) // empty log file
 
-	// TEST4: missing prey names
+	// TEST4: missing prey names.
 	data = []map[string]interface{}{
 		{"abundance": "2", "bait": "a", "control": "1|5|2", "prey": "b", "preyLength": "10", "score": 0.5},
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "", "preyLength": "1", "score": 0.1},
@@ -64,7 +64,7 @@ func TestRequired(t *testing.T) {
 	assert.True(t, matched, "Message not being logged when there are missing prey names")
 	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644) // empty log file
 
-	// TEST5: abundance column should be a pipe-separated list of numbers
+	// TEST5: abundance column should be a pipe-separated list of numbers.
 	data = []map[string]interface{}{
 		{"abundance": "a", "bait": "a", "control": "5", "prey": "b", "preyLength": "10", "score": 0.5},
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
@@ -78,7 +78,7 @@ func TestRequired(t *testing.T) {
 	assert.True(t, matched, "Message not being logged when the abundance column is not valid")
 	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644) // empty log file
 
-	// TEST6: score column should be a float64
+	// TEST6: score column should be a float64.
 	data = []map[string]interface{}{
 		{"abundance": "2", "bait": "a", "control": "1|5|2", "prey": "b", "preyLength": "10", "score": "0.5"},
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
@@ -92,7 +92,7 @@ func TestRequired(t *testing.T) {
 	assert.True(t, matched, "Message not being logged when the score column is not valid")
 	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644) // empty log file
 
-	// TEST7: prey length column should be parsable as an integer
+	// TEST7: prey length column should be parsable as an integer.
 	data = []map[string]interface{}{
 		{"abundance": "2", "bait": "a", "control": "1|5|2", "prey": "b", "preyLength": "a", "score": 0.5},
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
@@ -106,7 +106,7 @@ func TestRequired(t *testing.T) {
 	assert.True(t, matched, "Message not being logged when the prey length column is not valid")
 	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644) // empty log file
 
-	// TEST8: control column should be a pipe-separated list of numbers
+	// TEST8: control column should be a pipe-separated list of numbers.
 	data = []map[string]interface{}{
 		{"abundance": "2", "bait": "a", "control": "a", "prey": "b", "preyLength": "10", "score": 0.5},
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},

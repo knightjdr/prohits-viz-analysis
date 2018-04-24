@@ -1,19 +1,19 @@
 package filter
 
-// Preys filters slice map by preys
+// Preys filters slice map by preys.
 func Preys(
 	data []map[string]string,
 	preys []string,
-) []map[string]string {
-	// convert prey slice to map
+) (filtered []map[string]string) {
+	// Convert prey slice to map.
 	preyMap := SliceToMap(preys)
-	// iterate over slice and keep rows with prey in preyMap
+	// Iterate over slice and keep rows with prey in preyMap.
 	datalen := len(data)
-	filtered := data
+	filtered = data
 	for i := datalen - 1; i >= 0; i-- {
 		if _, ok := preyMap[data[i]["prey"]]; !ok {
 			filtered = append(filtered[:i], filtered[i+1:]...)
 		}
 	}
-	return filtered
+	return
 }

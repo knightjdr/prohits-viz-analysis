@@ -7,7 +7,7 @@ import (
 )
 
 func TestScore(t *testing.T) {
-	// TEST1: filter typical data slice
+	// TEST1: filter typical data slice.
 	data := []map[string]string{
 		{"bait": "a", "prey": "b", "score": "0.5"},
 		{"bait": "c", "prey": "d", "score": "0.1"},
@@ -23,7 +23,7 @@ func TestScore(t *testing.T) {
 	assert.Nil(t, err, "Valid scores should not produce an error")
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly")
 
-	// TEST2: Numeric conversion error returns an error
+	// TEST2: Numeric conversion error returns an error.
 	data = []map[string]string{
 		{"bait": "a", "prey": "b", "score": "x"},
 		{"bait": "c", "prey": "d", "score": "y"},

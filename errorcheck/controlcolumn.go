@@ -6,15 +6,14 @@ import (
 	"strings"
 )
 
-// ControlColumn ensures the control column is a pipe-separated list of numeric values
-func ControlColumn(data []map[string]interface{}, control string) error {
-	var err error
-	// if control column is null, we aren't using this column
-	if control == "" {
-		return err
+// ControlColumn ensures the control column is a pipe-separated list of numeric values.
+func ControlColumn(data []map[string]interface{}, controlColumn string) (err error) {
+	// If control column is null, we aren't using this column.
+	if controlColumn == "" {
+		return
 	}
 
-	// split first control column
+	// Test first control column.
 	column := strings.Split(data[0]["control"].(string), "|")
 	for _, value := range column {
 		_, err := strconv.ParseFloat(value, 64)
@@ -22,5 +21,5 @@ func ControlColumn(data []map[string]interface{}, control string) error {
 			return errors.New("Control column is not a pipe-separated list of numbers")
 		}
 	}
-	return err
+	return
 }

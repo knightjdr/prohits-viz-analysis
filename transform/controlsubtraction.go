@@ -5,17 +5,17 @@ import (
 	"strings"
 )
 
-// ControlSubtraction will subtract the average control value from the prey abundance
-func ControlSubtraction(data []map[string]interface{}, control string) ([]map[string]interface{}, error) {
-	var err error
-	// if no control column is specified, skip
-	if control == "" {
-		return data, err
+// ControlSubtraction will subtract the average control value from the prey abundance.
+func ControlSubtraction(data []map[string]interface{}, controlColumn string) (transformed []map[string]interface{}) {
+	transformed = data
+	// Skip if no control column is specified.
+	if controlColumn == "" {
+		return
 	}
 
-	// iterate over data slice and subtract control average from prey abundance
-	for _, row := range data {
-		// calculate control average
+	// Iterate over data slice and subtract control average from prey abundance.
+	for _, row := range transformed {
+		// Calculate control average.
 		controls := strings.Split(row["control"].(string), "|")
 		var controlSum float64
 		controlSum = 0
@@ -24,19 +24,21 @@ func ControlSubtraction(data []map[string]interface{}, control string) ([]map[st
 			controlSum += valueAsFloat
 		}
 		controlAvg := controlSum / float64(len(controls))
-		// subtract control average from each abundance value
+		// Subtract control average from each abundance value.
 		abundance := strings.Split(row["abundance"].(string), "|")
-		transformedAbdStr := make([]string, 0) // will store as strings for joining
-		for i, abdValue := range abundance {
+		transformedAbdStr := make([]string, 0) // Store as strings for joining.
+		for _, abdValue := range abundance {
 			transformedAbd, _ := strconv.ParseFloat(abdValue, 64)
 			transformedAbd -= controlAvg
 			if transformedAbd < 0 {
-				transformedAbd = 0
+				transformedAbd = float64(0)
+			} else {
+				transformedAbd = Round(transformedAbd, 0.01) // Round to nearest two decimals.
 			}
-			transformedAbd = Round(transformedAbd, 0.01)         // round to nearest two decimals
-			transformedAbdStr[i] = FloatToString(transformedAbd) //convert float to string
+			// Convert float to string and append.
+			transformedAbdStr = append(transformedAbdStr, FloatToString(transformedAbd))
 		}
 		row["abundance"] = strings.Join(transformedAbdStr[:], "|")
 	}
-	return data, err
+	return
 }

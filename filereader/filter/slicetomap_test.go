@@ -9,7 +9,7 @@ import (
 func TestSliceToMap(t *testing.T) {
 	data := []string{"a", "b", "c"}
 
-	// TEST1: convert slice to map
+	// TEST1: convert slice to map.
 	want := map[string]bool{
 		"a": true,
 		"b": true,

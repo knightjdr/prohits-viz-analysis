@@ -5,13 +5,14 @@ import (
 	"strconv"
 )
 
-// NumericScore checks if score column is numeric and convert its values from strings
-func NumericScore(data []map[string]string) ([]map[string]interface{}, error) {
-	converted := make([]map[string]interface{}, len(data))
+// NumericScore checks if score column is numeric and convert its values from strings.
+func NumericScore(data []map[string]string) (converted []map[string]interface{}, err error) {
+	converted = make([]map[string]interface{}, len(data))
 	// check if first row's score is numeric, if not return err
-	_, err := strconv.ParseFloat(data[0]["score"], 64)
+	_, err = strconv.ParseFloat(data[0]["score"], 64)
 	if err != nil {
-		return converted, errors.New("Score column is not numeric")
+		err = errors.New("Score column is not numeric")
+		return
 	}
 
 	// iterate data slice and convert scores to numeric
@@ -31,5 +32,5 @@ func NumericScore(data []map[string]string) ([]map[string]interface{}, error) {
 		}
 		converted[i] = newRow
 	}
-	return converted, err
+	return
 }

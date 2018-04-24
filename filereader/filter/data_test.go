@@ -10,16 +10,16 @@ import (
 )
 
 func TestData(t *testing.T) {
-	// mock fs
+	// Mock filesystem.
 	oldFs := fs.Instance
 	defer func() { fs.Instance = oldFs }()
 	fs.Instance = afero.NewMemMapFs()
 
-	// create test directory and files
+	// Create test directory and files.
 	fs.Instance.MkdirAll("test", 0755)
 	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644)
 
-	// TEST1: filter typical data slice
+	// TEST1: filter typical data slice.
 	baits := make([]string, 0)
 	data := []map[string]string{
 		{"bait": "a", "prey": "b", "score": "0.5"},
@@ -35,7 +35,7 @@ func TestData(t *testing.T) {
 	assert.Nil(t, err, "Valid input should not produce an error")
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly")
 
-	// TEST2: filter typical data slice by baits
+	// TEST2: filter typical data slice by baits.
 	baits = []string{"a", "c"}
 	preys = make([]string, 0)
 	want = []map[string]interface{}{
@@ -45,7 +45,7 @@ func TestData(t *testing.T) {
 	filtered, err = Data(data, 1, baits, preys, "lte", "test/logfile.txt")
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly by baits")
 
-	// TEST3: filter typical data slice by preys
+	// TEST3: filter typical data slice by preys.
 	baits = make([]string, 0)
 	preys = []string{"b", "f"}
 	want = []map[string]interface{}{
@@ -55,7 +55,7 @@ func TestData(t *testing.T) {
 	filtered, err = Data(data, 1, baits, preys, "lte", "test/logfile.txt")
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly by preys")
 
-	// TEST4: filter typical data slice by baits and preys
+	// TEST4: filter typical data slice by baits and preys.
 	baits = []string{"a", "c"}
 	preys = []string{"b", "f"}
 	want = []map[string]interface{}{
@@ -64,7 +64,7 @@ func TestData(t *testing.T) {
 	filtered, err = Data(data, 1, baits, preys, "lte", "test/logfile.txt")
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly by preys")
 
-	// TEST5: no filtered results after bait and prey returns an error and logs it
+	// TEST5: no filtered results after bait and prey returns an error and logs it.
 	baits = []string{"a", "c"}
 	preys = []string{"f"}
 	filtered, err = Data(data, 1, baits, preys, "lte", "test/logfile.txt")
@@ -75,7 +75,7 @@ func TestData(t *testing.T) {
 	assert.True(t, matched, "Message not being logged")
 	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644) // empty log file
 
-	// TEST6: score step error returns an error
+	// TEST6: score step error returns an error.
 	baits = make([]string, 0)
 	data = []map[string]string{
 		{"bait": "a", "prey": "b", "score": "x"},
@@ -84,7 +84,7 @@ func TestData(t *testing.T) {
 	filtered, err = Data(data, 1, baits, preys, "lte", "test/logfile.txt")
 	assert.NotNil(t, err, "Score step error should produce an error")
 
-	// TEST7: no filtered results after score step returns an error and logs it
+	// TEST7: no filtered results after score step returns an error and logs it.
 	baits = make([]string, 0)
 	data = []map[string]string{
 		{"bait": "a", "prey": "b", "score": "0.5"},
@@ -98,5 +98,5 @@ func TestData(t *testing.T) {
 	wantMessage = "No parsed results matching filter criteria"
 	matched, _ = regexp.MatchString(wantMessage, string(logfile))
 	assert.True(t, matched, "Message not being logged")
-	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644) // empty log file
+	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644) // Clear log file.
 }

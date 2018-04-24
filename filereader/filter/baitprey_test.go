@@ -12,7 +12,7 @@ func TestBaitPrey(t *testing.T) {
 		{"bait": "bait2", "prey": "prey2"},
 	}
 
-	// TEST1: filter by a single bait and prey
+	// TEST1: filter by a single bait and prey.
 	baits := []string{"bait2"}
 	preys := []string{"prey2"}
 	want := []map[string]string{
@@ -25,7 +25,7 @@ func TestBaitPrey(t *testing.T) {
 		"Single bait and prey filter is not returning correct slice map",
 	)
 
-	// TEST2: return empty slice map when not matches to bait and prey lists
+	// TEST2: return empty slice map when not matches to bait and prey lists.
 	baits = []string{"bait2"}
 	preys = []string{"prey1"}
 	want = []map[string]string{}
@@ -36,7 +36,7 @@ func TestBaitPrey(t *testing.T) {
 		"Returned value should have length zero",
 	)
 
-	// TEST3: filter by a multiple baits and preys
+	// TEST3: filter by a multiple baits and preys.
 	baits = []string{"bait1", "bait2"}
 	preys = []string{"prey1", "prey2"}
 	want = data
