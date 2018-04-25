@@ -5,22 +5,23 @@
 // log transformed.
 package transform
 
+import "github.com/knightjdr/prohits-viz-analysis/types"
+
 // Preys is the entry point for prey transformations.
 func Preys(
-	data []map[string]interface{},
-	control, preyLength, normalization, normalizationPrey, logBase string,
-) (transformed []map[string]interface{}, err error) {
+	dataset types.Dataset,
+) (transformed []map[string]interface{}) {
 	// Control subtraction.
-	transformed = ControlSubtraction(data, control)
+	transformed = ControlSubtraction(dataset.Data, dataset.Params.Control)
 
 	// Prey length normalization.
-	transformed = PreyLength(transformed, preyLength)
+	transformed = PreyLength(transformed, dataset.Params.PreyLength)
 
 	// Bait normalization.
-	transformed = Normalization(transformed, normalization, normalizationPrey)
+	transformed = Normalization(transformed, dataset.Params.Normalization, dataset.Params.NormalizationPrey)
 
 	// Log transformation
-	transformed = LogTransform(transformed, logBase)
+	transformed = LogTransform(transformed, dataset.Params.LogBase)
 
-	return transformed, err
+	return transformed
 }

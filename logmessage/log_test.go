@@ -15,7 +15,7 @@ import (
 )
 
 func TestFiletype(t *testing.T) {
-	//Mock filesystem
+	// Mock filesystem.
 	oldFs := fs.Instance
 	defer func() { fs.Instance = oldFs }()
 	fs.Instance = afero.NewMemMapFs()
@@ -38,14 +38,6 @@ func TestFiletype(t *testing.T) {
 	exitPatch := monkey.Patch(os.Exit, fakeExit)
 	defer exitPatch.Unpatch()
 
-	// TEST2: exit if no file specified.
-	assert.PanicsWithValue(
-		t,
-		"os.Exit called",
-		func() { Write("", "test message") },
-		"os.Exit was not called when missing file",
-	)
-
 	// Mock fatal.
 	fakeFatal := func(string, ...interface{}) {
 		panic("log.Fatalf called")
@@ -61,7 +53,7 @@ func TestFiletype(t *testing.T) {
 	monkey.PatchInstanceMethod(reflect.TypeOf(fs.Instance), "OpenFile", fakeOpenFile)
 	defer monkey.UnpatchInstanceMethod(reflect.TypeOf(fs.Instance), "OpenFile")
 
-	// Exit if file can't be opened.
+	// TEST2: exit if file can't be opened.
 	assert.PanicsWithValue(
 		t,
 		"log.Fatalf called",

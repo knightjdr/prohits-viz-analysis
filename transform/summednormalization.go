@@ -40,7 +40,11 @@ func SummedNormalization(data []map[string]interface{}) (transformed []map[strin
 	multiplier := map[string]float64{}
 	for bait, value := range baits {
 		abundance := value
-		multiplier[bait] = median / abundance
+		if abundance == 0 {
+			multiplier[bait] = 1
+		} else {
+			multiplier[bait] = median / abundance
+		}
 	}
 
 	// Transform preys.

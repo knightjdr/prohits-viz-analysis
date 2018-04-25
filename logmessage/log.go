@@ -13,7 +13,7 @@ func Write(file string, message string) {
 	// Exit and print to console if no log file specified.
 	if file == "" {
 		log.Println(message)
-		os.Exit(1)
+		return
 	}
 
 	// Open log file (create if it doesn't exist).

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/knightjdr/prohits-viz-analysis/fs"
+	"github.com/knightjdr/prohits-viz-analysis/types"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -27,47 +28,83 @@ func TestData(t *testing.T) {
 		{"bait": "e", "prey": "f", "score": "0.8"},
 	}
 	preys := make([]string, 0)
+	// Create dataset.
+	params := types.Parameters{
+		BaitList:      baits,
+		LogFile:       "test/logfile.txt",
+		PreyList:      preys,
+		PrimaryFilter: 0.5,
+		ScoreType:     "lte",
+	}
 	want := []map[string]interface{}{
 		{"bait": "a", "prey": "b", "score": 0.5},
 		{"bait": "c", "prey": "d", "score": 0.1},
 	}
-	filtered, err := Data(data, 0.5, baits, preys, "lte", "test/logfile.txt")
+	filtered, err := Data(data, params)
 	assert.Nil(t, err, "Valid input should not produce an error")
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly")
 
 	// TEST2: filter typical data slice by baits.
 	baits = []string{"a", "c"}
 	preys = make([]string, 0)
+	params = types.Parameters{
+		BaitList:      baits,
+		LogFile:       "test/logfile.txt",
+		PreyList:      preys,
+		PrimaryFilter: 1,
+		ScoreType:     "lte",
+	}
 	want = []map[string]interface{}{
 		{"bait": "a", "prey": "b", "score": 0.5},
 		{"bait": "c", "prey": "d", "score": 0.1},
 	}
-	filtered, err = Data(data, 1, baits, preys, "lte", "test/logfile.txt")
+	filtered, err = Data(data, params)
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly by baits")
 
 	// TEST3: filter typical data slice by preys.
 	baits = make([]string, 0)
 	preys = []string{"b", "f"}
+	params = types.Parameters{
+		BaitList:      baits,
+		LogFile:       "test/logfile.txt",
+		PreyList:      preys,
+		PrimaryFilter: 1,
+		ScoreType:     "lte",
+	}
 	want = []map[string]interface{}{
 		{"bait": "a", "prey": "b", "score": 0.5},
 		{"bait": "e", "prey": "f", "score": 0.8},
 	}
-	filtered, err = Data(data, 1, baits, preys, "lte", "test/logfile.txt")
+	filtered, err = Data(data, params)
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly by preys")
 
 	// TEST4: filter typical data slice by baits and preys.
 	baits = []string{"a", "c"}
 	preys = []string{"b", "f"}
+	params = types.Parameters{
+		BaitList:      baits,
+		LogFile:       "test/logfile.txt",
+		PreyList:      preys,
+		PrimaryFilter: 1,
+		ScoreType:     "lte",
+	}
 	want = []map[string]interface{}{
 		{"bait": "a", "prey": "b", "score": 0.5},
 	}
-	filtered, err = Data(data, 1, baits, preys, "lte", "test/logfile.txt")
+	filtered, err = Data(data, params)
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly by preys")
 
 	// TEST5: no filtered results after bait and prey returns an error and logs it.
 	baits = []string{"a", "c"}
 	preys = []string{"f"}
-	filtered, err = Data(data, 1, baits, preys, "lte", "test/logfile.txt")
+	params = types.Parameters{
+		BaitList:      baits,
+		LogFile:       "test/logfile.txt",
+		PreyList:      preys,
+		PrimaryFilter: 1,
+		ScoreType:     "lte",
+	}
+	filtered, err = Data(data, params)
 	assert.NotNil(t, err, "No filtered results from bait/prey step should produce an error")
 	logfile, _ := afero.ReadFile(fs.Instance, "test/logfile.txt")
 	wantMessage := "No parsed results matching bait and prey criteria"
@@ -81,7 +118,14 @@ func TestData(t *testing.T) {
 		{"bait": "a", "prey": "b", "score": "x"},
 	}
 	preys = make([]string, 0)
-	filtered, err = Data(data, 1, baits, preys, "lte", "test/logfile.txt")
+	params = types.Parameters{
+		BaitList:      baits,
+		LogFile:       "test/logfile.txt",
+		PreyList:      preys,
+		PrimaryFilter: 1,
+		ScoreType:     "lte",
+	}
+	filtered, err = Data(data, params)
 	assert.NotNil(t, err, "Score step error should produce an error")
 
 	// TEST7: no filtered results after score step returns an error and logs it.
@@ -92,7 +136,14 @@ func TestData(t *testing.T) {
 		{"bait": "e", "prey": "f", "score": "0.8"},
 	}
 	preys = make([]string, 0)
-	filtered, err = Data(data, 1, baits, preys, "gte", "test/logfile.txt")
+	params = types.Parameters{
+		BaitList:      baits,
+		LogFile:       "test/logfile.txt",
+		PreyList:      preys,
+		PrimaryFilter: 1,
+		ScoreType:     "gte",
+	}
+	filtered, err = Data(data, params)
 	assert.NotNil(t, err, "No filtered results from score step should produce an error")
 	logfile, _ = afero.ReadFile(fs.Instance, "test/logfile.txt")
 	wantMessage = "No parsed results matching filter criteria"

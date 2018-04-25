@@ -12,64 +12,61 @@ import (
 	"errors"
 
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
+	"github.com/knightjdr/prohits-viz-analysis/types"
 )
 
 // Required is the entry point for error checking the input data.
 func Required(
-	data []map[string]interface{},
-	analysisType string,
-	control string,
-	preyLength string,
-	logFile string,
+	dataset types.Dataset,
 ) (err error) {
 	errs := 0 // Track error number.
 	// Check there is data.
-	err = MinData(data)
+	err = MinData(dataset.Data)
 	if err != nil {
-		logmessage.Write(logFile, err.Error())
+		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 		return err // Skip next tests since there is no data.
 	}
 
 	// Minimum baits met.
-	err = MinBait(data, analysisType)
+	err = MinBait(dataset.Data, dataset.Params.AnalysisType)
 	if err != nil {
-		logmessage.Write(logFile, err.Error())
+		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 
 	// All preys have names.
-	err = PreyName(data)
+	err = PreyName(dataset.Data)
 	if err != nil {
-		logmessage.Write(logFile, err.Error())
+		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 
 	// Abundance column is a pipe-separated list.
-	err = AbundanceColumn(data)
+	err = AbundanceColumn(dataset.Data)
 	if err != nil {
-		logmessage.Write(logFile, err.Error())
+		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 
 	// Score column is a float.
-	err = ScoreFloat(data)
+	err = ScoreFloat(dataset.Data)
 	if err != nil {
-		logmessage.Write(logFile, err.Error())
+		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 
 	// Prey length column can be parsed as an integer.
-	err = PreyLengthInt(data, preyLength)
+	err = PreyLengthInt(dataset.Data, dataset.Params.PreyLength)
 	if err != nil {
-		logmessage.Write(logFile, err.Error())
+		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 
 	// Control column is a pipe-separated list.
-	err = ControlColumn(data, control)
+	err = ControlColumn(dataset.Data, dataset.Params.Control)
 	if err != nil {
-		logmessage.Write(logFile, err.Error())
+		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 	var formatErr error

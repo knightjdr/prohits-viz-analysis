@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/knightjdr/prohits-viz-analysis/fs"
+	"github.com/knightjdr/prohits-viz-analysis/types"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -25,12 +26,23 @@ func TestRequired(t *testing.T) {
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
 		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
 	}
-	err := Required(data, "dotplot", "controlColumn", "preyLengthColumn", "test/logfile.txt")
+	dataset := types.Dataset{
+		Data: data,
+		Params: types.Parameters{
+			AnalysisType: "dotplot",
+			Control:      "controlColumn",
+			LogFile:      "test/logfile.txt",
+			PreyLength:   "preyLengthColumn",
+		},
+	}
+
+	err := Required(dataset)
 	assert.Nil(t, err, "Valid input should not produce an error")
 
 	// TEST2: no data returns an error.
 	data = []map[string]interface{}{}
-	err = Required(data, "dotplot", "controlColumn", "preyLengthColumn", "test/logfile.txt")
+	dataset.Data = data
+	err = Required(dataset)
 	assert.NotNil(t, err, "No data returns an error")
 	logfile, _ := afero.ReadFile(fs.Instance, "test/logfile.txt")
 	wantMessage := "No data passes the required filters"
@@ -42,7 +54,8 @@ func TestRequired(t *testing.T) {
 	data = []map[string]interface{}{
 		{"abundance": "2", "bait": "a", "control": "1|5|2", "prey": "b", "preyLength": "10", "score": 0.5},
 	}
-	err = Required(data, "dotplot", "controlColumn", "preyLengthColumn", "test/logfile.txt")
+	dataset.Data = data
+	err = Required(dataset)
 	assert.NotNil(t, err, "Less than required number of baits should produce error")
 	logfile, _ = afero.ReadFile(fs.Instance, "test/logfile.txt")
 	wantMessage = "There are not enough baits for analysis. Min: 2"
@@ -56,7 +69,8 @@ func TestRequired(t *testing.T) {
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "", "preyLength": "1", "score": 0.1},
 		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
 	}
-	err = Required(data, "dotplot", "controlColumn", "preyLengthColumn", "test/logfile.txt")
+	dataset.Data = data
+	err = Required(dataset)
 	assert.NotNil(t, err, "Missing prey names should produce error")
 	logfile, _ = afero.ReadFile(fs.Instance, "test/logfile.txt")
 	wantMessage = "All preys should have a name"
@@ -70,7 +84,8 @@ func TestRequired(t *testing.T) {
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
 		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
 	}
-	err = Required(data, "dotplot", "controlColumn", "preyLengthColumn", "test/logfile.txt")
+	dataset.Data = data
+	err = Required(dataset)
 	assert.NotNil(t, err, "Non pipe-separated abundance column should produce error")
 	logfile, _ = afero.ReadFile(fs.Instance, "test/logfile.txt")
 	wantMessage = "Abundance column is not a pipe-separated list of numbers"
@@ -84,7 +99,8 @@ func TestRequired(t *testing.T) {
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
 		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
 	}
-	err = Required(data, "dotplot", "controlColumn", "preyLengthColumn", "test/logfile.txt")
+	dataset.Data = data
+	err = Required(dataset)
 	assert.NotNil(t, err, "Incorrect score type should produce error")
 	logfile, _ = afero.ReadFile(fs.Instance, "test/logfile.txt")
 	wantMessage = "Score column is not numeric"
@@ -98,7 +114,8 @@ func TestRequired(t *testing.T) {
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
 		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
 	}
-	err = Required(data, "dotplot", "controlColumn", "preyLengthColumn", "test/logfile.txt")
+	dataset.Data = data
+	err = Required(dataset)
 	assert.NotNil(t, err, "Non-integer parsable prey length should produce error")
 	logfile, _ = afero.ReadFile(fs.Instance, "test/logfile.txt")
 	wantMessage = "Prey length column must contain integer values"
@@ -112,7 +129,8 @@ func TestRequired(t *testing.T) {
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
 		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
 	}
-	err = Required(data, "dotplot", "controlColumn", "preyLengthColumn", "test/logfile.txt")
+	dataset.Data = data
+	err = Required(dataset)
 	assert.NotNil(t, err, "Non pipe-separated control column should produce error")
 	logfile, _ = afero.ReadFile(fs.Instance, "test/logfile.txt")
 	wantMessage = "Control column is not a pipe-separated list of numbers"

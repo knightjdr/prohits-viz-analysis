@@ -16,6 +16,8 @@ func TestSummedNormalization(t *testing.T) {
 		{"bait": "bait3", "prey": "prey2", "abundance": "4|6"},
 		{"bait": "bait4", "prey": "prey1", "abundance": "15|8|7"},
 		{"bait": "bait5", "prey": "prey2", "abundance": "10"},
+		{"bait": "bait6", "prey": "prey2", "abundance": "0"},
+		{"bait": "bait7", "prey": "prey2", "abundance": "30"},
 	}
 	want := []map[string]interface{}{
 		{"bait": "bait1", "prey": "prey1", "abundance": "10"},
@@ -26,6 +28,8 @@ func TestSummedNormalization(t *testing.T) {
 		{"bait": "bait3", "prey": "prey2", "abundance": "2.4|3.6"},
 		{"bait": "bait4", "prey": "prey1", "abundance": "7.5|4|3.5"},
 		{"bait": "bait5", "prey": "prey2", "abundance": "15"},
+		{"bait": "bait6", "prey": "prey2", "abundance": "0"},
+		{"bait": "bait7", "prey": "prey2", "abundance": "15"},
 	}
 
 	// TEST1: summed normalization
