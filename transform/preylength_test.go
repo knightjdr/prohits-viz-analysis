@@ -26,5 +26,5 @@ func TestPreyLength(t *testing.T) {
 
 	// TEST2: when prey length normalization is not requested, return original data.
 	transformed = PreyLength(data, "")
-	assert.Equal(t, data, data, "No prey length normalization should return input data")
+	assert.Equal(t, data, transformed, "No prey length normalization should return input data")
 }

@@ -26,5 +26,5 @@ func TestControlSubtraction(t *testing.T) {
 
 	// TEST2: when control subtraction is not requested, return original data.
 	transformed = ControlSubtraction(data, "")
-	assert.Equal(t, data, data, "No control subtraction should return input data")
+	assert.Equal(t, data, transformed, "No control subtraction should return input data")
 }
