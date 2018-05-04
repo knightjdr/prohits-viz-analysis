@@ -21,6 +21,7 @@ func BaitPreyMatrix(data []map[string]interface{}) (matrix [][]float64, baitList
 	for _, row := range data {
 		baitName := row["bait"].(string)
 		preyName := row["prey"].(string)
+
 		// Abundance could be a pipe separated list. Split and sum to accomodate.
 		abundance := strings.Split(row["abundance"].(string), "|")
 		abundanceSum := float64(0)
@@ -28,12 +29,15 @@ func BaitPreyMatrix(data []map[string]interface{}) (matrix [][]float64, baitList
 			abdFloat, _ := strconv.ParseFloat(value, 64)
 			abundanceSum += abdFloat
 		}
+
 		// Set prey-bait map value
 		preyBait[BaitPrey{preyName, baitName}] = abundanceSum
+
 		// Add bait if unique.
 		if _, ok := baits[baitName]; !ok {
 			baits[baitName] = true
 		}
+
 		// Add prey if unique.
 		if _, ok := preys[preyName]; !ok {
 			preys[preyName] = true

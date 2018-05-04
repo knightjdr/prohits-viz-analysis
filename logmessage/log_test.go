@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFiletype(t *testing.T) {
+func TestLogWrite(t *testing.T) {
 	// Mock filesystem.
 	oldFs := fs.Instance
 	defer func() { fs.Instance = oldFs }()
@@ -22,14 +22,14 @@ func TestFiletype(t *testing.T) {
 
 	// Create test directory and files.
 	fs.Instance.MkdirAll("test", 0755)
-	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644)
+	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
 	// TEST1: message logged to file.
-	Write("test/logfile.txt", "test message")
-	logfile, _ := afero.ReadFile(fs.Instance, "test/logfile.txt")
+	Write("test message")
+	logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
 	want := "test message"
 	matched, _ := regexp.MatchString(want, string(logfile))
-	assert.True(t, matched, "message not being logged")
+	assert.True(t, matched, "Message not being logged")
 
 	// Mock exit.
 	fakeExit := func(int) {
@@ -46,7 +46,7 @@ func TestFiletype(t *testing.T) {
 	defer fatalPatch.Unpatch()
 
 	// Mock OpenFile.
-	file, _ := fs.Instance.Open("test/logfile.txt")
+	file, _ := fs.Instance.Open("error.txt")
 	fakeOpenFile := func(*afero.MemMapFs, string, int, os.FileMode) (afero.File, error) {
 		return file, errors.New("Test open error")
 	}
@@ -57,7 +57,7 @@ func TestFiletype(t *testing.T) {
 	assert.PanicsWithValue(
 		t,
 		"log.Fatalf called",
-		func() { Write("test/logfile.txt", "test message") },
+		func() { Write("test message") },
 		"log.Fatalf called was not called when file doesn't exist",
 	)
 }

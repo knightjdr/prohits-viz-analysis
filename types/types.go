@@ -7,7 +7,10 @@ type Parameters struct {
 	AnalysisType      string
 	Bait              string
 	BaitList          []string
+	Clustering        string
+	ClusteringMethod  string
 	Control           string
+	Distance          string
 	Files             []string
 	LogBase           string
 	LogFile           string

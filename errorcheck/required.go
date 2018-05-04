@@ -20,53 +20,49 @@ func Required(
 	dataset types.Dataset,
 ) (err error) {
 	errs := 0 // Track error number.
-	// Check there is data.
+	// Check there is data and panic if not.
 	err = MinData(dataset.Data)
-	if err != nil {
-		logmessage.Write(dataset.Params.LogFile, err.Error())
-		errs++
-		return err // Skip next tests since there is no data.
-	}
+	logmessage.CheckError(err, true)
 
-	// Minimum baits met.
+	// Minimum baits met (don't panic so that all errors have a change to log).
 	err = MinBait(dataset.Data, dataset.Params.AnalysisType)
+	logmessage.CheckError(err, false)
 	if err != nil {
-		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 
 	// All preys have names.
 	err = PreyName(dataset.Data)
+	logmessage.CheckError(err, false)
 	if err != nil {
-		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 
 	// Abundance column is a pipe-separated list.
 	err = AbundanceColumn(dataset.Data)
+	logmessage.CheckError(err, false)
 	if err != nil {
-		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 
 	// Score column is a float.
 	err = ScoreFloat(dataset.Data)
+	logmessage.CheckError(err, false)
 	if err != nil {
-		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 
 	// Prey length column can be parsed as an integer.
 	err = PreyLengthInt(dataset.Data, dataset.Params.PreyLength)
+	logmessage.CheckError(err, false)
 	if err != nil {
-		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 
 	// Control column is a pipe-separated list.
 	err = ControlColumn(dataset.Data, dataset.Params.Control)
+	logmessage.CheckError(err, false)
 	if err != nil {
-		logmessage.Write(dataset.Params.LogFile, err.Error())
 		errs++
 	}
 	var formatErr error

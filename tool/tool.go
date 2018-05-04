@@ -1,8 +1,8 @@
-// Package tools passes analysis to the correct tool
-package tools
+// Package tool passes analysis to the correct tool
+package tool
 
 import (
-	"github.com/knightjdr/prohits-viz-analysis/tools/dotplot"
+	"github.com/knightjdr/prohits-viz-analysis/tool/dotplot"
 	"github.com/knightjdr/prohits-viz-analysis/types"
 )
 

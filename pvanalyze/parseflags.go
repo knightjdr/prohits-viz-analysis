@@ -16,10 +16,12 @@ func ParseFlags() (columnMap map[string]string, params types.Parameters, err err
 	analysisType := flag.String("analysisType", "", "Analysis type, one of: baitbait, correlation, dotplot or specificity")
 	bait := flag.String("bait", "", "Bait column")
 	baitList := flag.String("baitList", "", "List of baits")
+	clustering := flag.String("clustering", "", "Clustering type")
+	clusteringMethod := flag.String("clusteringMethod", "", "Clustering type")
 	control := flag.String("control", "", "Control column")
+	distance := flag.String("distance", "", "Distance metric")
 	fileList := flag.String("fileList", "", "Input files as comma-separated list")
 	logBase := flag.String("logBase", "", "Base for log transformation")
-	logFile := flag.String("logFile", "", "Log file")
 	normalization := flag.String("normalization", "", "Normalization type")
 	normalizationPrey := flag.String("normalizationPrey", "", "Prey to use for normalization")
 	prey := flag.String("prey", "", "Prey column")
@@ -34,27 +36,27 @@ func ParseFlags() (columnMap map[string]string, params types.Parameters, err err
 	// Exit if required args are missing.
 	argsError := false
 	if *abundance == "" {
-		logmessage.Write(*logFile, "No abundance column specified")
+		logmessage.Write("No abundance column specified")
 		argsError = true
 	}
 	if *analysisType == "" {
-		logmessage.Write(*logFile, "No analysis type specified")
+		logmessage.Write("No analysis type specified")
 		argsError = true
 	}
 	if *bait == "" {
-		logmessage.Write(*logFile, "No bait column specified")
+		logmessage.Write("No bait column specified")
 		argsError = true
 	}
 	if *fileList == "" {
-		logmessage.Write(*logFile, "No input file specified")
+		logmessage.Write("No input file specified")
 		argsError = true
 	}
 	if *prey == "" {
-		logmessage.Write(*logFile, "No prey column specified")
+		logmessage.Write("No prey column specified")
 		argsError = true
 	}
 	if *score == "" {
-		logmessage.Write(*logFile, "No score column specified")
+		logmessage.Write("No score column specified")
 		argsError = true
 	}
 	if argsError == true {
@@ -91,10 +93,12 @@ func ParseFlags() (columnMap map[string]string, params types.Parameters, err err
 		AnalysisType:      *analysisType,
 		Bait:              *bait,
 		BaitList:          baits,
+		Clustering:        *clustering,
+		ClusteringMethod:  *clusteringMethod,
 		Control:           *control,
+		Distance:          *distance,
 		Files:             files,
 		LogBase:           *logBase,
-		LogFile:           *logFile,
 		Normalization:     *normalization,
 		NormalizationPrey: *normalizationPrey,
 		Prey:              *prey,

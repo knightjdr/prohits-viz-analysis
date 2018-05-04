@@ -2,7 +2,6 @@ package columnparser
 
 import (
 	"encoding/csv"
-	"fmt"
 
 	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
@@ -15,39 +14,38 @@ var acceptedTypes = map[string]rune{
 	"text/tab-separated-values": '\t',
 }
 
-// ParseCsv reads specified header columns from csv formatted files to slice
+// ParseCsv reads specified header columns from csv formatted files to slice.
 func ParseCsv(
 	files []string,
 	filetype []string,
 	columnMap map[string]string,
-	logFile string,
 ) (parsed []map[string]string) {
 	for i, filename := range files {
-		// only parse a file if it's an accepted type
+		// Only parse a file if it's an accepted type.
 		if delimiter, ok := acceptedTypes[filetype[i]]; ok {
 			file, err := fs.Instance.Open(filename)
+			// Skip if file cannot be opened.
+			logmessage.CheckError(err, false)
 			if err != nil {
-				// skip if file cannot be opened
-				logmessage.Write(logFile, fmt.Sprintf("%s: could not be opened", filename))
 				continue
 			}
 
-			// read file
+			// Read file.
 			reader := csv.NewReader(file)
-			reader.Comma = delimiter // set delimiter
+			reader.Comma = delimiter // Set delimiter.
 			lines, err := reader.ReadAll()
+			// Skip if file cannot be read.
+			logmessage.CheckError(err, false)
 			if err != nil {
-				// skip if file cannot be read
-				logmessage.Write(logFile, fmt.Sprintf("%s: could not be read", filename))
 				continue
 			}
 			file.Close()
 
-			// get header map
+			// Get header map.
 			headerMap, err := HeaderMap(columnMap, lines[0])
+			// Skip if columns missing from file.
+			logmessage.CheckError(err, false)
 			if err != nil {
-				// skip if columns missing from file
-				logmessage.Write(logFile, fmt.Sprintf("%s: %s", filename, err.Error()))
 				continue
 			}
 

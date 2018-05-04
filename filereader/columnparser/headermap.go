@@ -2,13 +2,14 @@ package columnparser
 
 import "errors"
 
-// HeaderMap creates a map of specified headers to column numbers
-func HeaderMap(columnMap map[string]string, header []string) (map[string]int, error) {
-	columnsFound := 0                 // tracks header columns found
-	headerMap := make(map[string]int) // return map
-	// map columns to header
+// HeaderMap creates a map of specified headers to column numbers.
+func HeaderMap(columnMap map[string]string, header []string) (headerMap map[string]int, err error) {
+	columnsFound := 0 // Tracks header columns found.
+	headerMap = make(map[string]int)
+
+	// Map columns to header.
 	for i, definedName := range columnMap {
-		if definedName != "" { // ignore empty map values
+		if definedName != "" { // Ignore empty map values.
 			for j, columnName := range header {
 				if definedName == columnName {
 					columnsFound++
@@ -17,12 +18,11 @@ func HeaderMap(columnMap map[string]string, header []string) (map[string]int, er
 				}
 			}
 		} else {
-			columnsFound++ // empty map values get treated as found
+			columnsFound++ // Empty map values get treated as found.
 		}
 	}
 
-	// check if any specified columns were not found
-	var err error
+	// Check if any specified columns were not found.
 	if columnsFound != len(columnMap) {
 		err = errors.New("Missing header column")
 	}

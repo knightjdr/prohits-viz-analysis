@@ -12,7 +12,7 @@ import (
 func Data(
 	data []map[string]string,
 	params types.Parameters,
-) (filtered []map[string]interface{}, err error) {
+) (filtered []map[string]interface{}) {
 	filteredBaitPrey := make([]map[string]string, 0)
 	// Filter by both baits and preys if there are lists for both.
 	if (len(params.BaitList) > 0) && (len(params.PreyList) > 0) {
@@ -27,26 +27,18 @@ func Data(
 
 	// If filteredBaitPrey slice is empty, return error.
 	if len(filteredBaitPrey) == 0 {
-		err = errors.New("No parsed results matching bait and prey criteria")
-		// Log message and return error.
-		logmessage.Write(params.LogFile, err.Error())
-		return make([]map[string]interface{}, 0), err
+		// Log message and panic.
+		logmessage.CheckError(errors.New("No parsed results matching bait and prey criteria"), true)
 	}
 
 	// Filter by score.
-	filtered, err = Score(filteredBaitPrey, params.PrimaryFilter, params.ScoreType)
-	if err != nil {
-		// Log message and return error.
-		logmessage.Write(params.LogFile, err.Error())
-		return
-	}
+	filtered, err := Score(filteredBaitPrey, params.PrimaryFilter, params.ScoreType)
+	logmessage.CheckError(err, true)
 
 	// If filtered slice is empty, return error.
 	if len(filtered) == 0 {
-		err = errors.New("No parsed results matching filter criteria")
-		// Log message and return error.
-		logmessage.Write(params.LogFile, err.Error())
-		return
+		// Log message and panics.
+		logmessage.CheckError(errors.New("No parsed results matching filter criteria"), true)
 	}
 
 	return

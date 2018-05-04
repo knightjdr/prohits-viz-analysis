@@ -12,12 +12,12 @@ import (
 )
 
 func TestParseCsv(t *testing.T) {
-	// mock fs
+	// Mock fs.
 	oldFs := fs.Instance
 	defer func() { fs.Instance = oldFs }()
 	fs.Instance = afero.NewMemMapFs()
 
-	// create test directory and files
+	// create test directory and files.
 	fs.Instance.MkdirAll("test", 0755)
 	afero.WriteFile(
 		fs.Instance,
@@ -38,18 +38,18 @@ func TestParseCsv(t *testing.T) {
 		0444,
 	)
 	afero.WriteFile(fs.Instance, "test/unreadable.txt", []byte(""), 0444)
-	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644)
+	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
-	// reusable vars
+	// Reusable vars.
 	columnMap := map[string]string{
 		"key1": "column1",
 		"key2": "column3",
 	}
 
-	// TEST1: a single file return the expected parsed array
+	// TEST1: a single file return the expected parsed array.
 	files := []string{"test/testfile1.txt"}
 	filetype := []string{"text/plain"}
-	data := ParseCsv(files, filetype, columnMap, "test/logfile.txt")
+	data := ParseCsv(files, filetype, columnMap)
 	want := []map[string]string{
 		{"key1": "a", "key2": "c"},
 	}
@@ -60,10 +60,10 @@ func TestParseCsv(t *testing.T) {
 		"Processed file does not return correct data array",
 	)
 
-	// TEST2: two files return the expected parsed array
+	// TEST2: two files return the expected parsed array.
 	files = []string{"test/testfile1.txt", "test/testfile2.txt"}
 	filetype = []string{"text/plain", "text/csv"}
-	data = ParseCsv(files, filetype, columnMap, "test/logfile.txt")
+	data = ParseCsv(files, filetype, columnMap)
 	want = []map[string]string{
 		{"key1": "a", "key2": "c"},
 		{"key1": "d", "key2": "f"},
@@ -75,10 +75,10 @@ func TestParseCsv(t *testing.T) {
 		"Processed files do not return correct data array",
 	)
 
-	// TEST3: file with missing header column is skipped
+	// TEST3: file with missing header column is skipped.
 	files = []string{"test/testfile3.txt", "test/testfile1.txt"}
 	filetype = []string{"text/plain", "text/plain"}
-	data = ParseCsv(files, filetype, columnMap, "test/logfile.txt")
+	data = ParseCsv(files, filetype, columnMap)
 	want = []map[string]string{
 		{"key1": "a", "key2": "c"},
 	}
@@ -89,29 +89,29 @@ func TestParseCsv(t *testing.T) {
 		"Processed files do not return correct data array",
 	)
 
-	// TEST4: missing file logs message (intergration with logger)
+	// TEST4: missing file logs message (intergration with logger).
 	files = []string{"test/missing.txt"}
 	filetype = []string{"text/plain"}
-	ParseCsv(files, filetype, columnMap, "test/logfile.txt")
-	logfile, _ := afero.ReadFile(fs.Instance, "test/logfile.txt")
-	wantMessage := "could not be opened"
+	ParseCsv(files, filetype, columnMap)
+	logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
+	wantMessage := "file does not exist"
 	matched, _ := regexp.MatchString(wantMessage, string(logfile))
 	assert.True(t, matched, "message not being logged")
 
-	// mock HeaderMap
+	// Mock HeaderMap
 	fakeHeaderMap := func(columnMap map[string]string, header []string) (map[string]int, error) {
 		return map[string]int{}, errors.New("Missing header columns")
 	}
 	headerMapPatch := monkey.Patch(HeaderMap, fakeHeaderMap)
 
-	// TEST5: header error logs (intergration with logger)
-	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644) // clear log
+	// TEST5: header error logs (intergration with logger).
+	afero.WriteFile(fs.Instance, "test/error.txt", []byte(""), 0644) // clear log
 	files = []string{"test/testfile1.txt"}
 	filetype = []string{"text/plain"}
-	ParseCsv(files, filetype, columnMap, "test/logfile.txt")
-	logfile, _ = afero.ReadFile(fs.Instance, "test/logfile.txt")
+	ParseCsv(files, filetype, columnMap)
+	logfile, _ = afero.ReadFile(fs.Instance, "error.txt")
 	wantMessage = "Missing header columns"
 	matched, _ = regexp.MatchString(wantMessage, string(logfile))
 	assert.True(t, matched, "message not being logged")
-	headerMapPatch.Unpatch() // unmock HeaderMap
+	headerMapPatch.Unpatch() // Unmock HeaderMap.
 }

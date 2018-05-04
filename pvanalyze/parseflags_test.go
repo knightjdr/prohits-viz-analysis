@@ -22,7 +22,7 @@ func TestParseFlagsCorrect(t *testing.T) {
 
 	// Create test directory and files.
 	fs.Instance.MkdirAll("test", 0755)
-	afero.WriteFile(fs.Instance, "test/logfile.txt", []byte(""), 0644)
+	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
 	// TEST1: returns map and params with correct flags specied.
 	os.Args = oldArgs
@@ -32,10 +32,12 @@ func TestParseFlagsCorrect(t *testing.T) {
 		"-analysisType", "dotplot",
 		"-bait", "baitColumn",
 		"-baitList", "bait1,bait2",
+		"-clustering", "hierarchical",
+		"-clusteringMethod", "complete",
 		"-control", "controlColumn",
+		"-distance", "euclidean",
 		"-fileList", "testfile.txt",
 		"-logBase", "2",
-		"-logFile", "test/logfile.txt",
 		"-normalization", "prey",
 		"-normalizationPrey", "prey1",
 		"-prey", "preyColumn",
@@ -59,10 +61,12 @@ func TestParseFlagsCorrect(t *testing.T) {
 		AnalysisType:      "dotplot",
 		Bait:              "baitColumn",
 		BaitList:          []string{"bait1", "bait2"},
+		Clustering:        "hierarchical",
+		ClusteringMethod:  "complete",
 		Control:           "controlColumn",
+		Distance:          "euclidean",
 		Files:             []string{"testfile.txt"},
 		LogBase:           "2",
-		LogFile:           "test/logfile.txt",
 		Normalization:     "prey",
 		NormalizationPrey: "prey1",
 		Prey:              "preyColumn",

@@ -7,6 +7,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/errorcheck"
 	"github.com/knightjdr/prohits-viz-analysis/filereader/columnparser"
 	"github.com/knightjdr/prohits-viz-analysis/filereader/filter"
+	"github.com/knightjdr/prohits-viz-analysis/tool"
 	"github.com/knightjdr/prohits-viz-analysis/transform"
 	"github.com/knightjdr/prohits-viz-analysis/types"
 )
@@ -22,16 +23,10 @@ func main() {
 	dataset := types.Dataset{Params: params}
 
 	// Read needed columns from files.
-	parsedColumns, err := columnparser.ReadFile(params.Files, columnMap, params.LogFile)
-	if err != nil {
-		os.Exit(1)
-	}
+	parsedColumns := columnparser.ReadFile(params.Files, columnMap)
 
 	// Filter rows.
-	dataset.Data, err = filter.Data(parsedColumns, dataset.Params)
-	if err != nil {
-		os.Exit(1)
-	}
+	dataset.Data = filter.Data(parsedColumns, dataset.Params)
 
 	// Check for common errors in filtered data that result from incorrect input format.
 	err = errorcheck.Required(dataset)
@@ -41,4 +36,7 @@ func main() {
 
 	// Transform prey abundances.
 	dataset.Data = transform.Preys(dataset)
+
+	// Perform analysis
+	tool.Start(dataset)
 }
