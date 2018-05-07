@@ -3,6 +3,8 @@ package transform
 import (
 	"strconv"
 	"strings"
+
+	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
 // SummedNormalization normalizes prey abundances between baits by summing the
@@ -55,7 +57,7 @@ func SummedNormalization(data []map[string]interface{}) (transformed []map[strin
 		for _, abdValue := range abundance {
 			transformedAbd, _ := strconv.ParseFloat(abdValue, 64)
 			transformedAbd *= multiplier[baitName]
-			transformedAbd = Round(transformedAbd, 0.01) // Round to nearest two decimals.
+			transformedAbd = helper.Round(transformedAbd, 0.01) // Round to nearest two decimals.
 			// Convert float to string and append.
 			transformedAbdStr = append(transformedAbdStr, FloatToString(transformedAbd))
 		}

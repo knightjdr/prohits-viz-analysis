@@ -12,12 +12,12 @@ import (
 	"errors"
 
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
-	"github.com/knightjdr/prohits-viz-analysis/types"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 // Required is the entry point for error checking the input data.
 func Required(
-	dataset types.Dataset,
+	dataset typedef.Dataset,
 ) (err error) {
 	errs := 0 // Track error number.
 	// Check there is data and panic if not.

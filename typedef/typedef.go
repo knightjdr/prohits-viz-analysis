@@ -1,5 +1,5 @@
-// Package types has type definitions needed in several packages
-package types
+// Package typedef has type definitions needed in several packages
+package typedef
 
 // Analysis Parameters.
 type Parameters struct {
@@ -9,11 +9,13 @@ type Parameters struct {
 	BaitList          []string
 	Clustering        string
 	ClusteringMethod  string
+	ColorSpace        string
 	Control           string
 	Distance          string
 	Files             []string
 	LogBase           string
 	LogFile           string
+	MaximumAbundance  float64
 	Normalization     string
 	NormalizationPrey string
 	Prey              string

@@ -3,6 +3,8 @@ package transform
 import (
 	"strconv"
 	"strings"
+
+	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
 // LogTransform log transforms prey abundance values.
@@ -31,7 +33,7 @@ func LogTransform(data []map[string]interface{}, base string) (transformed []map
 			if transformedAbd < 0 {
 				transformedAbd = float64(0)
 			} else {
-				transformedAbd = Round(transformedAbd, 0.01) // Round to nearest two decimals.
+				transformedAbd = helper.Round(transformedAbd, 0.01) // Round to nearest two decimals.
 			}
 			// Convert float to string and append.
 			transformedAbdStr = append(transformedAbdStr, FloatToString(transformedAbd))

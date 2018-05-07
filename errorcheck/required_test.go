@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/knightjdr/prohits-viz-analysis/fs"
-	"github.com/knightjdr/prohits-viz-analysis/types"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -26,9 +26,9 @@ func TestRequired(t *testing.T) {
 		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
 		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
 	}
-	dataset := types.Dataset{
+	dataset := typedef.Dataset{
 		Data: data,
-		Params: types.Parameters{
+		Params: typedef.Parameters{
 			AnalysisType: "dotplot",
 			Control:      "controlColumn",
 			LogFile:      "error.txt",

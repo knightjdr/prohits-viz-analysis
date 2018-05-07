@@ -5,11 +5,12 @@ import (
 
 	"github.com/knightjdr/hclust"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
-	"github.com/knightjdr/prohits-viz-analysis/types"
+	"github.com/knightjdr/prohits-viz-analysis/svg"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 // Hierarchical clusters dataset hierarchically and outputs files.
-func Hierarchical(dataset types.Dataset) {
+func Hierarchical(dataset typedef.Dataset) {
 	// Generate bait-prey table.
 	matrix, baitList, preyList := BaitPreyMatrix(dataset.Data)
 
@@ -33,20 +34,32 @@ func Hierarchical(dataset types.Dataset) {
 	preyTree, err := hclust.Tree(preyClust, preyList)
 	logmessage.CheckError(err, true)
 
+	// Output svg.
+	params := map[string]interface{}{
+		"colorSpace":       dataset.Params.ColorSpace,
+		"maximumAbundance": dataset.Params.MaximumAbundance,
+	}
+	heatmap := svg.Heatmap(matrix, baitList, preyList, params)
+	ioutil.WriteFile("svg/heatmap.svg", []byte(heatmap), 0644)
+
+	// Output cytoscape files.
+
+	// Write bait-bait cytoscape file.
+	WriteBBCytoscape(baitDist, baitList)
+
+	// Write bait-prey cytoscape file.
+	WriteBPCytoscape(dataset)
+
+	// Write prey-prey cytoscape file.
+	WritePPCytoscape(preyDist, preyList)
+
+	// Output other files.
+
 	// Write transformed data matrix to file.
 	WriteMatrix(matrix, baitList, preyList)
 
 	// Write transformed data matrix to file but as ratios instead of absolutes.
 	WriteRatios(matrix, baitList, preyList)
-
-	// Write bait-prey cytoscape file.
-	WriteBPCytoscape(dataset)
-
-	// Write bait-bait cytoscape file.
-	WriteBBCytoscape(baitDist, baitList)
-
-	// Write prey-prey cytoscape file.
-	WritePPCytoscape(preyDist, preyList)
 
 	// Write newick trees to files.
 	ioutil.WriteFile("other/bait-dendrogram.txt", []byte(baitTree.Newick), 0644)

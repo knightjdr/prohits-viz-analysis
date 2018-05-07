@@ -2,9 +2,9 @@ package dotplot
 
 import (
 	"encoding/csv"
-	"os"
 	"strconv"
 
+	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 )
 
@@ -12,7 +12,7 @@ import (
 // use with cytoscape.
 func WriteBBCytoscape(matrix [][]float64, baitList []string) {
 	// Create file.
-	dataTransformedFile, err := os.Create("cytoscape/bait-bait-cytoscape.txt")
+	dataTransformedFile, err := fs.Instance.Create("cytoscape/bait-bait-cytoscape.txt")
 	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
 	if err != nil {
@@ -28,6 +28,7 @@ func WriteBBCytoscape(matrix [][]float64, baitList []string) {
 	// Create and write header.
 	header := []string{"source", "target", "distance"}
 	err = dataTransformedWriter.Write(header)
+	// Log error and return but don't panic.
 	logmessage.CheckError(err, false)
 	if err != nil {
 		return
@@ -38,11 +39,13 @@ func WriteBBCytoscape(matrix [][]float64, baitList []string) {
 	for i, row := range matrix {
 		for j := i + 1; j < numBaits; j++ {
 			// Create row to write.
-			rowSlice := make([]string, 4)
+			rowSlice := make([]string, 3)
 			rowSlice[0] = baitList[i]
 			rowSlice[1] = baitList[j]
 			rowSlice[2] = strconv.FormatFloat(row[j], 'f', -1, 64)
 			err = dataTransformedWriter.Write(rowSlice)
+
+			// Log error and return but don't panic.
 			logmessage.CheckError(err, false)
 			if err != nil {
 				return

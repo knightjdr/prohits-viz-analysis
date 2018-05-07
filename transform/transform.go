@@ -5,11 +5,11 @@
 // log transformed.
 package transform
 
-import "github.com/knightjdr/prohits-viz-analysis/types"
+import "github.com/knightjdr/prohits-viz-analysis/typedef"
 
 // Preys is the entry point for prey transformations.
 func Preys(
-	dataset types.Dataset,
+	dataset typedef.Dataset,
 ) (transformed []map[string]interface{}) {
 	// Control subtraction.
 	transformed = ControlSubtraction(dataset.Data, dataset.Params.Control)

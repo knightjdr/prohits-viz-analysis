@@ -6,11 +6,11 @@ import (
 	"strings"
 
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
-	"github.com/knightjdr/prohits-viz-analysis/types"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 // ParseFlags parses the command line arguments
-func ParseFlags() (columnMap map[string]string, params types.Parameters, err error) {
+func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err error) {
 	// Command line flag arguments.
 	abundance := flag.String("abundance", "", "Abundance column")
 	analysisType := flag.String("analysisType", "", "Analysis type, one of: baitbait, correlation, dotplot or specificity")
@@ -18,10 +18,12 @@ func ParseFlags() (columnMap map[string]string, params types.Parameters, err err
 	baitList := flag.String("baitList", "", "List of baits")
 	clustering := flag.String("clustering", "", "Clustering type")
 	clusteringMethod := flag.String("clusteringMethod", "", "Clustering type")
+	colorSpace := flag.String("colorSpace", "", "Color space")
 	control := flag.String("control", "", "Control column")
 	distance := flag.String("distance", "", "Distance metric")
 	fileList := flag.String("fileList", "", "Input files as comma-separated list")
 	logBase := flag.String("logBase", "", "Base for log transformation")
+	maximumAbundance := flag.Float64("maximumAbundance", 50, "Maximum abundance")
 	normalization := flag.String("normalization", "", "Normalization type")
 	normalizationPrey := flag.String("normalizationPrey", "", "Prey to use for normalization")
 	prey := flag.String("prey", "", "Prey column")
@@ -88,17 +90,19 @@ func ParseFlags() (columnMap map[string]string, params types.Parameters, err err
 	}
 
 	// Create parameter struct.
-	params = types.Parameters{
+	params = typedef.Parameters{
 		Abundance:         *abundance,
 		AnalysisType:      *analysisType,
 		Bait:              *bait,
 		BaitList:          baits,
 		Clustering:        *clustering,
 		ClusteringMethod:  *clusteringMethod,
+		ColorSpace:        *colorSpace,
 		Control:           *control,
 		Distance:          *distance,
 		Files:             files,
 		LogBase:           *logBase,
+		MaximumAbundance:  *maximumAbundance,
 		Normalization:     *normalization,
 		NormalizationPrey: *normalizationPrey,
 		Prey:              *prey,

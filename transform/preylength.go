@@ -3,6 +3,8 @@ package transform
 import (
 	"strconv"
 	"strings"
+
+	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
 // PreyLength adjusts prey abundance based on the length of a prey relative to
@@ -43,7 +45,7 @@ func PreyLength(data []map[string]interface{}, preyColumn string) (transformed [
 		for _, abdValue := range abundance {
 			transformedAbd, _ := strconv.ParseFloat(abdValue, 64)
 			transformedAbd *= multiplier[preyName]
-			transformedAbd = Round(transformedAbd, 0.01) // Round to nearest two decimals.
+			transformedAbd = helper.Round(transformedAbd, 0.01) // Round to nearest two decimals.
 			// Convert float to string and append.
 			transformedAbdStr = append(transformedAbdStr, FloatToString(transformedAbd))
 		}

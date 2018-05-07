@@ -2,9 +2,9 @@ package dotplot
 
 import (
 	"encoding/csv"
-	"os"
 	"strconv"
 
+	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 )
 
@@ -12,7 +12,7 @@ import (
 // use with cytoscape.
 func WritePPCytoscape(matrix [][]float64, preyList []string) {
 	// Create file.
-	dataTransformedFile, err := os.Create("cytoscape/prey-prey-cytoscape.txt")
+	dataTransformedFile, err := fs.Instance.Create("cytoscape/prey-prey-cytoscape.txt")
 	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
 	if err != nil {
@@ -28,6 +28,7 @@ func WritePPCytoscape(matrix [][]float64, preyList []string) {
 	// Create and write header.
 	header := []string{"source", "target", "distance"}
 	err = dataTransformedWriter.Write(header)
+	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
 	if err != nil {
 		return
@@ -38,11 +39,13 @@ func WritePPCytoscape(matrix [][]float64, preyList []string) {
 	for i, row := range matrix {
 		for j := i + 1; j < numPreys; j++ {
 			// Create row to write.
-			rowSlice := make([]string, 4)
+			rowSlice := make([]string, 3)
 			rowSlice[0] = preyList[i]
 			rowSlice[1] = preyList[j]
 			rowSlice[2] = strconv.FormatFloat(row[j], 'f', -1, 64)
 			err = dataTransformedWriter.Write(rowSlice)
+
+			// Log if error and return without panic.
 			logmessage.CheckError(err, false)
 			if err != nil {
 				return

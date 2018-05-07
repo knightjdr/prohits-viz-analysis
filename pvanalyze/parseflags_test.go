@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/knightjdr/prohits-viz-analysis/fs"
-	"github.com/knightjdr/prohits-viz-analysis/types"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -34,10 +34,12 @@ func TestParseFlagsCorrect(t *testing.T) {
 		"-baitList", "bait1,bait2",
 		"-clustering", "hierarchical",
 		"-clusteringMethod", "complete",
+		"-colorSpace", "blueBlack",
 		"-control", "controlColumn",
 		"-distance", "euclidean",
 		"-fileList", "testfile.txt",
 		"-logBase", "2",
+		"-maximumAbundance", "50",
 		"-normalization", "prey",
 		"-normalizationPrey", "prey1",
 		"-prey", "preyColumn",
@@ -56,17 +58,19 @@ func TestParseFlagsCorrect(t *testing.T) {
 		"preyLength": "preyLengthColumn",
 		"score":      "scoreColumn",
 	}
-	wantParams := types.Parameters{
+	wantParams := typedef.Parameters{
 		Abundance:         "abundanceColumn",
 		AnalysisType:      "dotplot",
 		Bait:              "baitColumn",
 		BaitList:          []string{"bait1", "bait2"},
 		Clustering:        "hierarchical",
 		ClusteringMethod:  "complete",
+		ColorSpace:        "blueBlack",
 		Control:           "controlColumn",
 		Distance:          "euclidean",
 		Files:             []string{"testfile.txt"},
 		LogBase:           "2",
+		MaximumAbundance:  50,
 		Normalization:     "prey",
 		NormalizationPrey: "prey1",
 		Prey:              "preyColumn",

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/knightjdr/prohits-viz-analysis/fs"
-	"github.com/knightjdr/prohits-viz-analysis/types"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -29,7 +29,7 @@ func TestData(t *testing.T) {
 	}
 	preys := make([]string, 0)
 	// Create dataset.
-	params := types.Parameters{
+	params := typedef.Parameters{
 		BaitList:      baits,
 		PreyList:      preys,
 		PrimaryFilter: 0.5,
@@ -45,7 +45,7 @@ func TestData(t *testing.T) {
 	// TEST2: filter typical data slice by baits.
 	baits = []string{"a", "c"}
 	preys = make([]string, 0)
-	params = types.Parameters{
+	params = typedef.Parameters{
 		BaitList:      baits,
 		PreyList:      preys,
 		PrimaryFilter: 1,
@@ -61,7 +61,7 @@ func TestData(t *testing.T) {
 	// TEST3: filter typical data slice by preys.
 	baits = make([]string, 0)
 	preys = []string{"b", "f"}
-	params = types.Parameters{
+	params = typedef.Parameters{
 		BaitList:      baits,
 		PreyList:      preys,
 		PrimaryFilter: 1,
@@ -77,7 +77,7 @@ func TestData(t *testing.T) {
 	// TEST4: filter typical data slice by baits and preys.
 	baits = []string{"a", "c"}
 	preys = []string{"b", "f"}
-	params = types.Parameters{
+	params = typedef.Parameters{
 		BaitList:      baits,
 		PreyList:      preys,
 		PrimaryFilter: 1,
@@ -92,7 +92,7 @@ func TestData(t *testing.T) {
 	// TEST5: no filtered results after bait and prey logs error and panics.
 	baits = []string{"a", "c"}
 	preys = []string{"f"}
-	params = types.Parameters{
+	params = typedef.Parameters{
 		BaitList:      baits,
 		PreyList:      preys,
 		PrimaryFilter: 1,
@@ -116,7 +116,7 @@ func TestData(t *testing.T) {
 		{"bait": "a", "prey": "b", "score": "x"},
 	}
 	preys = make([]string, 0)
-	params = types.Parameters{
+	params = typedef.Parameters{
 		BaitList:      baits,
 		PreyList:      preys,
 		PrimaryFilter: 1,
@@ -132,7 +132,7 @@ func TestData(t *testing.T) {
 		{"bait": "e", "prey": "f", "score": "0.8"},
 	}
 	preys = make([]string, 0)
-	params = types.Parameters{
+	params = typedef.Parameters{
 		BaitList:      baits,
 		LogFile:       "error.txt",
 		PreyList:      preys,

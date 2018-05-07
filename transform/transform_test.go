@@ -3,7 +3,7 @@ package transform
 import (
 	"testing"
 
-	"github.com/knightjdr/prohits-viz-analysis/types"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,9 +22,9 @@ func TestPreys(t *testing.T) {
 		{"bait": "bait2", "prey": "prey1", "abundance": "4", "control": "4", "preyLength": "3"},
 		{"bait": "bait2", "prey": "prey2", "abundance": "2", "control": "2", "preyLength": "5"},
 	}
-	dataset := types.Dataset{
+	dataset := typedef.Dataset{
 		Data: data,
-		Params: types.Parameters{
+		Params: typedef.Parameters{
 			Control:           "controlColumn",
 			LogBase:           "2",
 			Normalization:     "total",

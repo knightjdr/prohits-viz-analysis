@@ -2,8 +2,8 @@ package dotplot
 
 import (
 	"encoding/csv"
-	"os"
 
+	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/helper"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 )
@@ -31,7 +31,7 @@ func NormalizeSlice(unnormalized []float64) (normalized []float64) {
 // and prey names as rows. The matrix values are normalized by row to 1.
 func WriteRatios(matrix [][]float64, baitList, preyList []string) {
 	// Create file.
-	dataTransformedFile, err := os.Create("other/data-transformed-ratios.txt")
+	dataTransformedFile, err := fs.Instance.Create("other/data-transformed-ratios.txt")
 	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
 	if err != nil {
@@ -45,8 +45,9 @@ func WriteRatios(matrix [][]float64, baitList, preyList []string) {
 	defer writer.Flush()
 
 	// Create and write header.
-	header := append([]string{"Bait"}, baitList...)
+	header := append([]string{""}, baitList...)
 	err = writer.Write(header)
+	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
 	if err != nil {
 		return
@@ -57,6 +58,8 @@ func WriteRatios(matrix [][]float64, baitList, preyList []string) {
 		normRow := NormalizeSlice(row)
 		line := append([]string{preyList[i]}, helper.ConvertFts(normRow, 2)...)
 		err = writer.Write(line)
+
+		// Log if error and return without panic.
 		logmessage.CheckError(err, false)
 		if err != nil {
 			return

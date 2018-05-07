@@ -2,20 +2,20 @@ package dotplot
 
 import (
 	"encoding/csv"
-	"os"
 	"strconv"
 	"strings"
 
+	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/helper"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
-	"github.com/knightjdr/prohits-viz-analysis/types"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 // WriteBPCytoscape writes a tabular file with bait and prey information for
 // use with cytoscape.
-func WriteBPCytoscape(dataset types.Dataset) {
+func WriteBPCytoscape(dataset typedef.Dataset) {
 	// Create file.
-	dataTransformedFile, err := os.Create("cytoscape/bait-prey-cytoscape.txt")
+	dataTransformedFile, err := fs.Instance.Create("cytoscape/bait-prey-cytoscape.txt")
 	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
 	if err != nil {
@@ -31,6 +31,7 @@ func WriteBPCytoscape(dataset types.Dataset) {
 	// Create and write header.
 	header := []string{dataset.Params.Bait, dataset.Params.Prey, dataset.Params.Abundance, dataset.Params.Score}
 	err = writer.Write(header)
+	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
 	if err != nil {
 		return
@@ -56,6 +57,8 @@ func WriteBPCytoscape(dataset types.Dataset) {
 			rowSlice[2] = strconv.FormatFloat(abundanceSum, 'f', 2, 64)
 			rowSlice[3] = strconv.FormatFloat(row["score"].(float64), 'f', 2, 64)
 			err = writer.Write(rowSlice)
+
+			// Log if error and return without panic.
 			logmessage.CheckError(err, false)
 			if err != nil {
 				return

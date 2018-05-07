@@ -5,13 +5,13 @@ import (
 	"errors"
 
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
-	"github.com/knightjdr/prohits-viz-analysis/types"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 // Data filters first by bait and prey, then score.
 func Data(
 	data []map[string]string,
-	params types.Parameters,
+	params typedef.Parameters,
 ) (filtered []map[string]interface{}) {
 	filteredBaitPrey := make([]map[string]string, 0)
 	// Filter by both baits and preys if there are lists for both.

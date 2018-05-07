@@ -3,6 +3,8 @@ package transform
 import (
 	"strconv"
 	"strings"
+
+	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
 // ControlSubtraction will subtract the average control value from the prey abundance.
@@ -33,7 +35,7 @@ func ControlSubtraction(data []map[string]interface{}, controlColumn string) (tr
 			if transformedAbd < 0 {
 				transformedAbd = float64(0)
 			} else {
-				transformedAbd = Round(transformedAbd, 0.01) // Round to nearest two decimals.
+				transformedAbd = helper.Round(transformedAbd, 0.01) // Round to nearest two decimals.
 			}
 			// Convert float to string and append.
 			transformedAbdStr = append(transformedAbdStr, FloatToString(transformedAbd))

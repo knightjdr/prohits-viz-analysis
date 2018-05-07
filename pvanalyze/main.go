@@ -9,7 +9,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/filereader/filter"
 	"github.com/knightjdr/prohits-viz-analysis/tool"
 	"github.com/knightjdr/prohits-viz-analysis/transform"
-	"github.com/knightjdr/prohits-viz-analysis/types"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 	}
 
 	// Create dataset.
-	dataset := types.Dataset{Params: params}
+	dataset := typedef.Dataset{Params: params}
 
 	// Read needed columns from files.
 	parsedColumns := columnparser.ReadFile(params.Files, columnMap)

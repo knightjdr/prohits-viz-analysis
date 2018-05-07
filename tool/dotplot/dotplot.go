@@ -6,14 +6,17 @@ import (
 	"path/filepath"
 
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
-	"github.com/knightjdr/prohits-viz-analysis/types"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 // Generate is the entry point for generating dotplots and output files.
-func Generate(dataset types.Dataset) {
+func Generate(dataset typedef.Dataset) {
 	// Create subfolders. Panic if error.
 	cytoscapePath := filepath.Join(".", "cytoscape")
 	err := os.MkdirAll(cytoscapePath, os.ModePerm)
+	logmessage.CheckError(err, true)
+	svgPath := filepath.Join(".", "svg")
+	err = os.MkdirAll(svgPath, os.ModePerm)
 	logmessage.CheckError(err, true)
 	otherPath := filepath.Join(".", "other")
 	err = os.MkdirAll(otherPath, os.ModePerm)
