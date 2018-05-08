@@ -5,18 +5,17 @@ import (
 
 	"github.com/knightjdr/hclust"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
-	"github.com/knightjdr/prohits-viz-analysis/svg"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 // Hierarchical clusters dataset hierarchically and outputs files.
 func Hierarchical(dataset typedef.Dataset) {
 	// Generate bait-prey table.
-	matrix, baitList, preyList := BaitPreyMatrix(dataset.Data)
+	data := BaitPreyMatrix(dataset.Data, dataset.Params.ScoreType)
 
 	// Generate bait and prey distance matrices.
-	baitDist := hclust.Distance(matrix, dataset.Params.Distance, true)
-	preyDist := hclust.Distance(matrix, dataset.Params.Distance, false)
+	baitDist := hclust.Distance(data.Abundance, dataset.Params.Distance, true)
+	preyDist := hclust.Distance(data.Abundance, dataset.Params.Distance, false)
 
 	// Bait and prey clustering.
 	baitClust, err := hclust.Cluster(baitDist, dataset.Params.ClusteringMethod)
@@ -29,37 +28,63 @@ func Hierarchical(dataset typedef.Dataset) {
 	preyClust = hclust.Optimize(preyClust, preyDist)
 
 	// Create tree and get clustering order.
-	baitTree, err := hclust.Tree(baitClust, baitList)
+	baitTree, err := hclust.Tree(baitClust, data.Baits)
 	logmessage.CheckError(err, true)
-	preyTree, err := hclust.Tree(preyClust, preyList)
+	preyTree, err := hclust.Tree(preyClust, data.Preys)
 	logmessage.CheckError(err, true)
 
-	// Output svg.
-	params := map[string]interface{}{
-		"colorSpace":       dataset.Params.ColorSpace,
-		"maximumAbundance": dataset.Params.MaximumAbundance,
-	}
-	heatmap := svg.Heatmap(matrix, baitList, preyList, params)
-	ioutil.WriteFile("svg/heatmap.svg", []byte(heatmap), 0644)
+	// Create matrix with normalized rows for bait-prey abundances.
+	ratios := NormalizeMatrix(data.Abundance)
+
+	// Output svgs.
+
+	// Output bait-bait svg.
+	SvgBB(baitDist, data.Baits, baitTree.Order, dataset.Params.ColorSpace)
+
+	// Output bait-prey dotplot.
+	SvgDotplot(
+		data.Abundance,
+		ratios,
+		data.Score,
+		data.Baits,
+		data.Preys,
+		baitTree.Order,
+		preyTree.Order,
+		dataset.Params,
+	)
+
+	// Output bait-prey heatmap.
+	SvgHeatmap(
+		data.Abundance,
+		data.Baits,
+		data.Preys,
+		baitTree.Order,
+		preyTree.Order,
+		dataset.Params.ColorSpace,
+		dataset.Params.MaximumAbundance,
+	)
+
+	// Output prey-prey svg.
+	SvgPP(preyDist, data.Preys, preyTree.Order, dataset.Params.ColorSpace)
 
 	// Output cytoscape files.
 
 	// Write bait-bait cytoscape file.
-	WriteBBCytoscape(baitDist, baitList)
+	WriteBBCytoscape(baitDist, data.Baits)
 
 	// Write bait-prey cytoscape file.
 	WriteBPCytoscape(dataset)
 
 	// Write prey-prey cytoscape file.
-	WritePPCytoscape(preyDist, preyList)
+	WritePPCytoscape(preyDist, data.Preys)
 
 	// Output other files.
 
 	// Write transformed data matrix to file.
-	WriteMatrix(matrix, baitList, preyList)
+	WriteMatrix(data.Abundance, data.Baits, data.Preys, "other/data-transformed.txt")
 
 	// Write transformed data matrix to file but as ratios instead of absolutes.
-	WriteRatios(matrix, baitList, preyList)
+	WriteMatrix(ratios, data.Baits, data.Preys, "other/data-transformed-ratios.txt")
 
 	// Write newick trees to files.
 	ioutil.WriteFile("other/bait-dendrogram.txt", []byte(baitTree.Newick), 0644)

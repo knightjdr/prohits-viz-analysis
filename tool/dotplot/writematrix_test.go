@@ -24,6 +24,7 @@ func TestWriteMatrix(t *testing.T) {
 
 	// Data.
 	baitList := []string{"bait1", "bait2", "bait3"}
+	filename := "other/test.txt"
 	matrix := [][]float64{
 		{0, 10, 74.2},
 		{5, 7.2, 90.12},
@@ -33,10 +34,10 @@ func TestWriteMatrix(t *testing.T) {
 
 	// TEST1: bait prey transformed data.
 	want := "\tbait1\tbait2\tbait3\nprey1\t0.00\t10.00\t74.20\nprey2\t5.00\t7.20\t90.12\nprey3\t8.30\t2.00\t1.40\n"
-	WriteMatrix(matrix, baitList, preyList)
-	tsvFile, _ := afero.ReadFile(fs.Instance, "other/data-transformed.txt")
+	WriteMatrix(matrix, baitList, preyList, filename)
+	tsvFile, _ := afero.ReadFile(fs.Instance, filename)
 	assert.Equal(t, want, string(tsvFile), "Bait prey transformed data table not output correctly")
-	fs.Instance.Remove("other/data-transformed.txt")
+	fs.Instance.Remove(filename)
 
 	// Mock Create. Method is unpatched using monkey.UnpatchAll() as
 	// UnpatchInstanceMethod was not working between tests.
@@ -47,14 +48,14 @@ func TestWriteMatrix(t *testing.T) {
 	monkey.PatchInstanceMethod(reflect.TypeOf(fs.Instance), "Create", fakeCreate)
 
 	// TEST2: write error.
-	WriteMatrix(matrix, baitList, preyList)
+	WriteMatrix(matrix, baitList, preyList, filename)
 	// Ensure error is logged.
 	logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
 	want = "File cannot be created"
 	matched, _ := regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "File creation error message not being logged")
 	// Ensure file has not been created.
-	fileExists, _ := afero.Exists(fs.Instance, "other/data-transformed.txt")
+	fileExists, _ := afero.Exists(fs.Instance, filename)
 	assert.False(
 		t,
 		fileExists,

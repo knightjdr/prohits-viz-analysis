@@ -6,19 +6,54 @@ import (
 	"strings"
 )
 
-type BaitPrey struct {
-	Prey, Bait string
+type baitPrey struct {
+	prey, bait string
+}
+
+// Data holds information about the input data table.
+type Data struct {
+	Abundance, Score [][]float64
+	Baits, Preys     []string
+}
+
+type preyData struct {
+	abundance, score float64
+}
+
+// ScoreFunc returns a function for determining if a score is worse than treshold.
+// This is used for finding the worst score to use for missing preys in the table.
+func scoreFunc(scoreType string) func(score, threshold float64) float64 {
+	if scoreType == "gte" {
+		return func(score, threshold float64) float64 {
+			if score < threshold {
+				return score
+			}
+			return threshold
+		}
+	} else {
+		return func(score, threshold float64) float64 {
+			if score > threshold {
+				return score
+			}
+			return threshold
+		}
+	}
 }
 
 // BaitPreyMatrix generates a 2D matrix with rows (first dimensions) equal to preys
 // sorted alphabetically and columns (2nd dimension) equal to baits sorted
-// alphabetically.
-func BaitPreyMatrix(data []map[string]interface{}) (matrix [][]float64, baitList []string, preyList []string) {
-	// Put each bait prey pair into a 2D map.
+// alphabetically. It does this with both abundance and the score as the matrix
+// value. It also returns lists of the baits and preys.
+func BaitPreyMatrix(table []map[string]interface{}, scoreType string) (data Data) {
+	// Get scoring function to use for finding the worst score.
+	scoreCompare := scoreFunc(scoreType)
+	worstScore := float64(0)
+
+	// Put each bait prey pair into a 2D map. Also find the worst score.
 	baits := make(map[string]bool, 0)
 	preys := make(map[string]bool, 0)
-	preyBait := make(map[BaitPrey]float64)
-	for _, row := range data {
+	preyBait := make(map[baitPrey]preyData)
+	for _, row := range table {
 		baitName := row["bait"].(string)
 		preyName := row["prey"].(string)
 
@@ -30,8 +65,12 @@ func BaitPreyMatrix(data []map[string]interface{}) (matrix [][]float64, baitList
 			abundanceSum += abdFloat
 		}
 
-		// Set prey-bait map value
-		preyBait[BaitPrey{preyName, baitName}] = abundanceSum
+		// Set prey-bait map value.
+		score, _ := row["score"].(float64)
+		preyBait[baitPrey{preyName, baitName}] = preyData{abundance: abundanceSum, score: score}
+
+		// Set worst score.
+		worstScore = scoreCompare(score, worstScore)
 
 		// Add bait if unique.
 		if _, ok := baits[baitName]; !ok {
@@ -46,24 +85,28 @@ func BaitPreyMatrix(data []map[string]interface{}) (matrix [][]float64, baitList
 
 	// Sort baits and preys.
 	for bait, _ := range baits {
-		baitList = append(baitList, bait)
+		data.Baits = append(data.Baits, bait)
 	}
 	for prey, _ := range preys {
-		preyList = append(preyList, prey)
+		data.Preys = append(data.Preys, prey)
 	}
-	sort.Strings(baitList)
-	sort.Strings(preyList)
+	sort.Strings(data.Baits)
+	sort.Strings(data.Preys)
 
 	// Iterate over bait and prey lists to create matrix. Missing values are
 	// set to zero.
-	matrix = make([][]float64, len(preyList)) // Set row capacity.
-	for i, prey := range preyList {
-		matrix[i] = make([]float64, len(baitList)) // Set column capacity.
-		for j, bait := range baitList {
-			if value, ok := preyBait[BaitPrey{prey, bait}]; ok {
-				matrix[i][j] = value
+	data.Abundance = make([][]float64, len(data.Preys)) // Set row capacity.
+	data.Score = make([][]float64, len(data.Preys))     // Set row capacity.
+	for i, prey := range data.Preys {
+		data.Abundance[i] = make([]float64, len(data.Baits)) // Set column capacity.
+		data.Score[i] = make([]float64, len(data.Baits))     // Set column capacity.
+		for j, bait := range data.Baits {
+			if value, ok := preyBait[baitPrey{prey, bait}]; ok {
+				data.Abundance[i][j] = value.abundance
+				data.Score[i][j] = value.score
 			} else {
-				matrix[i][j] = 0
+				data.Abundance[i][j] = 0
+				data.Score[i][j] = worstScore
 			}
 		}
 	}

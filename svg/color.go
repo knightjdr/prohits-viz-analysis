@@ -9,17 +9,46 @@ import (
 
 // ColorGradient defines a color gradient to use for fill values. It defines
 // the colors to use via HSL and then converts those to HEX.
-func ColorGradient(colorSpace string, numColors int) (gradient []string) {
+func ColorGradient(colorSpace string, numColors int, invert bool) (gradient []string) {
 
-	// Create hex gradient.
+	// Create hex gradient. The color scale is set using the hue and saturation
+	// components of HSL. The gradient is then defined by changing the lightness
+	// from 1 (light) to 0 (dark). HSL values are on a 0-1 scale.
+	// The maximum hue value of 1 equals 360 so all values are relative to that.
+	var h, s float64
+	if colorSpace == "greenBlack" {
+		// Middle HSL value = (120, 100%, 50%).
+		h = float64(120) / float64(360)
+		s = 1
+	} else if colorSpace == "greyscale" {
+		// Middle HSL value = (0, 0%, 50%).
+		h = 0
+		s = 0
+	} else if colorSpace == "redBlack" {
+		// Middle HSL value = (0, 100%, 50%).
+		h = 0
+		s = 1
+	} else if colorSpace == "yellowBlack" {
+		// Middle HSL value = (60, 100%, 50%).
+		h = float64(60) / float64(360)
+		s = 1
+	} else { // default blueBlack
+		// Middle (HSL value = (225, 100%, 50%).
+		h = 0.625
+		s = 1
+	}
+	increment := 1.00 / float64(numColors-1)
+	startL := 1.00
 	gradient = make([]string, numColors)
-	if colorSpace == "blueBlack" {
-		// Middle (blue) HSL value = (225, 100%, 50%), but using 0-1 scale for each
-		increment := 0.9 / float64(numColors-1)
-		startL := 0.95
-		for i := 0; i < numColors; i++ {
-			lightness := helper.Round(startL-(float64(i)*increment), 0.0001)
-			gradient[i] = HSLtoHex(map[string]float64{"h": 0.625, "s": 1, "l": lightness})
+	for i := 0; i < numColors; i++ {
+		lightness := helper.Round(startL-(float64(i)*increment), 0.0001)
+		gradient[i] = HSLtoHex(map[string]float64{"h": h, "s": s, "l": lightness})
+	}
+
+	// Invert gradient if requested.
+	if invert {
+		for i, j := 0, numColors-1; i < j; i, j = i+1, j-1 {
+			gradient[i], gradient[j] = gradient[j], gradient[i]
 		}
 	}
 	return

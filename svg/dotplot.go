@@ -5,10 +5,41 @@ import (
 	"bytes"
 	"fmt"
 	"math"
+
+	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
-// Heatmap creates a heatmap from an input matrix.
-func Heatmap(matrix [][]float64, columns, rows []string, options map[string]interface{}) (svg string) {
+// ScoreColorFunc returns a function for determining the gradient index to use
+// for the score color.
+func scoreColorFunc(scoretype string, primary, secondary float64, numColors int) func(score float64) int {
+	if scoretype == "gte" {
+		return func(score float64) int {
+			if score >= primary {
+				return numColors
+			} else if score < primary && score >= secondary {
+				return numColors / 2
+			}
+			return numColors / 4
+		}
+	} else {
+		return func(score float64) int {
+			if score <= primary {
+				return numColors
+			} else if score > primary && score <= secondary {
+				return numColors / 2
+			}
+			return numColors / 4
+		}
+	}
+}
+
+// Dotplot creates a dotplot from an input matrices of abundance, abundance
+// ratios and score.
+func Dotplot(
+	matrix, ratios, scores [][]float64,
+	columns, rows []string,
+	options map[string]interface{},
+) (svg string) {
 	svgSlice := make([]string, 0)
 
 	// Check row and column size and adjust plot params as needed. The parameter
@@ -26,8 +57,27 @@ func Heatmap(matrix [][]float64, columns, rows []string, options map[string]inte
 		ratio = math.Max(colRatio, rowRatio)
 		ratio = 1 / ratio
 	}
+
+	// Sit the size of each cell on the dotplot.
 	cellSize := int(math.Floor(ratio * float64(idealCellSize)))
+	cellSizeHalf := int(math.Round(float64(cellSize) / float64(2)))
+
+	// Determine the amount to subtract for the maximum circle radius. We do this
+	// so that there is some space between circles. For the ideal cell size of 20
+	// (half size 10), I subtract 1 pixel from the radius to create 2 pixels of
+	// padding between circles, but this can go down as the size of the cell
+	// decreases.
+	circleSpace := ratio * idealCircleSpace
+
+	// Edgewidth can shrink as cell size gets smaller.
+	edgeWidth := helper.Round(ratio*float64(idealEdgeWidth), 0.01)
+
+	// Font size.
 	fontSize := int(math.Floor(ratio * float64(idealFontSize)))
+
+	// Determine the maxium circle radius. Will be 9px for the default cell size
+	// of 20px.
+	maxRadius := helper.Round(float64(cellSizeHalf)-circleSpace, 0.01)
 
 	// Calculate required top margin. Find the longest column name and assume it
 	// is made entirely of the "W" character (which has a width of 11.33px at
@@ -82,7 +132,7 @@ func Heatmap(matrix [][]float64, columns, rows []string, options map[string]inte
 
 	// Write row names.
 	xOffset = leftMargin - 2
-	yOffset = (cellSize + fontSize - 2) / 2
+	yOffset = cellSizeHalf + ((fontSize - 2) / 2)
 	svgSlice = append(svgSlice, fmt.Sprintf("\t<g transform=\"translate(0, %d)\">\n", topMargin))
 	for i, rowName := range rows {
 		yPos := (i * cellSize) + yOffset
@@ -97,23 +147,42 @@ func Heatmap(matrix [][]float64, columns, rows []string, options map[string]inte
 	// Get color gradient.
 	colorGradient := ColorGradient(options["colorSpace"].(string), 101, options["invert"].(bool))
 
+	// Get function for determining score edge color.
+	edgeColorFunc := scoreColorFunc(options["scoreType"].(string), options["primary"].(float64), options["secondary"].(float64), 100)
+
 	// Write rows.
 	svgSlice = append(svgSlice, fmt.Sprintf("\t<g transform=\"translate(%d, %d)\">\n", leftMargin, topMargin))
 	for i, row := range matrix {
-		iPos := i * cellSize
+		// Set x position.
+		iPos := (i * cellSize) + cellSizeHalf
+
+		// Draw dots.
 		for j, value := range row {
-			var fill string
-			if value > options["maximumAbundance"].(float64) {
-				fill = colorGradient[100]
-			} else {
-				index := int(math.Round(value / options["maximumAbundance"].(float64) * 100))
-				fill = colorGradient[index]
+			if value > 0 {
+				// Get fill color.
+				var fill string
+				if value > options["maximumAbundance"].(float64) {
+					fill = colorGradient[100]
+				} else {
+					index := int(math.Round(value / options["maximumAbundance"].(float64) * 100))
+					fill = colorGradient[index]
+				}
+
+				// Edge color
+				edgeColorIndex := edgeColorFunc(scores[i][j])
+				edgeColor := colorGradient[edgeColorIndex]
+
+				// Get circle radius.
+				radius := helper.Round(ratios[i][j]*maxRadius, 0.01)
+
+				// Draw circle.
+				circle := fmt.Sprintf(
+					"\t\t<circle fill=\"%s\" cy=\"%d\" cx=\"%d\" r=\"%f\""+
+						" stroke=\"%s\" stroke-width=\"%f\"/>\n",
+					fill, iPos, (j*cellSize)+cellSizeHalf, radius, edgeColor, edgeWidth,
+				)
+				svgSlice = append(svgSlice, circle)
 			}
-			rect := fmt.Sprintf(
-				"\t\t<rect fill=\"%s\" y=\"%d\" x=\"%d\" width=\"%d\" height=\"%d\" />\n",
-				fill, iPos, j*cellSize, cellSize, cellSize,
-			)
-			svgSlice = append(svgSlice, rect)
 		}
 	}
 	svgSlice = append(svgSlice, "\t</g>\n")
@@ -135,6 +204,14 @@ func Heatmap(matrix [][]float64, columns, rows []string, options map[string]inte
 		yOffset, yOffset, options["rowLabel"],
 	)
 	svgSlice = append(svgSlice, text)
+
+	// Add bounding box.
+	rect := fmt.Sprintf(
+		"\t<rect fill=\"none\" y=\"%d\" x=\"%d\" width=\"%d\" height=\"%d\""+
+			" stroke=\"#000000\" stroke-width=\"0.5\" />\n",
+		topMargin, leftMargin, plotWidth-leftMargin, plotHeight-topMargin,
+	)
+	svgSlice = append(svgSlice, rect)
 
 	// Add end element wrapper for svg.
 	svgSlice = append(svgSlice, "</svg>\n")

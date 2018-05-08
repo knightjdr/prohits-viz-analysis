@@ -10,9 +10,9 @@ import (
 
 // WriteMatrix writes a matrix to a tsv file with bait names as columns
 // and prey names as rows.
-func WriteMatrix(matrix [][]float64, baitList, preyList []string) (err error) {
+func WriteMatrix(matrix [][]float64, baitList, preyList []string, filename string) (err error) {
 	// Create file.
-	dataTransformedFile, err := fs.Instance.Create("other/data-transformed.txt")
+	dataTransformedFile, err := fs.Instance.Create(filename)
 	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
 	if err != nil {

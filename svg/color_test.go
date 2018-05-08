@@ -28,18 +28,99 @@ func TestColor(t *testing.T) {
 		assert.Equal(t, wantHex[i], HSLtoHex(testHSL[i]), "HSL color not converted correctly")
 	}
 
-	// TEST2: test generation of color gradient.
+	// TEST2: test generation of blueBlack (default) color gradient.
 	want := []string{
-		"#e6ecff",
-		"#b3c6ff",
-		"#809fff",
-		"#4d79ff",
-		"#1a53ff",
-		"#0039e6",
-		"#002db3",
-		"#002080",
-		"#00134d",
-		"#00061a",
+		"#ffffff",
+		"#ccd9ff",
+		"#99b3ff",
+		"#668cff",
+		"#3366ff",
+		"#0040ff",
+		"#0033cc",
+		"#002699",
+		"#001966",
+		"#000d33",
+		"#000000",
 	}
-	assert.Equal(t, want, ColorGradient("blueBlack", 10), "Blue color gradient is not correct")
+	assert.Equal(t, want, ColorGradient("blueBlack", 11, false), "Blue (default) color gradient is not correct")
+
+	// TEST3: test generation of greenBlack color gradient.
+	want = []string{
+		"#ffffff",
+		"#ccffcc",
+		"#99ff99",
+		"#66ff66",
+		"#33ff33",
+		"#00ff00",
+		"#00cc00",
+		"#009900",
+		"#006600",
+		"#003300",
+		"#000000",
+	}
+	assert.Equal(t, want, ColorGradient("greenBlack", 11, false), "Green color gradient is not correct")
+
+	// TEST4: test generation of greyscale color gradient.
+	want = []string{
+		"#ffffff",
+		"#e6e6e6",
+		"#cccccc",
+		"#b3b3b3",
+		"#999999",
+		"#808080",
+		"#666666",
+		"#4d4d4d",
+		"#333333",
+		"#1a1a1a",
+		"#000000",
+	}
+	assert.Equal(t, want, ColorGradient("greyscale", 11, false), "Grey color gradient is not correct")
+
+	// TEST5: test generation of redBlack color gradient.
+	want = []string{
+		"#ffffff",
+		"#ffcccc",
+		"#ff9999",
+		"#ff6666",
+		"#ff3333",
+		"#ff0000",
+		"#cc0000",
+		"#990000",
+		"#660000",
+		"#330000",
+		"#000000",
+	}
+	assert.Equal(t, want, ColorGradient("redBlack", 11, false), "Red color gradient is not correct")
+
+	// TEST5: test generation of yellowBlack color gradient.
+	want = []string{
+		"#ffffff",
+		"#ffffcc",
+		"#ffff99",
+		"#ffff66",
+		"#ffff33",
+		"#ffff00",
+		"#cccc00",
+		"#999900",
+		"#666600",
+		"#333300",
+		"#000000",
+	}
+	assert.Equal(t, want, ColorGradient("yellowBlack", 11, false), "Yellow color gradient is not correct")
+
+	// TEST6: gradient inversion.
+	want = []string{
+		"#000000",
+		"#000d33",
+		"#001966",
+		"#002699",
+		"#0033cc",
+		"#0040ff",
+		"#3366ff",
+		"#668cff",
+		"#99b3ff",
+		"#ccd9ff",
+		"#ffffff",
+	}
+	assert.Equal(t, want, ColorGradient("blueBlack", 11, true), "Gradient inversion is not correct")
 }
