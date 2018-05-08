@@ -38,10 +38,10 @@ func Hierarchical(dataset typedef.Dataset) {
 
 	// Output svgs.
 
-	// Output bait-bait svg.
+	// Write bait-bait svg.
 	SvgBB(baitDist, data.Baits, baitTree.Order, dataset.Params.ColorSpace)
 
-	// Output bait-prey dotplot.
+	// Write bait-prey dotplot.
 	SvgDotplot(
 		data.Abundance,
 		ratios,
@@ -53,7 +53,7 @@ func Hierarchical(dataset typedef.Dataset) {
 		dataset.Params,
 	)
 
-	// Output bait-prey heatmap.
+	// Write bait-prey heatmap.
 	SvgHeatmap(
 		data.Abundance,
 		data.Baits,
@@ -64,8 +64,10 @@ func Hierarchical(dataset typedef.Dataset) {
 		dataset.Params.MaximumAbundance,
 	)
 
-	// Output prey-prey svg.
+	// Write prey-prey svg.
 	SvgPP(preyDist, data.Preys, preyTree.Order, dataset.Params.ColorSpace)
+
+	// Write dotplot legend.
 
 	// Output cytoscape files.
 
