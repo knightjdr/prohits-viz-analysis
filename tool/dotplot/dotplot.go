@@ -15,11 +15,14 @@ func Generate(dataset typedef.Dataset) {
 	cytoscapePath := filepath.Join(".", "cytoscape")
 	err := os.MkdirAll(cytoscapePath, os.ModePerm)
 	logmessage.CheckError(err, true)
-	svgPath := filepath.Join(".", "svg")
-	err = os.MkdirAll(svgPath, os.ModePerm)
+	interactivePath := filepath.Join(".", "interactive")
+	err = os.MkdirAll(interactivePath, os.ModePerm)
 	logmessage.CheckError(err, true)
 	otherPath := filepath.Join(".", "other")
 	err = os.MkdirAll(otherPath, os.ModePerm)
+	logmessage.CheckError(err, true)
+	svgPath := filepath.Join(".", "svg")
+	err = os.MkdirAll(svgPath, os.ModePerm)
 	logmessage.CheckError(err, true)
 
 	// Initiate clustering method.

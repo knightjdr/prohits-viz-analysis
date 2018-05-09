@@ -13,7 +13,7 @@ func DotplotLegend(
 	colorSpace, title string,
 	numColors int,
 	min, max, primary, secondary float64,
-	scoreType string,
+	score, scoreType string,
 ) (svg string) {
 	// Get color gradient.
 	gradient := ColorGradient(colorSpace, numColors, false)
@@ -21,7 +21,7 @@ func DotplotLegend(
 	// Define svg.
 	svgSlice := make([]string, 0)
 	svgInit := "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"" +
-		" xml:space=\"preserve\" width=\"200\" height=\"220\" viewBox=\"0 0 200 220\">\n"
+		" xml:space=\"preserve\" width=\"200\" height=\"240\" viewBox=\"0 0 200 240\">\n"
 	svgSlice = append(svgSlice, svgInit)
 
 	// Add title
@@ -78,6 +78,11 @@ func DotplotLegend(
 
 	// Draw score graphic.
 	svgSlice = append(svgSlice, "\t<g>\n")
+	scoreText := fmt.Sprintf("\t\t<text y=\"220\" x=\"100\" font-size=\"12\""+
+		" text-anchor=\"middle\">%s</text>\n",
+		score,
+	)
+	svgSlice = append(svgSlice, scoreText)
 
 	// Create primary circle.
 	primaryCirc := fmt.Sprintf("\t\t<circle fill=\"none\" cy=\"165\" cx=\"50\" r=\"12\""+

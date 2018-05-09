@@ -36,8 +36,12 @@ func Hierarchical(dataset typedef.Dataset) {
 	preyTree, err := hclust.Tree(preyClust, data.Preys)
 	logmessage.CheckError(err, true)
 
-	// Create matrix with normalized rows for bait-prey abundances.
-	ratios := NormalizeMatrix(data.Abundance)
+	// Sort abundance matrix.
+	sortedAbundance, _ := hclust.Sort(data.Abundance, data.Baits, baitTree.Order, "column")
+	sortedAbundance, _ = hclust.Sort(sortedAbundance, data.Preys, preyTree.Order, "row")
+	sortedRatios := NormalizeMatrix(sortedAbundance)
+	sortedScores, _ := hclust.Sort(data.Score, data.Baits, baitTree.Order, "column")
+	sortedScores, _ = hclust.Sort(sortedScores, data.Preys, preyTree.Order, "row")
 
 	// Write log.
 	LogParams(dataset.Params)
@@ -49,11 +53,9 @@ func Hierarchical(dataset typedef.Dataset) {
 
 	// Write bait-prey dotplot.
 	SvgDotplot(
-		data.Abundance,
-		ratios,
-		data.Score,
-		data.Baits,
-		data.Preys,
+		sortedAbundance,
+		sortedRatios,
+		sortedScores,
 		baitTree.Order,
 		preyTree.Order,
 		dataset.Params,
@@ -61,9 +63,7 @@ func Hierarchical(dataset typedef.Dataset) {
 
 	// Write bait-prey heatmap.
 	SvgHeatmap(
-		data.Abundance,
-		data.Baits,
-		data.Preys,
+		sortedAbundance,
 		baitTree.Order,
 		preyTree.Order,
 		dataset.Params.ColorSpace,
@@ -106,13 +106,15 @@ func Hierarchical(dataset typedef.Dataset) {
 	// Output other files.
 
 	// Write transformed data matrix to file.
-	WriteMatrix(data.Abundance, data.Baits, data.Preys, "other/data-transformed.txt")
+	WriteMatrix(sortedAbundance, baitTree.Order, preyTree.Order, "other/data-transformed.txt")
 
 	// Write transformed data matrix to file but as ratios instead of absolutes.
-	WriteMatrix(ratios, data.Baits, data.Preys, "other/data-transformed-ratios.txt")
+	WriteMatrix(sortedRatios, baitTree.Order, preyTree.Order, "other/data-transformed-ratios.txt")
 
 	// Write newick trees to files.
 	afero.WriteFile(fs.Instance, "other/bait-dendrogram.txt", []byte(baitTree.Newick), 0644)
 	afero.WriteFile(fs.Instance, "other/prey-dendrogram.txt", []byte(preyTree.Newick), 0644)
+
+	// Create interactive files.
 	return
 }

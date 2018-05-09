@@ -8,7 +8,7 @@ import (
 
 func TestDotplotLegend(t *testing.T) {
 	// TEST1: draw legend svg with lte as score type.
-	want := "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"200\" height=\"220\" viewBox=\"0 0 200 220\">\n" +
+	want := "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"200\" height=\"240\" viewBox=\"0 0 200 240\">\n" +
 		"\t<text y=\"20\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Title - test</text>\n" +
 		"\t<g>\n" +
 		"\t\t<rect fill=\"#ffffff\" y=\"30\" x=\"25.000000\" width=\"13.640000\" height=\"20\" />\n" +
@@ -34,6 +34,7 @@ func TestDotplotLegend(t *testing.T) {
 		"\t\t<text y=\"130\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Relative abundance</text>\n" +
 		"\t</g>\n" +
 		"\t<g>\n" +
+		"\t\t<text y=\"220\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">FDR</text>\n" +
 		"\t\t<circle fill=\"none\" cy=\"165\" cx=\"50\" r=\"12\" stroke=\"#000000\" stroke-width=\"2\" />\n" +
 		"\t\t<text y=\"195\" x=\"50\" font-size=\"12\" text-anchor=\"middle\">≤ 0.01</text>\n" +
 		"\t\t<circle fill=\"none\" cy=\"165\" cx=\"100\" r=\"12\" stroke=\"#0040ff\" stroke-width=\"2\" />\n" +
@@ -45,12 +46,12 @@ func TestDotplotLegend(t *testing.T) {
 	assert.Equal(
 		t,
 		want,
-		DotplotLegend("blueBlack", "Title - test", 11, 0, 50, 0.01, 0.05, "lte"),
+		DotplotLegend("blueBlack", "Title - test", 11, 0, 50, 0.01, 0.05, "FDR", "lte"),
 		"Dotplot legend is not correct for lte score type",
 	)
 
 	// TEST2: draw legend svg with gte as score type.
-	want = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"200\" height=\"220\" viewBox=\"0 0 200 220\">\n" +
+	want = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"200\" height=\"240\" viewBox=\"0 0 200 240\">\n" +
 		"\t<text y=\"20\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Title - test</text>\n" +
 		"\t<g>\n" +
 		"\t\t<rect fill=\"#ffffff\" y=\"30\" x=\"25.000000\" width=\"13.640000\" height=\"20\" />\n" +
@@ -76,6 +77,7 @@ func TestDotplotLegend(t *testing.T) {
 		"\t\t<text y=\"130\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Relative abundance</text>\n" +
 		"\t</g>\n" +
 		"\t<g>\n" +
+		"\t\t<text y=\"220\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">FDR</text>\n" +
 		"\t\t<circle fill=\"none\" cy=\"165\" cx=\"50\" r=\"12\" stroke=\"#000000\" stroke-width=\"2\" />\n" +
 		"\t\t<text y=\"195\" x=\"50\" font-size=\"12\" text-anchor=\"middle\">≥ 0.01</text>\n" +
 		"\t\t<circle fill=\"none\" cy=\"165\" cx=\"100\" r=\"12\" stroke=\"#0040ff\" stroke-width=\"2\" />\n" +
@@ -87,7 +89,7 @@ func TestDotplotLegend(t *testing.T) {
 	assert.Equal(
 		t,
 		want,
-		DotplotLegend("blueBlack", "Title - test", 11, 0, 50, 0.01, 0.05, "gte"),
+		DotplotLegend("blueBlack", "Title - test", 11, 0, 50, 0.01, 0.05, "FDR", "gte"),
 		"Dotplot legend is not correct for gte score type",
 	)
 }
