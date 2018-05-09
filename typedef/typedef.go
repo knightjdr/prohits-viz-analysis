@@ -6,6 +6,7 @@ type Parameters struct {
 	Abundance         string
 	AnalysisType      string
 	Bait              string
+	BaitClustering    string
 	BaitList          []string
 	Clustering        string
 	ClusteringMethod  string
@@ -14,11 +15,12 @@ type Parameters struct {
 	Distance          string
 	Files             []string
 	LogBase           string
-	LogFile           string
 	MaximumAbundance  float64
+	MinimumAbundance  float64
 	Normalization     string
 	NormalizationPrey string
 	Prey              string
+	PreyClustering    string
 	PreyLength        string
 	PreyList          []string
 	PrimaryFilter     float64

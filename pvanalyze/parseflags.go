@@ -15,6 +15,7 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 	abundance := flag.String("abundance", "", "Abundance column")
 	analysisType := flag.String("analysisType", "", "Analysis type, one of: baitbait, correlation, dotplot or specificity")
 	bait := flag.String("bait", "", "Bait column")
+	baitClustering := flag.String("baitClustering", "", "Should baits be clustered: one of baits or none")
 	baitList := flag.String("baitList", "", "List of baits")
 	clustering := flag.String("clustering", "", "Clustering type")
 	clusteringMethod := flag.String("clusteringMethod", "", "Clustering type")
@@ -24,9 +25,11 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 	fileList := flag.String("fileList", "", "Input files as comma-separated list")
 	logBase := flag.String("logBase", "", "Base for log transformation")
 	maximumAbundance := flag.Float64("maximumAbundance", 50, "Maximum abundance")
+	minimumAbundance := flag.Float64("minimumAbundance", 0, "Minimum abundance")
 	normalization := flag.String("normalization", "", "Normalization type")
 	normalizationPrey := flag.String("normalizationPrey", "", "Prey to use for normalization")
 	prey := flag.String("prey", "", "Prey column")
+	preyClustering := flag.String("preyClustering", "", "Should preys be clustered: one of none or preys")
 	preyLength := flag.String("preyLength", "", "Prey length column")
 	preyList := flag.String("preyList", "", "List of preys")
 	primaryFilter := flag.Float64("primaryFilter", 0, "Primary filter")
@@ -94,6 +97,7 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 		Abundance:         *abundance,
 		AnalysisType:      *analysisType,
 		Bait:              *bait,
+		BaitClustering:    *baitClustering,
 		BaitList:          baits,
 		Clustering:        *clustering,
 		ClusteringMethod:  *clusteringMethod,
@@ -103,9 +107,11 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 		Files:             files,
 		LogBase:           *logBase,
 		MaximumAbundance:  *maximumAbundance,
+		MinimumAbundance:  *minimumAbundance,
 		Normalization:     *normalization,
 		NormalizationPrey: *normalizationPrey,
 		Prey:              *prey,
+		PreyClustering:    *preyClustering,
 		PreyLength:        *preyLength,
 		PreyList:          preys,
 		PrimaryFilter:     *primaryFilter,

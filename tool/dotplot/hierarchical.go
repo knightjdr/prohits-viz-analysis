@@ -1,11 +1,14 @@
 package dotplot
 
 import (
-	"io/ioutil"
+	"fmt"
 
 	"github.com/knightjdr/hclust"
+	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
+	"github.com/knightjdr/prohits-viz-analysis/svg"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
+	"github.com/spf13/afero"
 )
 
 // Hierarchical clusters dataset hierarchically and outputs files.
@@ -35,6 +38,9 @@ func Hierarchical(dataset typedef.Dataset) {
 
 	// Create matrix with normalized rows for bait-prey abundances.
 	ratios := NormalizeMatrix(data.Abundance)
+
+	// Write log.
+	LogParams(dataset.Params)
 
 	// Output svgs.
 
@@ -68,6 +74,23 @@ func Hierarchical(dataset typedef.Dataset) {
 	SvgPP(preyDist, data.Preys, preyTree.Order, dataset.Params.ColorSpace)
 
 	// Write dotplot legend.
+	legendTitle := fmt.Sprintf("Dotplot - %s", dataset.Params.Abundance)
+	dotplotLegend := svg.DotplotLegend(
+		dataset.Params.ColorSpace,
+		legendTitle,
+		101,
+		0,
+		dataset.Params.MaximumAbundance,
+		dataset.Params.PrimaryFilter,
+		dataset.Params.SecondaryFilter,
+		dataset.Params.ScoreType,
+	)
+	afero.WriteFile(fs.Instance, "svg/dotplot-legend.svg", []byte(dotplotLegend), 0644)
+
+	// Write distance legend.
+	legendTitle = fmt.Sprintf("Distance - %s", dataset.Params.Abundance)
+	distanceLegend := svg.Gradient(dataset.Params.ColorSpace, legendTitle, 101, 0, dataset.Params.MaximumAbundance)
+	afero.WriteFile(fs.Instance, "svg/distance-legend.svg", []byte(distanceLegend), 0644)
 
 	// Output cytoscape files.
 
@@ -89,7 +112,7 @@ func Hierarchical(dataset typedef.Dataset) {
 	WriteMatrix(ratios, data.Baits, data.Preys, "other/data-transformed-ratios.txt")
 
 	// Write newick trees to files.
-	ioutil.WriteFile("other/bait-dendrogram.txt", []byte(baitTree.Newick), 0644)
-	ioutil.WriteFile("other/prey-dendrogram.txt", []byte(preyTree.Newick), 0644)
+	afero.WriteFile(fs.Instance, "other/bait-dendrogram.txt", []byte(baitTree.Newick), 0644)
+	afero.WriteFile(fs.Instance, "other/prey-dendrogram.txt", []byte(preyTree.Newick), 0644)
 	return
 }

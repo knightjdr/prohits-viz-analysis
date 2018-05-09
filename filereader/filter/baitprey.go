@@ -8,8 +8,10 @@ func BaitPrey(
 ) (filtered []map[string]string) {
 	// Convert bait slice to map.
 	baitMap := SliceToMap(baits)
+
 	// Convert prey slice to map.
 	preyMap := SliceToMap(preys)
+
 	// Iterate over slice and keep rows with bait and preys in maps.
 	datalen := len(data)
 	filtered = data

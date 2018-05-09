@@ -7,6 +7,7 @@ func Preys(
 ) (filtered []map[string]string) {
 	// Convert prey slice to map.
 	preyMap := SliceToMap(preys)
+
 	// Iterate over slice and keep rows with prey in preyMap.
 	datalen := len(data)
 	filtered = data

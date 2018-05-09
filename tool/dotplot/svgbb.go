@@ -1,10 +1,10 @@
 package dotplot
 
 import (
-	"io/ioutil"
-
 	"github.com/knightjdr/hclust"
+	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
+	"github.com/spf13/afero"
 )
 
 // SvgBB draws a bait bait heatmap.
@@ -38,6 +38,6 @@ func SvgBB(dist [][]float64, unsorted, sorted []string, colorSpace string) {
 		"rowLabel":         "Baits",
 	}
 	heatmap := svg.Heatmap(sortedMatrix, sorted, sorted, params)
-	ioutil.WriteFile("svg/bait-bait.svg", []byte(heatmap), 0644)
+	afero.WriteFile(fs.Instance, "svg/bait-bait.svg", []byte(heatmap), 0644)
 	return
 }

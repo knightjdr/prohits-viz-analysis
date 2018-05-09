@@ -23,21 +23,22 @@ func TestData(t *testing.T) {
 	// TEST1: filter typical data slice.
 	baits := make([]string, 0)
 	data := []map[string]string{
-		{"bait": "a", "prey": "b", "score": "0.5"},
-		{"bait": "c", "prey": "d", "score": "0.1"},
-		{"bait": "e", "prey": "f", "score": "0.8"},
+		{"bait": "a", "prey": "b", "abundance": "5", "score": "0.5"},
+		{"bait": "c", "prey": "d", "abundance": "10", "score": "0.1"},
+		{"bait": "e", "prey": "f", "abundance": "2|1.2", "score": "0.8"},
 	}
 	preys := make([]string, 0)
 	// Create dataset.
 	params := typedef.Parameters{
-		BaitList:      baits,
-		PreyList:      preys,
-		PrimaryFilter: 0.5,
-		ScoreType:     "lte",
+		BaitList:         baits,
+		MinimumAbundance: 0,
+		PreyList:         preys,
+		PrimaryFilter:    0.5,
+		ScoreType:        "lte",
 	}
 	want := []map[string]interface{}{
-		{"bait": "a", "prey": "b", "score": 0.5},
-		{"bait": "c", "prey": "d", "score": 0.1},
+		{"bait": "a", "prey": "b", "abundance": "5", "score": 0.5},
+		{"bait": "c", "prey": "d", "abundance": "10", "score": 0.1},
 	}
 	filtered := Data(data, params)
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly")
@@ -46,14 +47,15 @@ func TestData(t *testing.T) {
 	baits = []string{"a", "c"}
 	preys = make([]string, 0)
 	params = typedef.Parameters{
-		BaitList:      baits,
-		PreyList:      preys,
-		PrimaryFilter: 1,
-		ScoreType:     "lte",
+		BaitList:         baits,
+		MinimumAbundance: 0,
+		PreyList:         preys,
+		PrimaryFilter:    1,
+		ScoreType:        "lte",
 	}
 	want = []map[string]interface{}{
-		{"bait": "a", "prey": "b", "score": 0.5},
-		{"bait": "c", "prey": "d", "score": 0.1},
+		{"bait": "a", "prey": "b", "abundance": "5", "score": 0.5},
+		{"bait": "c", "prey": "d", "abundance": "10", "score": 0.1},
 	}
 	filtered = Data(data, params)
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly by baits")
@@ -62,14 +64,15 @@ func TestData(t *testing.T) {
 	baits = make([]string, 0)
 	preys = []string{"b", "f"}
 	params = typedef.Parameters{
-		BaitList:      baits,
-		PreyList:      preys,
-		PrimaryFilter: 1,
-		ScoreType:     "lte",
+		BaitList:         baits,
+		MinimumAbundance: 0,
+		PreyList:         preys,
+		PrimaryFilter:    1,
+		ScoreType:        "lte",
 	}
 	want = []map[string]interface{}{
-		{"bait": "a", "prey": "b", "score": 0.5},
-		{"bait": "e", "prey": "f", "score": 0.8},
+		{"bait": "a", "prey": "b", "abundance": "5", "score": 0.5},
+		{"bait": "e", "prey": "f", "abundance": "2|1.2", "score": 0.8},
 	}
 	filtered = Data(data, params)
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly by preys")
@@ -78,13 +81,14 @@ func TestData(t *testing.T) {
 	baits = []string{"a", "c"}
 	preys = []string{"b", "f"}
 	params = typedef.Parameters{
-		BaitList:      baits,
-		PreyList:      preys,
-		PrimaryFilter: 1,
-		ScoreType:     "lte",
+		BaitList:         baits,
+		MinimumAbundance: 0,
+		PreyList:         preys,
+		PrimaryFilter:    1,
+		ScoreType:        "lte",
 	}
 	want = []map[string]interface{}{
-		{"bait": "a", "prey": "b", "score": 0.5},
+		{"bait": "a", "prey": "b", "abundance": "5", "score": 0.5},
 	}
 	filtered = Data(data, params)
 	assert.Equal(t, want, filtered, "Data slice is not being filtered correctly by preys")
@@ -93,10 +97,11 @@ func TestData(t *testing.T) {
 	baits = []string{"a", "c"}
 	preys = []string{"f"}
 	params = typedef.Parameters{
-		BaitList:      baits,
-		PreyList:      preys,
-		PrimaryFilter: 1,
-		ScoreType:     "lte",
+		BaitList:         baits,
+		MinimumAbundance: 0,
+		PreyList:         preys,
+		PrimaryFilter:    1,
+		ScoreType:        "lte",
 	}
 	assert.PanicsWithValue(
 		t,
@@ -113,31 +118,33 @@ func TestData(t *testing.T) {
 	// TEST6: score step error returns an error.
 	baits = make([]string, 0)
 	data = []map[string]string{
-		{"bait": "a", "prey": "b", "score": "x"},
+		{"bait": "a", "prey": "b", "abundance": "5", "score": "x"},
 	}
 	preys = make([]string, 0)
 	params = typedef.Parameters{
-		BaitList:      baits,
-		PreyList:      preys,
-		PrimaryFilter: 1,
-		ScoreType:     "lte",
+		BaitList:         baits,
+		MinimumAbundance: 0,
+		PreyList:         preys,
+		PrimaryFilter:    1,
+		ScoreType:        "lte",
 	}
 	assert.Panics(t, func() { Data(data, params) }, "Invalid score type should panic")
 
 	// TEST7: no filtered results after score step returns an error and logs it.
 	baits = make([]string, 0)
 	data = []map[string]string{
-		{"bait": "a", "prey": "b", "score": "0.5"},
-		{"bait": "c", "prey": "d", "score": "0.1"},
-		{"bait": "e", "prey": "f", "score": "0.8"},
+		{"bait": "a", "prey": "b", "abundance": "5", "score": "0.5"},
+		{"bait": "c", "prey": "d", "abundance": "10", "score": "0.1"},
+		{"bait": "e", "prey": "f", "abundance": "2|1.2", "score": "0.8"},
 	}
 	preys = make([]string, 0)
 	params = typedef.Parameters{
-		BaitList:      baits,
-		LogFile:       "error.txt",
-		PreyList:      preys,
-		PrimaryFilter: 1,
-		ScoreType:     "gte",
+		BaitList:         baits,
+		LogFile:          "error.txt",
+		MinimumAbundance: 0,
+		PreyList:         preys,
+		PrimaryFilter:    1,
+		ScoreType:        "gte",
 	}
 	assert.PanicsWithValue(
 		t,

@@ -14,6 +14,7 @@ func Data(
 	params typedef.Parameters,
 ) (filtered []map[string]interface{}) {
 	filteredBaitPrey := make([]map[string]string, 0)
+
 	// Filter by both baits and preys if there are lists for both.
 	if (len(params.BaitList) > 0) && (len(params.PreyList) > 0) {
 		filteredBaitPrey = BaitPrey(data, params.BaitList, params.PreyList)
@@ -32,7 +33,12 @@ func Data(
 	}
 
 	// Filter by score.
-	filtered, err := Score(filteredBaitPrey, params.PrimaryFilter, params.ScoreType)
+	filtered, err := Score(
+		filteredBaitPrey,
+		params.PrimaryFilter,
+		params.MinimumAbundance,
+		params.ScoreType,
+	)
 	logmessage.CheckError(err, true)
 
 	// If filtered slice is empty, return error.

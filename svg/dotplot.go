@@ -11,7 +11,7 @@ import (
 
 // ScoreColorFunc returns a function for determining the gradient index to use
 // for the score color.
-func scoreColorFunc(scoretype string, primary, secondary float64, numColors int) func(score float64) int {
+func ScoreColorFunc(scoretype string, primary, secondary float64, numColors int) func(score float64) int {
 	if scoretype == "gte" {
 		return func(score float64) int {
 			if score >= primary {
@@ -148,7 +148,7 @@ func Dotplot(
 	colorGradient := ColorGradient(options["colorSpace"].(string), 101, options["invert"].(bool))
 
 	// Get function for determining score edge color.
-	edgeColorFunc := scoreColorFunc(options["scoreType"].(string), options["primary"].(float64), options["secondary"].(float64), 100)
+	edgeColorFunc := ScoreColorFunc(options["scoreType"].(string), options["primary"].(float64), options["secondary"].(float64), 100)
 
 	// Write rows.
 	svgSlice = append(svgSlice, fmt.Sprintf("\t<g transform=\"translate(%d, %d)\">\n", leftMargin, topMargin))
