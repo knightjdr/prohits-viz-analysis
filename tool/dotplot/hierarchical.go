@@ -83,6 +83,7 @@ func Hierarchical(dataset typedef.Dataset) {
 		dataset.Params.MaximumAbundance,
 		dataset.Params.PrimaryFilter,
 		dataset.Params.SecondaryFilter,
+		dataset.Params.Score,
 		dataset.Params.ScoreType,
 	)
 	afero.WriteFile(fs.Instance, "svg/dotplot-legend.svg", []byte(dotplotLegend), 0644)
@@ -91,6 +92,18 @@ func Hierarchical(dataset typedef.Dataset) {
 	legendTitle = fmt.Sprintf("Distance - %s", dataset.Params.Abundance)
 	distanceLegend := svg.Gradient(dataset.Params.ColorSpace, legendTitle, 101, 0, dataset.Params.MaximumAbundance)
 	afero.WriteFile(fs.Instance, "svg/distance-legend.svg", []byte(distanceLegend), 0644)
+
+	// Create pdfs and pngs from svg.
+	svgList := []string{
+		"bait-bait.svg",
+		"distance-legend.svg",
+		"dotplot-legend.svg",
+		"dotplot.svg",
+		"heatmap.svg",
+		// "prey-prey.svg",
+	}
+	svg.ConvertPdf(svgList)
+	svg.ConvertPng(svgList)
 
 	// Output cytoscape files.
 
