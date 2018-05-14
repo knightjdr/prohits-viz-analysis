@@ -28,6 +28,8 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 	minimumAbundance := flag.Float64("minimumAbundance", 0, "Minimum abundance")
 	normalization := flag.String("normalization", "", "Normalization type")
 	normalizationPrey := flag.String("normalizationPrey", "", "Prey to use for normalization")
+	pdf := flag.Bool("pdf", false, "Generate pdf files")
+	png := flag.Bool("png", false, "Generate png files")
 	prey := flag.String("prey", "", "Prey column")
 	preyClustering := flag.String("preyClustering", "", "Should preys be clustered: one of none or preys")
 	preyLength := flag.String("preyLength", "", "Prey length column")
@@ -36,6 +38,9 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 	score := flag.String("score", "", "Score column")
 	scoreType := flag.String("scoreType", "lte", "Score type")
 	secondaryFilter := flag.Float64("secondaryFilter", 0, "Secondary filter")
+	writeDistance := flag.Bool("writeDistance", false, "Generate SVG files for distance matrix")
+	writeDotplot := flag.Bool("writeDotplot", false, "Generate SVG file for dotplot")
+	writeHeatmap := flag.Bool("writeHeatmap", false, "Generate SVG file for heatmap")
 	flag.Parse()
 
 	// Exit if required args are missing.
@@ -110,6 +115,8 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 		MinimumAbundance:  *minimumAbundance,
 		Normalization:     *normalization,
 		NormalizationPrey: *normalizationPrey,
+		Pdf:               *pdf,
+		Png:               *png,
 		Prey:              *prey,
 		PreyClustering:    *preyClustering,
 		PreyLength:        *preyLength,
@@ -118,6 +125,9 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 		Score:             *score,
 		ScoreType:         *scoreType,
 		SecondaryFilter:   *secondaryFilter,
+		WriteDistance:     *writeDistance,
+		WriteDotplot:      *writeDotplot,
+		WriteHeatmap:      *writeHeatmap,
 	}
 
 	return

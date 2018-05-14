@@ -9,25 +9,25 @@ import (
 
 // HeatmapJson stores the JSON structure for the interactive heatmap.
 type HeatmapJson struct {
-	Header []string                   `json:"header"`
-	Params map[string]interface{}     `json:"params"`
-	Rows   [][]map[string]interface{} `json:"rows"`
-	Uri    string                     `json:"minimap"`
+	Columns []string                 `json:"columns"`
+	Params  map[string]interface{}   `json:"params"`
+	Rows    []map[string]interface{} `json:"rows"`
+	Uri     string                   `json:"minimap"`
 }
 
 // Heatmap creates an interactive heatmap as json. The data matrix, row and column
 // names should already be sorted. UserParams has the parameters used for the
 // analysis.
 func Heatmap(
-	data [][]map[string]interface{},
-	columns, rows []string,
+	data []map[string]interface{},
+	columns []string,
 	params map[string]interface{},
 	uri string,
 ) (jsonString string) {
 	var jsonStruct HeatmapJson
 
 	// Add header.
-	jsonStruct.Header = columns
+	jsonStruct.Columns = columns
 
 	// Set Params.
 	jsonStruct.Params = params

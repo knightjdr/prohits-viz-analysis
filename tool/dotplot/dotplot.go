@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
@@ -12,28 +13,52 @@ import (
 // Generate is the entry point for generating dotplots and output files.
 func Generate(dataset typedef.Dataset) {
 	// Create subfolders. Panic if error.
+
+	// Cytoscape folder.
 	cytoscapePath := filepath.Join(".", "cytoscape")
-	err := os.MkdirAll(cytoscapePath, os.ModePerm)
+	err := fs.Instance.MkdirAll(cytoscapePath, os.ModePerm)
 	logmessage.CheckError(err, true)
+
+	// Interactive file folder.
 	interactivePath := filepath.Join(".", "interactive")
-	err = os.MkdirAll(interactivePath, os.ModePerm)
+	err = fs.Instance.MkdirAll(interactivePath, os.ModePerm)
 	logmessage.CheckError(err, true)
+
+	// Other files.
 	otherPath := filepath.Join(".", "other")
-	err = os.MkdirAll(otherPath, os.ModePerm)
+	err = fs.Instance.MkdirAll(otherPath, os.ModePerm)
 	logmessage.CheckError(err, true)
-	pdfPath := filepath.Join(".", "pdf")
-	err = os.MkdirAll(pdfPath, os.ModePerm)
+
+	// Minimap folder (can delete after making interactive files).
+	mapPath := filepath.Join(".", "minimap")
+	err = fs.Instance.MkdirAll(mapPath, os.ModePerm)
 	logmessage.CheckError(err, true)
-	pngPath := filepath.Join(".", "png")
-	err = os.MkdirAll(pngPath, os.ModePerm)
-	logmessage.CheckError(err, true)
+
+	// PDF folder.
+	if dataset.Params.Pdf {
+		pdfPath := filepath.Join(".", "pdf")
+		err = fs.Instance.MkdirAll(pdfPath, os.ModePerm)
+		logmessage.CheckError(err, true)
+	}
+
+	// PNG folder.
+	if dataset.Params.Png {
+		pngPath := filepath.Join(".", "png")
+		err = fs.Instance.MkdirAll(pngPath, os.ModePerm)
+		logmessage.CheckError(err, true)
+	}
+
+	// SVG folder.
 	svgPath := filepath.Join(".", "svg")
-	err = os.MkdirAll(svgPath, os.ModePerm)
+	err = fs.Instance.MkdirAll(svgPath, os.ModePerm)
 	logmessage.CheckError(err, true)
 
 	// Initiate clustering method.
 	if dataset.Params.Clustering == "hierarchical" {
 		Hierarchical(dataset)
 	}
+
+	// Remove minimap folder.
+	fs.Instance.RemoveAll(mapPath)
 	return
 }

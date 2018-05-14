@@ -19,6 +19,8 @@ type Parameters struct {
 	MinimumAbundance  float64
 	Normalization     string
 	NormalizationPrey string
+	Pdf               bool
+	Png               bool
 	Prey              string
 	PreyClustering    string
 	PreyLength        string
@@ -27,6 +29,9 @@ type Parameters struct {
 	Score             string
 	ScoreType         string
 	SecondaryFilter   float64
+	WriteDistance     bool
+	WriteDotplot      bool
+	WriteHeatmap      bool
 }
 
 // Dataset.

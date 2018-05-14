@@ -25,7 +25,6 @@ func TestParseFlagsCorrect(t *testing.T) {
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
 	// TEST1: returns map and params with correct flags specied.
-	os.Args = oldArgs
 	os.Args = []string{
 		"cmd",
 		"-abundance", "abundanceColumn",
@@ -44,6 +43,8 @@ func TestParseFlagsCorrect(t *testing.T) {
 		"-minimumAbundance", "0",
 		"-normalization", "prey",
 		"-normalizationPrey", "prey1",
+		"-pdf=false",
+		"-png=true",
 		"-prey", "preyColumn",
 		"-preyClustering", "preys",
 		"-preyLength", "preyLengthColumn",
@@ -52,6 +53,9 @@ func TestParseFlagsCorrect(t *testing.T) {
 		"-score", "scoreColumn",
 		"-scoreType", "lte",
 		"-secondaryFilter", "0.2",
+		"-writeDistance=false",
+		"-writeDotplot=false",
+		"-writeHeatmap=false",
 	}
 	wantMap := map[string]string{
 		"abundance":  "abundanceColumn",
@@ -78,6 +82,8 @@ func TestParseFlagsCorrect(t *testing.T) {
 		MinimumAbundance:  0,
 		Normalization:     "prey",
 		NormalizationPrey: "prey1",
+		Pdf:               false,
+		Png:               true,
 		Prey:              "preyColumn",
 		PreyClustering:    "preys",
 		PreyLength:        "preyLengthColumn",
@@ -86,6 +92,9 @@ func TestParseFlagsCorrect(t *testing.T) {
 		Score:             "scoreColumn",
 		ScoreType:         "lte",
 		SecondaryFilter:   0.2,
+		WriteDistance:     false,
+		WriteDotplot:      false,
+		WriteHeatmap:      false,
 	}
 	columnMap, params, err := ParseFlags()
 	assert.Nil(t, err, "All required arguments specified should not return an error")

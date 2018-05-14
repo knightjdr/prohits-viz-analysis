@@ -98,7 +98,7 @@ func Heatmap(matrix [][]float64, columns, rows []string, options map[string]inte
 	colorGradient := ColorGradient(options["colorSpace"].(string), 101, options["invert"].(bool))
 
 	// Write rows.
-	svgSlice = append(svgSlice, fmt.Sprintf("\t<g transform=\"translate(%d, %d)\">\n", leftMargin, topMargin))
+	svgSlice = append(svgSlice, fmt.Sprintf("\t<g id=\"minimap\" transform=\"translate(%d, %d)\">\n", leftMargin, topMargin))
 	for i, row := range matrix {
 		iPos := i * cellSize
 		for j, value := range row {

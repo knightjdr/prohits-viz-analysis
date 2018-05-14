@@ -45,36 +45,46 @@ func TestHeatmap(t *testing.T) {
 	uri := "pngImage"
 	numCols := len(columns)
 	numRows := len(rows)
-	data := make([][]map[string]interface{}, numRows)
+	data := make([]map[string]interface{}, numRows)
 	for i, row := range abundance {
-		data[i] = make([]map[string]interface{}, numCols)
+		rowslice := make([]map[string]float64, numCols)
 		for j, value := range row {
-			data[i][j] = map[string]interface{}{
-				"name":  rows[i],
+			rowslice[j] = map[string]float64{
 				"ratio": ratios[i][j],
 				"score": scores[i][j],
 				"value": value,
 			}
 		}
+		data[i] = map[string]interface{}{
+			"name": rows[i],
+			"data": rowslice,
+		}
 	}
 
 	// TEST1: generate JSON.
-	want := "{\"header\":[\"col1\",\"col2\",\"col3\"]," +
+	want := "{\"columns\":[\"col1\",\"col2\",\"col3\"]," +
 		"\"params\":{\"param1\":2,\"param2\":\"a\",\"param3\":[\"a\",\"b\",\"c\"]}," +
-		"\"rows\":[[{\"name\":\"row1\",\"ratio\":0.2,\"score\":0.01,\"value\":1}," +
-		"{\"name\":\"row1\",\"ratio\":0.5,\"score\":0.05,\"value\":2}," +
-		"{\"name\":\"row1\",\"ratio\":1,\"score\":0.08,\"value\":3}]," +
-		"[{\"name\":\"row2\",\"ratio\":0.7,\"score\":1,\"value\":4}," +
-		"{\"name\":\"row2\",\"ratio\":0.8,\"score\":0.07,\"value\":5}," +
-		"{\"name\":\"row2\",\"ratio\":1,\"score\":0.5,\"value\":6}]," +
-		"[{\"name\":\"row3\",\"ratio\":1,\"score\":0.2,\"value\":7}," +
-		"{\"name\":\"row3\",\"ratio\":0.2,\"score\":0.7,\"value\":8}," +
-		"{\"name\":\"row3\",\"ratio\":0.5,\"score\":0.01,\"value\":9}]]," +
+		"\"rows\":[" +
+		"{\"data\":[" +
+		"{\"ratio\":0.2,\"score\":0.01,\"value\":1}," +
+		"{\"ratio\":0.5,\"score\":0.05,\"value\":2}," +
+		"{\"ratio\":1,\"score\":0.08,\"value\":3}]," +
+		"\"name\":\"row1\"}," +
+		"{\"data\":[" +
+		"{\"ratio\":0.7,\"score\":1,\"value\":4}," +
+		"{\"ratio\":0.8,\"score\":0.07,\"value\":5}," +
+		"{\"ratio\":1,\"score\":0.5,\"value\":6}]," +
+		"\"name\":\"row2\"}," +
+		"{\"data\":[" +
+		"{\"ratio\":1,\"score\":0.2,\"value\":7}," +
+		"{\"ratio\":0.2,\"score\":0.7,\"value\":8}," +
+		"{\"ratio\":0.5,\"score\":0.01,\"value\":9}]," +
+		"\"name\":\"row3\"}]," +
 		"\"minimap\":\"pngImage\"}"
 	assert.Equal(
 		t,
 		want,
-		Heatmap(data, columns, rows, params, uri),
+		Heatmap(data, columns, params, uri),
 		"Heatmap json is not correct",
 	)
 
@@ -86,7 +96,7 @@ func TestHeatmap(t *testing.T) {
 	defer marshallPatch.Unpatch()
 
 	// TEST2: error.
-	Heatmap(data, columns, rows, params, uri)
+	Heatmap(data, columns, params, uri)
 	logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
 	wantMessage := "Error creating json"
 	matched, _ := regexp.MatchString(wantMessage, string(logfile))

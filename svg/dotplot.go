@@ -151,7 +151,7 @@ func Dotplot(
 	edgeColorFunc := ScoreColorFunc(options["scoreType"].(string), options["primary"].(float64), options["secondary"].(float64), 100)
 
 	// Write rows.
-	svgSlice = append(svgSlice, fmt.Sprintf("\t<g transform=\"translate(%d, %d)\">\n", leftMargin, topMargin))
+	svgSlice = append(svgSlice, fmt.Sprintf("\t<g id=\"minimap\" transform=\"translate(%d, %d)\">\n", leftMargin, topMargin))
 	for i, row := range matrix {
 		// Set x position.
 		iPos := (i * cellSize) + cellSizeHalf
