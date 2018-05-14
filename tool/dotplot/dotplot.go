@@ -56,6 +56,8 @@ func Generate(dataset typedef.Dataset) {
 	// Initiate clustering method.
 	if dataset.Params.Clustering == "hierarchical" {
 		Hierarchical(dataset)
+	} else if dataset.Params.Clustering == "none" {
+		NoCluster(dataset)
 	}
 
 	// Remove minimap folder.

@@ -13,6 +13,9 @@ import (
 
 // Hierarchical clusters dataset hierarchically and outputs files.
 func Hierarchical(dataset typedef.Dataset) {
+	// Write log.
+	LogParams(dataset.Params)
+
 	// Generate bait-prey table.
 	data := BaitPreyMatrix(dataset.Data, dataset.Params.ScoreType)
 
@@ -76,9 +79,6 @@ func Hierarchical(dataset typedef.Dataset) {
 	sortedRatios := NormalizeMatrix(sortedAbundance)
 	sortedScores, _ := hclust.Sort(data.Score, data.Baits, baitTree.Order, "column")
 	sortedScores, _ = hclust.Sort(sortedScores, data.Preys, preyTree.Order, "row")
-
-	// Write log.
-	LogParams(dataset.Params)
 
 	// Output svgs.
 
