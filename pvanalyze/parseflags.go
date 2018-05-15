@@ -17,6 +17,7 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 	bait := flag.String("bait", "", "Bait column")
 	baitClustering := flag.String("baitClustering", "", "Should baits be clustered: one of baits or none")
 	baitList := flag.String("baitList", "", "List of baits")
+	biclusteringApprox := flag.Bool("biclusteringApprox", false, "Perform approximate biclustering")
 	clustering := flag.String("clustering", "", "Clustering type")
 	clusteringMethod := flag.String("clusteringMethod", "", "Clustering type")
 	colorSpace := flag.String("colorSpace", "", "Color space")
@@ -99,35 +100,36 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 
 	// Create parameter struct.
 	params = typedef.Parameters{
-		Abundance:         *abundance,
-		AnalysisType:      *analysisType,
-		Bait:              *bait,
-		BaitClustering:    *baitClustering,
-		BaitList:          baits,
-		Clustering:        *clustering,
-		ClusteringMethod:  *clusteringMethod,
-		ColorSpace:        *colorSpace,
-		Control:           *control,
-		Distance:          *distance,
-		Files:             files,
-		LogBase:           *logBase,
-		MaximumAbundance:  *maximumAbundance,
-		MinimumAbundance:  *minimumAbundance,
-		Normalization:     *normalization,
-		NormalizationPrey: *normalizationPrey,
-		Pdf:               *pdf,
-		Png:               *png,
-		Prey:              *prey,
-		PreyClustering:    *preyClustering,
-		PreyLength:        *preyLength,
-		PreyList:          preys,
-		PrimaryFilter:     *primaryFilter,
-		Score:             *score,
-		ScoreType:         *scoreType,
-		SecondaryFilter:   *secondaryFilter,
-		WriteDistance:     *writeDistance,
-		WriteDotplot:      *writeDotplot,
-		WriteHeatmap:      *writeHeatmap,
+		Abundance:          *abundance,
+		AnalysisType:       *analysisType,
+		Bait:               *bait,
+		BaitClustering:     *baitClustering,
+		BaitList:           baits,
+		BiclusteringApprox: *biclusteringApprox,
+		Clustering:         *clustering,
+		ClusteringMethod:   *clusteringMethod,
+		ColorSpace:         *colorSpace,
+		Control:            *control,
+		Distance:           *distance,
+		Files:              files,
+		LogBase:            *logBase,
+		MaximumAbundance:   *maximumAbundance,
+		MinimumAbundance:   *minimumAbundance,
+		Normalization:      *normalization,
+		NormalizationPrey:  *normalizationPrey,
+		Pdf:                *pdf,
+		Png:                *png,
+		Prey:               *prey,
+		PreyClustering:     *preyClustering,
+		PreyLength:         *preyLength,
+		PreyList:           preys,
+		PrimaryFilter:      *primaryFilter,
+		Score:              *score,
+		ScoreType:          *scoreType,
+		SecondaryFilter:    *secondaryFilter,
+		WriteDistance:      *writeDistance,
+		WriteDotplot:       *writeDotplot,
+		WriteHeatmap:       *writeHeatmap,
 	}
 
 	return

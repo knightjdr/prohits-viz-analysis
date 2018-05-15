@@ -20,7 +20,7 @@ func TestData(t *testing.T) {
 	fs.Instance.MkdirAll("test", 0755)
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
-	// TEST1: filter typical data slice.
+	// TEST1: filter typical data slice when bait and prey lists not supplied.
 	baits := make([]string, 0)
 	data := []map[string]string{
 		{"bait": "a", "prey": "b", "abundance": "5", "score": "0.5"},
@@ -30,8 +30,10 @@ func TestData(t *testing.T) {
 	preys := make([]string, 0)
 	// Create dataset.
 	params := typedef.Parameters{
+		BaitClustering:   "none",
 		BaitList:         baits,
 		MinimumAbundance: 0,
+		PreyClustering:   "none",
 		PreyList:         preys,
 		PrimaryFilter:    0.5,
 		ScoreType:        "lte",
@@ -47,8 +49,10 @@ func TestData(t *testing.T) {
 	baits = []string{"a", "c"}
 	preys = make([]string, 0)
 	params = typedef.Parameters{
+		BaitClustering:   "baits",
 		BaitList:         baits,
 		MinimumAbundance: 0,
+		PreyClustering:   "none",
 		PreyList:         preys,
 		PrimaryFilter:    1,
 		ScoreType:        "lte",
@@ -64,8 +68,10 @@ func TestData(t *testing.T) {
 	baits = make([]string, 0)
 	preys = []string{"b", "f"}
 	params = typedef.Parameters{
+		BaitClustering:   "none",
 		BaitList:         baits,
 		MinimumAbundance: 0,
+		PreyClustering:   "preys",
 		PreyList:         preys,
 		PrimaryFilter:    1,
 		ScoreType:        "lte",
@@ -81,8 +87,10 @@ func TestData(t *testing.T) {
 	baits = []string{"a", "c"}
 	preys = []string{"b", "f"}
 	params = typedef.Parameters{
+		BaitClustering:   "baits",
 		BaitList:         baits,
 		MinimumAbundance: 0,
+		PreyClustering:   "preys",
 		PreyList:         preys,
 		PrimaryFilter:    1,
 		ScoreType:        "lte",
@@ -97,8 +105,10 @@ func TestData(t *testing.T) {
 	baits = []string{"a", "c"}
 	preys = []string{"f"}
 	params = typedef.Parameters{
+		BaitClustering:   "baits",
 		BaitList:         baits,
 		MinimumAbundance: 0,
+		PreyClustering:   "preys",
 		PreyList:         preys,
 		PrimaryFilter:    1,
 		ScoreType:        "lte",
@@ -122,8 +132,10 @@ func TestData(t *testing.T) {
 	}
 	preys = make([]string, 0)
 	params = typedef.Parameters{
+		BaitClustering:   "baits",
 		BaitList:         baits,
 		MinimumAbundance: 0,
+		PreyClustering:   "preys",
 		PreyList:         preys,
 		PrimaryFilter:    1,
 		ScoreType:        "lte",
@@ -139,9 +151,10 @@ func TestData(t *testing.T) {
 	}
 	preys = make([]string, 0)
 	params = typedef.Parameters{
+		BaitClustering:   "none",
 		BaitList:         baits,
-		LogFile:          "error.txt",
 		MinimumAbundance: 0,
+		PreyClustering:   "none",
 		PreyList:         preys,
 		PrimaryFilter:    1,
 		ScoreType:        "gte",

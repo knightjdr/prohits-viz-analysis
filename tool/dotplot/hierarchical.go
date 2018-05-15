@@ -195,7 +195,7 @@ func Hierarchical(dataset typedef.Dataset) {
 			dataset.Params,
 			"minimap/bait-bait.png",
 		)
-		afero.WriteFile(fs.Instance, "interactive/bait-bait.txt", []byte(json), 0644)
+		afero.WriteFile(fs.Instance, "interactive/bait-bait.json", []byte(json), 0644)
 		json = InteractiveHeatmap(
 			normalizedPreyDist,
 			preyTree.Order,
@@ -203,7 +203,7 @@ func Hierarchical(dataset typedef.Dataset) {
 			dataset.Params,
 			"minimap/prey-prey.png",
 		)
-		afero.WriteFile(fs.Instance, "interactive/prey-prey.txt", []byte(json), 0644)
+		afero.WriteFile(fs.Instance, "interactive/prey-prey.json", []byte(json), 0644)
 	}
 	if dataset.Params.WriteDotplot {
 		json := InteractiveDotplot(
@@ -215,7 +215,7 @@ func Hierarchical(dataset typedef.Dataset) {
 			dataset.Params,
 			"minimap/dotplot.png",
 		)
-		afero.WriteFile(fs.Instance, "interactive/dotplot.txt", []byte(json), 0644)
+		afero.WriteFile(fs.Instance, "interactive/dotplot.json", []byte(json), 0644)
 	}
 
 	return

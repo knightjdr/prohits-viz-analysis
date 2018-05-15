@@ -82,7 +82,7 @@ func NoCluster(dataset typedef.Dataset) {
 				dataset.Params,
 				"minimap/bait-bait.png",
 			)
-			afero.WriteFile(fs.Instance, "interactive/bait-bait.txt", []byte(json), 0644)
+			afero.WriteFile(fs.Instance, "interactive/bait-bait.json", []byte(json), 0644)
 		}
 
 		// Write bait-bait cytoscape file.
@@ -98,7 +98,7 @@ func NoCluster(dataset typedef.Dataset) {
 	var preyOrder []string
 	if dataset.Params.PreyClustering == "none" {
 		// Generate distance matrix.
-		preyDist := hclust.Distance(data.Abundance, dataset.Params.Distance, true)
+		preyDist := hclust.Distance(data.Abundance, dataset.Params.Distance, false)
 
 		// Cluster.
 		preyClust, err := hclust.Cluster(preyDist, dataset.Params.ClusteringMethod)
@@ -157,7 +157,7 @@ func NoCluster(dataset typedef.Dataset) {
 				dataset.Params,
 				"minimap/prey-prey.png",
 			)
-			afero.WriteFile(fs.Instance, "interactive/prey-prey.txt", []byte(json), 0644)
+			afero.WriteFile(fs.Instance, "interactive/prey-prey.json", []byte(json), 0644)
 		}
 
 		// Write prey-prey cytoscape file.
@@ -223,7 +223,7 @@ func NoCluster(dataset typedef.Dataset) {
 			dataset.Params,
 			"minimap/dotplot.png",
 		)
-		afero.WriteFile(fs.Instance, "interactive/dotplot.txt", []byte(json), 0644)
+		afero.WriteFile(fs.Instance, "interactive/dotplot.json", []byte(json), 0644)
 	}
 
 	// Write bait-prey heatmap.

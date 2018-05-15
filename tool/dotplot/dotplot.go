@@ -54,7 +54,9 @@ func Generate(dataset typedef.Dataset) {
 	logmessage.CheckError(err, true)
 
 	// Initiate clustering method.
-	if dataset.Params.Clustering == "hierarchical" {
+	if dataset.Params.Clustering == "biclustering" {
+		Biclustering(dataset)
+	} else if dataset.Params.Clustering == "hierarchical" {
 		Hierarchical(dataset)
 	} else if dataset.Params.Clustering == "none" {
 		NoCluster(dataset)
