@@ -1,10 +1,10 @@
 package dotplot
 
 import (
-	"io/ioutil"
-
+	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
+	"github.com/spf13/afero"
 )
 
 // SvgDotplot draws a bait prey heatmap.
@@ -25,6 +25,6 @@ func SvgDotplot(
 		"scoreType":        userParams.ScoreType,
 	}
 	dotplot := svg.Dotplot(abundance, ratios, scores, sortedColumns, sortedRows, params)
-	ioutil.WriteFile("svg/dotplot.svg", []byte(dotplot), 0644)
+	afero.WriteFile(fs.Instance, "svg/dotplot.svg", []byte(dotplot), 0644)
 	return
 }

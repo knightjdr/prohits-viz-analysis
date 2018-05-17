@@ -15,7 +15,7 @@ import (
 func Pngurl(filename string) (url string) {
 	url = "data:image/png;base64,"
 
-	// Open png. If it can't be opend, return an empty url.
+	// Open png. If it can't be opened, return an empty url.
 	pngfile, err := fs.Instance.Open(filename)
 	if err != nil {
 		logmessage.CheckError(err, false)

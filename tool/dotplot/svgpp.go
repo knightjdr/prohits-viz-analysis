@@ -1,9 +1,9 @@
 package dotplot
 
 import (
-	"io/ioutil"
-
+	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
+	"github.com/spf13/afero"
 )
 
 // SvgBB draws a prey prey heatmap.
@@ -17,6 +17,6 @@ func SvgPP(dist [][]float64, sorted []string, colorSpace string) {
 		"rowLabel":         "Preys",
 	}
 	heatmap := svg.Heatmap(dist, sorted, sorted, params)
-	ioutil.WriteFile("svg/prey-prey.svg", []byte(heatmap), 0644)
+	afero.WriteFile(fs.Instance, "svg/prey-prey.svg", []byte(heatmap), 0644)
 	return
 }

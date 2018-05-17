@@ -26,7 +26,7 @@ func Biclustering(dataset typedef.Dataset) {
 	err := fs.Instance.MkdirAll(biclustPath, os.ModePerm)
 	logmessage.CheckError(err, true)
 
-	// Generate parameter file. This depend on whether approximate biclustering
+	// Generate parameter file. This depends on whether approximate biclustering
 	// should be performed.
 	var params string
 	if dataset.Params.BiclusteringApprox {

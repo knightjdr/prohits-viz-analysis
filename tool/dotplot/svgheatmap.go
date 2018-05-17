@@ -1,9 +1,9 @@
 package dotplot
 
 import (
-	"io/ioutil"
-
+	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
+	"github.com/spf13/afero"
 )
 
 // SvgHeatmap draws a bait prey heatmap.
@@ -21,6 +21,6 @@ func SvgHeatmap(
 		"rowLabel":         "Preys",
 	}
 	heatmap := svg.Heatmap(matrix, sortedColumns, sortedRows, params)
-	ioutil.WriteFile("svg/heatmap.svg", []byte(heatmap), 0644)
+	afero.WriteFile(fs.Instance, "svg/heatmap.svg", []byte(heatmap), 0644)
 	return
 }
