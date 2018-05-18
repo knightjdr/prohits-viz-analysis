@@ -24,6 +24,7 @@ func InteractiveDotplot(
 		"controlColumn":    userParams.Control,
 		"distance":         userParams.Distance,
 		"files":            userParams.Files,
+		"imageType":        "dotplot",
 		"logBase":          userParams.LogBase,
 		"maximumAbundance": userParams.MaximumAbundance,
 		"minimumAbundance": userParams.MinimumAbundance,

@@ -69,6 +69,7 @@ func TestInteractiveHeatmap(t *testing.T) {
 		"\"controlColumn\":\"control\"," +
 		"\"distance\":\"euclidean\"," +
 		"\"files\":[\"file1.txt\",\"file2.txt\"]," +
+		"\"imageType\":\"heatmap\"," +
 		"\"logBase\":\"none\"," +
 		"\"maximumAbundance\":50," +
 		"\"minimumAbundance\":0," +

@@ -79,6 +79,7 @@ func TestInteractiveDotplot(t *testing.T) {
 		"\"controlColumn\":\"control\"," +
 		"\"distance\":\"euclidean\"," +
 		"\"files\":[\"file1.txt\",\"file2.txt\"]," +
+		"\"imageType\":\"dotplot\"," +
 		"\"logBase\":\"none\"," +
 		"\"maximumAbundance\":50," +
 		"\"minimumAbundance\":0," +
