@@ -20,10 +20,12 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 	biclusteringApprox := flag.Bool("biclusteringApprox", false, "Perform approximate biclustering")
 	clustering := flag.String("clustering", "", "Clustering type")
 	clusteringMethod := flag.String("clusteringMethod", "", "Clustering type")
-	colorSpace := flag.String("colorSpace", "", "Color space")
+	edgeColor := flag.String("edgeColor", "", "Edge color")
+	fillColor := flag.String("fillColor", "", "Fill color")
 	control := flag.String("control", "", "Control column")
 	distance := flag.String("distance", "", "Distance metric")
 	fileList := flag.String("fileList", "", "Input files as comma-separated list")
+	invert := flag.Bool("invert", false, "Invert fill color")
 	logBase := flag.String("logBase", "", "Base for log transformation")
 	maximumAbundance := flag.Float64("maximumAbundance", 50, "Maximum abundance")
 	minimumAbundance := flag.Float64("minimumAbundance", 0, "Minimum abundance")
@@ -108,10 +110,12 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 		BiclusteringApprox: *biclusteringApprox,
 		Clustering:         *clustering,
 		ClusteringMethod:   *clusteringMethod,
-		ColorSpace:         *colorSpace,
+		EdgeColor:          *edgeColor,
+		FillColor:          *fillColor,
 		Control:            *control,
 		Distance:           *distance,
 		Files:              files,
+		Invert:             *invert,
 		LogBase:            *logBase,
 		MaximumAbundance:   *maximumAbundance,
 		MinimumAbundance:   *minimumAbundance,

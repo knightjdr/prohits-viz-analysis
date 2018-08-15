@@ -11,13 +11,15 @@ import (
 func SvgDotplot(
 	abundance, ratios, scores [][]float64,
 	sortedColumns, sortedRows []string,
+	invert bool,
 	userParams typedef.Parameters,
 ) {
 	// Define dotplot parameters.
 	params := map[string]interface{}{
 		"colLabel":         "Baits",
-		"colorSpace":       userParams.ColorSpace,
-		"invert":           false,
+		"edgeColor":        userParams.EdgeColor,
+		"fillColor":        userParams.FillColor,
+		"invert":           invert,
 		"maximumAbundance": userParams.MaximumAbundance,
 		"primary":          userParams.PrimaryFilter,
 		"rowLabel":         "Preys",

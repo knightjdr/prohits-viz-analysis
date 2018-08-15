@@ -10,13 +10,14 @@ import (
 func SvgHeatmap(
 	matrix [][]float64,
 	sortedColumns, sortedRows []string,
-	colorSpace string,
+	fillColor string,
 	maximumAbundance float64,
+	invert bool,
 ) {
 	params := map[string]interface{}{
 		"colLabel":         "Baits",
-		"colorSpace":       colorSpace,
-		"invert":           false,
+		"fillColor":        fillColor,
+		"invert":           invert,
 		"maximumAbundance": maximumAbundance,
 		"rowLabel":         "Preys",
 	}

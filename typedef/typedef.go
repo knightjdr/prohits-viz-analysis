@@ -11,10 +11,12 @@ type Parameters struct {
 	BiclusteringApprox bool
 	Clustering         string
 	ClusteringMethod   string
-	ColorSpace         string
+	EdgeColor          string
+	FillColor          string
 	Control            string
 	Distance           string
 	Files              []string
+	Invert             bool
 	LogBase            string
 	MaximumAbundance   float64
 	MinimumAbundance   float64

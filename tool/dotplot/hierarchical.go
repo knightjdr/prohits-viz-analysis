@@ -84,11 +84,11 @@ func Hierarchical(dataset typedef.Dataset) {
 
 	// Write bait-bait svg.
 	if dataset.Params.WriteDistance {
-		SvgBB(sortedBaitDist, baitTree.Order, dataset.Params.ColorSpace)
+		SvgBB(sortedBaitDist, baitTree.Order, dataset.Params.FillColor)
 
 		// Write distance legend.
 		legendTitle := fmt.Sprintf("Distance - %s", dataset.Params.Abundance)
-		distanceLegend := svg.Gradient(dataset.Params.ColorSpace, legendTitle, 101, 0, dataset.Params.MaximumAbundance)
+		distanceLegend := svg.Gradient(dataset.Params.FillColor, legendTitle, 101, 0, dataset.Params.MaximumAbundance)
 		afero.WriteFile(fs.Instance, "svg/distance-legend.svg", []byte(distanceLegend), 0644)
 	}
 
@@ -100,13 +100,14 @@ func Hierarchical(dataset typedef.Dataset) {
 			sortedScores,
 			baitTree.Order,
 			preyTree.Order,
+			false,
 			dataset.Params,
 		)
 
 		// Write dotplot legend.
 		legendTitle := fmt.Sprintf("Dotplot - %s", dataset.Params.Abundance)
 		dotplotLegend := svg.DotplotLegend(
-			dataset.Params.ColorSpace,
+			dataset.Params.FillColor,
 			legendTitle,
 			101,
 			0,
@@ -125,14 +126,15 @@ func Hierarchical(dataset typedef.Dataset) {
 			sortedAbundance,
 			baitTree.Order,
 			preyTree.Order,
-			dataset.Params.ColorSpace,
+			dataset.Params.FillColor,
 			dataset.Params.MaximumAbundance,
+			false,
 		)
 	}
 
 	// Write prey-prey svg.
 	if dataset.Params.WriteDistance {
-		SvgPP(sortedPreyDist, preyTree.Order, dataset.Params.ColorSpace)
+		SvgPP(sortedPreyDist, preyTree.Order, dataset.Params.FillColor)
 	}
 
 	// Create pdfs from svg.
@@ -192,6 +194,7 @@ func Hierarchical(dataset typedef.Dataset) {
 			normalizedBaitDist,
 			baitTree.Order,
 			baitTree.Order,
+			true,
 			dataset.Params,
 			"minimap/bait-bait.png",
 		)
@@ -200,6 +203,7 @@ func Hierarchical(dataset typedef.Dataset) {
 			normalizedPreyDist,
 			preyTree.Order,
 			preyTree.Order,
+			true,
 			dataset.Params,
 			"minimap/prey-prey.png",
 		)

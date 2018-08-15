@@ -10,13 +10,13 @@ import (
 
 // DotplotLegend creates a legend for a dotplot.
 func DotplotLegend(
-	colorSpace, title string,
+	fillColor, title string,
 	numColors int,
 	min, max, primary, secondary float64,
 	score, scoreType string,
 ) (svg string) {
 	// Get color gradient.
-	gradient := ColorGradient(colorSpace, numColors, false)
+	gradient := ColorGradient(fillColor, numColors, false)
 
 	// Define svg.
 	svgSlice := make([]string, 0)

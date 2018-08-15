@@ -10,6 +10,7 @@ import (
 func InteractiveHeatmap(
 	abundance [][]float64,
 	columns, rows []string,
+	invert bool,
 	userParams typedef.Parameters,
 	pngfilename string,
 ) (json string) {
@@ -20,11 +21,12 @@ func InteractiveHeatmap(
 		"baitColumn":       userParams.Bait,
 		"clustering":       userParams.Clustering,
 		"clusteringMethod": userParams.ClusteringMethod,
-		"colorSpace":       userParams.ColorSpace,
 		"controlColumn":    userParams.Control,
 		"distance":         userParams.Distance,
 		"files":            userParams.Files,
+		"fillColor":        userParams.FillColor,
 		"imageType":        "heatmap",
+		"invert":           invert,
 		"logBase":          userParams.LogBase,
 		"maximumAbundance": userParams.MaximumAbundance,
 		"minimumAbundance": userParams.MinimumAbundance,

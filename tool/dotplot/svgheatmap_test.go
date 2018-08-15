@@ -52,7 +52,7 @@ func TestSvgHeatmap(t *testing.T) {
 		"\t<text y=\"10\" x=\"75\" font-size=\"12\" text-anchor=\"middle\">Baits</text>\n" +
 		"\t<text y=\"75\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 75)\">Preys</text>\n" +
 		"</svg>\n"
-	SvgHeatmap(matrix, sortedColumns, sortedRows, "blueBlack", 50)
+	SvgHeatmap(matrix, sortedColumns, sortedRows, "blueBlack", 50, false)
 	svg, _ := afero.ReadFile(fs.Instance, "svg/heatmap.svg")
 	assert.Equal(t, want, string(svg), "Heatmap svg not generated correctly")
 }

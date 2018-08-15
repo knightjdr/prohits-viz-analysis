@@ -15,7 +15,7 @@ func TestHeatmap(t *testing.T) {
 	}
 	options := map[string]interface{}{
 		"colLabel":         "Baits",
-		"colorSpace":       "blueBlack",
+		"fillColor":       "blueBlack",
 		"maximumAbundance": float64(50),
 		"invert":           false,
 		"rowLabel":         "Preys",

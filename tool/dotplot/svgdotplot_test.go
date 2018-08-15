@@ -25,7 +25,7 @@ func TestSvgDotplot(t *testing.T) {
 		{75, 0.2, 0.5},
 	}
 	params := typedef.Parameters{
-		ColorSpace:       "blueBlack",
+		FillColor:        "blueBlack",
 		MaximumAbundance: float64(50),
 		PrimaryFilter:    0.01,
 		SecondaryFilter:  0.05,
@@ -71,7 +71,7 @@ func TestSvgDotplot(t *testing.T) {
 		"\t<text y=\"75\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 75)\">Preys</text>\n" +
 		"\t<rect fill=\"none\" y=\"45\" x=\"45\" width=\"60\" height=\"60\" stroke=\"#000000\" stroke-width=\"0.5\" />\n" +
 		"</svg>\n"
-	SvgDotplot(abundance, ratios, scores, sortedColumns, sortedRows, params)
+	SvgDotplot(abundance, ratios, scores, sortedColumns, sortedRows, false, params)
 	svg, _ := afero.ReadFile(fs.Instance, "svg/dotplot.svg")
 	assert.Equal(t, want, string(svg), "Dotplot svg not generated correctly")
 }

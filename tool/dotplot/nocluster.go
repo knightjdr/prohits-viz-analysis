@@ -61,7 +61,7 @@ func NoCluster(dataset typedef.Dataset) {
 
 		// Write bait-bait svg.
 		if dataset.Params.WriteDistance {
-			SvgBB(sortedBaitDist, baitOrder, dataset.Params.ColorSpace)
+			SvgBB(sortedBaitDist, baitOrder, dataset.Params.FillColor)
 
 			// Generate pdfs and pngs.
 			if dataset.Params.Pdf {
@@ -79,6 +79,7 @@ func NoCluster(dataset typedef.Dataset) {
 				normalizedBaitDist,
 				baitOrder,
 				baitOrder,
+				true,
 				dataset.Params,
 				"minimap/bait-bait.png",
 			)
@@ -136,7 +137,7 @@ func NoCluster(dataset typedef.Dataset) {
 
 		// Write prey-prey svg.
 		if dataset.Params.WriteDistance {
-			SvgPP(sortedPreyDist, preyOrder, dataset.Params.ColorSpace)
+			SvgPP(sortedPreyDist, preyOrder, dataset.Params.FillColor)
 
 			// Generate pdfs and pngs.
 			if dataset.Params.Pdf {
@@ -154,6 +155,7 @@ func NoCluster(dataset typedef.Dataset) {
 				normalizedPreyDist,
 				preyOrder,
 				preyOrder,
+				true,
 				dataset.Params,
 				"minimap/prey-prey.png",
 			)
@@ -184,13 +186,14 @@ func NoCluster(dataset typedef.Dataset) {
 			sortedScores,
 			baitOrder,
 			preyOrder,
+			false,
 			dataset.Params,
 		)
 
 		// Write dotplot legend.
 		legendTitle := fmt.Sprintf("Dotplot - %s", dataset.Params.Abundance)
 		dotplotLegend := svg.DotplotLegend(
-			dataset.Params.ColorSpace,
+			dataset.Params.FillColor,
 			legendTitle,
 			101,
 			0,
@@ -232,8 +235,9 @@ func NoCluster(dataset typedef.Dataset) {
 			sortedAbundance,
 			baitOrder,
 			preyOrder,
-			dataset.Params.ColorSpace,
+			dataset.Params.FillColor,
 			dataset.Params.MaximumAbundance,
+			false,
 		)
 
 		// Create pdfs and pngs.
@@ -249,7 +253,7 @@ func NoCluster(dataset typedef.Dataset) {
 	if dataset.Params.WriteDistance {
 		// Write distance legend.
 		legendTitle := fmt.Sprintf("Distance - %s", dataset.Params.Abundance)
-		distanceLegend := svg.Gradient(dataset.Params.ColorSpace, legendTitle, 101, 0, dataset.Params.MaximumAbundance)
+		distanceLegend := svg.Gradient(dataset.Params.FillColor, legendTitle, 101, 0, dataset.Params.MaximumAbundance)
 		afero.WriteFile(fs.Instance, "svg/distance-legend.svg", []byte(distanceLegend), 0644)
 
 		// Generate pdfs and pngs.

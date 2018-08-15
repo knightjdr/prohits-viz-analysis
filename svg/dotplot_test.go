@@ -25,7 +25,8 @@ func TestDotplot(t *testing.T) {
 	}
 	options := map[string]interface{}{
 		"colLabel":         "Baits",
-		"colorSpace":       "blueBlack",
+		"edgeColor":        "blueBlack",
+		"fillColor":        "blueBlack",
 		"maximumAbundance": float64(50),
 		"invert":           false,
 		"primary":          0.01,

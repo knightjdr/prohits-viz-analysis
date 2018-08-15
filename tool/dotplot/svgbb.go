@@ -7,11 +7,11 @@ import (
 )
 
 // SvgBB draws a bait bait heatmap.
-func SvgBB(dist [][]float64, baits []string, colorSpace string) {
+func SvgBB(dist [][]float64, baits []string, fillColor string) {
 	// Heatmap params.
 	params := map[string]interface{}{
 		"colLabel":         "Baits",
-		"colorSpace":       colorSpace,
+		"fillColor":        fillColor,
 		"invert":           true,
 		"maximumAbundance": float64(1),
 		"rowLabel":         "Baits",

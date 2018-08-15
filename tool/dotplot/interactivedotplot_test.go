@@ -39,7 +39,8 @@ func TestInteractiveDotplot(t *testing.T) {
 		Bait:             "bait",
 		Clustering:       "hierarchical",
 		ClusteringMethod: "complete",
-		ColorSpace:       "blueBlack",
+		EdgeColor:        "blueBlack",
+		FillColor:        "blueBlack",
 		Control:          "control",
 		Distance:         "euclidean",
 		Files:            []string{"file1.txt", "file2.txt"},
@@ -65,7 +66,7 @@ func TestInteractiveDotplot(t *testing.T) {
 		{0.2, 0.7, 0.01},
 	}
 
-	// TEST1: typical date conversion to json.
+	// TEST1: typical data conversion to json.
 	want := "{" +
 		"\"columns\":" +
 		"[\"col1\",\"col2\",\"col3\"]," +
@@ -75,11 +76,13 @@ func TestInteractiveDotplot(t *testing.T) {
 		"\"baitColumn\":\"bait\"," +
 		"\"clustering\":\"hierarchical\"," +
 		"\"clusteringMethod\":\"complete\"," +
-		"\"colorSpace\":\"blueBlack\"," +
 		"\"controlColumn\":\"control\"," +
 		"\"distance\":\"euclidean\"," +
+		"\"edgeColor\":\"blueBlack\"," +
 		"\"files\":[\"file1.txt\",\"file2.txt\"]," +
+		"\"fillColor\":\"blueBlack\"," +
 		"\"imageType\":\"dotplot\"," +
+		"\"invert\":false," +
 		"\"logBase\":\"none\"," +
 		"\"maximumAbundance\":50," +
 		"\"minimumAbundance\":0," +

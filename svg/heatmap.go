@@ -95,7 +95,7 @@ func Heatmap(matrix [][]float64, columns, rows []string, options map[string]inte
 	svgSlice = append(svgSlice, "\t</g>\n")
 
 	// Get color gradient.
-	colorGradient := ColorGradient(options["colorSpace"].(string), 101, options["invert"].(bool))
+	colorGradient := ColorGradient(options["fillColor"].(string), 101, options["invert"].(bool))
 
 	// Write rows.
 	svgSlice = append(svgSlice, fmt.Sprintf("\t<g id=\"minimap\" transform=\"translate(%d, %d)\">\n", leftMargin, topMargin))

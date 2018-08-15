@@ -7,11 +7,11 @@ import (
 )
 
 // SvgBB draws a prey prey heatmap.
-func SvgPP(dist [][]float64, sorted []string, colorSpace string) {
+func SvgPP(dist [][]float64, sorted []string, fillColor string) {
 	// Heatmap params.
 	params := map[string]interface{}{
 		"colLabel":         "Preys",
-		"colorSpace":       colorSpace,
+		"fillColor":        fillColor,
 		"invert":           true,
 		"maximumAbundance": float64(1),
 		"rowLabel":         "Preys",

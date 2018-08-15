@@ -145,7 +145,8 @@ func Dotplot(
 	svgSlice = append(svgSlice, "\t</g>\n")
 
 	// Get color gradient.
-	colorGradient := ColorGradient(options["colorSpace"].(string), 101, options["invert"].(bool))
+	edgeColorGradient := ColorGradient(options["edgeColor"].(string), 101, false)
+	fillColorGradient := ColorGradient(options["fillColor"].(string), 101, options["invert"].(bool))
 
 	// Get function for determining score edge color.
 	edgeColorFunc := ScoreColorFunc(options["scoreType"].(string), options["primary"].(float64), options["secondary"].(float64), 100)
@@ -162,15 +163,15 @@ func Dotplot(
 				// Get fill color.
 				var fill string
 				if value > options["maximumAbundance"].(float64) {
-					fill = colorGradient[100]
+					fill = fillColorGradient[100]
 				} else {
 					index := int(math.Round(value / options["maximumAbundance"].(float64) * 100))
-					fill = colorGradient[index]
+					fill = fillColorGradient[index]
 				}
 
 				// Edge color
 				edgeColorIndex := edgeColorFunc(scores[i][j])
-				edgeColor := colorGradient[edgeColorIndex]
+				edgeColor := edgeColorGradient[edgeColorIndex]
 
 				// Get circle radius.
 				radius := helper.Round(ratios[i][j]*maxRadius, 0.01)

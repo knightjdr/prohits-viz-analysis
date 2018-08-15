@@ -39,10 +39,10 @@ func TestInteractiveHeatmap(t *testing.T) {
 		Bait:             "bait",
 		Clustering:       "hierarchical",
 		ClusteringMethod: "complete",
-		ColorSpace:       "blueBlack",
 		Control:          "control",
 		Distance:         "euclidean",
 		Files:            []string{"file1.txt", "file2.txt"},
+		FillColor:        "blueBlack",
 		LogBase:          "none",
 		MaximumAbundance: float64(50),
 		MinimumAbundance: float64(0),
@@ -65,11 +65,12 @@ func TestInteractiveHeatmap(t *testing.T) {
 		"\"baitColumn\":\"bait\"," +
 		"\"clustering\":\"hierarchical\"," +
 		"\"clusteringMethod\":\"complete\"," +
-		"\"colorSpace\":\"blueBlack\"," +
 		"\"controlColumn\":\"control\"," +
 		"\"distance\":\"euclidean\"," +
 		"\"files\":[\"file1.txt\",\"file2.txt\"]," +
+		"\"fillColor\":\"blueBlack\"," +
 		"\"imageType\":\"heatmap\"," +
+		"\"invert\":false," +
 		"\"logBase\":\"none\"," +
 		"\"maximumAbundance\":50," +
 		"\"minimumAbundance\":0," +
@@ -103,6 +104,7 @@ func TestInteractiveHeatmap(t *testing.T) {
 			abundance,
 			columns,
 			rows,
+			false,
 			params,
 			"test.png",
 		),

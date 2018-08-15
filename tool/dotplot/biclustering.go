@@ -102,13 +102,14 @@ func Biclustering(dataset typedef.Dataset) {
 			sortedScores,
 			order.Baits,
 			order.Preys,
+			false,
 			dataset.Params,
 		)
 
 		// Write dotplot legend.
 		legendTitle := fmt.Sprintf("Dotplot - %s", dataset.Params.Abundance)
 		dotplotLegend := svg.DotplotLegend(
-			dataset.Params.ColorSpace,
+			dataset.Params.FillColor,
 			legendTitle,
 			101,
 			0,
@@ -127,8 +128,9 @@ func Biclustering(dataset typedef.Dataset) {
 			sortedAbundance,
 			order.Baits,
 			order.Preys,
-			dataset.Params.ColorSpace,
+			dataset.Params.FillColor,
 			dataset.Params.MaximumAbundance,
+			false,
 		)
 	}
 
