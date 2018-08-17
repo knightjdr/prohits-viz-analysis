@@ -1,6 +1,6 @@
 package main
 
-// Convert json data array to matrices for svg creation.
+// FormatData converts json data slice to matrices for svg creation.
 func FormatData(data *Data) ([][]float64, [][]float64, [][]float64) {
 	// Define matrix dimensions.
 	colNum := len(data.Rows[0])

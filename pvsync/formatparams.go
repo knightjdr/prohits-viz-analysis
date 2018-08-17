@@ -4,7 +4,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
-// Convert Data struct to Parameters type.
+// FormatParams converts Data struct to Parameters type.
 func FormatParams(data *Data) (params typedef.Parameters) {
 	params = typedef.Parameters{
 		EdgeColor:        data.EdgeColor,

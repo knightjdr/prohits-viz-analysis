@@ -67,7 +67,7 @@ func TestParseJSON(t *testing.T) {
 		"cmd",
 		"-json", "test/testfile1.txt",
 	}
-	dotplotOutput, dotplotErr := ParseJson()
+	dotplotOutput, dotplotErr := ParseJSON()
 	assert.Nil(t, dotplotErr, "All required arguments specified should not return an error")
 	assert.EqualValues(t, &dotplotData, dotplotOutput)
 }

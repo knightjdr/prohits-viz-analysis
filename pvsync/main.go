@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// Parse flags.
-	data, err := ParseJson()
+	data, err := ParseJSON()
 	if err != nil {
 		os.Exit(1)
 	}
