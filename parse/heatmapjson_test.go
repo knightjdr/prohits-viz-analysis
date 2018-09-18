@@ -1,4 +1,4 @@
-package main
+package parse
 
 import (
 	"os"
@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestParseJSON(t *testing.T) {
+func TestHeatmapJSON(t *testing.T) {
 	// Mock fs.
 	oldFs := fs.Instance
 	defer func() { fs.Instance = oldFs }()
@@ -24,9 +24,18 @@ func TestParseJSON(t *testing.T) {
 		"invertColor": false,
 		"primaryFilter": 0.01,
 		"rows": [
-			[{"value": 5}, {"value": 10}, {"value": 40}],
-			[{"value": 8}, {"value": 60}, {"value": 15}],
-			[{"value": 17}, {"value": 5}, {"value": 30}]
+			{
+				"data": [{"value": 5}, {"value": 10}, {"value": 40}],
+				"name": "a"
+			},
+			{
+				"data": [{"value": 8}, {"value": 60}, {"value": 15}],
+				"name": "b"
+			},
+			{
+				"data": [{"value": 17}, {"value": 5}, {"value": 30}],
+				"name": "c"
+			}
 		],
 		"scoreType": "lte",
 		"secondaryFilter": 0.05
@@ -46,10 +55,19 @@ func TestParseJSON(t *testing.T) {
 	defer func() { os.Args = oldArgs }()
 
 	// TEST1: returns struct from json.
-	rows := [][]Row{
-		{{Value: 5}, {Value: 10}, {Value: 40}},
-		{{Value: 8}, {Value: 60}, {Value: 15}},
-		{{Value: 17}, {Value: 5}, {Value: 30}},
+	rows := []Row{
+		{
+			Data: []Column{{Value: 5}, {Value: 10}, {Value: 40}},
+			Name: "a",
+		},
+		{
+			Data: []Column{{Value: 8}, {Value: 60}, {Value: 15}},
+			Name: "b",
+		},
+		{
+			Data: []Column{{Value: 17}, {Value: 5}, {Value: 30}},
+			Name: "c",
+		},
 	}
 	dotplotData := Data{
 		EdgeColor:        "blueBlack",
@@ -67,7 +85,7 @@ func TestParseJSON(t *testing.T) {
 		"cmd",
 		"-json", "test/testfile1.txt",
 	}
-	dotplotOutput, dotplotErr := ParseJSON()
+	dotplotOutput, dotplotErr := HeatmapJSON("test/testfile1.txt")
 	assert.Nil(t, dotplotErr, "All required arguments specified should not return an error")
 	assert.EqualValues(t, &dotplotData, dotplotOutput)
 }

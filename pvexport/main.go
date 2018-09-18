@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/knightjdr/prohits-viz-analysis/interactive"
 	"github.com/knightjdr/prohits-viz-analysis/parse"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
 	"github.com/knightjdr/prohits-viz-analysis/tool/dotplot"
@@ -15,6 +14,7 @@ import (
 func main() {
 	// Parse flags.
 	jsonFile := flag.String("json", "", "JSON file")
+	outputType := flag.String("type", "", "Type of file export")
 	flag.Parse()
 
 	data, err := parse.HeatmapJSON(*jsonFile)
@@ -28,8 +28,7 @@ func main() {
 	// Format parameters for svg.
 	params := FormatParams(data)
 
-	// Creat dummy row and column names.
-	dummyColumns, dummyRows := Dummy(len(data.Rows[0].Data), len(data.Rows))
+	rowNames := RowNames(data.Rows)
 
 	// Create svg.
 	image := "heatmap"
@@ -39,26 +38,27 @@ func main() {
 			abundance,
 			ratios,
 			scores,
-			dummyColumns,
-			dummyRows,
+			data.Columns,
+			rowNames,
 			data.Invert,
 			params,
 		)
 	} else {
 		dotplot.SvgHeatmap(
 			abundance,
-			dummyColumns,
-			dummyRows,
+			data.Columns,
+			rowNames,
 			data.FillColor,
 			data.MaximumAbundance,
 			data.Invert,
 		)
 	}
 
-	// Create minimap.
-	svg.ConvertMap([]string{fmt.Sprintf("%s.svg", image)})
-
-	// Generate URL.
-	url := interactive.Pngurl(fmt.Sprintf("minimap/%s.png", image))
-	fmt.Println(url)
+	// Create additional output type if needed.
+	imageName := fmt.Sprintf("%s.svg", image)
+	if *outputType == "pdf" {
+		svg.ConvertPdf([]string{imageName})
+	} else if *outputType == "png" {
+		svg.ConvertPng([]string{imageName})
+	}
 }

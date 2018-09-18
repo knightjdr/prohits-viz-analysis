@@ -21,15 +21,14 @@ func ScoreColorFunc(scoretype string, primary, secondary float64, numColors int)
 			}
 			return numColors / 4
 		}
-	} else {
-		return func(score float64) int {
-			if score <= primary {
-				return numColors
-			} else if score > primary && score <= secondary {
-				return numColors / 2
-			}
-			return numColors / 4
+	}
+	return func(score float64) int {
+		if score <= primary {
+			return numColors
+		} else if score > primary && score <= secondary {
+			return numColors / 2
 		}
+		return numColors / 4
 	}
 }
 

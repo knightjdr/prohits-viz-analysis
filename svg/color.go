@@ -54,10 +54,10 @@ func ColorGradient(colorSpace string, numColors int, invert bool) (gradient []st
 	return
 }
 
-// HSLtoHex converts hsl colors to rgb to hex. Takes HSL values between 0 - 1 and
-// converts to range from 0 - 255, then converts to hex.
 const onethird float64 = float64(1) / float64(3)
 
+// HSLtoHex converts hsl colors to rgb to hex. Takes HSL values between 0 - 1 and
+// converts to range from 0 - 255, then converts to hex.
 func HSLtoHex(hsl map[string]float64) (hex string) {
 	var r, g, b float64
 
@@ -86,22 +86,23 @@ func HSLtoHex(hsl map[string]float64) (hex string) {
 	return
 }
 
-// HuetoRGB converts a hue to rgb.
 const sixth float64 = float64(1) / float64(6)
 const twothirds float64 = float64(2) / float64(3)
 
+// HuetoRGB converts a hue to rgb.
 func HuetoRGB(p, q, t float64) float64 {
-	if t < 0 {
-		t += 1
-	} else if t > 1 {
-		t -= 1
+	u := t
+	if u < 0 {
+		u++
+	} else if u > 1 {
+		u--
 	}
-	if t < sixth {
-		return p + ((q - p) * float64(6) * t)
-	} else if t < 0.5 {
+	if u < sixth {
+		return p + ((q - p) * float64(6) * u)
+	} else if u < 0.5 {
 		return q
-	} else if t < twothirds {
-		return p + ((q - p) * (twothirds - t) * float64(6))
+	} else if u < twothirds {
+		return p + ((q - p) * (twothirds - u) * float64(6))
 	}
 	return p
 }

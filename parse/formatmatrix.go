@@ -1,9 +1,9 @@
-package main
+package parse
 
-// FormatData converts json data slice to matrices for svg creation.
-func FormatData(data *Data) ([][]float64, [][]float64, [][]float64) {
+// FormatMatrix converts json data slice to matrices for svg creation.
+func FormatMatrix(data *Data) ([][]float64, [][]float64, [][]float64) {
 	// Define matrix dimensions.
-	colNum := len(data.Rows[0])
+	colNum := len(data.Rows[0].Data)
 	rowNum := len(data.Rows)
 
 	// Init matrices.
@@ -16,7 +16,7 @@ func FormatData(data *Data) ([][]float64, [][]float64, [][]float64) {
 		abundance[i] = make([]float64, colNum)
 		ratios[i] = make([]float64, colNum)
 		score[i] = make([]float64, colNum)
-		for j, cell := range row {
+		for j, cell := range row.Data {
 			abundance[i][j] = cell.Value
 			ratios[i][j] = cell.Ratio
 			score[i][j] = cell.Score

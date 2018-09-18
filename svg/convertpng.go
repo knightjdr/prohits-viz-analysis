@@ -30,7 +30,7 @@ func ConvertPng(list []string) {
 		filename := svg[0 : len(svg)-len(extension)]
 		fileArg := fmt.Sprintf("%s/svg/%s", workingDir, svg)
 		exportArg := fmt.Sprintf("--export-png=%s/png/%s.png", workingDir, filename)
-		cmd := exec.Command("inkscape", fileArg, exportArg, "--export-dpi=96", "--without-gui")
+		cmd := exec.Command("inkscape", fileArg, exportArg, "--export-dpi=192", "--without-gui")
 		var stderr bytes.Buffer
 		cmd.Stderr = &stderr
 		err := cmd.Run()
