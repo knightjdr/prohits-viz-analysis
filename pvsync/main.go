@@ -9,7 +9,6 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/interactive"
 	"github.com/knightjdr/prohits-viz-analysis/parse"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
-	"github.com/knightjdr/prohits-viz-analysis/tool/dotplot"
 )
 
 func main() {
@@ -32,33 +31,20 @@ func main() {
 	dummyColumns, dummyRows := Dummy(len(data.Rows[0].Data), len(data.Rows))
 
 	// Create svg.
-	image := "heatmap"
-	if data.ImageType == "dotplot" {
-		image = "dotplot"
-		dotplot.SvgDotplot(
-			abundance,
-			ratios,
-			scores,
-			dummyColumns,
-			dummyRows,
-			data.Invert,
-			params,
-		)
-	} else {
-		dotplot.SvgHeatmap(
-			abundance,
-			dummyColumns,
-			dummyRows,
-			data.FillColor,
-			data.MaximumAbundance,
-			data.Invert,
-		)
-	}
+	Map(
+		data.ImageType,
+		abundance,
+		ratios,
+		scores,
+		dummyColumns,
+		dummyRows,
+		params,
+	)
 
 	// Create minimap.
-	svg.ConvertMap([]string{fmt.Sprintf("%s.svg", image)})
+	svg.ConvertMap([]string{fmt.Sprintf("%s.svg", data.ImageType)})
 
 	// Generate URL.
-	url := interactive.Pngurl(fmt.Sprintf("minimap/%s.png", image))
+	url := interactive.Pngurl(fmt.Sprintf("minimap/%s.png", data.ImageType))
 	fmt.Println(url)
 }

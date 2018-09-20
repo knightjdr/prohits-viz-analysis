@@ -8,7 +8,6 @@ import (
 
 	"github.com/knightjdr/prohits-viz-analysis/parse"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
-	"github.com/knightjdr/prohits-viz-analysis/tool/dotplot"
 )
 
 func main() {
@@ -31,31 +30,20 @@ func main() {
 	rowNames := RowNames(data.Rows)
 
 	// Create svg.
-	image := "heatmap"
-	if data.ImageType == "dotplot" {
-		image = "dotplot"
-		dotplot.SvgDotplot(
-			abundance,
-			ratios,
-			scores,
-			data.Columns,
-			rowNames,
-			data.Invert,
-			params,
-		)
-	} else {
-		dotplot.SvgHeatmap(
-			abundance,
-			data.Columns,
-			rowNames,
-			data.FillColor,
-			data.MaximumAbundance,
-			data.Invert,
-		)
-	}
+	Export(
+		data.ImageType,
+		abundance,
+		ratios,
+		scores,
+		data.Annotations,
+		data.Markers,
+		data.Columns,
+		rowNames,
+		params,
+	)
 
 	// Create additional output type if needed.
-	imageName := fmt.Sprintf("%s.svg", image)
+	imageName := fmt.Sprintf("%s.svg", data.ImageType)
 	if *outputType == "pdf" {
 		svg.ConvertPdf([]string{imageName})
 	} else if *outputType == "png" {

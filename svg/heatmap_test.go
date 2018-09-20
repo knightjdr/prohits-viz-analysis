@@ -3,6 +3,7 @@ package svg
 import (
 	"testing"
 
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -13,12 +14,20 @@ func TestHeatmap(t *testing.T) {
 		{100, 30, 7},
 		{5, 2.3, 8},
 	}
+	annotations := []typedef.Annotation{
+		{Text: "a", X: 0.5, Y: 0.2},
+	}
+	markers := []typedef.Marker{
+		{Height: 2, Width: 2, X: 0, Y: 1},
+	}
 	options := map[string]interface{}{
-		"colLabel":         "Baits",
-		"fillColor":       "blueBlack",
-		"maximumAbundance": float64(50),
-		"invert":           false,
-		"rowLabel":         "Preys",
+		"annotationFontSize": int(15),
+		"colLabel":           "Baits",
+		"fillColor":          "blueBlack",
+		"markerColor":        "#000000",
+		"maximumAbundance":   float64(50),
+		"invert":             false,
+		"rowLabel":           "Preys",
 	}
 	rows := []string{"prey1", "prey2", "prey3"}
 
@@ -45,9 +54,15 @@ func TestHeatmap(t *testing.T) {
 		"\t\t<rect fill=\"#e6ecff\" y=\"40\" x=\"20\" width=\"20\" height=\"20\" />\n" +
 		"\t\t<rect fill=\"#adc2ff\" y=\"40\" x=\"40\" width=\"20\" height=\"20\" />\n" +
 		"\t</g>\n" +
+		"\t<g transform=\"translate(57, 57)\">\n" +
+		"\t\t<rect y=\"20\" x=\"0\" width=\"40\" height=\"40\" stroke=\"#000000\" stroke-width=\"1\" fill=\"none\"/>\n" +
+		"\t</g>\n" +
+		"\t<g transform=\"translate(57, 57)\">\n" +
+		"\t\t<text y=\"12\" x=\"30\" font-size=\"15\" text-anchor=\"middle\">a</text>\n" +
+		"\t</g>\n" +
 		"\t<text y=\"10\" x=\"87\" font-size=\"12\" text-anchor=\"middle\">Baits</text>\n" +
 		"\t<text y=\"87\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 87)\">Preys</text>\n" +
 		"</svg>\n"
-	svg := Heatmap(matrix, columns, rows, options)
+	svg := Heatmap(matrix, annotations, markers, columns, rows, options)
 	assert.Equal(t, want, svg, "Heatmap svg is not correct")
 }
