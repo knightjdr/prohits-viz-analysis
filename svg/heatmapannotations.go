@@ -9,19 +9,19 @@ import (
 )
 
 // HeatmapAnnotations adds annotations to an SVG
-func HeatmapAnnotations(annotations []typedef.Annotation, dims HDimensions, fontSize int) string {
-	if len(annotations) == 0 {
+func HeatmapAnnotations(annotations typedef.Annotations, dims HDimensions) string {
+	if annotations.List == nil && len(annotations.List) == 0 {
 		return ""
 	}
 	svg := make([]string, 0)
 	svg = append(svg, fmt.Sprintf("\t<g transform=\"translate(%d, %d)\">\n", dims.leftMargin, dims.topMargin))
-	for _, annotation := range annotations {
+	for _, annotation := range annotations.List {
 		x := int(math.Round(annotation.X * float64(dims.plotWidth)))
 		y := int(math.Round(annotation.Y * float64(dims.plotHeight)))
 		text := fmt.Sprintf(
 			"\t\t<text y=\"%d\" x=\"%d\" font-size=\"%d\""+
 				" text-anchor=\"middle\">%s</text>\n",
-			y, x, fontSize, annotation.Text,
+			y, x, annotations.FontSize, annotation.Text,
 		)
 		svg = append(svg, text)
 

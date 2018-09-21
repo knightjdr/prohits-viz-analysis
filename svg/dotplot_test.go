@@ -24,24 +24,28 @@ func TestDotplot(t *testing.T) {
 		{0, 0.01, 0.01},
 		{0.02, 0.1, 0.01},
 	}
-	annotations := []typedef.Annotation{
-		{Text: "a", X: 0.5, Y: 0.2},
+	annotations := typedef.Annotations{
+		FontSize: 15,
+		List: []typedef.Annotation{
+			{Text: "a", X: 0.5, Y: 0.2},
+		},
 	}
-	markers := []typedef.Marker{
-		{Height: 2, Width: 2, X: 0, Y: 1},
+	markers := typedef.Markers{
+		Color: "#000000",
+		List: []typedef.Marker{
+			{Height: 2, Width: 2, X: 0, Y: 1},
+		},
 	}
 	options := map[string]interface{}{
-		"annotationFontSize": int(15),
-		"colLabel":           "Baits",
-		"edgeColor":          "blueBlack",
-		"fillColor":          "blueBlack",
-		"markerColor":        "#000000",
-		"maximumAbundance":   float64(50),
-		"invert":             false,
-		"primary":            0.01,
-		"rowLabel":           "Preys",
-		"secondary":          0.05,
-		"scoreType":          "lte",
+		"colLabel":         "Baits",
+		"edgeColor":        "blueBlack",
+		"fillColor":        "blueBlack",
+		"maximumAbundance": float64(50),
+		"invert":           false,
+		"primary":          0.01,
+		"rowLabel":         "Preys",
+		"secondary":        0.05,
+		"scoreType":        "lte",
 	}
 	rows := []string{"prey1", "prey2", "prey3"}
 

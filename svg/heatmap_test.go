@@ -14,11 +14,17 @@ func TestHeatmap(t *testing.T) {
 		{100, 30, 7},
 		{5, 2.3, 8},
 	}
-	annotations := []typedef.Annotation{
-		{Text: "a", X: 0.5, Y: 0.2},
+	annotations := typedef.Annotations{
+		FontSize: 15,
+		List: []typedef.Annotation{
+			{Text: "a", X: 0.5, Y: 0.2},
+		},
 	}
-	markers := []typedef.Marker{
-		{Height: 2, Width: 2, X: 0, Y: 1},
+	markers := typedef.Markers{
+		Color: "#000000",
+		List: []typedef.Marker{
+			{Height: 2, Width: 2, X: 0, Y: 1},
+		},
 	}
 	options := map[string]interface{}{
 		"annotationFontSize": int(15),

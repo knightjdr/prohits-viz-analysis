@@ -33,8 +33,8 @@ func ScoreColorFunc(scoretype string, primary, secondary float64, numColors int)
 // ratios and score.
 func Dotplot(
 	matrix, ratios, scores [][]float64,
-	annotations []typedef.Annotation,
-	markers []typedef.Marker,
+	annotations typedef.Annotations,
+	markers typedef.Markers,
 	columns, rows []string,
 	options map[string]interface{},
 ) string {
@@ -45,8 +45,8 @@ func Dotplot(
 	svg = append(svg, HeatmapColumnNames(dims, columns))
 	svg = append(svg, HeatmapRowNames(dims, rows))
 	svg = append(svg, DotplotRows(matrix, ratios, scores, dims, params, options))
-	svg = append(svg, HeatmapMarkers(markers, dims, options["markerColor"].(string)))
-	svg = append(svg, HeatmapAnnotations(annotations, dims, options["annotationFontSize"].(int)))
+	svg = append(svg, HeatmapMarkers(markers, dims))
+	svg = append(svg, HeatmapAnnotations(annotations, dims))
 	svg = append(svg, BoundingBox(dims))
 	svg = append(svg, HeatmapHeadings(dims, options))
 	// Add end element wrapper for svg.

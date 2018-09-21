@@ -13,24 +13,22 @@ import (
 func Export(
 	imageType string,
 	abundance, ratios, scores [][]float64,
-	annotations []typedef.Annotation,
-	markers []typedef.Marker,
+	annotations typedef.Annotations,
+	markers typedef.Markers,
 	columns, rows []string,
 	userParams typedef.Parameters,
 ) {
 	// Define dotplot parameters.
 	params := map[string]interface{}{
-		"annotationFontSize": userParams.AnnotationFontSize,
-		"colLabel":           "Baits",
-		"edgeColor":          userParams.EdgeColor,
-		"fillColor":          userParams.FillColor,
-		"invert":             userParams.Invert,
-		"markerColor":        userParams.MarkerColor,
-		"maximumAbundance":   userParams.MaximumAbundance,
-		"primary":            userParams.PrimaryFilter,
-		"rowLabel":           "Preys",
-		"secondary":          userParams.SecondaryFilter,
-		"scoreType":          userParams.ScoreType,
+		"colLabel":         "Baits",
+		"edgeColor":        userParams.EdgeColor,
+		"fillColor":        userParams.FillColor,
+		"invert":           userParams.Invert,
+		"maximumAbundance": userParams.MaximumAbundance,
+		"primary":          userParams.PrimaryFilter,
+		"rowLabel":         "Preys",
+		"secondary":        userParams.SecondaryFilter,
+		"scoreType":        userParams.ScoreType,
 	}
 	var content string
 	if imageType == "dotplot" {

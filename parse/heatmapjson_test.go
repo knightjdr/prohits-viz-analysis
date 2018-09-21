@@ -19,15 +19,24 @@ func TestHeatmapJSON(t *testing.T) {
 	// Define json.
 	json := `{
 		"abundanceCap": 50,
-		"annotationFontSize": 15,
-		"annotations": [
-			{ "text": "a", "x": 0.2, "y": 0.5 },
-			{ "text": "b", "x": 0.6, "y": 0.1 }
-		],
+		"annotations": {
+			"fontSize": 15,
+			"list": [
+				{ "text": "a", "x": 0.2, "y": 0.5 },
+				{ "text": "b", "x": 0.6, "y": 0.1 }
+			]
+		},
 		"edgeColor": "blueBlack",
 		"fillColor": "blueBlack",
 		"imageType": "dotplot",
 		"invertColor": false,
+		"markers": {
+			"color": "#000000",
+			"list": [
+				{ "height": 10, "width": 15, "x": 2, "y": 8 },
+				{ "height": 12, "width": 20, "x": 3, "y": 7 }
+			]
+		},
 		"primaryFilter": 0.01,
 		"rows": [
 			{
@@ -61,9 +70,19 @@ func TestHeatmapJSON(t *testing.T) {
 	defer func() { os.Args = oldArgs }()
 
 	// TEST1: returns struct from json.
-	annotations := []typedef.Annotation{
-		{Text: "a", X: 0.2, Y: 0.5},
-		{Text: "b", X: 0.6, Y: 0.1},
+	annotations := typedef.Annotations{
+		FontSize: 15,
+		List: []typedef.Annotation{
+			{Text: "a", X: 0.2, Y: 0.5},
+			{Text: "b", X: 0.6, Y: 0.1},
+		},
+	}
+	markers := typedef.Markers{
+		Color: "#000000",
+		List: []typedef.Marker{
+			{Height: 10, Width: 15, X: 2, Y: 8},
+			{Height: 12, Width: 20, X: 3, Y: 7},
+		},
 	}
 	rows := []Row{
 		{
@@ -80,17 +99,17 @@ func TestHeatmapJSON(t *testing.T) {
 		},
 	}
 	dotplotData := Data{
-		AnnotationFontSize: 15,
-		Annotations:        annotations,
-		EdgeColor:          "blueBlack",
-		FillColor:          "blueBlack",
-		ImageType:          "dotplot",
-		Invert:             false,
-		MaximumAbundance:   50,
-		PrimaryFilter:      0.01,
-		Rows:               rows,
-		ScoreType:          "lte",
-		SecondaryFilter:    0.05,
+		Annotations:      annotations,
+		EdgeColor:        "blueBlack",
+		FillColor:        "blueBlack",
+		ImageType:        "dotplot",
+		Invert:           false,
+		Markers:          markers,
+		MaximumAbundance: 50,
+		PrimaryFilter:    0.01,
+		Rows:             rows,
+		ScoreType:        "lte",
+		SecondaryFilter:  0.05,
 	}
 
 	os.Args = []string{

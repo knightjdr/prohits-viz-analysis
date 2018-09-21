@@ -1,6 +1,12 @@
 // Package typedef has type definitions needed in several packages
 package typedef
 
+// Annotations is the struct for heatmap annotations.
+type Annotations struct {
+	FontSize int          `json:"fontSize"`
+	List     []Annotation `json:"list"`
+}
+
 // Annotation is the struct for heatmap annotation text.
 type Annotation struct {
 	Text string  `json:"text"`
@@ -12,6 +18,12 @@ type Annotation struct {
 type Dataset struct {
 	Data   []map[string]interface{}
 	Params Parameters
+}
+
+// Markers is the struct for heatmap markers.
+type Markers struct {
+	Color string   `json:"color"`
+	List  []Marker `json:"list"`
 }
 
 // Marker is the struct for heatmap marker boxes.
@@ -26,7 +38,6 @@ type Marker struct {
 type Parameters struct {
 	Abundance          string
 	AnalysisType       string
-	AnnotationFontSize int
 	Bait               string
 	BaitClustering     string
 	BaitList           []string
@@ -40,7 +51,6 @@ type Parameters struct {
 	Files              []string
 	Invert             bool
 	LogBase            string
-	MarkerColor        string
 	MaximumAbundance   float64
 	MinimumAbundance   float64
 	Normalization      string
