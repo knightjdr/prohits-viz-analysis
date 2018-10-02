@@ -24,7 +24,7 @@ func TestPreys(t *testing.T) {
 	}
 	dataset := typedef.Dataset{
 		Data: data,
-		Params: typedef.Parameters{
+		Parameters: typedef.Parameters{
 			Control:           "controlColumn",
 			LogBase:           "2",
 			Normalization:     "total",

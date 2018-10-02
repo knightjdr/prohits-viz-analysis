@@ -35,14 +35,14 @@ func Generate(dataset typedef.Dataset) {
 	logmessage.CheckError(err, true)
 
 	// PDF folder.
-	if dataset.Params.Pdf {
+	if dataset.Parameters.Pdf {
 		pdfPath := filepath.Join(".", "pdf")
 		err = fs.Instance.MkdirAll(pdfPath, os.ModePerm)
 		logmessage.CheckError(err, true)
 	}
 
 	// PNG folder.
-	if dataset.Params.Png {
+	if dataset.Parameters.Png {
 		pngPath := filepath.Join(".", "png")
 		err = fs.Instance.MkdirAll(pngPath, os.ModePerm)
 		logmessage.CheckError(err, true)
@@ -54,11 +54,11 @@ func Generate(dataset typedef.Dataset) {
 	logmessage.CheckError(err, true)
 
 	// Initiate clustering method.
-	if dataset.Params.Clustering == "biclustering" {
+	if dataset.Parameters.Clustering == "biclustering" {
 		Biclustering(dataset)
-	} else if dataset.Params.Clustering == "hierarchical" {
+	} else if dataset.Parameters.Clustering == "hierarchical" {
 		Hierarchical(dataset)
-	} else if dataset.Params.Clustering == "none" {
+	} else if dataset.Parameters.Clustering == "none" {
 		NoCluster(dataset)
 	}
 

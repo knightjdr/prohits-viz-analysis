@@ -10,12 +10,12 @@ import (
 func InteractiveHeatmap(
 	abundance [][]float64,
 	columns, rows []string,
-	invert bool,
+	invertColor bool,
 	userParams typedef.Parameters,
 	pngfilename string,
 ) (json string) {
-	// Needed parameters.
-	params := map[string]interface{}{
+	// Run parameters.
+	parameters := map[string]interface{}{
 		"abundanceColumn":  userParams.Abundance,
 		"analysisType":     userParams.AnalysisType,
 		"baitColumn":       userParams.Bait,
@@ -24,18 +24,23 @@ func InteractiveHeatmap(
 		"controlColumn":    userParams.Control,
 		"distance":         userParams.Distance,
 		"files":            userParams.Files,
-		"fillColor":        userParams.FillColor,
 		"imageType":        "heatmap",
-		"invert":           invert,
 		"logBase":          userParams.LogBase,
-		"maximumAbundance": userParams.MaximumAbundance,
-		"minimumAbundance": userParams.MinimumAbundance,
 		"normalization":    userParams.Normalization,
 		"preyColumn":       userParams.Prey,
-		"primaryFilter":    userParams.PrimaryFilter,
 		"scoreColumn":      userParams.Score,
 		"scoreType":        userParams.ScoreType,
-		"secondaryFilter":  userParams.SecondaryFilter,
+	}
+
+	// Needed settings.
+	settings := map[string]interface{}{
+		"abundanceCap":    userParams.AbundanceCap,
+		"fillColor":       userParams.FillColor,
+		"imageType":       "heatmap",
+		"invertColor":     invertColor,
+		"minAbundance":    userParams.MinAbundance,
+		"primaryFilter":   userParams.PrimaryFilter,
+		"secondaryFilter": userParams.SecondaryFilter,
 	}
 
 	// Convert png to url.
@@ -59,6 +64,6 @@ func InteractiveHeatmap(
 	}
 
 	// Get json.
-	json = interactive.Heatmap(data, columns, params, url)
+	json = interactive.Heatmap(data, columns, parameters, settings, url)
 	return
 }

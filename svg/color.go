@@ -7,9 +7,9 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
-// ColorGradient defines a color gradient to use for fill values. It defines
+// colorGradient defines a color gradient to use for fill values. It defines
 // the colors to use via HSL and then converts those to HEX.
-func ColorGradient(colorSpace string, numColors int, invert bool) (gradient []string) {
+func colorGradient(colorSpace string, numColors int, invertColor bool) (gradient []string) {
 
 	// Create hex gradient. The color scale is set using the hue and saturation
 	// components of HSL. The gradient is then defined by changing the lightness
@@ -46,7 +46,7 @@ func ColorGradient(colorSpace string, numColors int, invert bool) (gradient []st
 	}
 
 	// Invert gradient if requested.
-	if invert {
+	if invertColor {
 		for i, j := 0, numColors-1; i < j; i, j = i+1, j-1 {
 			gradient[i], gradient[j] = gradient[j], gradient[i]
 		}

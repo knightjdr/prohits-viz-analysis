@@ -19,7 +19,7 @@ import (
 // for the images.
 func Biclustering(dataset typedef.Dataset) {
 	// Write log.
-	LogParams(dataset.Params)
+	LogParams(dataset.Parameters)
 
 	// Create folder for biclustering files.
 	biclustPath := filepath.Join(".", "biclustering")
@@ -28,8 +28,8 @@ func Biclustering(dataset typedef.Dataset) {
 
 	// Generate parameter file. This depends on whether approximate biclustering
 	// should be performed.
-	var params string
-	if dataset.Params.BiclusteringApprox {
+	var parameters string
+	if dataset.Parameters.BiclusteringApprox {
 		// Get number of baits.
 		uniqueBaits := make(map[string]bool)
 		for _, row := range dataset.Data {
@@ -41,7 +41,7 @@ func Biclustering(dataset typedef.Dataset) {
 		nb := len(uniqueBaits)
 
 		// Create optimized param file content.
-		params = fmt.Sprintf("np 10\n"+
+		parameters = fmt.Sprintf("np 10\n"+
 			"nb %d\n"+
 			"a 1.0\n"+
 			"b 1.0\n"+
@@ -55,7 +55,7 @@ func Biclustering(dataset typedef.Dataset) {
 		)
 	} else {
 		// Create default param file content.
-		params = fmt.Sprintln("np 10\n" +
+		parameters = fmt.Sprintln("np 10\n" +
 			"nb 100\n" +
 			"a 1.0\n" +
 			"b 1.0\n" +
@@ -68,16 +68,16 @@ func Biclustering(dataset typedef.Dataset) {
 			"niter 10000\n",
 		)
 	}
-	afero.WriteFile(fs.Instance, "biclustering/params.txt", []byte(params), 0644)
+	afero.WriteFile(fs.Instance, "biclustering/parameters.txt", []byte(parameters), 0644)
 
 	// Generate bait-prey table.
-	data := BaitPreyMatrix(dataset.Data, dataset.Params.ScoreType)
+	data := BaitPreyMatrix(dataset.Data, dataset.Parameters.ScoreType)
 
 	// Subset data matrix to only include preys that pass the minimum abundance
 	// cutoff for at least two baits and return normalized matrix. Will also return
 	// a list of the "singletons" (preys that don't meet criteria) for
 	// appending to the clustering order.
-	filteredData := BiclustFormat(data, dataset.Params.MinimumAbundance)
+	filteredData := BiclustFormat(data, dataset.Parameters.MinAbundance)
 
 	// Run nested cluster.
 	order := NestedClustering()
@@ -95,7 +95,7 @@ func Biclustering(dataset typedef.Dataset) {
 	// Output svgs.
 
 	// Write bait-prey dotplot.
-	if dataset.Params.WriteDotplot {
+	if dataset.Parameters.WriteDotplot {
 		SvgDotplot(
 			sortedAbundance,
 			sortedRatios,
@@ -103,33 +103,33 @@ func Biclustering(dataset typedef.Dataset) {
 			order.Baits,
 			order.Preys,
 			false,
-			dataset.Params,
+			dataset.Parameters,
 		)
 
 		// Write dotplot legend.
-		legendTitle := fmt.Sprintf("Dotplot - %s", dataset.Params.Abundance)
+		legendTitle := fmt.Sprintf("Dotplot - %s", dataset.Parameters.Abundance)
 		dotplotLegend := svg.DotplotLegend(
-			dataset.Params.FillColor,
+			dataset.Parameters.FillColor,
 			legendTitle,
 			101,
 			0,
-			dataset.Params.MaximumAbundance,
-			dataset.Params.PrimaryFilter,
-			dataset.Params.SecondaryFilter,
-			dataset.Params.Score,
-			dataset.Params.ScoreType,
+			dataset.Parameters.AbundanceCap,
+			dataset.Parameters.PrimaryFilter,
+			dataset.Parameters.SecondaryFilter,
+			dataset.Parameters.Score,
+			dataset.Parameters.ScoreType,
 		)
 		afero.WriteFile(fs.Instance, "svg/dotplot-legend.svg", []byte(dotplotLegend), 0644)
 	}
 
 	// Write bait-prey heatmap.
-	if dataset.Params.WriteHeatmap {
+	if dataset.Parameters.WriteHeatmap {
 		SvgHeatmap(
 			sortedAbundance,
 			order.Baits,
 			order.Preys,
-			dataset.Params.FillColor,
-			dataset.Params.MaximumAbundance,
+			dataset.Parameters.FillColor,
+			dataset.Parameters.AbundanceCap,
 			false,
 		)
 	}
@@ -137,18 +137,18 @@ func Biclustering(dataset typedef.Dataset) {
 	// Create pdfs from svg.
 	svgList := make([]string, 0)
 	svgMiniList := make([]string, 0)
-	if dataset.Params.WriteDotplot {
+	if dataset.Parameters.WriteDotplot {
 		svgList = append(svgList, "dotplot.svg")
 		svgList = append(svgList, "dotplot-legend.svg")
 		svgMiniList = append(svgMiniList, "dotplot.svg")
 	}
-	if dataset.Params.WriteHeatmap {
+	if dataset.Parameters.WriteHeatmap {
 		svgList = append(svgList, "heatmap.svg")
 	}
-	if dataset.Params.Pdf {
+	if dataset.Parameters.Pdf {
 		svg.ConvertPdf(svgList)
 	}
-	if dataset.Params.Png {
+	if dataset.Parameters.Png {
 		svg.ConvertPng(svgList)
 	}
 
@@ -167,14 +167,14 @@ func Biclustering(dataset typedef.Dataset) {
 	WriteMatrix(sortedRatios, order.Baits, order.Preys, "other/data-transformed-ratios.txt")
 
 	// Create interactive files.
-	if dataset.Params.WriteDotplot {
+	if dataset.Parameters.WriteDotplot {
 		json := InteractiveDotplot(
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,
 			order.Baits,
 			order.Preys,
-			dataset.Params,
+			dataset.Parameters,
 			"minimap/dotplot.png",
 		)
 		afero.WriteFile(fs.Instance, "interactive/dotplot.json", []byte(json), 0644)

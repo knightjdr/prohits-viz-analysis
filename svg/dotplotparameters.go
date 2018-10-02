@@ -14,8 +14,8 @@ type DParameters struct {
 }
 
 // DotplotParameters generates dot dimensions for an SVG.
-func DotplotParameters(dims HDimensions) (params DParameters) {
-	params.cellSizeHalf = int(math.Round(float64(dims.cellSize) / float64(2)))
+func DotplotParameters(dims HDimensions) (parameters DParameters) {
+	parameters.cellSizeHalf = int(math.Round(float64(dims.cellSize) / float64(2)))
 
 	// Determine the amount to subtract for the maximum circle radius. We do this
 	// so that there is some space between circles. For the ideal cell size of 20
@@ -25,11 +25,11 @@ func DotplotParameters(dims HDimensions) (params DParameters) {
 	circleSpace := dims.ratio * idealCircleSpace
 
 	// Adjust edgeWidth as cell size gets smaller.
-	params.edgeWidth = helper.Round(dims.ratio*float64(idealEdgeWidth), 0.01)
+	parameters.edgeWidth = helper.Round(dims.ratio*float64(idealEdgeWidth), 0.01)
 
 	// Determine the maxium circle radius. Will be 9px for the default cell size
 	// of 20px.
-	params.maxRadius = helper.Round(float64(params.cellSizeHalf)-circleSpace, 0.01)
+	parameters.maxRadius = helper.Round(float64(parameters.cellSizeHalf)-circleSpace, 0.01)
 
 	return
 }

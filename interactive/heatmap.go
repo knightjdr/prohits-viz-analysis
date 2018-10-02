@@ -7,12 +7,13 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 )
 
-// HeatmapJson stores the JSON structure for the interactive heatmap.
-type HeatmapJson struct {
-	Columns []string                 `json:"columns"`
-	Params  map[string]interface{}   `json:"params"`
-	Rows    []map[string]interface{} `json:"rows"`
-	Uri     string                   `json:"minimap"`
+// HeatmapJSON stores the JSON structure for the interactive heatmap.
+type HeatmapJSON struct {
+	Columns    []string                 `json:"columns"`
+	Parameters map[string]interface{}   `json:"parameters"`
+	Settings   map[string]interface{}   `json:"settings"`
+	Rows       []map[string]interface{} `json:"rows"`
+	URI        string                   `json:"minimap"`
 }
 
 // Heatmap creates an interactive heatmap as json. The data matrix, row and column
@@ -21,22 +22,17 @@ type HeatmapJson struct {
 func Heatmap(
 	data []map[string]interface{},
 	columns []string,
-	params map[string]interface{},
+	parameters map[string]interface{},
+	settings map[string]interface{},
 	uri string,
 ) (jsonString string) {
-	var jsonStruct HeatmapJson
+	var jsonStruct HeatmapJSON
 
-	// Add header.
 	jsonStruct.Columns = columns
-
-	// Set Params.
-	jsonStruct.Params = params
-
-	// Add rows.
+	jsonStruct.Parameters = parameters
 	jsonStruct.Rows = data
-
-	// Add uri.
-	jsonStruct.Uri = uri
+	jsonStruct.Settings = settings
+	jsonStruct.URI = uri
 
 	// Convert struct to json.
 	byte, err := json.Marshal(jsonStruct)

@@ -99,17 +99,17 @@ func TestHeatmapJSON(t *testing.T) {
 		},
 	}
 	dotplotData := Data{
-		Annotations:      annotations,
-		EdgeColor:        "blueBlack",
-		FillColor:        "blueBlack",
-		ImageType:        "dotplot",
-		Invert:           false,
-		Markers:          markers,
-		MaximumAbundance: 50,
-		PrimaryFilter:    0.01,
-		Rows:             rows,
-		ScoreType:        "lte",
-		SecondaryFilter:  0.05,
+		Annotations:     annotations,
+		EdgeColor:       "blueBlack",
+		FillColor:       "blueBlack",
+		ImageType:       "dotplot",
+		InvertColor:     false,
+		Markers:         markers,
+		AbundanceCap:    50,
+		PrimaryFilter:   0.01,
+		Rows:            rows,
+		ScoreType:       "lte",
+		SecondaryFilter: 0.05,
 	}
 
 	os.Args = []string{

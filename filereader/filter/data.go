@@ -11,17 +11,17 @@ import (
 // Data filters first by bait and prey, then score.
 func Data(
 	data []map[string]string,
-	params typedef.Parameters,
+	parameters typedef.Parameters,
 ) (filtered []map[string]interface{}) {
 	filteredBaitPrey := make([]map[string]string, 0)
 
 	// Filter by both baits and preys if desired.
-	if params.BaitClustering == "baits" && params.PreyClustering == "preys" {
-		filteredBaitPrey = BaitPrey(data, params.BaitList, params.PreyList)
-	} else if params.BaitClustering == "baits" { // Filter by baits only.
-		filteredBaitPrey = Baits(data, params.BaitList)
-	} else if params.PreyClustering == "preys" { // Filter by preys only.
-		filteredBaitPrey = Preys(data, params.PreyList)
+	if parameters.BaitClustering == "baits" && parameters.PreyClustering == "preys" {
+		filteredBaitPrey = BaitPrey(data, parameters.BaitList, parameters.PreyList)
+	} else if parameters.BaitClustering == "baits" { // Filter by baits only.
+		filteredBaitPrey = Baits(data, parameters.BaitList)
+	} else if parameters.PreyClustering == "preys" { // Filter by preys only.
+		filteredBaitPrey = Preys(data, parameters.PreyList)
 	} else {
 		filteredBaitPrey = data
 	}
@@ -35,9 +35,9 @@ func Data(
 	// Filter by score.
 	filtered, err := Score(
 		filteredBaitPrey,
-		params.PrimaryFilter,
-		params.MinimumAbundance,
-		params.ScoreType,
+		parameters.PrimaryFilter,
+		parameters.MinAbundance,
+		parameters.ScoreType,
 	)
 	logmessage.CheckError(err, true)
 

@@ -28,7 +28,7 @@ func TestRequired(t *testing.T) {
 	}
 	dataset := typedef.Dataset{
 		Data: data,
-		Params: typedef.Parameters{
+		Parameters: typedef.Parameters{
 			AnalysisType: "dotplot",
 			Control:      "controlColumn",
 			LogFile:      "error.txt",

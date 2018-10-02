@@ -12,7 +12,7 @@ func HeatmapRows(matrix [][]float64, dims HDimensions, options map[string]interf
 	svg := make([]string, 0)
 
 	// Get color gradient.
-	colorGradient := ColorGradient(options["fillColor"].(string), 101, options["invert"].(bool))
+	colorGradient := colorGradient(options["fillColor"].(string), 101, options["invertColor"].(bool))
 
 	// Write rows.
 	svg = append(svg, fmt.Sprintf("\t<g id=\"minimap\" transform=\"translate(%d, %d)\">\n", dims.leftMargin, dims.topMargin))
@@ -20,10 +20,10 @@ func HeatmapRows(matrix [][]float64, dims HDimensions, options map[string]interf
 		iPos := i * dims.cellSize
 		for j, value := range row {
 			var fill string
-			if value > options["maximumAbundance"].(float64) {
+			if value > options["abundanceCap"].(float64) {
 				fill = colorGradient[100]
 			} else {
-				index := int(math.Round(value / options["maximumAbundance"].(float64) * 100))
+				index := int(math.Round(value / options["abundanceCap"].(float64) * 100))
 				fill = colorGradient[index]
 			}
 			rect := fmt.Sprintf(

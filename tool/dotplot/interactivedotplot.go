@@ -13,8 +13,8 @@ func InteractiveDotplot(
 	userParams typedef.Parameters,
 	pngfilename string,
 ) (json string) {
-	// Needed parameters.
-	params := map[string]interface{}{
+	// User parameters.
+	parameters := map[string]interface{}{
 		"abundanceColumn":  userParams.Abundance,
 		"analysisType":     userParams.AnalysisType,
 		"baitColumn":       userParams.Bait,
@@ -22,20 +22,25 @@ func InteractiveDotplot(
 		"clusteringMethod": userParams.ClusteringMethod,
 		"controlColumn":    userParams.Control,
 		"distance":         userParams.Distance,
-		"edgeColor":        userParams.EdgeColor,
 		"files":            userParams.Files,
-		"fillColor":        userParams.FillColor,
 		"imageType":        "dotplot",
-		"invert":           false,
 		"logBase":          userParams.LogBase,
-		"maximumAbundance": userParams.MaximumAbundance,
-		"minimumAbundance": userParams.MinimumAbundance,
 		"normalization":    userParams.Normalization,
 		"preyColumn":       userParams.Prey,
-		"primaryFilter":    userParams.PrimaryFilter,
 		"scoreColumn":      userParams.Score,
 		"scoreType":        userParams.ScoreType,
-		"secondaryFilter":  userParams.SecondaryFilter,
+	}
+
+	// Needed settings.
+	settings := map[string]interface{}{
+		"abundanceCap":    userParams.AbundanceCap,
+		"edgeColor":       userParams.EdgeColor,
+		"fillColor":       userParams.FillColor,
+		"imageType":       "dotplot",
+		"invertColor":     false,
+		"minAbundance":    userParams.MinAbundance,
+		"primaryFilter":   userParams.PrimaryFilter,
+		"secondaryFilter": userParams.SecondaryFilter,
 	}
 
 	// Convert png to url.
@@ -61,6 +66,6 @@ func InteractiveDotplot(
 	}
 
 	// Get json.
-	json = interactive.Heatmap(data, columns, params, url)
+	json = interactive.Heatmap(data, columns, parameters, settings, url)
 	return
 }

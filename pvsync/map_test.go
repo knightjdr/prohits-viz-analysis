@@ -24,12 +24,12 @@ func TestMap(t *testing.T) {
 		{3, 7, 1},
 		{75, 0.2, 0.5},
 	}
-	params := typedef.Parameters{
-		FillColor:        "blueBlack",
-		MaximumAbundance: float64(50),
-		PrimaryFilter:    0.01,
-		SecondaryFilter:  0.05,
-		ScoreType:        "lte",
+	parameters := typedef.Parameters{
+		FillColor:       "blueBlack",
+		AbundanceCap:    float64(50),
+		PrimaryFilter:   0.01,
+		SecondaryFilter: 0.05,
+		ScoreType:       "lte",
 	}
 	ratios := [][]float64{
 		{0.2, 0.5, 1},
@@ -71,7 +71,7 @@ func TestMap(t *testing.T) {
 		"\t<text y=\"10\" x=\"75\" font-size=\"12\" text-anchor=\"middle\">Baits</text>\n" +
 		"\t<text y=\"75\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 75)\">Preys</text>\n" +
 		"</svg>\n"
-	Map("dotplot", abundance, ratios, scores, sortedColumns, sortedRows, params)
+	Map("dotplot", abundance, ratios, scores, sortedColumns, sortedRows, parameters)
 	svg, _ := afero.ReadFile(fs.Instance, "svg/dotplot.svg")
 	assert.Equal(t, want, string(svg), "Dotplot svg not generated correctly")
 }

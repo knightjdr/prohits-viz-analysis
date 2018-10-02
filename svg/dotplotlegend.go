@@ -16,7 +16,7 @@ func DotplotLegend(
 	score, scoreType string,
 ) (svg string) {
 	// Get color gradient.
-	gradient := ColorGradient(fillColor, numColors, false)
+	gradient := colorGradient(fillColor, numColors, false)
 
 	// Define svg.
 	svgSlice := make([]string, 0)

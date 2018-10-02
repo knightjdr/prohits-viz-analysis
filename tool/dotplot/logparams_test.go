@@ -17,20 +17,20 @@ func TestLogParams(t *testing.T) {
 	fs.Instance = afero.NewMemMapFs()
 
 	// TEST1: test typical run with hierarchical clustering.
-	params := typedef.Parameters{
+	parameters := typedef.Parameters{
 		Abundance:         "abundanceColumn",
 		AnalysisType:      "dotplot",
 		Bait:              "baitColumn",
 		BaitClustering:    "",
 		Clustering:        "hierarchical",
 		ClusteringMethod:  "ward",
-		FillColor:        "blueBlack",
+		FillColor:         "blueBlack",
 		Control:           "controlColumn",
 		Distance:          "canberra",
 		Files:             []string{"file1.txt", "file2.txt"},
 		LogBase:           "2",
-		MaximumAbundance:  50,
-		MinimumAbundance:  0,
+		AbundanceCap:      50,
+		MinAbundance:      0,
 		Normalization:     "total",
 		NormalizationPrey: "",
 		Prey:              "preysColumn",
@@ -41,7 +41,7 @@ func TestLogParams(t *testing.T) {
 		ScoreType:         "lte",
 		SecondaryFilter:   0.05,
 	}
-	LogParams(params)
+	LogParams(parameters)
 	logfile, _ := afero.ReadFile(fs.Instance, "log.txt")
 	want := "Analysis type: dotplot\r\n" +
 		"\r\n" +
@@ -79,20 +79,20 @@ func TestLogParams(t *testing.T) {
 	assert.Equal(t, want, string(logfile), "Logfile not correct")
 
 	// TEST2: log normalization to a specific prey.
-	params = typedef.Parameters{
+	parameters = typedef.Parameters{
 		Abundance:         "abundanceColumn",
 		AnalysisType:      "dotplot",
 		Bait:              "baitColumn",
 		BaitClustering:    "",
 		Clustering:        "hierarchical",
 		ClusteringMethod:  "ward",
-		FillColor:        "blueBlack",
+		FillColor:         "blueBlack",
 		Control:           "controlColumn",
 		Distance:          "canberra",
 		Files:             []string{"file1.txt", "file2.txt"},
 		LogBase:           "2",
-		MaximumAbundance:  50,
-		MinimumAbundance:  0,
+		AbundanceCap:      50,
+		MinAbundance:      0,
 		Normalization:     "prey",
 		NormalizationPrey: "preyX",
 		Prey:              "preysColumn",
@@ -103,27 +103,27 @@ func TestLogParams(t *testing.T) {
 		ScoreType:         "lte",
 		SecondaryFilter:   0.05,
 	}
-	LogParams(params)
+	LogParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- bait normalization was performed using the prey: preyX"
 	matched, _ := regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "Bait normalization to a prey not recorded in log")
 
 	// TEST3: log higher scores are better.
-	params = typedef.Parameters{
+	parameters = typedef.Parameters{
 		Abundance:         "abundanceColumn",
 		AnalysisType:      "dotplot",
 		Bait:              "baitColumn",
 		BaitClustering:    "",
 		Clustering:        "hierarchical",
 		ClusteringMethod:  "ward",
-		FillColor:        "blueBlack",
+		FillColor:         "blueBlack",
 		Control:           "controlColumn",
 		Distance:          "canberra",
 		Files:             []string{"file1.txt", "file2.txt"},
 		LogBase:           "2",
-		MaximumAbundance:  50,
-		MinimumAbundance:  0,
+		AbundanceCap:      50,
+		MinAbundance:      0,
 		Normalization:     "prey",
 		NormalizationPrey: "preyX",
 		Prey:              "preysColumn",
@@ -134,27 +134,27 @@ func TestLogParams(t *testing.T) {
 		ScoreType:         "gte",
 		SecondaryFilter:   0.05,
 	}
-	LogParams(params)
+	LogParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- larger scores are better"
 	matched, _ = regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "Larger scores are better not recorded in log")
 
 	// TEST3: log biclustering.
-	params = typedef.Parameters{
+	parameters = typedef.Parameters{
 		Abundance:         "abundanceColumn",
 		AnalysisType:      "dotplot",
 		Bait:              "baitColumn",
 		BaitClustering:    "",
 		Clustering:        "biclustering",
 		ClusteringMethod:  "ward",
-		FillColor:        "blueBlack",
+		FillColor:         "blueBlack",
 		Control:           "controlColumn",
 		Distance:          "canberra",
 		Files:             []string{"file1.txt", "file2.txt"},
 		LogBase:           "2",
-		MaximumAbundance:  50,
-		MinimumAbundance:  0,
+		AbundanceCap:      50,
+		MinAbundance:      0,
 		Normalization:     "prey",
 		NormalizationPrey: "preyX",
 		Prey:              "preysColumn",
@@ -165,27 +165,27 @@ func TestLogParams(t *testing.T) {
 		ScoreType:         "gte",
 		SecondaryFilter:   0.05,
 	}
-	LogParams(params)
+	LogParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- biclustering was performed"
 	matched, _ = regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "Biclustering not recorded in log")
 
 	// TEST4: bait and prey clustering.
-	params = typedef.Parameters{
+	parameters = typedef.Parameters{
 		Abundance:         "abundanceColumn",
 		AnalysisType:      "dotplot",
 		Bait:              "baitColumn",
 		BaitClustering:    "baits",
 		Clustering:        "none",
 		ClusteringMethod:  "ward",
-		FillColor:        "blueBlack",
+		FillColor:         "blueBlack",
 		Control:           "controlColumn",
 		Distance:          "canberra",
 		Files:             []string{"file1.txt", "file2.txt"},
 		LogBase:           "2",
-		MaximumAbundance:  50,
-		MinimumAbundance:  0,
+		AbundanceCap:      50,
+		MinAbundance:      0,
 		Normalization:     "prey",
 		NormalizationPrey: "preyX",
 		Prey:              "preysColumn",
@@ -196,27 +196,27 @@ func TestLogParams(t *testing.T) {
 		ScoreType:         "gte",
 		SecondaryFilter:   0.05,
 	}
-	LogParams(params)
+	LogParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- no clustering was performed"
 	matched, _ = regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "No clustering not recorded in log")
 
 	// TEST4: bait clustering alone.
-	params = typedef.Parameters{
+	parameters = typedef.Parameters{
 		Abundance:         "abundanceColumn",
 		AnalysisType:      "dotplot",
 		Bait:              "baitColumn",
 		BaitClustering:    "none",
 		Clustering:        "none",
 		ClusteringMethod:  "ward",
-		FillColor:        "blueBlack",
+		FillColor:         "blueBlack",
 		Control:           "controlColumn",
 		Distance:          "canberra",
 		Files:             []string{"file1.txt", "file2.txt"},
 		LogBase:           "2",
-		MaximumAbundance:  50,
-		MinimumAbundance:  0,
+		AbundanceCap:      50,
+		MinAbundance:      0,
 		Normalization:     "prey",
 		NormalizationPrey: "preyX",
 		Prey:              "preysColumn",
@@ -227,27 +227,27 @@ func TestLogParams(t *testing.T) {
 		ScoreType:         "gte",
 		SecondaryFilter:   0.05,
 	}
-	LogParams(params)
+	LogParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- baits were hierarchically clustered"
 	matched, _ = regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "Exclusive bait clustering not recorded in log")
 
 	// TEST5: prey clustering alone.
-	params = typedef.Parameters{
+	parameters = typedef.Parameters{
 		Abundance:         "abundanceColumn",
 		AnalysisType:      "dotplot",
 		Bait:              "baitColumn",
 		BaitClustering:    "baits",
 		Clustering:        "none",
 		ClusteringMethod:  "ward",
-		FillColor:        "blueBlack",
+		FillColor:         "blueBlack",
 		Control:           "controlColumn",
 		Distance:          "canberra",
 		Files:             []string{"file1.txt", "file2.txt"},
 		LogBase:           "2",
-		MaximumAbundance:  50,
-		MinimumAbundance:  0,
+		AbundanceCap:      50,
+		MinAbundance:      0,
 		Normalization:     "prey",
 		NormalizationPrey: "preyX",
 		Prey:              "preysColumn",
@@ -258,7 +258,7 @@ func TestLogParams(t *testing.T) {
 		ScoreType:         "gte",
 		SecondaryFilter:   0.05,
 	}
-	LogParams(params)
+	LogParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- preys were hierarchically clustered"
 	matched, _ = regexp.MatchString(want, string(logfile))

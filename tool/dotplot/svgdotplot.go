@@ -11,22 +11,22 @@ import (
 func SvgDotplot(
 	abundance, ratios, scores [][]float64,
 	sortedColumns, sortedRows []string,
-	invert bool,
+	invertColor bool,
 	userParams typedef.Parameters,
 ) {
 	// Define dotplot parameters.
-	params := map[string]interface{}{
-		"colLabel":         "Baits",
-		"edgeColor":        userParams.EdgeColor,
-		"fillColor":        userParams.FillColor,
-		"invert":           invert,
-		"maximumAbundance": userParams.MaximumAbundance,
-		"primary":          userParams.PrimaryFilter,
-		"rowLabel":         "Preys",
-		"secondary":        userParams.SecondaryFilter,
-		"scoreType":        userParams.ScoreType,
+	parameters := map[string]interface{}{
+		"colLabel":     "Baits",
+		"edgeColor":    userParams.EdgeColor,
+		"fillColor":    userParams.FillColor,
+		"invertColor":  invertColor,
+		"abundanceCap": userParams.AbundanceCap,
+		"primary":      userParams.PrimaryFilter,
+		"rowLabel":     "Preys",
+		"secondary":    userParams.SecondaryFilter,
+		"scoreType":    userParams.ScoreType,
 	}
-	dotplot := svg.Dotplot(abundance, ratios, scores, sortedColumns, sortedRows, params)
+	dotplot := svg.Dotplot(abundance, ratios, scores, typedef.Annotations{}, typedef.Markers{}, sortedColumns, sortedRows, parameters)
 	afero.WriteFile(fs.Instance, "svg/dotplot.svg", []byte(dotplot), 0644)
 	return
 }

@@ -24,10 +24,11 @@ func TestParseFlagsCorrect(t *testing.T) {
 	fs.Instance.MkdirAll("test", 0755)
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
-	// TEST1: returns map and params with correct flags specied.
+	// TEST1: returns map and parameters with correct flags specied.
 	os.Args = []string{
 		"cmd",
 		"-abundance", "abundanceColumn",
+		"-abundanceCap", "50",
 		"-analysisType", "dotplot",
 		"-bait", "baitColumn",
 		"-baitClustering", "baits",
@@ -39,10 +40,9 @@ func TestParseFlagsCorrect(t *testing.T) {
 		"-control", "controlColumn",
 		"-distance", "euclidean",
 		"-fileList", "testfile.txt",
-		"-invert=false",
+		"-invertColor=false",
 		"-logBase", "2",
-		"-maximumAbundance", "50",
-		"-minimumAbundance", "0",
+		"-minAbundance", "0",
 		"-normalization", "prey",
 		"-normalizationPrey", "prey1",
 		"-pdf=false",
@@ -69,6 +69,7 @@ func TestParseFlagsCorrect(t *testing.T) {
 	}
 	wantParams := typedef.Parameters{
 		Abundance:          "abundanceColumn",
+		AbundanceCap:       50,
 		AnalysisType:       "dotplot",
 		Bait:               "baitColumn",
 		BaitClustering:     "baits",
@@ -80,10 +81,9 @@ func TestParseFlagsCorrect(t *testing.T) {
 		Control:            "controlColumn",
 		Distance:           "euclidean",
 		Files:              []string{"testfile.txt"},
-		Invert:             false,
+		InvertColor:        false,
 		LogBase:            "2",
-		MaximumAbundance:   50,
-		MinimumAbundance:   0,
+		MinAbundance:       0,
 		Normalization:      "prey",
 		NormalizationPrey:  "prey1",
 		Pdf:                false,
@@ -100,8 +100,8 @@ func TestParseFlagsCorrect(t *testing.T) {
 		WriteDotplot:       false,
 		WriteHeatmap:       false,
 	}
-	columnMap, params, err := ParseFlags()
+	columnMap, parameters, err := ParseFlags()
 	assert.Nil(t, err, "All required arguments specified should not return an error")
 	assert.Equal(t, wantMap, columnMap, "Column map is not correctly formatted")
-	assert.Equal(t, wantParams, params, "Parameters are not correctly formatted")
+	assert.Equal(t, wantParams, parameters, "Parameters are not correctly formatted")
 }

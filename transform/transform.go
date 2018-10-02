@@ -12,16 +12,16 @@ func Preys(
 	dataset typedef.Dataset,
 ) (transformed []map[string]interface{}) {
 	// Control subtraction.
-	transformed = ControlSubtraction(dataset.Data, dataset.Params.Control)
+	transformed = ControlSubtraction(dataset.Data, dataset.Parameters.Control)
 
 	// Prey length normalization.
-	transformed = PreyLength(transformed, dataset.Params.PreyLength)
+	transformed = PreyLength(transformed, dataset.Parameters.PreyLength)
 
 	// Bait normalization.
-	transformed = Normalization(transformed, dataset.Params.Normalization, dataset.Params.NormalizationPrey)
+	transformed = Normalization(transformed, dataset.Parameters.Normalization, dataset.Parameters.NormalizationPrey)
 
 	// Log transformation
-	transformed = LogTransform(transformed, dataset.Params.LogBase)
+	transformed = LogTransform(transformed, dataset.Parameters.LogBase)
 
 	return transformed
 }

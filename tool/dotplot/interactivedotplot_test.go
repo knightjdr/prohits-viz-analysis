@@ -33,8 +33,9 @@ func TestInteractiveDotplot(t *testing.T) {
 		{7, 8, 9},
 	}
 	columns := []string{"col1", "col2", "col3"}
-	params := typedef.Parameters{
+	parameters := typedef.Parameters{
 		Abundance:        "abd",
+		AbundanceCap:     float64(50),
 		AnalysisType:     "dotplot",
 		Bait:             "bait",
 		Clustering:       "hierarchical",
@@ -45,8 +46,7 @@ func TestInteractiveDotplot(t *testing.T) {
 		Distance:         "euclidean",
 		Files:            []string{"file1.txt", "file2.txt"},
 		LogBase:          "none",
-		MaximumAbundance: float64(50),
-		MinimumAbundance: float64(0),
+		MinAbundance:     float64(0),
 		Normalization:    "none",
 		Prey:             "prey",
 		PrimaryFilter:    0.01,
@@ -70,7 +70,7 @@ func TestInteractiveDotplot(t *testing.T) {
 	want := "{" +
 		"\"columns\":" +
 		"[\"col1\",\"col2\",\"col3\"]," +
-		"\"params\":{" +
+		"\"parameters\":{" +
 		"\"abundanceColumn\":\"abd\"," +
 		"\"analysisType\":\"dotplot\"," +
 		"\"baitColumn\":\"bait\"," +
@@ -78,19 +78,21 @@ func TestInteractiveDotplot(t *testing.T) {
 		"\"clusteringMethod\":\"complete\"," +
 		"\"controlColumn\":\"control\"," +
 		"\"distance\":\"euclidean\"," +
-		"\"edgeColor\":\"blueBlack\"," +
 		"\"files\":[\"file1.txt\",\"file2.txt\"]," +
-		"\"fillColor\":\"blueBlack\"," +
 		"\"imageType\":\"dotplot\"," +
-		"\"invert\":false," +
 		"\"logBase\":\"none\"," +
-		"\"maximumAbundance\":50," +
-		"\"minimumAbundance\":0," +
 		"\"normalization\":\"none\"," +
 		"\"preyColumn\":\"prey\"," +
-		"\"primaryFilter\":0.01," +
 		"\"scoreColumn\":\"score\"," +
-		"\"scoreType\":\"lte\"," +
+		"\"scoreType\":\"lte\"}," +
+		"\"settings\":{" +
+		"\"abundanceCap\":50," +
+		"\"edgeColor\":\"blueBlack\"," +
+		"\"fillColor\":\"blueBlack\"," +
+		"\"imageType\":\"dotplot\"," +
+		"\"invertColor\":false," +
+		"\"minAbundance\":0," +
+		"\"primaryFilter\":0.01," +
 		"\"secondaryFilter\":0.05}," +
 		"\"rows\":[" +
 		"{\"data\":[" +
@@ -118,7 +120,7 @@ func TestInteractiveDotplot(t *testing.T) {
 			scores,
 			columns,
 			rows,
-			params,
+			parameters,
 			"test.png",
 		),
 		"JSON not generated correctly",

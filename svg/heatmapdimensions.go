@@ -17,7 +17,7 @@ type HDimensions struct {
 
 // HeatmapDimensions calculates the dimensions to use for the heatmap.
 func HeatmapDimensions(matrix [][]float64, columns, rows []string) (dims HDimensions) {
-	// Check row and column size and adjust plot params as needed. The parameter
+	// Check row and column size and adjust plot parameters as needed. The parameter
 	// adjustment is done based on whichever dimension exceeds the limits by
 	// a greater amount.
 	colNum := len(matrix[0])

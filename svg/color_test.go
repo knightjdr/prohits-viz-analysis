@@ -42,7 +42,7 @@ func TestColor(t *testing.T) {
 		"#000d33",
 		"#000000",
 	}
-	assert.Equal(t, want, ColorGradient("blueBlack", 11, false), "Blue (default) color gradient is not correct")
+	assert.Equal(t, want, colorGradient("blueBlack", 11, false), "Blue (default) color gradient is not correct")
 
 	// TEST3: test generation of greenBlack color gradient.
 	want = []string{
@@ -58,7 +58,7 @@ func TestColor(t *testing.T) {
 		"#003300",
 		"#000000",
 	}
-	assert.Equal(t, want, ColorGradient("greenBlack", 11, false), "Green color gradient is not correct")
+	assert.Equal(t, want, colorGradient("greenBlack", 11, false), "Green color gradient is not correct")
 
 	// TEST4: test generation of greyscale color gradient.
 	want = []string{
@@ -74,7 +74,7 @@ func TestColor(t *testing.T) {
 		"#1a1a1a",
 		"#000000",
 	}
-	assert.Equal(t, want, ColorGradient("greyscale", 11, false), "Grey color gradient is not correct")
+	assert.Equal(t, want, colorGradient("greyscale", 11, false), "Grey color gradient is not correct")
 
 	// TEST5: test generation of redBlack color gradient.
 	want = []string{
@@ -90,7 +90,7 @@ func TestColor(t *testing.T) {
 		"#330000",
 		"#000000",
 	}
-	assert.Equal(t, want, ColorGradient("redBlack", 11, false), "Red color gradient is not correct")
+	assert.Equal(t, want, colorGradient("redBlack", 11, false), "Red color gradient is not correct")
 
 	// TEST5: test generation of yellowBlack color gradient.
 	want = []string{
@@ -106,7 +106,7 @@ func TestColor(t *testing.T) {
 		"#333300",
 		"#000000",
 	}
-	assert.Equal(t, want, ColorGradient("yellowBlack", 11, false), "Yellow color gradient is not correct")
+	assert.Equal(t, want, colorGradient("yellowBlack", 11, false), "Yellow color gradient is not correct")
 
 	// TEST6: gradient inversion.
 	want = []string{
@@ -122,5 +122,5 @@ func TestColor(t *testing.T) {
 		"#ccd9ff",
 		"#ffffff",
 	}
-	assert.Equal(t, want, ColorGradient("blueBlack", 11, true), "Gradient inversion is not correct")
+	assert.Equal(t, want, colorGradient("blueBlack", 11, true), "Gradient inversion is not correct")
 }

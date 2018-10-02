@@ -30,13 +30,12 @@ func scoreFunc(scoreType string) func(score, threshold float64) float64 {
 			}
 			return threshold
 		}
-	} else {
-		return func(score, threshold float64) float64 {
-			if score > threshold {
-				return score
-			}
-			return threshold
+	}
+	return func(score, threshold float64) float64 {
+		if score > threshold {
+			return score
 		}
+		return threshold
 	}
 }
 
@@ -84,10 +83,10 @@ func BaitPreyMatrix(table []map[string]interface{}, scoreType string) (data Data
 	}
 
 	// Sort baits and preys.
-	for bait, _ := range baits {
+	for bait := range baits {
 		data.Baits = append(data.Baits, bait)
 	}
-	for prey, _ := range preys {
+	for prey := range preys {
 		data.Preys = append(data.Preys, prey)
 	}
 	sort.Strings(data.Baits)

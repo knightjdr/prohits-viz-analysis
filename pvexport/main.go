@@ -25,7 +25,7 @@ func main() {
 	abundance, ratios, scores := parse.FormatMatrix(data)
 
 	// Format parameters for svg.
-	params := FormatParams(data)
+	parameters := FormatParams(data)
 
 	rowNames := RowNames(data.Rows)
 
@@ -39,7 +39,7 @@ func main() {
 		data.Markers,
 		data.Columns,
 		rowNames,
-		params,
+		parameters,
 	)
 
 	// Create additional output type if needed.

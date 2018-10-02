@@ -26,7 +26,7 @@ func TestHeatmap(t *testing.T) {
 		{7, 8, 9},
 	}
 	columns := []string{"col1", "col2", "col3"}
-	params := map[string]interface{}{
+	parameters := map[string]interface{}{
 		"param1": 2.0,
 		"param2": "a",
 		"param3": []string{"a", "b", "c"},
@@ -41,6 +41,11 @@ func TestHeatmap(t *testing.T) {
 		{0.01, 0.05, 0.08},
 		{1, 0.07, 0.5},
 		{0.2, 0.7, 0.01},
+	}
+	settings := map[string]interface{}{
+		"param1": 1.0,
+		"param2": "b",
+		"param3": []string{"x", "y", "z"},
 	}
 	uri := "pngImage"
 	numCols := len(columns)
@@ -63,7 +68,8 @@ func TestHeatmap(t *testing.T) {
 
 	// TEST1: generate JSON.
 	want := "{\"columns\":[\"col1\",\"col2\",\"col3\"]," +
-		"\"params\":{\"param1\":2,\"param2\":\"a\",\"param3\":[\"a\",\"b\",\"c\"]}," +
+		"\"parameters\":{\"param1\":2,\"param2\":\"a\",\"param3\":[\"a\",\"b\",\"c\"]}," +
+		"\"settings\":{\"param1\":1,\"param2\":\"b\",\"param3\":[\"x\",\"y\",\"z\"]}," +
 		"\"rows\":[" +
 		"{\"data\":[" +
 		"{\"ratio\":0.2,\"score\":0.01,\"value\":1}," +
@@ -84,7 +90,7 @@ func TestHeatmap(t *testing.T) {
 	assert.Equal(
 		t,
 		want,
-		Heatmap(data, columns, params, uri),
+		Heatmap(data, columns, parameters, settings, uri),
 		"Heatmap json is not correct",
 	)
 
@@ -96,7 +102,7 @@ func TestHeatmap(t *testing.T) {
 	defer marshallPatch.Unpatch()
 
 	// TEST2: error.
-	Heatmap(data, columns, params, uri)
+	Heatmap(data, columns, parameters, settings, uri)
 	logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
 	wantMessage := "Error creating json"
 	matched, _ := regexp.MatchString(wantMessage, string(logfile))

@@ -3,6 +3,7 @@ package dotplot
 import (
 	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 	"github.com/spf13/afero"
 )
 
@@ -11,17 +12,17 @@ func SvgHeatmap(
 	matrix [][]float64,
 	sortedColumns, sortedRows []string,
 	fillColor string,
-	maximumAbundance float64,
-	invert bool,
+	abundanceCap float64,
+	invertColor bool,
 ) {
-	params := map[string]interface{}{
-		"colLabel":         "Baits",
-		"fillColor":        fillColor,
-		"invert":           invert,
-		"maximumAbundance": maximumAbundance,
-		"rowLabel":         "Preys",
+	parameters := map[string]interface{}{
+		"colLabel":     "Baits",
+		"fillColor":    fillColor,
+		"invertColor":  invertColor,
+		"abundanceCap": abundanceCap,
+		"rowLabel":     "Preys",
 	}
-	heatmap := svg.Heatmap(matrix, sortedColumns, sortedRows, params)
+	heatmap := svg.Heatmap(matrix, typedef.Annotations{}, typedef.Markers{}, sortedColumns, sortedRows, parameters)
 	afero.WriteFile(fs.Instance, "svg/heatmap.svg", []byte(heatmap), 0644)
 	return
 }

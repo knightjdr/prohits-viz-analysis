@@ -37,15 +37,15 @@ func TestDotplot(t *testing.T) {
 		},
 	}
 	options := map[string]interface{}{
-		"colLabel":         "Baits",
-		"edgeColor":        "blueBlack",
-		"fillColor":        "blueBlack",
-		"maximumAbundance": float64(50),
-		"invert":           false,
-		"primary":          0.01,
-		"rowLabel":         "Preys",
-		"secondary":        0.05,
-		"scoreType":        "lte",
+		"colLabel":     "Baits",
+		"edgeColor":    "blueBlack",
+		"fillColor":    "blueBlack",
+		"abundanceCap": float64(50),
+		"invertColor":  false,
+		"primary":      0.01,
+		"rowLabel":     "Preys",
+		"secondary":    0.05,
+		"scoreType":    "lte",
 	}
 	rows := []string{"prey1", "prey2", "prey3"}
 

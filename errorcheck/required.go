@@ -25,7 +25,7 @@ func Required(
 	logmessage.CheckError(err, true)
 
 	// Minimum baits met (don't panic so that all errors have a change to log).
-	err = MinBait(dataset.Data, dataset.Params.AnalysisType)
+	err = MinBait(dataset.Data, dataset.Parameters.AnalysisType)
 	logmessage.CheckError(err, false)
 	if err != nil {
 		errs++
@@ -53,14 +53,14 @@ func Required(
 	}
 
 	// Prey length column can be parsed as an integer.
-	err = PreyLengthInt(dataset.Data, dataset.Params.PreyLength)
+	err = PreyLengthInt(dataset.Data, dataset.Parameters.PreyLength)
 	logmessage.CheckError(err, false)
 	if err != nil {
 		errs++
 	}
 
 	// Control column is a pipe-separated list.
-	err = ControlColumn(dataset.Data, dataset.Params.Control)
+	err = ControlColumn(dataset.Data, dataset.Parameters.Control)
 	logmessage.CheckError(err, false)
 	if err != nil {
 		errs++

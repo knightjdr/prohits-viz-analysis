@@ -14,19 +14,19 @@ import (
 // NoCluster creates a dotplot using a list of baits and preys.
 func NoCluster(dataset typedef.Dataset) {
 	// Write log.
-	LogParams(dataset.Params)
+	LogParams(dataset.Parameters)
 
 	// Generate bait-prey table.
-	data := BaitPreyMatrix(dataset.Data, dataset.Params.ScoreType)
+	data := BaitPreyMatrix(dataset.Data, dataset.Parameters.ScoreType)
 
 	// Cluster baits.
 	var baitOrder []string
-	if dataset.Params.BaitClustering == "none" {
+	if dataset.Parameters.BaitClustering == "none" {
 		// Generate distance matrix.
-		baitDist := hclust.Distance(data.Abundance, dataset.Params.Distance, true)
+		baitDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, true)
 
 		// Cluster.
-		baitClust, err := hclust.Cluster(baitDist, dataset.Params.ClusteringMethod)
+		baitClust, err := hclust.Cluster(baitDist, dataset.Parameters.ClusteringMethod)
 		logmessage.CheckError(err, true)
 
 		// Optimize clustering.
@@ -60,14 +60,14 @@ func NoCluster(dataset typedef.Dataset) {
 		sortedBaitDist, _ = hclust.Sort(sortedBaitDist, data.Baits, baitOrder, "row")
 
 		// Write bait-bait svg.
-		if dataset.Params.WriteDistance {
-			SvgBB(sortedBaitDist, baitOrder, dataset.Params.FillColor)
+		if dataset.Parameters.WriteDistance {
+			SvgBB(sortedBaitDist, baitOrder, dataset.Parameters.FillColor)
 
 			// Generate pdfs and pngs.
-			if dataset.Params.Pdf {
+			if dataset.Parameters.Pdf {
 				svg.ConvertPdf([]string{"bait-bait.svg"})
 			}
-			if dataset.Params.Png {
+			if dataset.Parameters.Png {
 				svg.ConvertPng([]string{"bait-bait.svg"})
 			}
 
@@ -80,7 +80,7 @@ func NoCluster(dataset typedef.Dataset) {
 				baitOrder,
 				baitOrder,
 				true,
-				dataset.Params,
+				dataset.Parameters,
 				"minimap/bait-bait.png",
 			)
 			afero.WriteFile(fs.Instance, "interactive/bait-bait.json", []byte(json), 0644)
@@ -92,17 +92,17 @@ func NoCluster(dataset typedef.Dataset) {
 		// Write newick tree to file.
 		afero.WriteFile(fs.Instance, "other/bait-dendrogram.txt", []byte(baitTree.Newick), 0644)
 	} else {
-		baitOrder = dataset.Params.BaitList
+		baitOrder = dataset.Parameters.BaitList
 	}
 
 	// Cluster preys.
 	var preyOrder []string
-	if dataset.Params.PreyClustering == "none" {
+	if dataset.Parameters.PreyClustering == "none" {
 		// Generate distance matrix.
-		preyDist := hclust.Distance(data.Abundance, dataset.Params.Distance, false)
+		preyDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, false)
 
 		// Cluster.
-		preyClust, err := hclust.Cluster(preyDist, dataset.Params.ClusteringMethod)
+		preyClust, err := hclust.Cluster(preyDist, dataset.Parameters.ClusteringMethod)
 		logmessage.CheckError(err, true)
 
 		// Optimize clustering.
@@ -136,14 +136,14 @@ func NoCluster(dataset typedef.Dataset) {
 		sortedPreyDist, _ = hclust.Sort(sortedPreyDist, data.Preys, preyOrder, "row")
 
 		// Write prey-prey svg.
-		if dataset.Params.WriteDistance {
-			SvgPP(sortedPreyDist, preyOrder, dataset.Params.FillColor)
+		if dataset.Parameters.WriteDistance {
+			SvgPP(sortedPreyDist, preyOrder, dataset.Parameters.FillColor)
 
 			// Generate pdfs and pngs.
-			if dataset.Params.Pdf {
+			if dataset.Parameters.Pdf {
 				svg.ConvertPdf([]string{"prey-prey.svg"})
 			}
-			if dataset.Params.Png {
+			if dataset.Parameters.Png {
 				svg.ConvertPng([]string{"prey-prey.svg"})
 			}
 
@@ -156,7 +156,7 @@ func NoCluster(dataset typedef.Dataset) {
 				preyOrder,
 				preyOrder,
 				true,
-				dataset.Params,
+				dataset.Parameters,
 				"minimap/prey-prey.png",
 			)
 			afero.WriteFile(fs.Instance, "interactive/prey-prey.json", []byte(json), 0644)
@@ -168,7 +168,7 @@ func NoCluster(dataset typedef.Dataset) {
 		// Write newick tree to file.
 		afero.WriteFile(fs.Instance, "other/prey-dendrogram.txt", []byte(preyTree.Newick), 0644)
 	} else {
-		preyOrder = dataset.Params.PreyList
+		preyOrder = dataset.Parameters.PreyList
 	}
 
 	// Sort matrices.
@@ -179,7 +179,7 @@ func NoCluster(dataset typedef.Dataset) {
 	sortedScores, _ = hclust.Sort(sortedScores, data.Preys, preyOrder, "row")
 
 	// Write bait-prey dotplot.
-	if dataset.Params.WriteDotplot {
+	if dataset.Parameters.WriteDotplot {
 		SvgDotplot(
 			sortedAbundance,
 			sortedRatios,
@@ -187,29 +187,29 @@ func NoCluster(dataset typedef.Dataset) {
 			baitOrder,
 			preyOrder,
 			false,
-			dataset.Params,
+			dataset.Parameters,
 		)
 
 		// Write dotplot legend.
-		legendTitle := fmt.Sprintf("Dotplot - %s", dataset.Params.Abundance)
+		legendTitle := fmt.Sprintf("Dotplot - %s", dataset.Parameters.Abundance)
 		dotplotLegend := svg.DotplotLegend(
-			dataset.Params.FillColor,
+			dataset.Parameters.FillColor,
 			legendTitle,
 			101,
 			0,
-			dataset.Params.MaximumAbundance,
-			dataset.Params.PrimaryFilter,
-			dataset.Params.SecondaryFilter,
-			dataset.Params.Score,
-			dataset.Params.ScoreType,
+			dataset.Parameters.AbundanceCap,
+			dataset.Parameters.PrimaryFilter,
+			dataset.Parameters.SecondaryFilter,
+			dataset.Parameters.Score,
+			dataset.Parameters.ScoreType,
 		)
 		afero.WriteFile(fs.Instance, "svg/dotplot-legend.svg", []byte(dotplotLegend), 0644)
 
 		// Create pdfs and pngs.
-		if dataset.Params.Pdf {
+		if dataset.Parameters.Pdf {
 			svg.ConvertPdf([]string{"dotplot.svg", "dotplot-legend.svg"})
 		}
-		if dataset.Params.Png {
+		if dataset.Parameters.Png {
 			svg.ConvertPng([]string{"dotplot.svg", "dotplot-legend.svg"})
 		}
 
@@ -223,44 +223,44 @@ func NoCluster(dataset typedef.Dataset) {
 			sortedScores,
 			baitOrder,
 			preyOrder,
-			dataset.Params,
+			dataset.Parameters,
 			"minimap/dotplot.png",
 		)
 		afero.WriteFile(fs.Instance, "interactive/dotplot.json", []byte(json), 0644)
 	}
 
 	// Write bait-prey heatmap.
-	if dataset.Params.WriteHeatmap {
+	if dataset.Parameters.WriteHeatmap {
 		SvgHeatmap(
 			sortedAbundance,
 			baitOrder,
 			preyOrder,
-			dataset.Params.FillColor,
-			dataset.Params.MaximumAbundance,
+			dataset.Parameters.FillColor,
+			dataset.Parameters.AbundanceCap,
 			false,
 		)
 
 		// Create pdfs and pngs.
-		if dataset.Params.Pdf {
+		if dataset.Parameters.Pdf {
 			svg.ConvertPdf([]string{"heatmap.svg"})
 		}
-		if dataset.Params.Png {
+		if dataset.Parameters.Png {
 			svg.ConvertPng([]string{"heatmap.svg"})
 		}
 	}
 
 	// Write distance legend.
-	if dataset.Params.WriteDistance {
+	if dataset.Parameters.WriteDistance {
 		// Write distance legend.
-		legendTitle := fmt.Sprintf("Distance - %s", dataset.Params.Abundance)
-		distanceLegend := svg.Gradient(dataset.Params.FillColor, legendTitle, 101, 0, dataset.Params.MaximumAbundance)
+		legendTitle := fmt.Sprintf("Distance - %s", dataset.Parameters.Abundance)
+		distanceLegend := svg.Gradient(dataset.Parameters.FillColor, legendTitle, 101, 0, dataset.Parameters.AbundanceCap)
 		afero.WriteFile(fs.Instance, "svg/distance-legend.svg", []byte(distanceLegend), 0644)
 
 		// Generate pdfs and pngs.
-		if dataset.Params.Pdf {
+		if dataset.Parameters.Pdf {
 			svg.ConvertPdf([]string{"distance-legend.svg"})
 		}
-		if dataset.Params.Png {
+		if dataset.Parameters.Png {
 			svg.ConvertPng([]string{"distance-legend.svg"})
 		}
 	}

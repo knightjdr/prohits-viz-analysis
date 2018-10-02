@@ -40,11 +40,11 @@ func Dotplot(
 ) string {
 	svg := make([]string, 0)
 	dims := HeatmapDimensions(matrix, columns, rows)
-	params := DotplotParameters(dims)
+	parameters := DotplotParameters(dims)
 	svg = append(svg, HeatmapHeader(dims))
 	svg = append(svg, HeatmapColumnNames(dims, columns))
 	svg = append(svg, HeatmapRowNames(dims, rows))
-	svg = append(svg, DotplotRows(matrix, ratios, scores, dims, params, options))
+	svg = append(svg, DotplotRows(matrix, ratios, scores, dims, parameters, options))
 	svg = append(svg, HeatmapMarkers(markers, dims))
 	svg = append(svg, HeatmapAnnotations(annotations, dims))
 	svg = append(svg, BoundingBox(dims))

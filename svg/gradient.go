@@ -12,7 +12,7 @@ import (
 // or just the elements for the gradient (i.e. not wrapped by <svg>)
 func Gradient(colorSpace, title string, numColors int, min, max float64) (svg string) {
 	// Get color gradient.
-	gradient := ColorGradient(colorSpace, numColors, false)
+	gradient := colorGradient(colorSpace, numColors, false)
 
 	// Define svg.
 	svgSlice := make([]string, 0)

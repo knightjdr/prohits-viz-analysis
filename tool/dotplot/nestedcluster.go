@@ -17,7 +17,7 @@ type BiclustOrder struct {
 // files to the appropriate subfolder. It returns the order of the baits and preys.
 func NestedClustering() (order BiclustOrder) {
 	// Run nested cluster.
-	cmd := exec.Command("nestedcluster", "biclustering/matrix.txt", "biclustering/params.txt")
+	cmd := exec.Command("nestedcluster", "biclustering/matrix.txt", "biclustering/parameters.txt")
 	cmdErr := cmd.Run()
 
 	// Exit if run err.

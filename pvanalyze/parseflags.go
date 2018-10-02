@@ -10,7 +10,7 @@ import (
 )
 
 // ParseFlags parses the command line arguments
-func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err error) {
+func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, err error) {
 	// Command line flag arguments.
 	abundance := flag.String("abundance", "", "Abundance column")
 	analysisType := flag.String("analysisType", "", "Analysis type, one of: baitbait, correlation, dotplot or specificity")
@@ -25,10 +25,10 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 	control := flag.String("control", "", "Control column")
 	distance := flag.String("distance", "", "Distance metric")
 	fileList := flag.String("fileList", "", "Input files as comma-separated list")
-	invert := flag.Bool("invert", false, "Invert fill color")
+	invertColor := flag.Bool("invertColor", false, "Invert fill color")
 	logBase := flag.String("logBase", "", "Base for log transformation")
-	maximumAbundance := flag.Float64("maximumAbundance", 50, "Maximum abundance")
-	minimumAbundance := flag.Float64("minimumAbundance", 0, "Minimum abundance")
+	abundanceCap := flag.Float64("abundanceCap", 50, "Maximum abundance")
+	minAbundance := flag.Float64("minAbundance", 0, "Minimum abundance")
 	normalization := flag.String("normalization", "", "Normalization type")
 	normalizationPrey := flag.String("normalizationPrey", "", "Prey to use for normalization")
 	pdf := flag.Bool("pdf", false, "Generate pdf files")
@@ -101,8 +101,9 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 	}
 
 	// Create parameter struct.
-	params = typedef.Parameters{
+	parameters = typedef.Parameters{
 		Abundance:          *abundance,
+		AbundanceCap:       *abundanceCap,
 		AnalysisType:       *analysisType,
 		Bait:               *bait,
 		BaitClustering:     *baitClustering,
@@ -115,10 +116,9 @@ func ParseFlags() (columnMap map[string]string, params typedef.Parameters, err e
 		Control:            *control,
 		Distance:           *distance,
 		Files:              files,
-		Invert:             *invert,
+		InvertColor:        *invertColor,
 		LogBase:            *logBase,
-		MaximumAbundance:   *maximumAbundance,
-		MinimumAbundance:   *minimumAbundance,
+		MinAbundance:       *minAbundance,
 		Normalization:      *normalization,
 		NormalizationPrey:  *normalizationPrey,
 		Pdf:                *pdf,

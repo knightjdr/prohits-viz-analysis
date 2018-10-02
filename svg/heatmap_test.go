@@ -31,8 +31,8 @@ func TestHeatmap(t *testing.T) {
 		"colLabel":           "Baits",
 		"fillColor":          "blueBlack",
 		"markerColor":        "#000000",
-		"maximumAbundance":   float64(50),
-		"invert":             false,
+		"abundanceCap":       float64(50),
+		"invertColor":        false,
 		"rowLabel":           "Preys",
 	}
 	rows := []string{"prey1", "prey2", "prey3"}

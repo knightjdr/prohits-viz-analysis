@@ -16,8 +16,8 @@ type Annotation struct {
 
 // Dataset contains data to analysis plus parameters.
 type Dataset struct {
-	Data   []map[string]interface{}
-	Params Parameters
+	Data       []map[string]interface{}
+	Parameters Parameters
 }
 
 // Markers is the struct for heatmap markers.
@@ -37,6 +37,7 @@ type Marker struct {
 // Parameters for command line arguments.
 type Parameters struct {
 	Abundance          string
+	AbundanceCap       float64
 	AnalysisType       string
 	Bait               string
 	BaitClustering     string
@@ -49,10 +50,9 @@ type Parameters struct {
 	Control            string
 	Distance           string
 	Files              []string
-	Invert             bool
+	InvertColor        bool
 	LogBase            string
-	MaximumAbundance   float64
-	MinimumAbundance   float64
+	MinAbundance       float64
 	Normalization      string
 	NormalizationPrey  string
 	Pdf                bool

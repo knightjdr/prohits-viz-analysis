@@ -24,7 +24,7 @@ func TestWriteBPCytoscape(t *testing.T) {
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
 	// Data.
-	params := typedef.Parameters{
+	parameters := typedef.Parameters{
 		Abundance:     "AvgSpec",
 		Bait:          "Bait",
 		Prey:          "PreyGene",
@@ -39,7 +39,7 @@ func TestWriteBPCytoscape(t *testing.T) {
 			{"bait": "bait2", "prey": "prey1", "abundance": "1", "score": float64(0)},
 			{"bait": "bait2", "prey": "prey3", "abundance": "75", "score": 0.01},
 		},
-		Params: params,
+		Parameters: parameters,
 	}
 
 	// TEST1: typical dataset output.

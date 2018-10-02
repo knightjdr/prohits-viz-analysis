@@ -14,19 +14,19 @@ import (
 // Hierarchical clusters dataset hierarchically and outputs files.
 func Hierarchical(dataset typedef.Dataset) {
 	// Write log.
-	LogParams(dataset.Params)
+	LogParams(dataset.Parameters)
 
 	// Generate bait-prey table.
-	data := BaitPreyMatrix(dataset.Data, dataset.Params.ScoreType)
+	data := BaitPreyMatrix(dataset.Data, dataset.Parameters.ScoreType)
 
 	// Generate bait and prey distance matrices.
-	baitDist := hclust.Distance(data.Abundance, dataset.Params.Distance, true)
-	preyDist := hclust.Distance(data.Abundance, dataset.Params.Distance, false)
+	baitDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, true)
+	preyDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, false)
 
 	// Bait and prey clustering.
-	baitClust, err := hclust.Cluster(baitDist, dataset.Params.ClusteringMethod)
+	baitClust, err := hclust.Cluster(baitDist, dataset.Parameters.ClusteringMethod)
 	logmessage.CheckError(err, true)
-	preyClust, err := hclust.Cluster(preyDist, dataset.Params.ClusteringMethod)
+	preyClust, err := hclust.Cluster(preyDist, dataset.Parameters.ClusteringMethod)
 	logmessage.CheckError(err, true)
 
 	// Optimize clustering.
@@ -83,17 +83,17 @@ func Hierarchical(dataset typedef.Dataset) {
 	// Output svgs.
 
 	// Write bait-bait svg.
-	if dataset.Params.WriteDistance {
-		SvgBB(sortedBaitDist, baitTree.Order, dataset.Params.FillColor)
+	if dataset.Parameters.WriteDistance {
+		SvgBB(sortedBaitDist, baitTree.Order, dataset.Parameters.FillColor)
 
 		// Write distance legend.
-		legendTitle := fmt.Sprintf("Distance - %s", dataset.Params.Abundance)
-		distanceLegend := svg.Gradient(dataset.Params.FillColor, legendTitle, 101, 0, dataset.Params.MaximumAbundance)
+		legendTitle := fmt.Sprintf("Distance - %s", dataset.Parameters.Abundance)
+		distanceLegend := svg.Gradient(dataset.Parameters.FillColor, legendTitle, 101, 0, dataset.Parameters.AbundanceCap)
 		afero.WriteFile(fs.Instance, "svg/distance-legend.svg", []byte(distanceLegend), 0644)
 	}
 
 	// Write bait-prey dotplot.
-	if dataset.Params.WriteDotplot {
+	if dataset.Parameters.WriteDotplot {
 		SvgDotplot(
 			sortedAbundance,
 			sortedRatios,
@@ -101,64 +101,64 @@ func Hierarchical(dataset typedef.Dataset) {
 			baitTree.Order,
 			preyTree.Order,
 			false,
-			dataset.Params,
+			dataset.Parameters,
 		)
 
 		// Write dotplot legend.
-		legendTitle := fmt.Sprintf("Dotplot - %s", dataset.Params.Abundance)
+		legendTitle := fmt.Sprintf("Dotplot - %s", dataset.Parameters.Abundance)
 		dotplotLegend := svg.DotplotLegend(
-			dataset.Params.FillColor,
+			dataset.Parameters.FillColor,
 			legendTitle,
 			101,
 			0,
-			dataset.Params.MaximumAbundance,
-			dataset.Params.PrimaryFilter,
-			dataset.Params.SecondaryFilter,
-			dataset.Params.Score,
-			dataset.Params.ScoreType,
+			dataset.Parameters.AbundanceCap,
+			dataset.Parameters.PrimaryFilter,
+			dataset.Parameters.SecondaryFilter,
+			dataset.Parameters.Score,
+			dataset.Parameters.ScoreType,
 		)
 		afero.WriteFile(fs.Instance, "svg/dotplot-legend.svg", []byte(dotplotLegend), 0644)
 	}
 
 	// Write bait-prey heatmap.
-	if dataset.Params.WriteHeatmap {
+	if dataset.Parameters.WriteHeatmap {
 		SvgHeatmap(
 			sortedAbundance,
 			baitTree.Order,
 			preyTree.Order,
-			dataset.Params.FillColor,
-			dataset.Params.MaximumAbundance,
+			dataset.Parameters.FillColor,
+			dataset.Parameters.AbundanceCap,
 			false,
 		)
 	}
 
 	// Write prey-prey svg.
-	if dataset.Params.WriteDistance {
-		SvgPP(sortedPreyDist, preyTree.Order, dataset.Params.FillColor)
+	if dataset.Parameters.WriteDistance {
+		SvgPP(sortedPreyDist, preyTree.Order, dataset.Parameters.FillColor)
 	}
 
 	// Create pdfs from svg.
 	svgList := make([]string, 0)
 	svgMiniList := make([]string, 0)
-	if dataset.Params.WriteDistance {
+	if dataset.Parameters.WriteDistance {
 		svgList = append(svgList, "bait-bait.svg")
 		svgList = append(svgList, "distance-legend.svg")
 		svgList = append(svgList, "prey-prey.svg")
 		svgMiniList = append(svgMiniList, "bait-bait.svg")
 		svgMiniList = append(svgMiniList, "prey-prey.svg")
 	}
-	if dataset.Params.WriteDotplot {
+	if dataset.Parameters.WriteDotplot {
 		svgList = append(svgList, "dotplot.svg")
 		svgList = append(svgList, "dotplot-legend.svg")
 		svgMiniList = append(svgMiniList, "dotplot.svg")
 	}
-	if dataset.Params.WriteHeatmap {
+	if dataset.Parameters.WriteHeatmap {
 		svgList = append(svgList, "heatmap.svg")
 	}
-	if dataset.Params.Pdf {
+	if dataset.Parameters.Pdf {
 		svg.ConvertPdf(svgList)
 	}
-	if dataset.Params.Png {
+	if dataset.Parameters.Png {
 		svg.ConvertPng(svgList)
 	}
 
@@ -189,13 +189,13 @@ func Hierarchical(dataset typedef.Dataset) {
 	afero.WriteFile(fs.Instance, "other/prey-dendrogram.txt", []byte(preyTree.Newick), 0644)
 
 	// Create interactive files.
-	if dataset.Params.WriteDistance {
+	if dataset.Parameters.WriteDistance {
 		json := InteractiveHeatmap(
 			normalizedBaitDist,
 			baitTree.Order,
 			baitTree.Order,
 			true,
-			dataset.Params,
+			dataset.Parameters,
 			"minimap/bait-bait.png",
 		)
 		afero.WriteFile(fs.Instance, "interactive/bait-bait.json", []byte(json), 0644)
@@ -204,19 +204,19 @@ func Hierarchical(dataset typedef.Dataset) {
 			preyTree.Order,
 			preyTree.Order,
 			true,
-			dataset.Params,
+			dataset.Parameters,
 			"minimap/prey-prey.png",
 		)
 		afero.WriteFile(fs.Instance, "interactive/prey-prey.json", []byte(json), 0644)
 	}
-	if dataset.Params.WriteDotplot {
+	if dataset.Parameters.WriteDotplot {
 		json := InteractiveDotplot(
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,
 			baitTree.Order,
 			preyTree.Order,
-			dataset.Params,
+			dataset.Parameters,
 			"minimap/dotplot.png",
 		)
 		afero.WriteFile(fs.Instance, "interactive/dotplot.json", []byte(json), 0644)

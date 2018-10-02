@@ -25,7 +25,7 @@ func main() {
 	abundance, ratios, scores := parse.FormatMatrix(data)
 
 	// Format parameters for svg.
-	params := FormatParams(data)
+	parameters := FormatParams(data)
 
 	// Creat dummy row and column names.
 	dummyColumns, dummyRows := Dummy(len(data.Rows[0].Data), len(data.Rows))
@@ -38,7 +38,7 @@ func main() {
 		scores,
 		dummyColumns,
 		dummyRows,
-		params,
+		parameters,
 	)
 
 	// Create minimap.

@@ -29,7 +29,7 @@ func WriteBPCytoscape(dataset typedef.Dataset) {
 	defer writer.Flush()
 
 	// Create and write header.
-	header := []string{dataset.Params.Bait, dataset.Params.Prey, dataset.Params.Abundance, dataset.Params.Score}
+	header := []string{dataset.Parameters.Bait, dataset.Parameters.Prey, dataset.Parameters.Abundance, dataset.Parameters.Score}
 	err = writer.Write(header)
 	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
@@ -38,8 +38,8 @@ func WriteBPCytoscape(dataset typedef.Dataset) {
 	}
 
 	// Write each row in the dataset if the score passed the cutoff.
-	cutoff := dataset.Params.PrimaryFilter
-	filterFunc := helper.FilterFunc(dataset.Params.ScoreType)
+	cutoff := dataset.Parameters.PrimaryFilter
+	filterFunc := helper.FilterFunc(dataset.Parameters.ScoreType)
 	for _, row := range dataset.Data {
 		if filterFunc(row["score"].(float64), cutoff) {
 			// Abundance could be a pipe separated list. Split and sum to accomodate.

@@ -24,12 +24,12 @@ func TestSvgDotplot(t *testing.T) {
 		{3, 7, 1},
 		{75, 0.2, 0.5},
 	}
-	params := typedef.Parameters{
-		FillColor:        "blueBlack",
-		MaximumAbundance: float64(50),
-		PrimaryFilter:    0.01,
-		SecondaryFilter:  0.05,
-		ScoreType:        "lte",
+	parameters := typedef.Parameters{
+		FillColor:       "blueBlack",
+		AbundanceCap:    float64(50),
+		PrimaryFilter:   0.01,
+		SecondaryFilter: 0.05,
+		ScoreType:       "lte",
 	}
 	ratios := [][]float64{
 		{0.2, 0.5, 1},
@@ -67,11 +67,11 @@ func TestSvgDotplot(t *testing.T) {
 		"\t\t<circle fill=\"#ffffff\" cy=\"50\" cx=\"30\" r=\"1.700000\" stroke=\"#809fff\" stroke-width=\"2.000000\"/>\n" +
 		"\t\t<circle fill=\"#fafbff\" cy=\"50\" cx=\"50\" r=\"4.250000\" stroke=\"#000000\" stroke-width=\"2.000000\"/>\n" +
 		"\t</g>\n" +
+		"\t<rect fill=\"none\" y=\"45\" x=\"45\" width=\"60\" height=\"60\" stroke=\"#000000\" stroke-width=\"0.5\" />\n" +
 		"\t<text y=\"10\" x=\"75\" font-size=\"12\" text-anchor=\"middle\">Baits</text>\n" +
 		"\t<text y=\"75\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 75)\">Preys</text>\n" +
-		"\t<rect fill=\"none\" y=\"45\" x=\"45\" width=\"60\" height=\"60\" stroke=\"#000000\" stroke-width=\"0.5\" />\n" +
 		"</svg>\n"
-	SvgDotplot(abundance, ratios, scores, sortedColumns, sortedRows, false, params)
+	SvgDotplot(abundance, ratios, scores, sortedColumns, sortedRows, false, parameters)
 	svg, _ := afero.ReadFile(fs.Instance, "svg/dotplot.svg")
 	assert.Equal(t, want, string(svg), "Dotplot svg not generated correctly")
 }

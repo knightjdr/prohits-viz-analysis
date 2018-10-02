@@ -33,8 +33,9 @@ func TestInteractiveHeatmap(t *testing.T) {
 		{7, 8, 9},
 	}
 	columns := []string{"col1", "col2", "col3"}
-	params := typedef.Parameters{
+	parameters := typedef.Parameters{
 		Abundance:        "abd",
+		AbundanceCap:     float64(50),
 		AnalysisType:     "dotplot",
 		Bait:             "bait",
 		Clustering:       "hierarchical",
@@ -44,8 +45,7 @@ func TestInteractiveHeatmap(t *testing.T) {
 		Files:            []string{"file1.txt", "file2.txt"},
 		FillColor:        "blueBlack",
 		LogBase:          "none",
-		MaximumAbundance: float64(50),
-		MinimumAbundance: float64(0),
+		MinAbundance:     float64(0),
 		Normalization:    "none",
 		Prey:             "prey",
 		PrimaryFilter:    0.01,
@@ -59,7 +59,7 @@ func TestInteractiveHeatmap(t *testing.T) {
 	want := "{" +
 		"\"columns\":" +
 		"[\"col1\",\"col2\",\"col3\"]," +
-		"\"params\":{" +
+		"\"parameters\":{" +
 		"\"abundanceColumn\":\"abd\"," +
 		"\"analysisType\":\"dotplot\"," +
 		"\"baitColumn\":\"bait\"," +
@@ -68,17 +68,19 @@ func TestInteractiveHeatmap(t *testing.T) {
 		"\"controlColumn\":\"control\"," +
 		"\"distance\":\"euclidean\"," +
 		"\"files\":[\"file1.txt\",\"file2.txt\"]," +
-		"\"fillColor\":\"blueBlack\"," +
 		"\"imageType\":\"heatmap\"," +
-		"\"invert\":false," +
 		"\"logBase\":\"none\"," +
-		"\"maximumAbundance\":50," +
-		"\"minimumAbundance\":0," +
 		"\"normalization\":\"none\"," +
 		"\"preyColumn\":\"prey\"," +
-		"\"primaryFilter\":0.01," +
 		"\"scoreColumn\":\"score\"," +
-		"\"scoreType\":\"lte\"," +
+		"\"scoreType\":\"lte\"}," +
+		"\"settings\":{" +
+		"\"abundanceCap\":50," +
+		"\"fillColor\":\"blueBlack\"," +
+		"\"imageType\":\"heatmap\"," +
+		"\"invertColor\":false," +
+		"\"minAbundance\":0," +
+		"\"primaryFilter\":0.01," +
 		"\"secondaryFilter\":0.05}," +
 		"\"rows\":[" +
 		"{\"data\":[" +
@@ -105,7 +107,7 @@ func TestInteractiveHeatmap(t *testing.T) {
 			columns,
 			rows,
 			false,
-			params,
+			parameters,
 			"test.png",
 		),
 		"JSON not generated correctly",
