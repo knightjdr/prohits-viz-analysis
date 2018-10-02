@@ -6,44 +6,44 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBaitPrey(t *testing.T) {
+func TestConditionReadout(t *testing.T) {
 	data := []map[string]string{
-		{"bait": "bait1", "prey": "prey1"},
-		{"bait": "bait2", "prey": "prey2"},
+		{"condition": "condition1", "readout": "readout1"},
+		{"condition": "condition2", "readout": "readout2"},
 	}
 
-	// TEST1: filter by a single bait and prey.
-	baits := []string{"bait2"}
-	preys := []string{"prey2"}
+	// TEST1: filter by a single condition and readout.
+	conditions := []string{"condition2"}
+	readouts := []string{"readout2"}
 	want := []map[string]string{
-		{"bait": "bait2", "prey": "prey2"},
+		{"condition": "condition2", "readout": "readout2"},
 	}
 	assert.Equal(
 		t,
 		want,
-		BaitPrey(data, baits, preys),
-		"Single bait and prey filter is not returning correct slice map",
+		ConditionReadout(data, conditions, readouts),
+		"Single condition and readout filter is not returning correct slice map",
 	)
 
-	// TEST2: return empty slice map when not matches to bait and prey lists.
-	baits = []string{"bait2"}
-	preys = []string{"prey1"}
+	// TEST2: return empty slice map when not matches to condition and readout lists.
+	conditions = []string{"condition2"}
+	readouts = []string{"readout1"}
 	want = []map[string]string{}
 	assert.Equal(
 		t,
 		want,
-		BaitPrey(data, baits, preys),
+		ConditionReadout(data, conditions, readouts),
 		"Returned value should have length zero",
 	)
 
-	// TEST3: filter by a multiple baits and preys.
-	baits = []string{"bait1", "bait2"}
-	preys = []string{"prey1", "prey2"}
+	// TEST3: filter by a multiple conditions and readouts.
+	conditions = []string{"condition1", "condition2"}
+	readouts = []string{"readout1", "readout2"}
 	want = data
 	assert.Equal(
 		t,
 		want,
-		BaitPrey(data, baits, preys),
-		"Multiple bait and prey filter is not returning correct slice map",
+		ConditionReadout(data, conditions, readouts),
+		"Multiple condition and readout filter is not returning correct slice map",
 	)
 }

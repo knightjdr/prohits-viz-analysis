@@ -23,19 +23,19 @@ func TestWriteBBCytoscape(t *testing.T) {
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
 	// Data.
-	baitList := []string{"bait1", "bait2", "bait3"}
+	conditionList := []string{"condition1", "condition2", "condition3"}
 	matrix := [][]float64{
 		{0, 10, 74.2},
 		{10, 0, 90.12},
 		{74.2, 90.12, 0},
 	}
 
-	// TEST1: bait table output.
-	want := "source\ttarget\tdistance\nbait1\tbait2\t10\nbait1\tbait3\t74.2\nbait2\tbait3\t90.12\n"
-	WriteBBCytoscape(matrix, baitList)
-	tsvFile, _ := afero.ReadFile(fs.Instance, "cytoscape/bait-bait-cytoscape.txt")
-	assert.Equal(t, want, string(tsvFile), "Bait distance table not output correctly")
-	fs.Instance.Remove("cytoscape/bait-bait-cytoscape.txt")
+	// TEST1: condition table output.
+	want := "source\ttarget\tdistance\ncondition1\tcondition2\t10\ncondition1\tcondition3\t74.2\ncondition2\tcondition3\t90.12\n"
+	WriteBBCytoscape(matrix, conditionList)
+	tsvFile, _ := afero.ReadFile(fs.Instance, "cytoscape/condition-condition-cytoscape.txt")
+	assert.Equal(t, want, string(tsvFile), "Condition distance table not output correctly")
+	fs.Instance.Remove("cytoscape/condition-condition-cytoscape.txt")
 
 	// Mock Create. Method is unpatched using monkey.UnpatchAll() as
 	// UnpatchInstanceMethod was not working between tests.
@@ -46,14 +46,14 @@ func TestWriteBBCytoscape(t *testing.T) {
 	monkey.PatchInstanceMethod(reflect.TypeOf(fs.Instance), "Create", fakeCreate)
 
 	// TEST2: write error.
-	WriteBBCytoscape(matrix, baitList)
+	WriteBBCytoscape(matrix, conditionList)
 	// Ensure error is logged.
 	logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
 	want = "File cannot be created"
 	matched, _ := regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "File creation error message not being logged")
 	// Ensure file has not been created.
-	fileExists, _ := afero.Exists(fs.Instance, "cytoscape/bait-bait-cytoscape.txt")
+	fileExists, _ := afero.Exists(fs.Instance, "cytoscape/condition-condition-cytoscape.txt")
 	assert.False(
 		t,
 		fileExists,

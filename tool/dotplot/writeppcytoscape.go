@@ -8,11 +8,11 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 )
 
-// WritePPCytoscape writes a tabular file with prey-prey distance information for
+// WritePPCytoscape writes a tabular file with readout-readout distance information for
 // use with cytoscape.
-func WritePPCytoscape(matrix [][]float64, preyList []string) {
+func WritePPCytoscape(matrix [][]float64, readoutList []string) {
 	// Create file.
-	dataTransformedFile, err := fs.Instance.Create("cytoscape/prey-prey-cytoscape.txt")
+	dataTransformedFile, err := fs.Instance.Create("cytoscape/readout-readout-cytoscape.txt")
 	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
 	if err != nil {
@@ -35,13 +35,13 @@ func WritePPCytoscape(matrix [][]float64, preyList []string) {
 	}
 
 	// Write each row in the matrix.
-	numPreys := len(matrix)
+	numReadouts := len(matrix)
 	for i, row := range matrix {
-		for j := i + 1; j < numPreys; j++ {
+		for j := i + 1; j < numReadouts; j++ {
 			// Create row to write.
 			rowSlice := make([]string, 3)
-			rowSlice[0] = preyList[i]
-			rowSlice[1] = preyList[j]
+			rowSlice[0] = readoutList[i]
+			rowSlice[1] = readoutList[j]
 			rowSlice[2] = strconv.FormatFloat(row[j], 'f', -1, 64)
 			err = dataTransformedWriter.Write(rowSlice)
 

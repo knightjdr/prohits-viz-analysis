@@ -8,28 +8,28 @@ import (
 
 func TestSummedNormalization(t *testing.T) {
 	data := []map[string]interface{}{
-		{"bait": "bait1", "prey": "prey1", "abundance": "10"},
-		{"bait": "bait1", "prey": "prey2", "abundance": "5"},
-		{"bait": "bait2", "prey": "prey1", "abundance": "1"},
-		{"bait": "bait2", "prey": "prey2", "abundance": "2"},
-		{"bait": "bait3", "prey": "prey1", "abundance": "10|5"},
-		{"bait": "bait3", "prey": "prey2", "abundance": "4|6"},
-		{"bait": "bait4", "prey": "prey1", "abundance": "15|8|7"},
-		{"bait": "bait5", "prey": "prey2", "abundance": "10"},
-		{"bait": "bait6", "prey": "prey2", "abundance": "0"},
-		{"bait": "bait7", "prey": "prey2", "abundance": "30"},
+		{"condition": "condition1", "readout": "readout1", "abundance": "10"},
+		{"condition": "condition1", "readout": "readout2", "abundance": "5"},
+		{"condition": "condition2", "readout": "readout1", "abundance": "1"},
+		{"condition": "condition2", "readout": "readout2", "abundance": "2"},
+		{"condition": "condition3", "readout": "readout1", "abundance": "10|5"},
+		{"condition": "condition3", "readout": "readout2", "abundance": "4|6"},
+		{"condition": "condition4", "readout": "readout1", "abundance": "15|8|7"},
+		{"condition": "condition5", "readout": "readout2", "abundance": "10"},
+		{"condition": "condition6", "readout": "readout2", "abundance": "0"},
+		{"condition": "condition7", "readout": "readout2", "abundance": "30"},
 	}
 	want := []map[string]interface{}{
-		{"bait": "bait1", "prey": "prey1", "abundance": "10"},
-		{"bait": "bait1", "prey": "prey2", "abundance": "5"},
-		{"bait": "bait2", "prey": "prey1", "abundance": "5"},
-		{"bait": "bait2", "prey": "prey2", "abundance": "10"},
-		{"bait": "bait3", "prey": "prey1", "abundance": "6|3"},
-		{"bait": "bait3", "prey": "prey2", "abundance": "2.4|3.6"},
-		{"bait": "bait4", "prey": "prey1", "abundance": "7.5|4|3.5"},
-		{"bait": "bait5", "prey": "prey2", "abundance": "15"},
-		{"bait": "bait6", "prey": "prey2", "abundance": "0"},
-		{"bait": "bait7", "prey": "prey2", "abundance": "15"},
+		{"condition": "condition1", "readout": "readout1", "abundance": "10"},
+		{"condition": "condition1", "readout": "readout2", "abundance": "5"},
+		{"condition": "condition2", "readout": "readout1", "abundance": "5"},
+		{"condition": "condition2", "readout": "readout2", "abundance": "10"},
+		{"condition": "condition3", "readout": "readout1", "abundance": "6|3"},
+		{"condition": "condition3", "readout": "readout2", "abundance": "2.4|3.6"},
+		{"condition": "condition4", "readout": "readout1", "abundance": "7.5|4|3.5"},
+		{"condition": "condition5", "readout": "readout2", "abundance": "15"},
+		{"condition": "condition6", "readout": "readout2", "abundance": "0"},
+		{"condition": "condition7", "readout": "readout2", "abundance": "15"},
 	}
 
 	// TEST1: summed normalization
@@ -37,6 +37,6 @@ func TestSummedNormalization(t *testing.T) {
 		t,
 		want,
 		SummedNormalization(data),
-		"Preys are not being normalized correctly by total sum",
+		"Readouts are not being normalized correctly by total sum",
 	)
 }

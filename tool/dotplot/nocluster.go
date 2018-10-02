@@ -11,181 +11,181 @@ import (
 	"github.com/spf13/afero"
 )
 
-// NoCluster creates a dotplot using a list of baits and preys.
+// NoCluster creates a dotplot using a list of conditions and readouts.
 func NoCluster(dataset typedef.Dataset) {
 	// Write log.
 	LogParams(dataset.Parameters)
 
-	// Generate bait-prey table.
-	data := BaitPreyMatrix(dataset.Data, dataset.Parameters.ScoreType)
+	// Generate condition-readout table.
+	data := ConditionReadoutMatrix(dataset.Data, dataset.Parameters.ScoreType)
 
-	// Cluster baits.
-	var baitOrder []string
-	if dataset.Parameters.BaitClustering == "none" {
+	// Cluster conditions.
+	var conditionOrder []string
+	if dataset.Parameters.ConditionClustering == "none" {
 		// Generate distance matrix.
-		baitDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, true)
+		conditionDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, true)
 
 		// Cluster.
-		baitClust, err := hclust.Cluster(baitDist, dataset.Parameters.ClusteringMethod)
+		conditionClust, err := hclust.Cluster(conditionDist, dataset.Parameters.ClusteringMethod)
 		logmessage.CheckError(err, true)
 
 		// Optimize clustering.
-		baitClust = hclust.Optimize(baitClust, baitDist)
+		conditionClust = hclust.Optimize(conditionClust, conditionDist)
 
 		// Create tree and get clustering order.
-		baitTree, err := hclust.Tree(baitClust, data.Baits)
+		conditionTree, err := hclust.Tree(conditionClust, data.Conditions)
 		logmessage.CheckError(err, true)
 
-		// Set bait order.
-		baitOrder = baitTree.Order
+		// Set condition order.
+		conditionOrder = conditionTree.Order
 
 		// Normalize distance matrix to 1.
 		maxDist := float64(0)
-		normalizedBaitDist := baitDist
-		for _, row := range normalizedBaitDist {
+		normalizedConditionDist := conditionDist
+		for _, row := range normalizedConditionDist {
 			for _, dist := range row {
 				if dist > maxDist {
 					maxDist = dist
 				}
 			}
 		}
-		for i, row := range normalizedBaitDist {
+		for i, row := range normalizedConditionDist {
 			for j, dist := range row {
-				normalizedBaitDist[i][j] = dist / maxDist
+				normalizedConditionDist[i][j] = dist / maxDist
 			}
 		}
 
 		// Sort distance matrix.
-		sortedBaitDist, _ := hclust.Sort(normalizedBaitDist, data.Baits, baitOrder, "column")
-		sortedBaitDist, _ = hclust.Sort(sortedBaitDist, data.Baits, baitOrder, "row")
+		sortedConditionDist, _ := hclust.Sort(normalizedConditionDist, data.Conditions, conditionOrder, "column")
+		sortedConditionDist, _ = hclust.Sort(sortedConditionDist, data.Conditions, conditionOrder, "row")
 
-		// Write bait-bait svg.
+		// Write condition-condition svg.
 		if dataset.Parameters.WriteDistance {
-			SvgBB(sortedBaitDist, baitOrder, dataset.Parameters.FillColor)
+			SvgCC(sortedConditionDist, conditionOrder, dataset.Parameters.FillColor)
 
 			// Generate pdfs and pngs.
 			if dataset.Parameters.Pdf {
-				svg.ConvertPdf([]string{"bait-bait.svg"})
+				svg.ConvertPdf([]string{"condition-condition.svg"})
 			}
 			if dataset.Parameters.Png {
-				svg.ConvertPng([]string{"bait-bait.svg"})
+				svg.ConvertPng([]string{"condition-condition.svg"})
 			}
 
 			// Create  minimaps from svg.
-			svg.ConvertMap([]string{"bait-bait.svg"})
+			svg.ConvertMap([]string{"condition-condition.svg"})
 
 			// Create interactive files.
 			json := InteractiveHeatmap(
-				normalizedBaitDist,
-				baitOrder,
-				baitOrder,
+				normalizedConditionDist,
+				conditionOrder,
+				conditionOrder,
 				true,
 				dataset.Parameters,
-				"minimap/bait-bait.png",
+				"minimap/condition-condition.png",
 			)
-			afero.WriteFile(fs.Instance, "interactive/bait-bait.json", []byte(json), 0644)
+			afero.WriteFile(fs.Instance, "interactive/condition-condition.json", []byte(json), 0644)
 		}
 
-		// Write bait-bait cytoscape file.
-		WriteBBCytoscape(baitDist, data.Baits)
+		// Write condition-condition cytoscape file.
+		WriteBBCytoscape(conditionDist, data.Conditions)
 
 		// Write newick tree to file.
-		afero.WriteFile(fs.Instance, "other/bait-dendrogram.txt", []byte(baitTree.Newick), 0644)
+		afero.WriteFile(fs.Instance, "other/condition-dendrogram.txt", []byte(conditionTree.Newick), 0644)
 	} else {
-		baitOrder = dataset.Parameters.BaitList
+		conditionOrder = dataset.Parameters.ConditionList
 	}
 
-	// Cluster preys.
-	var preyOrder []string
-	if dataset.Parameters.PreyClustering == "none" {
+	// Cluster readouts.
+	var readoutOrder []string
+	if dataset.Parameters.ReadoutClustering == "none" {
 		// Generate distance matrix.
-		preyDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, false)
+		readoutDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, false)
 
 		// Cluster.
-		preyClust, err := hclust.Cluster(preyDist, dataset.Parameters.ClusteringMethod)
+		readoutClust, err := hclust.Cluster(readoutDist, dataset.Parameters.ClusteringMethod)
 		logmessage.CheckError(err, true)
 
 		// Optimize clustering.
-		preyClust = hclust.Optimize(preyClust, preyDist)
+		readoutClust = hclust.Optimize(readoutClust, readoutDist)
 
 		// Create tree and get clustering order.
-		preyTree, err := hclust.Tree(preyClust, data.Preys)
+		readoutTree, err := hclust.Tree(readoutClust, data.Readouts)
 		logmessage.CheckError(err, true)
 
-		// Set prey order.
-		preyOrder = preyTree.Order
+		// Set readout order.
+		readoutOrder = readoutTree.Order
 
 		// Normalize distance matrix to 1.
 		maxDist := float64(0)
-		normalizedPreyDist := preyDist
-		for _, row := range normalizedPreyDist {
+		normalizedReadoutDist := readoutDist
+		for _, row := range normalizedReadoutDist {
 			for _, dist := range row {
 				if dist > maxDist {
 					maxDist = dist
 				}
 			}
 		}
-		for i, row := range normalizedPreyDist {
+		for i, row := range normalizedReadoutDist {
 			for j, dist := range row {
-				normalizedPreyDist[i][j] = dist / maxDist
+				normalizedReadoutDist[i][j] = dist / maxDist
 			}
 		}
 
 		// Sort distance matrix.
-		sortedPreyDist, _ := hclust.Sort(normalizedPreyDist, data.Preys, preyOrder, "column")
-		sortedPreyDist, _ = hclust.Sort(sortedPreyDist, data.Preys, preyOrder, "row")
+		sortedReadoutDist, _ := hclust.Sort(normalizedReadoutDist, data.Readouts, readoutOrder, "column")
+		sortedReadoutDist, _ = hclust.Sort(sortedReadoutDist, data.Readouts, readoutOrder, "row")
 
-		// Write prey-prey svg.
+		// Write readout-readout svg.
 		if dataset.Parameters.WriteDistance {
-			SvgPP(sortedPreyDist, preyOrder, dataset.Parameters.FillColor)
+			SvgRR(sortedReadoutDist, readoutOrder, dataset.Parameters.FillColor)
 
 			// Generate pdfs and pngs.
 			if dataset.Parameters.Pdf {
-				svg.ConvertPdf([]string{"prey-prey.svg"})
+				svg.ConvertPdf([]string{"readout-readout.svg"})
 			}
 			if dataset.Parameters.Png {
-				svg.ConvertPng([]string{"prey-prey.svg"})
+				svg.ConvertPng([]string{"readout-readout.svg"})
 			}
 
 			// Create  minimaps from svg.
-			svg.ConvertMap([]string{"prey-prey.svg"})
+			svg.ConvertMap([]string{"readout-readout.svg"})
 
 			// Create interactive files.
 			json := InteractiveHeatmap(
-				normalizedPreyDist,
-				preyOrder,
-				preyOrder,
+				normalizedReadoutDist,
+				readoutOrder,
+				readoutOrder,
 				true,
 				dataset.Parameters,
-				"minimap/prey-prey.png",
+				"minimap/readout-readout.png",
 			)
-			afero.WriteFile(fs.Instance, "interactive/prey-prey.json", []byte(json), 0644)
+			afero.WriteFile(fs.Instance, "interactive/readout-readout.json", []byte(json), 0644)
 		}
 
-		// Write prey-prey cytoscape file.
-		WritePPCytoscape(preyDist, data.Preys)
+		// Write readout-readout cytoscape file.
+		WritePPCytoscape(readoutDist, data.Readouts)
 
 		// Write newick tree to file.
-		afero.WriteFile(fs.Instance, "other/prey-dendrogram.txt", []byte(preyTree.Newick), 0644)
+		afero.WriteFile(fs.Instance, "other/readout-dendrogram.txt", []byte(readoutTree.Newick), 0644)
 	} else {
-		preyOrder = dataset.Parameters.PreyList
+		readoutOrder = dataset.Parameters.ReadoutList
 	}
 
 	// Sort matrices.
-	sortedAbundance, _ := hclust.Sort(data.Abundance, data.Baits, baitOrder, "column")
-	sortedAbundance, _ = hclust.Sort(sortedAbundance, data.Preys, preyOrder, "row")
+	sortedAbundance, _ := hclust.Sort(data.Abundance, data.Conditions, conditionOrder, "column")
+	sortedAbundance, _ = hclust.Sort(sortedAbundance, data.Readouts, readoutOrder, "row")
 	sortedRatios := NormalizeMatrix(sortedAbundance)
-	sortedScores, _ := hclust.Sort(data.Score, data.Baits, baitOrder, "column")
-	sortedScores, _ = hclust.Sort(sortedScores, data.Preys, preyOrder, "row")
+	sortedScores, _ := hclust.Sort(data.Score, data.Conditions, conditionOrder, "column")
+	sortedScores, _ = hclust.Sort(sortedScores, data.Readouts, readoutOrder, "row")
 
-	// Write bait-prey dotplot.
+	// Write condition-readout dotplot.
 	if dataset.Parameters.WriteDotplot {
 		SvgDotplot(
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,
-			baitOrder,
-			preyOrder,
+			conditionOrder,
+			readoutOrder,
 			false,
 			dataset.Parameters,
 		)
@@ -221,20 +221,20 @@ func NoCluster(dataset typedef.Dataset) {
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,
-			baitOrder,
-			preyOrder,
+			conditionOrder,
+			readoutOrder,
 			dataset.Parameters,
 			"minimap/dotplot.png",
 		)
 		afero.WriteFile(fs.Instance, "interactive/dotplot.json", []byte(json), 0644)
 	}
 
-	// Write bait-prey heatmap.
+	// Write condition-readout heatmap.
 	if dataset.Parameters.WriteHeatmap {
 		SvgHeatmap(
 			sortedAbundance,
-			baitOrder,
-			preyOrder,
+			conditionOrder,
+			readoutOrder,
 			dataset.Parameters.FillColor,
 			dataset.Parameters.AbundanceCap,
 			false,
@@ -267,13 +267,13 @@ func NoCluster(dataset typedef.Dataset) {
 
 	// Output other files.
 
-	// Write bait-prey cytoscape file.
+	// Write condition-readout cytoscape file.
 	WriteBPCytoscape(dataset)
 
 	// Write transformed data matrix to file.
-	WriteMatrix(sortedAbundance, baitOrder, preyOrder, "other/data-transformed.txt")
+	WriteMatrix(sortedAbundance, conditionOrder, readoutOrder, "other/data-transformed.txt")
 
 	// Write transformed data matrix to file but as ratios instead of absolutes.
-	WriteMatrix(sortedRatios, baitOrder, preyOrder, "other/data-transformed-ratios.txt")
+	WriteMatrix(sortedRatios, conditionOrder, readoutOrder, "other/data-transformed-ratios.txt")
 	return
 }

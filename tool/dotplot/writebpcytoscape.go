@@ -11,11 +11,11 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
-// WriteBPCytoscape writes a tabular file with bait and prey information for
+// WriteBPCytoscape writes a tabular file with condition and readout information for
 // use with cytoscape.
 func WriteBPCytoscape(dataset typedef.Dataset) {
 	// Create file.
-	dataTransformedFile, err := fs.Instance.Create("cytoscape/bait-prey-cytoscape.txt")
+	dataTransformedFile, err := fs.Instance.Create("cytoscape/condition-readout-cytoscape.txt")
 	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
 	if err != nil {
@@ -29,7 +29,7 @@ func WriteBPCytoscape(dataset typedef.Dataset) {
 	defer writer.Flush()
 
 	// Create and write header.
-	header := []string{dataset.Parameters.Bait, dataset.Parameters.Prey, dataset.Parameters.Abundance, dataset.Parameters.Score}
+	header := []string{dataset.Parameters.Condition, dataset.Parameters.Readout, dataset.Parameters.Abundance, dataset.Parameters.Score}
 	err = writer.Write(header)
 	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
@@ -52,8 +52,8 @@ func WriteBPCytoscape(dataset typedef.Dataset) {
 
 			// Create row to write.
 			rowSlice := make([]string, 4)
-			rowSlice[0] = row["bait"].(string)
-			rowSlice[1] = row["prey"].(string)
+			rowSlice[0] = row["condition"].(string)
+			rowSlice[1] = row["readout"].(string)
 			rowSlice[2] = strconv.FormatFloat(abundanceSum, 'f', 2, 64)
 			rowSlice[3] = strconv.FormatFloat(row["score"].(float64), 'f', 2, 64)
 			err = writer.Write(rowSlice)

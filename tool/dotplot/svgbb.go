@@ -7,17 +7,17 @@ import (
 	"github.com/spf13/afero"
 )
 
-// SvgBB draws a bait bait heatmap.
-func SvgBB(dist [][]float64, baits []string, fillColor string) {
+// SvgCC draws a condition condition heatmap.
+func SvgCC(dist [][]float64, conditions []string, fillColor string) {
 	// Heatmap parameters.
 	parameters := map[string]interface{}{
 		"abundanceCap": float64(1),
-		"colLabel":     "Baits",
+		"colLabel":     "Conditions",
 		"fillColor":    fillColor,
 		"invertColor":  true,
-		"rowLabel":     "Baits",
+		"rowLabel":     "Conditions",
 	}
-	heatmap := svg.Heatmap(dist, typedef.Annotations{}, typedef.Markers{}, baits, baits, parameters)
-	afero.WriteFile(fs.Instance, "svg/bait-bait.svg", []byte(heatmap), 0644)
+	heatmap := svg.Heatmap(dist, typedef.Annotations{}, typedef.Markers{}, conditions, conditions, parameters)
+	afero.WriteFile(fs.Instance, "svg/condition-condition.svg", []byte(heatmap), 0644)
 	return
 }

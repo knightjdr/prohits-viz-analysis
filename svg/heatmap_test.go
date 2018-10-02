@@ -28,12 +28,12 @@ func TestHeatmap(t *testing.T) {
 	}
 	options := map[string]interface{}{
 		"annotationFontSize": int(15),
-		"colLabel":           "Baits",
+		"colLabel":           "Conditions",
 		"fillColor":          "blueBlack",
 		"markerColor":        "#000000",
 		"abundanceCap":       float64(50),
 		"invertColor":        false,
-		"rowLabel":           "Preys",
+		"rowLabel":           "Readouts",
 	}
 	rows := []string{"prey1", "prey2", "prey3"}
 
@@ -66,8 +66,8 @@ func TestHeatmap(t *testing.T) {
 		"\t<g transform=\"translate(57, 57)\">\n" +
 		"\t\t<text y=\"12\" x=\"30\" font-size=\"15\" text-anchor=\"middle\">a</text>\n" +
 		"\t</g>\n" +
-		"\t<text y=\"10\" x=\"87\" font-size=\"12\" text-anchor=\"middle\">Baits</text>\n" +
-		"\t<text y=\"87\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 87)\">Preys</text>\n" +
+		"\t<text y=\"10\" x=\"87\" font-size=\"12\" text-anchor=\"middle\">Conditions</text>\n" +
+		"\t<text y=\"87\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 87)\">Readouts</text>\n" +
 		"</svg>\n"
 	svg := Heatmap(matrix, annotations, markers, columns, rows, options)
 	assert.Equal(t, want, svg, "Heatmap svg is not correct")

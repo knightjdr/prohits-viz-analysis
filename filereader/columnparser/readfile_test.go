@@ -34,12 +34,12 @@ func TestReadFile(t *testing.T) {
 	// TEST1: file gets parsed to a slice of maps.
 	files := []string{"test/testfile.txt"}
 	columnMap := map[string]string{
-		"bait": "column1",
-		"prey": "column3",
+		"condition": "column1",
+		"readout":   "column3",
 	}
 	want := []map[string]string{
-		{"bait": "a", "prey": "c"},
-		{"bait": "d", "prey": "f"},
+		{"condition": "a", "readout": "c"},
+		{"condition": "d", "readout": "f"},
 	}
 	parsed := ReadFile(files, columnMap)
 	assert.Equal(t, want, parsed, "File not parsed as expected")

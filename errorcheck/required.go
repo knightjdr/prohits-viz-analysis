@@ -2,8 +2,8 @@
 //
 // Common errors: 1) no entries pass the required filters (this is already checked
 // during the file reading step but is repeated here for completeness); 2) not
-// enough baits for the type of anlaysis; 3) missing prey names; 4) score column
-// must be numeric (also checked during file reading step); 5) prey length column
+// enough conditions for the type of anlaysis; 3) missing readout names; 4) score column
+// must be numeric (also checked during file reading step); 5) readout length column
 // (if specified) must be numeric; 6) control column (if specified) must be a
 // pipe-separated list of numeric values.
 package errorcheck
@@ -24,15 +24,15 @@ func Required(
 	err = MinData(dataset.Data)
 	logmessage.CheckError(err, true)
 
-	// Minimum baits met (don't panic so that all errors have a change to log).
-	err = MinBait(dataset.Data, dataset.Parameters.AnalysisType)
+	// Minimum conditions met (don't panic so that all errors have a change to log).
+	err = MinCondition(dataset.Data, dataset.Parameters.AnalysisType)
 	logmessage.CheckError(err, false)
 	if err != nil {
 		errs++
 	}
 
-	// All preys have names.
-	err = PreyName(dataset.Data)
+	// All readouts have names.
+	err = ReadoutName(dataset.Data)
 	logmessage.CheckError(err, false)
 	if err != nil {
 		errs++
@@ -52,8 +52,8 @@ func Required(
 		errs++
 	}
 
-	// Prey length column can be parsed as an integer.
-	err = PreyLengthInt(dataset.Data, dataset.Parameters.PreyLength)
+	// Readout length column can be parsed as an integer.
+	err = ReadoutLengthInt(dataset.Data, dataset.Parameters.ReadoutLength)
 	logmessage.CheckError(err, false)
 	if err != nil {
 		errs++

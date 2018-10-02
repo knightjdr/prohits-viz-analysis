@@ -7,44 +7,44 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
-// PreyLength adjusts prey abundance based on the length of a prey relative to
-// all others in the data set. It takes the median length of all preys (this is
+// ReadoutLength adjusts readout abundance based on the length of a readout relative to
+// all others in the data set. It takes the median length of all readouts (this is
 // after filtering by score in previous steps), calculates the median and then
-// divides the median by each prey's length to get the multiplier for that prey.
-func PreyLength(data []map[string]interface{}, preyColumn string) (transformed []map[string]interface{}) {
+// divides the median by each readout's length to get the multiplier for that readout.
+func ReadoutLength(data []map[string]interface{}, readoutColumn string) (transformed []map[string]interface{}) {
 	transformed = data
-	// Skip if no prey length column is specified.
-	if preyColumn == "" {
+	// Skip if no readout length column is specified.
+	if readoutColumn == "" {
 		return
 	}
 
-	// Get all unique preys and their lengths.
-	preys := map[string]int{}
-	preyLengths := make([]int, 0)
+	// Get all unique readouts and their lengths.
+	readouts := map[string]int{}
+	readoutLengths := make([]int, 0)
 	for _, row := range transformed {
-		preyName := row["prey"].(string)
-		if _, ok := preys[preyName]; !ok {
-			length, _ := strconv.Atoi(row["preyLength"].(string))
-			preys[preyName] = length
-			preyLengths = append(preyLengths, length)
+		readoutName := row["readout"].(string)
+		if _, ok := readouts[readoutName]; !ok {
+			length, _ := strconv.Atoi(row["readoutLength"].(string))
+			readouts[readoutName] = length
+			readoutLengths = append(readoutLengths, length)
 		}
 	}
 
-	// Calculate median prey length and prey multiplier for each prey.
-	median := MedianInt(preyLengths)
+	// Calculate median readout length and readout multiplier for each readout.
+	median := MedianInt(readoutLengths)
 	multiplier := map[string]float64{}
-	for prey, length := range preys {
-		multiplier[prey] = median / float64(length)
+	for readout, length := range readouts {
+		multiplier[readout] = median / float64(length)
 	}
 
-	// Iterate over data slice and multiply prey abundance by multiplier.
+	// Iterate over data slice and multiply readout abundance by multiplier.
 	for _, row := range transformed {
-		preyName := row["prey"].(string)
+		readoutName := row["readout"].(string)
 		abundance := strings.Split(row["abundance"].(string), "|")
 		transformedAbdStr := make([]string, 0) // Store as strings for joining.
 		for _, abdValue := range abundance {
 			transformedAbd, _ := strconv.ParseFloat(abdValue, 64)
-			transformedAbd *= multiplier[preyName]
+			transformedAbd *= multiplier[readoutName]
 			transformedAbd = helper.Round(transformedAbd, 0.01) // Round to nearest two decimals.
 			// Convert float to string and append.
 			transformedAbdStr = append(transformedAbdStr, FloatToString(transformedAbd))

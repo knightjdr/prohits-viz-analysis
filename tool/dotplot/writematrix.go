@@ -8,9 +8,9 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 )
 
-// WriteMatrix writes a matrix to a tsv file with bait names as columns
-// and prey names as rows.
-func WriteMatrix(matrix [][]float64, baitList, preyList []string, filename string) (err error) {
+// WriteMatrix writes a matrix to a tsv file with condition names as columns
+// and readout names as rows.
+func WriteMatrix(matrix [][]float64, conditionList, readoutList []string, filename string) (err error) {
 	// Create file.
 	dataTransformedFile, err := fs.Instance.Create(filename)
 	// Log if error and return without panic.
@@ -26,7 +26,7 @@ func WriteMatrix(matrix [][]float64, baitList, preyList []string, filename strin
 	defer writer.Flush()
 
 	// Create and write header.
-	header := append([]string{""}, baitList...)
+	header := append([]string{""}, conditionList...)
 	err = writer.Write(header)
 	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
@@ -36,7 +36,7 @@ func WriteMatrix(matrix [][]float64, baitList, preyList []string, filename strin
 
 	// Write each line.
 	for i, row := range matrix {
-		line := append([]string{preyList[i]}, helper.ConvertFts(row, 2)...)
+		line := append([]string{readoutList[i]}, helper.ConvertFts(row, 2)...)
 		err = writer.Write(line)
 
 		// Log if error and return without panic.

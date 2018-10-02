@@ -7,20 +7,20 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
-// SummedNormalization normalizes prey abundances between baits by summing the
-// prey abundances for each bait, taking the median of that and using the
-// median / total prey abundance for each bait as the prey multplier.
+// SummedNormalization normalizes readout abundances between conditions by summing the
+// readout abundances for each condition, taking the median of that and using the
+// median / total readout abundance for each condition as the readout multplier.
 func SummedNormalization(data []map[string]interface{}) (transformed []map[string]interface{}) {
 	transformed = data
-	// Sum thhe prey abundances for each bait.
-	baits := map[string]float64{}
+	// Sum thhe readout abundances for each condition.
+	conditions := map[string]float64{}
 	for _, row := range transformed {
-		// Add bait to map if it is not present.
-		baitName := row["bait"].(string)
-		if _, ok := baits[baitName]; !ok {
-			baits[baitName] = 0
+		// Add condition to map if it is not present.
+		conditionName := row["condition"].(string)
+		if _, ok := conditions[conditionName]; !ok {
+			conditions[conditionName] = 0
 		}
-		// Add prey abundance.
+		// Add readout abundance.
 		abundance := strings.Split(row["abundance"].(string), "|")
 		var abundanceSum float64
 		abundanceSum = 0
@@ -28,35 +28,35 @@ func SummedNormalization(data []map[string]interface{}) (transformed []map[strin
 			abundanceFloat, _ := strconv.ParseFloat(abdValue, 64)
 			abundanceSum += abundanceFloat
 		}
-		baits[baitName] += abundanceSum
+		conditions[conditionName] += abundanceSum
 	}
 
 	// Get total abundance median.
-	baitValues := make([]float64, 0)
-	for _, value := range baits {
-		baitValues = append(baitValues, value)
+	conditionValues := make([]float64, 0)
+	for _, value := range conditions {
+		conditionValues = append(conditionValues, value)
 	}
-	median := MedianFloat(baitValues)
+	median := MedianFloat(conditionValues)
 
-	// Calculate prey multipliers.
+	// Calculate readout multipliers.
 	multiplier := map[string]float64{}
-	for bait, value := range baits {
+	for condition, value := range conditions {
 		abundance := value
 		if abundance == 0 {
-			multiplier[bait] = 1
+			multiplier[condition] = 1
 		} else {
-			multiplier[bait] = median / abundance
+			multiplier[condition] = median / abundance
 		}
 	}
 
-	// Transform preys.
+	// Transform readouts.
 	for _, row := range transformed {
 		abundance := strings.Split(row["abundance"].(string), "|")
-		baitName := row["bait"].(string)
+		conditionName := row["condition"].(string)
 		transformedAbdStr := make([]string, 0) // Store as strings for joining.
 		for _, abdValue := range abundance {
 			transformedAbd, _ := strconv.ParseFloat(abdValue, 64)
-			transformedAbd *= multiplier[baitName]
+			transformedAbd *= multiplier[conditionName]
 			transformedAbd = helper.Round(transformedAbd, 0.01) // Round to nearest two decimals.
 			// Convert float to string and append.
 			transformedAbdStr = append(transformedAbdStr, FloatToString(transformedAbd))

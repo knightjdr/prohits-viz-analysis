@@ -1,6 +1,7 @@
 package dotplot
 
 import (
+	"github.com/knightjdr/prohits-viz-analysis/helper"
 	"github.com/knightjdr/prohits-viz-analysis/interactive"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
@@ -18,16 +19,16 @@ func InteractiveHeatmap(
 	parameters := map[string]interface{}{
 		"abundanceColumn":  userParams.Abundance,
 		"analysisType":     userParams.AnalysisType,
-		"baitColumn":       userParams.Bait,
+		"conditionColumn":  userParams.Condition,
 		"clustering":       userParams.Clustering,
 		"clusteringMethod": userParams.ClusteringMethod,
 		"controlColumn":    userParams.Control,
 		"distance":         userParams.Distance,
-		"files":            userParams.Files,
+		"files":            helper.Filename(userParams.Files),
 		"imageType":        "heatmap",
 		"logBase":          userParams.LogBase,
 		"normalization":    userParams.Normalization,
-		"preyColumn":       userParams.Prey,
+		"readoutColumn":    userParams.Readout,
 		"scoreColumn":      userParams.Score,
 		"scoreType":        userParams.ScoreType,
 	}

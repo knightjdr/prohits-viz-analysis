@@ -26,7 +26,7 @@ func TestSvgHeatmap(t *testing.T) {
 	sortedColumns := []string{"col1", "col3", "col2"}
 	sortedRows := []string{"row2", "row3", "row1"}
 
-	// TEST1: bait-prey heatmap
+	// TEST1: condition-readout heatmap
 	want := "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"105\" height=\"105\" viewBox=\"0 0 105 105\">\n" +
 		"\t<g transform=\"translate(45)\">\n" +
 		"\t\t<text y=\"43\" x=\"6\" font-size=\"12\" text-anchor=\"end\" transform=\"rotate(90, 6, 43)\">col1</text>\n" +
@@ -49,8 +49,8 @@ func TestSvgHeatmap(t *testing.T) {
 		"\t\t<rect fill=\"#ffffff\" y=\"40\" x=\"20\" width=\"20\" height=\"20\" />\n" +
 		"\t\t<rect fill=\"#fafbff\" y=\"40\" x=\"40\" width=\"20\" height=\"20\" />\n" +
 		"\t</g>\n" +
-		"\t<text y=\"10\" x=\"75\" font-size=\"12\" text-anchor=\"middle\">Baits</text>\n" +
-		"\t<text y=\"75\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 75)\">Preys</text>\n" +
+		"\t<text y=\"10\" x=\"75\" font-size=\"12\" text-anchor=\"middle\">Conditions</text>\n" +
+		"\t<text y=\"75\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 75)\">Readouts</text>\n" +
 		"</svg>\n"
 	SvgHeatmap(matrix, sortedColumns, sortedRows, "blueBlack", 50, false)
 	svg, _ := afero.ReadFile(fs.Instance, "svg/heatmap.svg")

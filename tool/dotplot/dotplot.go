@@ -1,4 +1,4 @@
-// Package dotplot clusters baits and preys for visualization as a dotplot
+// Package dotplot clusters conditions and readouts for visualization as a dotplot
 package dotplot
 
 import (

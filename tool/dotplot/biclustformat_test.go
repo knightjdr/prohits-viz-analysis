@@ -28,13 +28,13 @@ func TestBiclustFormat(t *testing.T) {
 			{4, 8, 16},
 			{2, 8, 8},
 		},
-		Baits: []string{"abait", "bbait", "cbait"},
+		Conditions: []string{"acondition", "bcondition", "ccondition"},
 		Score: [][]float64{
 			{0.01, 0, 2},
 			{2, 1, 3},
 			{2, 4, 5},
 		},
-		Preys: []string{"xprey", "yprey", "zprey"},
+		Readouts: []string{"xreadout", "yreadout", "zreadout"},
 	}
 	filename := "biclustering/matrix.txt"
 
@@ -43,22 +43,22 @@ func TestBiclustFormat(t *testing.T) {
 		{2.5, 5, 10},
 		{1.25, 5, 5},
 	}
-	wantBaitList := []string{"abait", "bbait", "cbait"}
-	wantFile := "PROT\tabait\tbbait\tcbait\nyprey\t2.50000\t5.00000\t10.00000\nzprey\t1.25000\t5.00000\t5.00000\n"
-	wantPreyList := []string{"yprey", "zprey"}
-	wantSingleList := []string{"xprey"}
+	wantConditionList := []string{"acondition", "bcondition", "ccondition"}
+	wantFile := "PROT\tacondition\tbcondition\tccondition\nyreadout\t2.50000\t5.00000\t10.00000\nzreadout\t1.25000\t5.00000\t5.00000\n"
+	wantReadoutList := []string{"yreadout", "zreadout"}
+	wantSingleList := []string{"xreadout"}
 	wantScore := [][]float64{
 		{2, 1, 3},
 		{2, 4, 5},
 	}
 	data := BiclustFormat(dataset, 8)
-	assert.Equal(t, wantAbundance, data.Abundance, "Data not converted to bait prey abundance matrix for biclustering")
-	assert.Equal(t, wantBaitList, data.Baits, "Bait list not correct for biclustering")
-	assert.Equal(t, wantPreyList, data.Preys, "Prey list not correct for biclustering")
-	assert.Equal(t, wantScore, data.Score, "Data not converted to bait prey score matrix for biclustering")
-	assert.Equal(t, wantSingleList, data.Singles, "Singleton prey list not correct for biclustering")
+	assert.Equal(t, wantAbundance, data.Abundance, "Data not converted to condition readout abundance matrix for biclustering")
+	assert.Equal(t, wantConditionList, data.Conditions, "Condition list not correct for biclustering")
+	assert.Equal(t, wantReadoutList, data.Readouts, "Readout list not correct for biclustering")
+	assert.Equal(t, wantScore, data.Score, "Data not converted to condition readout score matrix for biclustering")
+	assert.Equal(t, wantSingleList, data.Singles, "Singleton readout list not correct for biclustering")
 	tsvFile, _ := afero.ReadFile(fs.Instance, filename)
-	assert.Equal(t, wantFile, string(tsvFile), "Bait prey transformed data table not output correctly")
+	assert.Equal(t, wantFile, string(tsvFile), "Condition readout transformed data table not output correctly")
 	fs.Instance.Remove(filename)
 
 	// Mock Create. Method is unpatched using monkey.UnpatchAll() as

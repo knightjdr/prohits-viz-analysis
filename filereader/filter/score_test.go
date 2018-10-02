@@ -9,15 +9,15 @@ import (
 func TestScore(t *testing.T) {
 	// TEST1: filter typical data slice.
 	data := []map[string]string{
-		{"bait": "a", "prey": "b", "abundance": "10|7", "score": "0.5"},
-		{"bait": "c", "prey": "d", "abundance": "15", "score": "0.1"},
-		{"bait": "e", "prey": "f", "abundance": "2|6", "score": "0.5"},
-		{"bait": "g", "prey": "d", "abundance": "5", "score": "0.8"},
+		{"condition": "a", "readout": "b", "abundance": "10|7", "score": "0.5"},
+		{"condition": "c", "readout": "d", "abundance": "15", "score": "0.1"},
+		{"condition": "e", "readout": "f", "abundance": "2|6", "score": "0.5"},
+		{"condition": "g", "readout": "d", "abundance": "5", "score": "0.8"},
 	}
 	want := []map[string]interface{}{
-		{"bait": "a", "prey": "b", "abundance": "10|7", "score": 0.5},
-		{"bait": "c", "prey": "d", "abundance": "15", "score": 0.1},
-		{"bait": "g", "prey": "d", "abundance": "5", "score": 0.8},
+		{"condition": "a", "readout": "b", "abundance": "10|7", "score": 0.5},
+		{"condition": "c", "readout": "d", "abundance": "15", "score": 0.1},
+		{"condition": "g", "readout": "d", "abundance": "5", "score": 0.8},
 	}
 	filtered, err := Score(data, 0.5, 5, "lte")
 	assert.Nil(t, err, "Valid scores should not produce an error")
@@ -25,8 +25,8 @@ func TestScore(t *testing.T) {
 
 	// TEST2: Numeric conversion error returns an error.
 	data = []map[string]string{
-		{"bait": "a", "prey": "b", "score": "x"},
-		{"bait": "c", "prey": "d", "score": "y"},
+		{"condition": "a", "readout": "b", "score": "x"},
+		{"condition": "c", "readout": "d", "score": "y"},
 	}
 	filtered, err = Score(data, 0.5, 5, "lte")
 	assert.NotNil(t, err, "Numeric conversion of score column should return error")

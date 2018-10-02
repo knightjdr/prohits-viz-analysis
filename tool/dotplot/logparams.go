@@ -28,31 +28,31 @@ func LogParams(parameters typedef.Parameters) {
 	// Columns used.
 	logSlice = append(logSlice, "Columns used")
 	logSlice = append(logSlice, fmt.Sprintf("- abundance: %s", parameters.Abundance))
-	logSlice = append(logSlice, fmt.Sprintf("- bait: %s", parameters.Bait))
-	logSlice = append(logSlice, fmt.Sprintf("- prey: %s", parameters.Prey))
+	logSlice = append(logSlice, fmt.Sprintf("- condition: %s", parameters.Condition))
+	logSlice = append(logSlice, fmt.Sprintf("- readout: %s", parameters.Readout))
 	logSlice = append(logSlice, fmt.Sprintf("- score: %s", parameters.Score))
 	if parameters.Control != "" {
 		logSlice = append(logSlice, fmt.Sprintf("- control: %s", parameters.Control))
 	}
-	if parameters.PreyLength != "" {
-		logSlice = append(logSlice, fmt.Sprintf("- prey length: %s", parameters.PreyLength))
+	if parameters.ReadoutLength != "" {
+		logSlice = append(logSlice, fmt.Sprintf("- readout length: %s", parameters.ReadoutLength))
 	}
 	logSlice = append(logSlice, "")
 
 	// Transformations.
-	logSlice = append(logSlice, "Prey abundance transformations")
+	logSlice = append(logSlice, "Readout abundance transformations")
 	if parameters.Control != "" {
 		logSlice = append(logSlice, "- control subtraction was performed")
 	}
-	if parameters.PreyLength != "" {
-		logSlice = append(logSlice, "- prey length normalization was performed")
+	if parameters.ReadoutLength != "" {
+		logSlice = append(logSlice, "- readout length normalization was performed")
 	}
 	if parameters.Normalization == "total" {
-		logSlice = append(logSlice, "- bait normalization was performed using total abundance")
-	} else if parameters.Normalization == "prey" {
+		logSlice = append(logSlice, "- condition normalization was performed using total abundance")
+	} else if parameters.Normalization == "readout" {
 		logSlice = append(
 			logSlice,
-			fmt.Sprintf("- bait normalization was performed using the prey: %s", parameters.NormalizationPrey),
+			fmt.Sprintf("- condition normalization was performed using the readout: %s", parameters.NormalizationReadout),
 		)
 	}
 	if parameters.LogBase != "" {
@@ -97,12 +97,12 @@ func LogParams(parameters typedef.Parameters) {
 		logSlice = append(logSlice, "- hierarchical clustering was performed")
 		logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
 		logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))
-	} else if parameters.BaitClustering == "baits" && parameters.PreyClustering != "preys" {
-		logSlice = append(logSlice, "- preys were hierarchically clustered")
+	} else if parameters.ConditionClustering == "conditions" && parameters.ReadoutClustering != "readouts" {
+		logSlice = append(logSlice, "- readouts were hierarchically clustered")
 		logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
 		logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))
-	} else if parameters.PreyClustering == "preys" && parameters.BaitClustering != "baits" {
-		logSlice = append(logSlice, "- baits were hierarchically clustered")
+	} else if parameters.ReadoutClustering == "readouts" && parameters.ConditionClustering != "conditions" {
+		logSlice = append(logSlice, "- conditions were hierarchically clustered")
 		logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
 		logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))
 	} else {

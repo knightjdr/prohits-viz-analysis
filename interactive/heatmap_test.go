@@ -67,26 +67,13 @@ func TestHeatmap(t *testing.T) {
 	}
 
 	// TEST1: generate JSON.
-	want := "{\"columns\":[\"col1\",\"col2\",\"col3\"]," +
-		"\"parameters\":{\"param1\":2,\"param2\":\"a\",\"param3\":[\"a\",\"b\",\"c\"]}," +
-		"\"settings\":{\"param1\":1,\"param2\":\"b\",\"param3\":[\"x\",\"y\",\"z\"]}," +
-		"\"rows\":[" +
-		"{\"data\":[" +
-		"{\"ratio\":0.2,\"score\":0.01,\"value\":1}," +
-		"{\"ratio\":0.5,\"score\":0.05,\"value\":2}," +
-		"{\"ratio\":1,\"score\":0.08,\"value\":3}]," +
-		"\"name\":\"row1\"}," +
-		"{\"data\":[" +
-		"{\"ratio\":0.7,\"score\":1,\"value\":4}," +
-		"{\"ratio\":0.8,\"score\":0.07,\"value\":5}," +
-		"{\"ratio\":1,\"score\":0.5,\"value\":6}]," +
-		"\"name\":\"row2\"}," +
-		"{\"data\":[" +
-		"{\"ratio\":1,\"score\":0.2,\"value\":7}," +
-		"{\"ratio\":0.2,\"score\":0.7,\"value\":8}," +
-		"{\"ratio\":0.5,\"score\":0.01,\"value\":9}]," +
-		"\"name\":\"row3\"}]," +
-		"\"minimap\":\"pngImage\"}"
+	want := "{\n\t\"columns\": {\n" +
+		"\t\t\"names\": [\n\t\t\t\"col1\",\n\t\t\t\"col2\",\n\t\t\t\"col3\"\n\t\t],\n\t\t\"ref\": null\n\t},\n" +
+		"\t\"parameters\": {\n\t\t\"param1\": 2,\n\t\t\"param2\": \"a\",\n\t\t\"param3\": [\n\t\t\t\"a\",\n\t\t\t\"b\",\n\t\t\t\"c\"\n\t\t]\n\t},\n" +
+		"\t\"settings\": {\n\t\t\"current\": {\n\t\t\t\"param1\": 1,\n\t\t\t\"param2\": \"b\",\n\t\t\t\"param3\": [\n\t\t\t\t\"x\",\n\t\t\t\t\"y\",\n\t\t\t\t\"z\"\n\t\t\t]\n\t\t}\n\t},\n" +
+		"\t\"rows\": {\n\t\t\"list\": [\n\t\t\t{\n\t\t\t\t\"data\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.2,\n\t\t\t\t\t\t\"score\": 0.01,\n\t\t\t\t\t\t\"value\": 1\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.5,\n\t\t\t\t\t\t\"score\": 0.05,\n\t\t\t\t\t\t\"value\": 2\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 1,\n\t\t\t\t\t\t\"score\": 0.08,\n\t\t\t\t\t\t\"value\": 3\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"name\": \"row1\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"data\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.7,\n\t\t\t\t\t\t\"score\": 1,\n\t\t\t\t\t\t\"value\": 4\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.8,\n\t\t\t\t\t\t\"score\": 0.07,\n\t\t\t\t\t\t\"value\": 5\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 1,\n\t\t\t\t\t\t\"score\": 0.5,\n\t\t\t\t\t\t\"value\": 6\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"name\": \"row2\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"data\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 1,\n\t\t\t\t\t\t\"score\": 0.2,\n\t\t\t\t\t\t\"value\": 7\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.2,\n\t\t\t\t\t\t\"score\": 0.7,\n\t\t\t\t\t\t\"value\": 8\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.5,\n\t\t\t\t\t\t\"score\": 0.01,\n\t\t\t\t\t\t\"value\": 9\n\t\t\t\t\t}\n\t\t\t\t],\n" +
+		"\t\t\t\t\"name\": \"row3\"\n\t\t\t}\n\t\t]\n\t},\n" +
+		"\t\"minimap\": \"pngImage\"\n}"
 	assert.Equal(
 		t,
 		want,

@@ -13,10 +13,10 @@ import (
 func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, err error) {
 	// Command line flag arguments.
 	abundance := flag.String("abundance", "", "Abundance column")
-	analysisType := flag.String("analysisType", "", "Analysis type, one of: baitbait, correlation, dotplot or specificity")
-	bait := flag.String("bait", "", "Bait column")
-	baitClustering := flag.String("baitClustering", "", "Should baits be clustered: one of baits or none")
-	baitList := flag.String("baitList", "", "List of baits")
+	analysisType := flag.String("analysisType", "", "Analysis type, one of: conditioncondition, correlation, dotplot or specificity")
+	condition := flag.String("condition", "", "Condition column")
+	conditionClustering := flag.String("conditionClustering", "", "Should conditions be clustered: one of conditions or none")
+	conditionList := flag.String("conditionList", "", "List of conditions")
 	biclusteringApprox := flag.Bool("biclusteringApprox", false, "Perform approximate biclustering")
 	clustering := flag.String("clustering", "", "Clustering type")
 	clusteringMethod := flag.String("clusteringMethod", "", "Clustering type")
@@ -30,13 +30,13 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 	abundanceCap := flag.Float64("abundanceCap", 50, "Maximum abundance")
 	minAbundance := flag.Float64("minAbundance", 0, "Minimum abundance")
 	normalization := flag.String("normalization", "", "Normalization type")
-	normalizationPrey := flag.String("normalizationPrey", "", "Prey to use for normalization")
+	normalizationReadout := flag.String("normalizationReadout", "", "Readout to use for normalization")
 	pdf := flag.Bool("pdf", false, "Generate pdf files")
 	png := flag.Bool("png", false, "Generate png files")
-	prey := flag.String("prey", "", "Prey column")
-	preyClustering := flag.String("preyClustering", "", "Should preys be clustered: one of none or preys")
-	preyLength := flag.String("preyLength", "", "Prey length column")
-	preyList := flag.String("preyList", "", "List of preys")
+	readout := flag.String("readout", "", "Readout column")
+	readoutClustering := flag.String("readoutClustering", "", "Should readouts be clustered: one of none or readouts")
+	readoutLength := flag.String("readoutLength", "", "Readout length column")
+	readoutList := flag.String("readoutList", "", "List of readouts")
 	primaryFilter := flag.Float64("primaryFilter", 0, "Primary filter")
 	score := flag.String("score", "", "Score column")
 	scoreType := flag.String("scoreType", "lte", "Score type")
@@ -56,16 +56,16 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 		logmessage.Write("No analysis type specified")
 		argsError = true
 	}
-	if *bait == "" {
-		logmessage.Write("No bait column specified")
+	if *condition == "" {
+		logmessage.Write("No condition column specified")
 		argsError = true
 	}
 	if *fileList == "" {
 		logmessage.Write("No input file specified")
 		argsError = true
 	}
-	if *prey == "" {
-		logmessage.Write("No prey column specified")
+	if *readout == "" {
+		logmessage.Write("No readout column specified")
 		argsError = true
 	}
 	if *score == "" {
@@ -82,58 +82,58 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 
 	// Create mapping of column names to keys.
 	columnMap = map[string]string{
-		"abundance":  *abundance,
-		"bait":       *bait,
-		"control":    *control,
-		"prey":       *prey,
-		"preyLength": *preyLength,
-		"score":      *score,
+		"abundance":     *abundance,
+		"condition":     *condition,
+		"control":       *control,
+		"readout":       *readout,
+		"readoutLength": *readoutLength,
+		"score":         *score,
 	}
 
-	// Split bait and prey lists.
-	baits := []string{}
-	if *baitList != "" {
-		baits = strings.Split(*baitList, ",")
+	// Split condition and readout lists.
+	conditions := []string{}
+	if *conditionList != "" {
+		conditions = strings.Split(*conditionList, ",")
 	}
-	preys := []string{}
-	if *preyList != "" {
-		preys = strings.Split(*preyList, ",")
+	readouts := []string{}
+	if *readoutList != "" {
+		readouts = strings.Split(*readoutList, ",")
 	}
 
 	// Create parameter struct.
 	parameters = typedef.Parameters{
-		Abundance:          *abundance,
-		AbundanceCap:       *abundanceCap,
-		AnalysisType:       *analysisType,
-		Bait:               *bait,
-		BaitClustering:     *baitClustering,
-		BaitList:           baits,
-		BiclusteringApprox: *biclusteringApprox,
-		Clustering:         *clustering,
-		ClusteringMethod:   *clusteringMethod,
-		EdgeColor:          *edgeColor,
-		FillColor:          *fillColor,
-		Control:            *control,
-		Distance:           *distance,
-		Files:              files,
-		InvertColor:        *invertColor,
-		LogBase:            *logBase,
-		MinAbundance:       *minAbundance,
-		Normalization:      *normalization,
-		NormalizationPrey:  *normalizationPrey,
-		Pdf:                *pdf,
-		Png:                *png,
-		Prey:               *prey,
-		PreyClustering:     *preyClustering,
-		PreyLength:         *preyLength,
-		PreyList:           preys,
-		PrimaryFilter:      *primaryFilter,
-		Score:              *score,
-		ScoreType:          *scoreType,
-		SecondaryFilter:    *secondaryFilter,
-		WriteDistance:      *writeDistance,
-		WriteDotplot:       *writeDotplot,
-		WriteHeatmap:       *writeHeatmap,
+		Abundance:            *abundance,
+		AbundanceCap:         *abundanceCap,
+		AnalysisType:         *analysisType,
+		Condition:            *condition,
+		ConditionClustering:  *conditionClustering,
+		ConditionList:        conditions,
+		BiclusteringApprox:   *biclusteringApprox,
+		Clustering:           *clustering,
+		ClusteringMethod:     *clusteringMethod,
+		EdgeColor:            *edgeColor,
+		FillColor:            *fillColor,
+		Control:              *control,
+		Distance:             *distance,
+		Files:                files,
+		InvertColor:          *invertColor,
+		LogBase:              *logBase,
+		MinAbundance:         *minAbundance,
+		Normalization:        *normalization,
+		NormalizationReadout: *normalizationReadout,
+		Pdf:                  *pdf,
+		Png:                  *png,
+		Readout:              *readout,
+		ReadoutClustering:    *readoutClustering,
+		ReadoutLength:        *readoutLength,
+		ReadoutList:          readouts,
+		PrimaryFilter:        *primaryFilter,
+		Score:                *score,
+		ScoreType:            *scoreType,
+		SecondaryFilter:      *secondaryFilter,
+		WriteDistance:        *writeDistance,
+		WriteDotplot:         *writeDotplot,
+		WriteHeatmap:         *writeHeatmap,
 	}
 
 	return

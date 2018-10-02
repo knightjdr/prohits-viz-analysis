@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/afero"
 )
 
-// Map draws a bait prey heatmap/dotplot.
+// Map draws a condition readout heatmap/dotplot.
 func Map(
 	imageType string,
 	abundance, ratios, scores [][]float64,
@@ -18,13 +18,13 @@ func Map(
 ) {
 	// Define dotplot parameters.
 	parameters := map[string]interface{}{
-		"colLabel":     "Baits",
+		"colLabel":     "Conditions",
 		"edgeColor":    userParams.EdgeColor,
 		"fillColor":    userParams.FillColor,
 		"invertColor":  userParams.InvertColor,
 		"abundanceCap": userParams.AbundanceCap,
 		"primary":      userParams.PrimaryFilter,
-		"rowLabel":     "Preys",
+		"rowLabel":     "Readouts",
 		"secondary":    userParams.SecondaryFilter,
 		"scoreType":    userParams.ScoreType,
 	}

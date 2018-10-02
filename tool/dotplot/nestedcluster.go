@@ -8,13 +8,13 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 )
 
-// BiclustOrder has the order for the biclustering baits and preys.
+// BiclustOrder has the order for the biclustering conditions and readouts.
 type BiclustOrder struct {
-	Baits, Preys []string
+	Conditions, Readouts []string
 }
 
 // NestedClustering calls the script for the nested clustering algorithm and moves
-// files to the appropriate subfolder. It returns the order of the baits and preys.
+// files to the appropriate subfolder. It returns the order of the conditions and readouts.
 func NestedClustering() (order BiclustOrder) {
 	// Run nested cluster.
 	cmd := exec.Command("nestedcluster", "biclustering/matrix.txt", "biclustering/parameters.txt")
@@ -31,9 +31,9 @@ func NestedClustering() (order BiclustOrder) {
 	logmessage.CheckError(cmdErr, true)
 
 	// Move nested cluster files.
-	fs.Instance.Rename("bait_lists", "biclustering/bait_lists")
-	fs.Instance.Rename("bait2bait.pdf", "biclustering/bait2bait.pdf")
-	fs.Instance.Rename("baitClusters", "biclustering/baitClusters")
+	fs.Instance.Rename("condition_lists", "biclustering/condition_lists")
+	fs.Instance.Rename("condition2condition.pdf", "biclustering/condition2condition.pdf")
+	fs.Instance.Rename("conditionClusters", "biclustering/conditionClusters")
 	fs.Instance.Rename("clustered-matrix.txt", "biclustering/clustered-matrix.txt")
 	fs.Instance.Rename("clusteredData", "biclustering/clusteredData")
 	fs.Instance.Rename("Clusters", "biclustering/Clusters")
@@ -59,12 +59,12 @@ func NestedClustering() (order BiclustOrder) {
 	lines, err := reader.ReadAll()
 	// Panic if file can't be read.
 	logmessage.CheckError(err, true)
-	// Bait order.
-	order.Baits = lines[0][1:]
+	// Condition order.
+	order.Conditions = lines[0][1:]
 
-	// Get prey order.
+	// Get readout order.
 	for i := 1; i < len(lines); i++ {
-		order.Preys = append(order.Preys, lines[i][0])
+		order.Readouts = append(order.Readouts, lines[i][0])
 	}
 
 	return

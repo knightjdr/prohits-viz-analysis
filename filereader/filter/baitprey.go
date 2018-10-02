@@ -1,24 +1,24 @@
 package filter
 
-// BaitPrey filters slice map by baits and preys.
-func BaitPrey(
+// ConditionReadout filters slice map by conditions and readouts.
+func ConditionReadout(
 	data []map[string]string,
-	baits []string,
-	preys []string,
+	conditions []string,
+	readouts []string,
 ) (filtered []map[string]string) {
-	// Convert bait slice to map.
-	baitMap := SliceToMap(baits)
+	// Convert condition slice to map.
+	conditionMap := SliceToMap(conditions)
 
-	// Convert prey slice to map.
-	preyMap := SliceToMap(preys)
+	// Convert readout slice to map.
+	readoutMap := SliceToMap(readouts)
 
-	// Iterate over slice and keep rows with bait and preys in maps.
+	// Iterate over slice and keep rows with condition and readouts in maps.
 	datalen := len(data)
 	filtered = data
 	for i := datalen - 1; i >= 0; i-- {
-		_, okBait := baitMap[data[i]["bait"]]
-		_, okPrey := preyMap[data[i]["prey"]]
-		if !okBait || !okPrey {
+		_, okCondition := conditionMap[data[i]["condition"]]
+		_, okReadout := readoutMap[data[i]["readout"]]
+		if !okCondition || !okReadout {
 			filtered = append(filtered[:i], filtered[i+1:]...)
 		}
 	}

@@ -37,13 +37,13 @@ func TestDotplot(t *testing.T) {
 		},
 	}
 	options := map[string]interface{}{
-		"colLabel":     "Baits",
+		"colLabel":     "Conditions",
 		"edgeColor":    "blueBlack",
 		"fillColor":    "blueBlack",
 		"abundanceCap": float64(50),
 		"invertColor":  false,
 		"primary":      0.01,
-		"rowLabel":     "Preys",
+		"rowLabel":     "Readouts",
 		"secondary":    0.05,
 		"scoreType":    "lte",
 	}
@@ -79,8 +79,8 @@ func TestDotplot(t *testing.T) {
 		"\t\t<text y=\"12\" x=\"30\" font-size=\"15\" text-anchor=\"middle\">a</text>\n" +
 		"\t</g>\n" +
 		"\t<rect fill=\"none\" y=\"57\" x=\"57\" width=\"60\" height=\"60\" stroke=\"#000000\" stroke-width=\"0.5\" />\n" +
-		"\t<text y=\"10\" x=\"87\" font-size=\"12\" text-anchor=\"middle\">Baits</text>\n" +
-		"\t<text y=\"87\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 87)\">Preys</text>\n" +
+		"\t<text y=\"10\" x=\"87\" font-size=\"12\" text-anchor=\"middle\">Conditions</text>\n" +
+		"\t<text y=\"87\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 87)\">Readouts</text>\n" +
 		"</svg>\n"
 	svg := Dotplot(abundance, ratio, score, annotations, markers, columns, rows, options)
 	assert.Equal(t, want, svg, "Dotplot svg is not correct")

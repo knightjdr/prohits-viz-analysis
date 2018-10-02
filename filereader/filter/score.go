@@ -21,8 +21,8 @@ func Score(
 	// Get filter function.
 	filterFunc := FilterFunc(scoreType)
 
-	// Find unique preys passing score.
-	preys := make(map[string]bool, 0)
+	// Find unique readouts passing score.
+	readouts := make(map[string]bool, 0)
 	for i, row := range filtered {
 		// Check if score passes.
 		passes := filterFunc(filtered[i]["score"].(float64), primaryFilter)
@@ -37,18 +37,18 @@ func Score(
 		}
 		avgAbundance /= float64(len(abundance))
 		if passes && avgAbundance > minimum {
-			preyString := row["prey"].(string)
-			if _, ok := preys[preyString]; !ok { // only add preys not already present
-				preys[preyString] = true
+			readoutString := row["readout"].(string)
+			if _, ok := readouts[readoutString]; !ok { // only add readouts not already present
+				readouts[readoutString] = true
 			}
 		}
 	}
 
-	// Remove preys not passing score.
+	// Remove readouts not passing score.
 	filteredlen := len(filtered)
 	for i := filteredlen - 1; i >= 0; i-- {
-		preyString := filtered[i]["prey"].(string)
-		if _, ok := preys[preyString]; !ok {
+		readoutString := filtered[i]["readout"].(string)
+		if _, ok := readouts[readoutString]; !ok {
 			filtered = append(filtered[:i], filtered[i+1:]...)
 		}
 	}

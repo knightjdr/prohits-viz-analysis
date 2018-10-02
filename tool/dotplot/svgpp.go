@@ -7,17 +7,17 @@ import (
 	"github.com/spf13/afero"
 )
 
-// SvgPP draws a prey prey heatmap.
-func SvgPP(dist [][]float64, sorted []string, fillColor string) {
+// SvgRR draws a readout readout heatmap.
+func SvgRR(dist [][]float64, sorted []string, fillColor string) {
 	// Heatmap parameters.
 	parameters := map[string]interface{}{
-		"colLabel":     "Preys",
+		"colLabel":     "Readouts",
 		"fillColor":    fillColor,
 		"invertColor":  true,
 		"abundanceCap": float64(1),
-		"rowLabel":     "Preys",
+		"rowLabel":     "Readouts",
 	}
 	heatmap := svg.Heatmap(dist, typedef.Annotations{}, typedef.Markers{}, sorted, sorted, parameters)
-	afero.WriteFile(fs.Instance, "svg/prey-prey.svg", []byte(heatmap), 0644)
+	afero.WriteFile(fs.Instance, "svg/readout-readout.svg", []byte(heatmap), 0644)
 	return
 }

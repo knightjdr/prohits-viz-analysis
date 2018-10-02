@@ -19,12 +19,12 @@ func TestMapLines(t *testing.T) {
 	}
 	// array of lines from a csv file
 	lines := [][]string{
-		{"bait1", "x", "prey1"},
-		{"bait2", "x", "prey2"},
+		{"condition1", "x", "readout1"},
+		{"condition2", "x", "readout2"},
 	}
 	want := []map[string]string{
-		{"key1": "bait1", "key2": "prey1"},
-		{"key1": "bait2", "key2": "prey2"},
+		{"key1": "condition1", "key2": "readout1"},
+		{"key1": "condition2", "key2": "readout2"},
 	}
 	data := MapLines(lines, headerMap)
 	assert.Equal(t, want, data)

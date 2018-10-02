@@ -6,31 +6,31 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPreys(t *testing.T) {
+func TestReadouts(t *testing.T) {
 	data := []map[string]string{
-		{"bait": "bait1", "prey": "prey1"},
-		{"bait": "bait1", "prey": "prey2"},
+		{"condition": "condition1", "readout": "readout1"},
+		{"condition": "condition1", "readout": "readout2"},
 	}
 
-	// TEST1: filter by a single prey.
-	preys := []string{"prey2"}
+	// TEST1: filter by a single readout.
+	readouts := []string{"readout2"}
 	want := []map[string]string{
-		{"bait": "bait1", "prey": "prey2"},
+		{"condition": "condition1", "readout": "readout2"},
 	}
 	assert.Equal(
 		t,
 		want,
-		Preys(data, preys),
-		"Single prey filter is not correct",
+		Readouts(data, readouts),
+		"Single readout filter is not correct",
 	)
 
-	// TEST1: filter by multiple preys.
-	preys = []string{"prey1", "prey2"}
+	// TEST1: filter by multiple readouts.
+	readouts = []string{"readout1", "readout2"}
 	want = data
 	assert.Equal(
 		t,
 		want,
-		Preys(data, preys),
-		"Single prey filter is not correct",
+		Readouts(data, readouts),
+		"Single readout filter is not correct",
 	)
 }

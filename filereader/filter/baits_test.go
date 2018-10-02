@@ -6,31 +6,31 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBaits(t *testing.T) {
+func TestConditions(t *testing.T) {
 	data := []map[string]string{
-		{"bait": "bait1", "prey": "prey1"},
-		{"bait": "bait2", "prey": "prey2"},
+		{"condition": "condition1", "readout": "readout1"},
+		{"condition": "condition2", "readout": "readout2"},
 	}
 
-	// TEST1: filter by a single bait.
-	baits := []string{"bait2"}
+	// TEST1: filter by a single condition.
+	conditions := []string{"condition2"}
 	want := []map[string]string{
-		{"bait": "bait2", "prey": "prey2"},
+		{"condition": "condition2", "readout": "readout2"},
 	}
 	assert.Equal(
 		t,
 		want,
-		Baits(data, baits),
-		"Single bait filter is not correct",
+		Conditions(data, conditions),
+		"Single condition filter is not correct",
 	)
 
-	// TEST1: filter by multiple baits.
-	baits = []string{"bait1", "bait2"}
+	// TEST1: filter by multiple conditions.
+	conditions = []string{"condition1", "condition2"}
 	want = data
 	assert.Equal(
 		t,
 		want,
-		Baits(data, baits),
-		"Single bait filter is not correct",
+		Conditions(data, conditions),
+		"Single condition filter is not correct",
 	)
 }

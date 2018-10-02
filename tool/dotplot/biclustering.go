@@ -15,7 +15,7 @@ import (
 
 // Biclustering using the biclustering method of Choi et. al (2010) to cluster
 // data. The files produced from it will get put into a folder called
-// "biclustering" and the order of baits and preys from that will be used
+// "biclustering" and the order of conditions and readouts from that will be used
 // for the images.
 func Biclustering(dataset typedef.Dataset) {
 	// Write log.
@@ -30,15 +30,15 @@ func Biclustering(dataset typedef.Dataset) {
 	// should be performed.
 	var parameters string
 	if dataset.Parameters.BiclusteringApprox {
-		// Get number of baits.
-		uniqueBaits := make(map[string]bool)
+		// Get number of conditions.
+		uniqueConditions := make(map[string]bool)
 		for _, row := range dataset.Data {
-			bait := row["bait"].(string)
-			if _, ok := uniqueBaits[bait]; !ok {
-				uniqueBaits[bait] = true
+			condition := row["condition"].(string)
+			if _, ok := uniqueConditions[condition]; !ok {
+				uniqueConditions[condition] = true
 			}
 		}
-		nb := len(uniqueBaits)
+		nb := len(uniqueConditions)
 
 		// Create optimized param file content.
 		parameters = fmt.Sprintf("np 10\n"+
@@ -70,12 +70,12 @@ func Biclustering(dataset typedef.Dataset) {
 	}
 	afero.WriteFile(fs.Instance, "biclustering/parameters.txt", []byte(parameters), 0644)
 
-	// Generate bait-prey table.
-	data := BaitPreyMatrix(dataset.Data, dataset.Parameters.ScoreType)
+	// Generate condition-readout table.
+	data := ConditionReadoutMatrix(dataset.Data, dataset.Parameters.ScoreType)
 
-	// Subset data matrix to only include preys that pass the minimum abundance
-	// cutoff for at least two baits and return normalized matrix. Will also return
-	// a list of the "singletons" (preys that don't meet criteria) for
+	// Subset data matrix to only include readouts that pass the minimum abundance
+	// cutoff for at least two conditions and return normalized matrix. Will also return
+	// a list of the "singletons" (readouts that don't meet criteria) for
 	// appending to the clustering order.
 	filteredData := BiclustFormat(data, dataset.Parameters.MinAbundance)
 
@@ -83,25 +83,25 @@ func Biclustering(dataset typedef.Dataset) {
 	order := NestedClustering()
 
 	// Add singletons to nested cluster order.
-	order.Preys = append(order.Preys, filteredData.Singles...)
+	order.Readouts = append(order.Readouts, filteredData.Singles...)
 
 	// Sort matrices.
-	sortedAbundance, _ := hclust.Sort(data.Abundance, data.Baits, order.Baits, "column")
-	sortedAbundance, _ = hclust.Sort(sortedAbundance, data.Preys, order.Preys, "row")
+	sortedAbundance, _ := hclust.Sort(data.Abundance, data.Conditions, order.Conditions, "column")
+	sortedAbundance, _ = hclust.Sort(sortedAbundance, data.Readouts, order.Readouts, "row")
 	sortedRatios := NormalizeMatrix(sortedAbundance)
-	sortedScores, _ := hclust.Sort(data.Score, data.Baits, order.Baits, "column")
-	sortedScores, _ = hclust.Sort(sortedScores, data.Preys, order.Preys, "row")
+	sortedScores, _ := hclust.Sort(data.Score, data.Conditions, order.Conditions, "column")
+	sortedScores, _ = hclust.Sort(sortedScores, data.Readouts, order.Readouts, "row")
 
 	// Output svgs.
 
-	// Write bait-prey dotplot.
+	// Write condition-readout dotplot.
 	if dataset.Parameters.WriteDotplot {
 		SvgDotplot(
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,
-			order.Baits,
-			order.Preys,
+			order.Conditions,
+			order.Readouts,
 			false,
 			dataset.Parameters,
 		)
@@ -122,12 +122,12 @@ func Biclustering(dataset typedef.Dataset) {
 		afero.WriteFile(fs.Instance, "svg/dotplot-legend.svg", []byte(dotplotLegend), 0644)
 	}
 
-	// Write bait-prey heatmap.
+	// Write condition-readout heatmap.
 	if dataset.Parameters.WriteHeatmap {
 		SvgHeatmap(
 			sortedAbundance,
-			order.Baits,
-			order.Preys,
+			order.Conditions,
+			order.Readouts,
 			dataset.Parameters.FillColor,
 			dataset.Parameters.AbundanceCap,
 			false,
@@ -155,16 +155,16 @@ func Biclustering(dataset typedef.Dataset) {
 	// Create  minimaps from svg.
 	svg.ConvertMap(svgMiniList)
 
-	// Write bait-prey cytoscape file.
+	// Write condition-readout cytoscape file.
 	WriteBPCytoscape(dataset)
 
 	// Output other files.
 
 	// Write transformed data matrix to file.
-	WriteMatrix(sortedAbundance, order.Baits, order.Preys, "other/data-transformed.txt")
+	WriteMatrix(sortedAbundance, order.Conditions, order.Readouts, "other/data-transformed.txt")
 
 	// Write transformed data matrix to file but as ratios instead of absolutes.
-	WriteMatrix(sortedRatios, order.Baits, order.Preys, "other/data-transformed-ratios.txt")
+	WriteMatrix(sortedRatios, order.Conditions, order.Readouts, "other/data-transformed-ratios.txt")
 
 	// Create interactive files.
 	if dataset.Parameters.WriteDotplot {
@@ -172,8 +172,8 @@ func Biclustering(dataset typedef.Dataset) {
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,
-			order.Baits,
-			order.Preys,
+			order.Conditions,
+			order.Readouts,
 			dataset.Parameters,
 			"minimap/dotplot.png",
 		)

@@ -8,11 +8,11 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 )
 
-// WriteBBCytoscape writes a tabular file with bait-bait distance information for
+// WriteBBCytoscape writes a tabular file with condition-condition distance information for
 // use with cytoscape.
-func WriteBBCytoscape(matrix [][]float64, baitList []string) {
+func WriteBBCytoscape(matrix [][]float64, conditionList []string) {
 	// Create file.
-	dataTransformedFile, err := fs.Instance.Create("cytoscape/bait-bait-cytoscape.txt")
+	dataTransformedFile, err := fs.Instance.Create("cytoscape/condition-condition-cytoscape.txt")
 	// Log if error and return without panic.
 	logmessage.CheckError(err, false)
 	if err != nil {
@@ -35,13 +35,13 @@ func WriteBBCytoscape(matrix [][]float64, baitList []string) {
 	}
 
 	// Write each row in the matrix.
-	numBaits := len(matrix)
+	numConditions := len(matrix)
 	for i, row := range matrix {
-		for j := i + 1; j < numBaits; j++ {
+		for j := i + 1; j < numConditions; j++ {
 			// Create row to write.
 			rowSlice := make([]string, 3)
-			rowSlice[0] = baitList[i]
-			rowSlice[1] = baitList[j]
+			rowSlice[0] = conditionList[i]
+			rowSlice[1] = conditionList[j]
 			rowSlice[2] = strconv.FormatFloat(row[j], 'f', -1, 64)
 			err = dataTransformedWriter.Write(rowSlice)
 

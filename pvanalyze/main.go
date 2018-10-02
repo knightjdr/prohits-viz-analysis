@@ -34,8 +34,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Transform prey abundances.
-	dataset.Data = transform.Preys(dataset)
+	// Transform readout abundances.
+	dataset.Data = transform.Readouts(dataset)
 
 	// Perform analysis
 	tool.Start(dataset)

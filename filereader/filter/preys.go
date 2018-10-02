@@ -1,18 +1,18 @@
 package filter
 
-// Preys filters slice map by preys.
-func Preys(
+// Readouts filters slice map by readouts.
+func Readouts(
 	data []map[string]string,
-	preys []string,
+	readouts []string,
 ) (filtered []map[string]string) {
-	// Convert prey slice to map.
-	preyMap := SliceToMap(preys)
+	// Convert readout slice to map.
+	readoutMap := SliceToMap(readouts)
 
-	// Iterate over slice and keep rows with prey in preyMap.
+	// Iterate over slice and keep rows with readout in readoutMap.
 	datalen := len(data)
 	filtered = data
 	for i := datalen - 1; i >= 0; i-- {
-		if _, ok := preyMap[data[i]["prey"]]; !ok {
+		if _, ok := readoutMap[data[i]["readout"]]; !ok {
 			filtered = append(filtered[:i], filtered[i+1:]...)
 		}
 	}

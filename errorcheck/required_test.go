@@ -22,17 +22,16 @@ func TestRequired(t *testing.T) {
 
 	// TEST1: filter typical data slice.
 	data := []map[string]interface{}{
-		{"abundance": "2", "bait": "a", "control": "1|5|2", "prey": "b", "preyLength": "10", "score": 0.5},
-		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
-		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
+		{"abundance": "2", "condition": "a", "control": "1|5|2", "readout": "b", "readoutLength": "10", "score": 0.5},
+		{"abundance": "2|3.1", "condition": "c", "control": "2|5.1|2", "readout": "d", "readoutLength": "1", "score": 0.1},
+		{"abundance": "4", "condition": "e", "control": "1", "readout": "f", "readoutLength": "100", "score": 0.8},
 	}
 	dataset := typedef.Dataset{
 		Data: data,
 		Parameters: typedef.Parameters{
-			AnalysisType: "dotplot",
-			Control:      "controlColumn",
-			LogFile:      "error.txt",
-			PreyLength:   "preyLengthColumn",
+			AnalysisType:  "dotplot",
+			Control:       "controlColumn",
+			ReadoutLength: "readoutLengthColumn",
 		},
 	}
 
@@ -54,39 +53,39 @@ func TestRequired(t *testing.T) {
 	assert.True(t, matched, "Message not being logged when there is no data")
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644) // Clear log file.
 
-	// TEST3: not enough baits.
+	// TEST3: not enough conditions.
 	data = []map[string]interface{}{
-		{"abundance": "2", "bait": "a", "control": "1|5|2", "prey": "b", "preyLength": "10", "score": 0.5},
+		{"abundance": "2", "condition": "a", "control": "1|5|2", "readout": "b", "readoutLength": "10", "score": 0.5},
 	}
 	dataset.Data = data
 	err = Required(dataset)
-	assert.NotNil(t, err, "Less than required number of baits should produce error")
+	assert.NotNil(t, err, "Less than required number of conditions should produce error")
 	logfile, _ = afero.ReadFile(fs.Instance, "error.txt")
-	wantMessage = "There are not enough baits for analysis. Min: 2"
+	wantMessage = "There are not enough conditions for analysis. Min: 2"
 	matched, _ = regexp.MatchString(wantMessage, string(logfile))
-	assert.True(t, matched, "Message not being logged when there are not enough baits")
+	assert.True(t, matched, "Message not being logged when there are not enough conditions")
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644) // empty log file
 
-	// TEST4: missing prey names.
+	// TEST4: missing readout names.
 	data = []map[string]interface{}{
-		{"abundance": "2", "bait": "a", "control": "1|5|2", "prey": "b", "preyLength": "10", "score": 0.5},
-		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "", "preyLength": "1", "score": 0.1},
-		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
+		{"abundance": "2", "condition": "a", "control": "1|5|2", "readout": "b", "readoutLength": "10", "score": 0.5},
+		{"abundance": "2|3.1", "condition": "c", "control": "2|5.1|2", "readout": "", "readoutLength": "1", "score": 0.1},
+		{"abundance": "4", "condition": "e", "control": "1", "readout": "f", "readoutLength": "100", "score": 0.8},
 	}
 	dataset.Data = data
 	err = Required(dataset)
-	assert.NotNil(t, err, "Missing prey names should produce error")
+	assert.NotNil(t, err, "Missing readout names should produce error")
 	logfile, _ = afero.ReadFile(fs.Instance, "error.txt")
-	wantMessage = "All preys should have a name"
+	wantMessage = "All readouts should have a name"
 	matched, _ = regexp.MatchString(wantMessage, string(logfile))
-	assert.True(t, matched, "Message not being logged when there are missing prey names")
+	assert.True(t, matched, "Message not being logged when there are missing readout names")
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644) // empty log file
 
 	// TEST5: abundance column should be a pipe-separated list of numbers.
 	data = []map[string]interface{}{
-		{"abundance": "a", "bait": "a", "control": "5", "prey": "b", "preyLength": "10", "score": 0.5},
-		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
-		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
+		{"abundance": "a", "condition": "a", "control": "5", "readout": "b", "readoutLength": "10", "score": 0.5},
+		{"abundance": "2|3.1", "condition": "c", "control": "2|5.1|2", "readout": "d", "readoutLength": "1", "score": 0.1},
+		{"abundance": "4", "condition": "e", "control": "1", "readout": "f", "readoutLength": "100", "score": 0.8},
 	}
 	dataset.Data = data
 	err = Required(dataset)
@@ -99,9 +98,9 @@ func TestRequired(t *testing.T) {
 
 	// TEST6: score column should be a float64.
 	data = []map[string]interface{}{
-		{"abundance": "2", "bait": "a", "control": "1|5|2", "prey": "b", "preyLength": "10", "score": "0.5"},
-		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
-		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
+		{"abundance": "2", "condition": "a", "control": "1|5|2", "readout": "b", "readoutLength": "10", "score": "0.5"},
+		{"abundance": "2|3.1", "condition": "c", "control": "2|5.1|2", "readout": "d", "readoutLength": "1", "score": 0.1},
+		{"abundance": "4", "condition": "e", "control": "1", "readout": "f", "readoutLength": "100", "score": 0.8},
 	}
 	dataset.Data = data
 	err = Required(dataset)
@@ -112,26 +111,26 @@ func TestRequired(t *testing.T) {
 	assert.True(t, matched, "Message not being logged when the score column is not valid")
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644) // empty log file
 
-	// TEST7: prey length column should be parsable as an integer.
+	// TEST7: readout length column should be parsable as an integer.
 	data = []map[string]interface{}{
-		{"abundance": "2", "bait": "a", "control": "1|5|2", "prey": "b", "preyLength": "a", "score": 0.5},
-		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
-		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
+		{"abundance": "2", "condition": "a", "control": "1|5|2", "readout": "b", "readoutLength": "a", "score": 0.5},
+		{"abundance": "2|3.1", "condition": "c", "control": "2|5.1|2", "readout": "d", "readoutLength": "1", "score": 0.1},
+		{"abundance": "4", "condition": "e", "control": "1", "readout": "f", "readoutLength": "100", "score": 0.8},
 	}
 	dataset.Data = data
 	err = Required(dataset)
-	assert.NotNil(t, err, "Non-integer parsable prey length should produce error")
+	assert.NotNil(t, err, "Non-integer parsable readout length should produce error")
 	logfile, _ = afero.ReadFile(fs.Instance, "error.txt")
-	wantMessage = "Prey length column must contain integer values"
+	wantMessage = "Readout length column must contain integer values"
 	matched, _ = regexp.MatchString(wantMessage, string(logfile))
-	assert.True(t, matched, "Message not being logged when the prey length column is not valid")
+	assert.True(t, matched, "Message not being logged when the readout length column is not valid")
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644) // empty log file
 
 	// TEST8: control column should be a pipe-separated list of numbers.
 	data = []map[string]interface{}{
-		{"abundance": "2", "bait": "a", "control": "a", "prey": "b", "preyLength": "10", "score": 0.5},
-		{"abundance": "2|3.1", "bait": "c", "control": "2|5.1|2", "prey": "d", "preyLength": "1", "score": 0.1},
-		{"abundance": "4", "bait": "e", "control": "1", "prey": "f", "preyLength": "100", "score": 0.8},
+		{"abundance": "2", "condition": "a", "control": "a", "readout": "b", "readoutLength": "10", "score": 0.5},
+		{"abundance": "2|3.1", "condition": "c", "control": "2|5.1|2", "readout": "d", "readoutLength": "1", "score": 0.1},
+		{"abundance": "4", "condition": "e", "control": "1", "readout": "f", "readoutLength": "100", "score": 0.8},
 	}
 	dataset.Data = data
 	err = Required(dataset)

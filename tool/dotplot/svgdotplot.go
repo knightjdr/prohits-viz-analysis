@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/afero"
 )
 
-// SvgDotplot draws a bait prey heatmap.
+// SvgDotplot draws a condition readout heatmap.
 func SvgDotplot(
 	abundance, ratios, scores [][]float64,
 	sortedColumns, sortedRows []string,
@@ -16,13 +16,13 @@ func SvgDotplot(
 ) {
 	// Define dotplot parameters.
 	parameters := map[string]interface{}{
-		"colLabel":     "Baits",
+		"colLabel":     "Conditions",
 		"edgeColor":    userParams.EdgeColor,
 		"fillColor":    userParams.FillColor,
 		"invertColor":  invertColor,
 		"abundanceCap": userParams.AbundanceCap,
 		"primary":      userParams.PrimaryFilter,
-		"rowLabel":     "Preys",
+		"rowLabel":     "Readouts",
 		"secondary":    userParams.SecondaryFilter,
 		"scoreType":    userParams.ScoreType,
 	}

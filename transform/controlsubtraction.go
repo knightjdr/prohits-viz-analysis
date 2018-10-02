@@ -7,7 +7,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
-// ControlSubtraction will subtract the average control value from the prey abundance.
+// ControlSubtraction will subtract the average control value from the readout abundance.
 func ControlSubtraction(data []map[string]interface{}, controlColumn string) (transformed []map[string]interface{}) {
 	transformed = data
 	// Skip if no control column is specified.
@@ -15,7 +15,7 @@ func ControlSubtraction(data []map[string]interface{}, controlColumn string) (tr
 		return
 	}
 
-	// Iterate over data slice and subtract control average from prey abundance.
+	// Iterate over data slice and subtract control average from readout abundance.
 	for _, row := range transformed {
 		// Calculate control average.
 		controls := strings.Split(row["control"].(string), "|")

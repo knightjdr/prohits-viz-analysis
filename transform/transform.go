@@ -1,24 +1,24 @@
-// Package transform will adjust prey values to the user's requirements.
+// Package transform will adjust readout values to the user's requirements.
 //
-// Preys can be adjusted by (in this order): 1) control values (must be a
-// pipe-separated list); 2) prey length; 3) normalized across baits; and 4)
+// Readouts can be adjusted by (in this order): 1) control values (must be a
+// pipe-separated list); 2) readout length; 3) normalized across conditions; and 4)
 // log transformed.
 package transform
 
 import "github.com/knightjdr/prohits-viz-analysis/typedef"
 
-// Preys is the entry point for prey transformations.
-func Preys(
+// Readouts is the entry point for readout transformations.
+func Readouts(
 	dataset typedef.Dataset,
 ) (transformed []map[string]interface{}) {
 	// Control subtraction.
 	transformed = ControlSubtraction(dataset.Data, dataset.Parameters.Control)
 
-	// Prey length normalization.
-	transformed = PreyLength(transformed, dataset.Parameters.PreyLength)
+	// Readout length normalization.
+	transformed = ReadoutLength(transformed, dataset.Parameters.ReadoutLength)
 
-	// Bait normalization.
-	transformed = Normalization(transformed, dataset.Parameters.Normalization, dataset.Parameters.NormalizationPrey)
+	// Condition normalization.
+	transformed = Normalization(transformed, dataset.Parameters.Normalization, dataset.Parameters.NormalizationReadout)
 
 	// Log transformation
 	transformed = LogTransform(transformed, dataset.Parameters.LogBase)

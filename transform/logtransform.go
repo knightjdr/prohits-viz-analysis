@@ -7,7 +7,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
-// LogTransform log transforms prey abundance values.
+// LogTransform log transforms readout abundance values.
 func LogTransform(data []map[string]interface{}, base string) (transformed []map[string]interface{}) {
 	transformed = data
 	// Skip if log transformation not required.
@@ -23,7 +23,7 @@ func LogTransform(data []map[string]interface{}, base string) (transformed []map
 	// Get log function.
 	logFunc := LogFunc(base)
 
-	// Iterate over data slice and log transform prey abundance.
+	// Iterate over data slice and log transform readout abundance.
 	for _, row := range transformed {
 		abundance := strings.Split(row["abundance"].(string), "|")
 		transformedAbdStr := make([]string, 0) // Store as strings for joining.

@@ -26,28 +26,28 @@ func TestWriteBPCytoscape(t *testing.T) {
 	// Data.
 	parameters := typedef.Parameters{
 		Abundance:     "AvgSpec",
-		Bait:          "Bait",
-		Prey:          "PreyGene",
+		Condition:     "Condition",
+		Readout:       "ReadoutGene",
 		PrimaryFilter: 0.01,
 		Score:         "BFDR",
 		ScoreType:     "lte",
 	}
 	dataset := typedef.Dataset{
 		Data: []map[string]interface{}{
-			{"bait": "bait1", "prey": "prey1", "abundance": "10", "score": 0.01},
-			{"bait": "bait1", "prey": "prey2", "abundance": "5.5", "score": 0.02},
-			{"bait": "bait2", "prey": "prey1", "abundance": "1", "score": float64(0)},
-			{"bait": "bait2", "prey": "prey3", "abundance": "75", "score": 0.01},
+			{"condition": "condition1", "readout": "readout1", "abundance": "10", "score": 0.01},
+			{"condition": "condition1", "readout": "readout2", "abundance": "5.5", "score": 0.02},
+			{"condition": "condition2", "readout": "readout1", "abundance": "1", "score": float64(0)},
+			{"condition": "condition2", "readout": "readout3", "abundance": "75", "score": 0.01},
 		},
 		Parameters: parameters,
 	}
 
 	// TEST1: typical dataset output.
-	want := "Bait\tPreyGene\tAvgSpec\tBFDR\nbait1\tprey1\t10.00\t0.01\nbait2\tprey1\t1.00\t0.00\nbait2\tprey3\t75.00\t0.01\n"
+	want := "Condition\tReadoutGene\tAvgSpec\tBFDR\ncondition1\treadout1\t10.00\t0.01\ncondition2\treadout1\t1.00\t0.00\ncondition2\treadout3\t75.00\t0.01\n"
 	WriteBPCytoscape(dataset)
-	tsvFile, _ := afero.ReadFile(fs.Instance, "cytoscape/bait-prey-cytoscape.txt")
-	assert.Equal(t, want, string(tsvFile), "Bait-prey cytoscape file not output correctly")
-	fs.Instance.Remove("cytoscape/bait-prey-cytoscape.txt")
+	tsvFile, _ := afero.ReadFile(fs.Instance, "cytoscape/condition-readout-cytoscape.txt")
+	assert.Equal(t, want, string(tsvFile), "Condition-readout cytoscape file not output correctly")
+	fs.Instance.Remove("cytoscape/condition-readout-cytoscape.txt")
 
 	// Mock Create. Method is unpatched using monkey.UnpatchAll() as
 	// UnpatchInstanceMethod was not working between tests.
@@ -65,7 +65,7 @@ func TestWriteBPCytoscape(t *testing.T) {
 	matched, _ := regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "File creation error message not being logged")
 	// Ensure file has not been created.
-	fileExists, _ := afero.Exists(fs.Instance, "cytoscape/bait-prey-cytoscape.txt")
+	fileExists, _ := afero.Exists(fs.Instance, "cytoscape/condition-readout-cytoscape.txt")
 	assert.False(
 		t,
 		fileExists,

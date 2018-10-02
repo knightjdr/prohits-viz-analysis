@@ -10,46 +10,46 @@ import (
 
 // BiclustData holds information about the input data table.
 type BiclustData struct {
-	Abundance, Score      [][]float64
-	Baits, Preys, Singles []string
+	Abundance, Score              [][]float64
+	Conditions, Readouts, Singles []string
 }
 
 // BiclustFormat filters and formats a data matrix for the biclustering
-// script. It will only keep preys found in at least two baits with the
+// script. It will only keep readouts found in at least two conditions with the
 // minimum criteria and will normalize all values by the max value * 10
 // (not sure why this normalization is done - taking it frmo HW's script).
-// It returns a 2D matrix sorted by bait and prey alphabetically, as well
-// as the list of preys kept and preys omitted (all sorted alphabetically).
+// It returns a 2D matrix sorted by condition and readout alphabetically, as well
+// as the list of readouts kept and readouts omitted (all sorted alphabetically).
 func BiclustFormat(data Data, min float64) (filteredData BiclustData) {
-	// Bait list doesn't change.
-	filteredData.Baits = data.Baits
+	// Condition list doesn't change.
+	filteredData.Conditions = data.Conditions
 
-	// Iterate over matrix and find preys that pass minimum abundance cutoff for
-	// at least two baits. Keep these prey rows in filtered matrix.
-	keepPreys := make([]int, 0)
+	// Iterate over matrix and find readouts that pass minimum abundance cutoff for
+	// at least two conditions. Keep these readout rows in filtered matrix.
+	keepReadouts := make([]int, 0)
 	numCols := len(data.Abundance[0])
-	singlePreys := make([]int, 0)
+	singleReadouts := make([]int, 0)
 	for i, row := range data.Abundance {
-		baitCount := 0
+		conditionCount := 0
 		newrow := make([]float64, numCols)
 		copy(newrow, row)
 		for _, value := range row {
 			if value >= min {
-				baitCount++
-				if baitCount > 1 {
-					keepPreys = append(keepPreys, i)
+				conditionCount++
+				if conditionCount > 1 {
+					keepReadouts = append(keepReadouts, i)
 					filteredData.Abundance = append(filteredData.Abundance, newrow)
 					filteredData.Score = append(filteredData.Score, data.Score[i])
-					filteredData.Preys = append(filteredData.Preys, data.Preys[i])
+					filteredData.Readouts = append(filteredData.Readouts, data.Readouts[i])
 					break
 				}
 			}
 		}
 
-		// Add prey to singleton list if it doesn't meet requirement.
-		if baitCount < 2 {
-			singlePreys = append(singlePreys, i)
-			filteredData.Singles = append(filteredData.Singles, data.Preys[i])
+		// Add readout to singleton list if it doesn't meet requirement.
+		if conditionCount < 2 {
+			singleReadouts = append(singleReadouts, i)
+			filteredData.Singles = append(filteredData.Singles, data.Readouts[i])
 		}
 	}
 
@@ -84,14 +84,14 @@ func BiclustFormat(data Data, min float64) (filteredData BiclustData) {
 	defer writer.Flush()
 
 	// Create and write header.
-	header := append([]string{"PROT"}, filteredData.Baits...)
+	header := append([]string{"PROT"}, filteredData.Conditions...)
 	err = writer.Write(header)
 	// Log if error and panic.
 	logmessage.CheckError(err, true)
 
 	// Write each line.
 	for i, row := range filteredData.Abundance {
-		line := append([]string{filteredData.Preys[i]}, helper.ConvertFts(row, 5)...)
+		line := append([]string{filteredData.Readouts[i]}, helper.ConvertFts(row, 5)...)
 		err = writer.Write(line)
 
 		// Log if error and return without panic.

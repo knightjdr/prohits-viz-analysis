@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSvgPP(t *testing.T) {
+func TestSvgRR(t *testing.T) {
 	// Mock filesystem.
 	oldFs := fs.Instance
 	defer func() { fs.Instance = oldFs }()
@@ -25,7 +25,7 @@ func TestSvgPP(t *testing.T) {
 	}
 	sorted := []string{"row2", "row3", "row1"}
 
-	// TEST1: prey-prey heatmap
+	// TEST1: readout-readout heatmap
 	want := "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"105\" height=\"105\" viewBox=\"0 0 105 105\">\n" +
 		"\t<g transform=\"translate(45)\">\n" +
 		"\t\t<text y=\"43\" x=\"6\" font-size=\"12\" text-anchor=\"end\" transform=\"rotate(90, 6, 43)\">row2</text>\n" +
@@ -48,10 +48,10 @@ func TestSvgPP(t *testing.T) {
 		"\t\t<rect fill=\"#001966\" y=\"40\" x=\"20\" width=\"20\" height=\"20\" />\n" +
 		"\t\t<rect fill=\"#0040ff\" y=\"40\" x=\"40\" width=\"20\" height=\"20\" />\n" +
 		"\t</g>\n" +
-		"\t<text y=\"10\" x=\"75\" font-size=\"12\" text-anchor=\"middle\">Preys</text>\n" +
-		"\t<text y=\"75\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 75)\">Preys</text>\n" +
+		"\t<text y=\"10\" x=\"75\" font-size=\"12\" text-anchor=\"middle\">Readouts</text>\n" +
+		"\t<text y=\"75\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 75)\">Readouts</text>\n" +
 		"</svg>\n"
-	SvgPP(dist, sorted, "blueBlack")
-	svg, _ := afero.ReadFile(fs.Instance, "svg/prey-prey.svg")
-	assert.Equal(t, want, string(svg), "Prey-prey svg not generated correctly")
+	SvgRR(dist, sorted, "blueBlack")
+	svg, _ := afero.ReadFile(fs.Instance, "svg/readout-readout.svg")
+	assert.Equal(t, want, string(svg), "Readout-readout svg not generated correctly")
 }

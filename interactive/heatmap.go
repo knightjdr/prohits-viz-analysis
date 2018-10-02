@@ -9,11 +9,20 @@ import (
 
 // HeatmapJSON stores the JSON structure for the interactive heatmap.
 type HeatmapJSON struct {
-	Columns    []string                 `json:"columns"`
-	Parameters map[string]interface{}   `json:"parameters"`
-	Settings   map[string]interface{}   `json:"settings"`
-	Rows       []map[string]interface{} `json:"rows"`
-	URI        string                   `json:"minimap"`
+	Columns    columnObj              `json:"columns"`
+	Parameters map[string]interface{} `json:"parameters"`
+	Settings   map[string]interface{} `json:"settings"`
+	Rows       rowObj                 `json:"rows"`
+	URI        string                 `json:"minimap"`
+}
+
+type columnObj struct {
+	Names []string `json:"names"`
+	Ref   *string  `json:"ref"`
+}
+
+type rowObj struct {
+	List []map[string]interface{} `json:"list"`
 }
 
 // Heatmap creates an interactive heatmap as json. The data matrix, row and column
@@ -28,14 +37,20 @@ func Heatmap(
 ) (jsonString string) {
 	var jsonStruct HeatmapJSON
 
-	jsonStruct.Columns = columns
+	jsonStruct.Columns = columnObj{
+		Names: columns,
+	}
 	jsonStruct.Parameters = parameters
-	jsonStruct.Rows = data
-	jsonStruct.Settings = settings
+	jsonStruct.Rows = rowObj{
+		List: data,
+	}
+	jsonStruct.Settings = map[string]interface{}{
+		"current": settings,
+	}
 	jsonStruct.URI = uri
 
 	// Convert struct to json.
-	byte, err := json.Marshal(jsonStruct)
+	byte, err := json.MarshalIndent(jsonStruct, "", "\t")
 	// Log message but do not panic.
 	logmessage.CheckError(err, false)
 	if err != nil {

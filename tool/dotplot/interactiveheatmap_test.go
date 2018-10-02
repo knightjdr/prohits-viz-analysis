@@ -37,7 +37,7 @@ func TestInteractiveHeatmap(t *testing.T) {
 		Abundance:        "abd",
 		AbundanceCap:     float64(50),
 		AnalysisType:     "dotplot",
-		Bait:             "bait",
+		Condition:        "condition",
 		Clustering:       "hierarchical",
 		ClusteringMethod: "complete",
 		Control:          "control",
@@ -47,7 +47,7 @@ func TestInteractiveHeatmap(t *testing.T) {
 		LogBase:          "none",
 		MinAbundance:     float64(0),
 		Normalization:    "none",
-		Prey:             "prey",
+		Readout:          "readout",
 		PrimaryFilter:    0.01,
 		Score:            "score",
 		ScoreType:        "lte",
@@ -62,16 +62,16 @@ func TestInteractiveHeatmap(t *testing.T) {
 		"\"parameters\":{" +
 		"\"abundanceColumn\":\"abd\"," +
 		"\"analysisType\":\"dotplot\"," +
-		"\"baitColumn\":\"bait\"," +
 		"\"clustering\":\"hierarchical\"," +
 		"\"clusteringMethod\":\"complete\"," +
+		"\"conditionColumn\":\"condition\"," +
 		"\"controlColumn\":\"control\"," +
 		"\"distance\":\"euclidean\"," +
 		"\"files\":[\"file1.txt\",\"file2.txt\"]," +
 		"\"imageType\":\"heatmap\"," +
 		"\"logBase\":\"none\"," +
 		"\"normalization\":\"none\"," +
-		"\"preyColumn\":\"prey\"," +
+		"\"readoutColumn\":\"readout\"," +
 		"\"scoreColumn\":\"score\"," +
 		"\"scoreType\":\"lte\"}," +
 		"\"settings\":{" +
