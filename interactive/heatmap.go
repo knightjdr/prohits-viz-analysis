@@ -13,12 +13,16 @@ type HeatmapJSON struct {
 	Parameters map[string]interface{} `json:"parameters"`
 	Settings   map[string]interface{} `json:"settings"`
 	Rows       rowObj                 `json:"rows"`
-	URI        string                 `json:"minimap"`
+	Minimap    mapObj                 `json:"minimap"`
 }
 
 type columnObj struct {
 	Names []string `json:"names"`
 	Ref   *string  `json:"ref"`
+}
+
+type mapObj struct {
+	Image string `json:"image"`
 }
 
 type rowObj struct {
@@ -47,7 +51,9 @@ func Heatmap(
 	jsonStruct.Settings = map[string]interface{}{
 		"current": settings,
 	}
-	jsonStruct.URI = uri
+	jsonStruct.Minimap = mapObj{
+		Image: uri,
+	}
 
 	// Convert struct to json.
 	byte, err := json.MarshalIndent(jsonStruct, "", "\t")

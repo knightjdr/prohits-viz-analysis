@@ -1,6 +1,8 @@
 package svg
 
-import "math"
+import (
+	"math"
+)
 
 // HDimensions contains heatmap plot dimensions.
 type HDimensions struct {
@@ -31,6 +33,9 @@ func HeatmapDimensions(matrix [][]float64, columns, rows []string) (dims HDimens
 	if colRatio > 1 || rowRatio > 1 {
 		dims.ratio = math.Max(colRatio, rowRatio)
 		dims.ratio = 1 / dims.ratio
+	}
+	if dims.ratio < minRatio {
+		dims.ratio = minRatio
 	}
 	dims.cellSize = int(math.Floor(dims.ratio * float64(idealCellSize)))
 	dims.fontSize = int(math.Floor(dims.ratio * float64(idealFontSize)))

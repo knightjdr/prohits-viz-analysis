@@ -73,7 +73,7 @@ func TestHeatmap(t *testing.T) {
 		"\t\"settings\": {\n\t\t\"current\": {\n\t\t\t\"param1\": 1,\n\t\t\t\"param2\": \"b\",\n\t\t\t\"param3\": [\n\t\t\t\t\"x\",\n\t\t\t\t\"y\",\n\t\t\t\t\"z\"\n\t\t\t]\n\t\t}\n\t},\n" +
 		"\t\"rows\": {\n\t\t\"list\": [\n\t\t\t{\n\t\t\t\t\"data\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.2,\n\t\t\t\t\t\t\"score\": 0.01,\n\t\t\t\t\t\t\"value\": 1\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.5,\n\t\t\t\t\t\t\"score\": 0.05,\n\t\t\t\t\t\t\"value\": 2\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 1,\n\t\t\t\t\t\t\"score\": 0.08,\n\t\t\t\t\t\t\"value\": 3\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"name\": \"row1\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"data\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.7,\n\t\t\t\t\t\t\"score\": 1,\n\t\t\t\t\t\t\"value\": 4\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.8,\n\t\t\t\t\t\t\"score\": 0.07,\n\t\t\t\t\t\t\"value\": 5\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 1,\n\t\t\t\t\t\t\"score\": 0.5,\n\t\t\t\t\t\t\"value\": 6\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"name\": \"row2\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"data\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 1,\n\t\t\t\t\t\t\"score\": 0.2,\n\t\t\t\t\t\t\"value\": 7\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.2,\n\t\t\t\t\t\t\"score\": 0.7,\n\t\t\t\t\t\t\"value\": 8\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"ratio\": 0.5,\n\t\t\t\t\t\t\"score\": 0.01,\n\t\t\t\t\t\t\"value\": 9\n\t\t\t\t\t}\n\t\t\t\t],\n" +
 		"\t\t\t\t\"name\": \"row3\"\n\t\t\t}\n\t\t]\n\t},\n" +
-		"\t\"minimap\": \"pngImage\"\n}"
+		"\t\"minimap\": {\n\t\t\"image\": \"pngImage\"\n\t}\n}"
 	assert.Equal(
 		t,
 		want,
