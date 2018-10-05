@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/knightjdr/prohits-viz-analysis/fs"
+	"github.com/knightjdr/prohits-viz-analysis/helper"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 	"github.com/spf13/afero"
 )
@@ -20,7 +21,8 @@ func LogParams(parameters typedef.Parameters) {
 
 	// Files.
 	logSlice = append(logSlice, "Files used")
-	for _, file := range parameters.Files {
+	fileNames := helper.Filename(parameters.Files)
+	for _, file := range fileNames {
 		logSlice = append(logSlice, fmt.Sprintf("- %s", file))
 	}
 	logSlice = append(logSlice, "")
