@@ -13,6 +13,7 @@ import (
 func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, err error) {
 	// Command line flag arguments.
 	abundance := flag.String("abundance", "", "Abundance column")
+	abundanceCap := flag.Float64("abundanceCap", 50, "Maximum abundance")
 	analysisType := flag.String("analysisType", "", "Analysis type, one of: conditioncondition, correlation, dotplot or specificity")
 	condition := flag.String("condition", "", "Condition column")
 	conditionClustering := flag.String("conditionClustering", "", "Should conditions be clustered: one of conditions or none")
@@ -20,14 +21,13 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 	biclusteringApprox := flag.Bool("biclusteringApprox", false, "Perform approximate biclustering")
 	clustering := flag.String("clustering", "", "Clustering type")
 	clusteringMethod := flag.String("clusteringMethod", "", "Clustering type")
-	edgeColor := flag.String("edgeColor", "", "Edge color")
-	fillColor := flag.String("fillColor", "", "Fill color")
 	control := flag.String("control", "", "Control column")
 	distance := flag.String("distance", "", "Distance metric")
+	edgeColor := flag.String("edgeColor", "", "Edge color")
 	fileList := flag.String("fileList", "", "Input files as comma-separated list")
+	fillColor := flag.String("fillColor", "", "Fill color")
 	invertColor := flag.Bool("invertColor", false, "Invert fill color")
 	logBase := flag.String("logBase", "", "Base for log transformation")
-	abundanceCap := flag.Float64("abundanceCap", 50, "Maximum abundance")
 	minAbundance := flag.Float64("minAbundance", 0, "Minimum abundance")
 	normalization := flag.String("normalization", "", "Normalization type")
 	normalizationReadout := flag.String("normalizationReadout", "", "Readout to use for normalization")
@@ -105,16 +105,16 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 		Abundance:            *abundance,
 		AbundanceCap:         *abundanceCap,
 		AnalysisType:         *analysisType,
-		Condition:            *condition,
-		ConditionClustering:  *conditionClustering,
-		ConditionList:        conditions,
 		BiclusteringApprox:   *biclusteringApprox,
 		Clustering:           *clustering,
 		ClusteringMethod:     *clusteringMethod,
+		Condition:            *condition,
+		ConditionClustering:  *conditionClustering,
+		ConditionList:        conditions,
 		EdgeColor:            *edgeColor,
-		FillColor:            *fillColor,
 		Control:              *control,
 		Distance:             *distance,
+		FillColor:            *fillColor,
 		Files:                files,
 		InvertColor:          *invertColor,
 		LogBase:              *logBase,
