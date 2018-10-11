@@ -75,12 +75,15 @@ func NoCluster(dataset typedef.Dataset) {
 			svg.ConvertMap([]string{"condition-condition.svg"})
 
 			// Create interactive files.
+			distanceParams := dataset.Parameters
+			distanceParams.AbundanceCap = 1
+			distanceParams.MinAbundance = 0
 			json := InteractiveHeatmap(
 				normalizedConditionDist,
 				conditionOrder,
 				conditionOrder,
 				true,
-				dataset.Parameters,
+				distanceParams,
 				"minimap/condition-condition.png",
 			)
 			afero.WriteFile(fs.Instance, "interactive/condition-condition.json", []byte(json), 0644)
@@ -151,12 +154,15 @@ func NoCluster(dataset typedef.Dataset) {
 			svg.ConvertMap([]string{"readout-readout.svg"})
 
 			// Create interactive files.
+			distanceParams := dataset.Parameters
+			distanceParams.AbundanceCap = 1
+			distanceParams.MinAbundance = 0
 			json := InteractiveHeatmap(
 				normalizedReadoutDist,
 				readoutOrder,
 				readoutOrder,
 				true,
-				dataset.Parameters,
+				distanceParams,
 				"minimap/readout-readout.png",
 			)
 			afero.WriteFile(fs.Instance, "interactive/readout-readout.json", []byte(json), 0644)

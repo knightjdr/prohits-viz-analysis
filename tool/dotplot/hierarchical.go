@@ -190,12 +190,15 @@ func Hierarchical(dataset typedef.Dataset) {
 
 	// Create interactive files.
 	if dataset.Parameters.WriteDistance {
+		distanceParams := dataset.Parameters
+		distanceParams.AbundanceCap = 1
+		distanceParams.MinAbundance = 0
 		json := InteractiveHeatmap(
 			normalizedConditionDist,
 			conditionTree.Order,
 			conditionTree.Order,
 			true,
-			dataset.Parameters,
+			distanceParams,
 			"minimap/condition-condition.png",
 		)
 		afero.WriteFile(fs.Instance, "interactive/condition-condition.json", []byte(json), 0644)
@@ -204,7 +207,7 @@ func Hierarchical(dataset typedef.Dataset) {
 			readoutTree.Order,
 			readoutTree.Order,
 			true,
-			dataset.Parameters,
+			distanceParams,
 			"minimap/readout-readout.png",
 		)
 		afero.WriteFile(fs.Instance, "interactive/readout-readout.json", []byte(json), 0644)
