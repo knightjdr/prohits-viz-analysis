@@ -21,7 +21,7 @@ func NoCluster(dataset typedef.Dataset) {
 
 	// Cluster conditions.
 	var conditionOrder []string
-	if dataset.Parameters.ConditionClustering == "none" {
+	if dataset.Parameters.ConditionClustering != "none" {
 		// Generate distance matrix.
 		conditionDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, true)
 
@@ -73,7 +73,15 @@ func NoCluster(dataset typedef.Dataset) {
 				svg.ConvertPng([]string{"condition-condition.svg"})
 			}
 
-			// Create  minimaps from svg.
+			// Write minimap.
+			MinimapDistance(
+				sortedConditionDist,
+				conditionOrder,
+				dataset.Parameters.FillColor,
+				"condition-condition",
+			)
+
+			// Create minimaps from svg.
 			svg.ConvertMap([]string{"condition-condition.svg"})
 
 			// Create interactive files.
@@ -102,7 +110,7 @@ func NoCluster(dataset typedef.Dataset) {
 
 	// Cluster readouts.
 	var readoutOrder []string
-	if dataset.Parameters.ReadoutClustering == "none" {
+	if dataset.Parameters.ReadoutClustering != "none" {
 		// Generate distance matrix.
 		readoutDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, false)
 
@@ -154,6 +162,14 @@ func NoCluster(dataset typedef.Dataset) {
 				svg.ConvertPng([]string{"readout-readout.svg"})
 			}
 
+			// Write minimap.
+			MinimapDistance(
+				sortedReadoutDist,
+				readoutOrder,
+				dataset.Parameters.FillColor,
+				"readout-readout",
+			)
+
 			// Create  minimaps from svg.
 			svg.ConvertMap([]string{"readout-readout.svg"})
 
@@ -191,6 +207,17 @@ func NoCluster(dataset typedef.Dataset) {
 	// Write condition-readout dotplot.
 	if dataset.Parameters.WriteDotplot {
 		SvgDotplot(
+			sortedAbundance,
+			sortedRatios,
+			sortedScores,
+			conditionOrder,
+			readoutOrder,
+			false,
+			dataset.Parameters,
+		)
+
+		// Write minimap.
+		Minimap(
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,

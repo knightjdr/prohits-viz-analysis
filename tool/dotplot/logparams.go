@@ -99,11 +99,11 @@ func LogParams(parameters typedef.Parameters) {
 		logSlice = append(logSlice, "- hierarchical clustering was performed")
 		logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
 		logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))
-	} else if parameters.ConditionClustering == "conditions" && parameters.ReadoutClustering != "readouts" {
+	} else if parameters.ConditionClustering == "none" && parameters.ReadoutClustering == "readouts" {
 		logSlice = append(logSlice, "- readouts were hierarchically clustered")
 		logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
 		logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))
-	} else if parameters.ReadoutClustering == "readouts" && parameters.ConditionClustering != "conditions" {
+	} else if parameters.ReadoutClustering == "none" && parameters.ConditionClustering == "conditions" {
 		logSlice = append(logSlice, "- conditions were hierarchically clustered")
 		logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
 		logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))

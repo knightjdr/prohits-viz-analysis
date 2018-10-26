@@ -30,11 +30,11 @@ func Map(
 	}
 	var content string
 	if imageType == "dotplot" {
-		content = svg.Dotplot(abundance, ratios, scores, typedef.Annotations{}, typedef.Markers{}, columns, rows, parameters)
+		content = svg.Dotplot(abundance, ratios, scores, typedef.Annotations{}, typedef.Markers{}, columns, rows, true, parameters)
 	} else {
-		content = svg.Heatmap(abundance, typedef.Annotations{}, typedef.Markers{}, columns, rows, parameters)
+		content = svg.Heatmap(abundance, typedef.Annotations{}, typedef.Markers{}, columns, rows, true, parameters)
 	}
-	filename := fmt.Sprintf("svg/%s.svg", imageType)
+	filename := fmt.Sprintf("minimap/%s.svg", imageType)
 	afero.WriteFile(fs.Instance, filename, []byte(content), 0644)
 	return
 }

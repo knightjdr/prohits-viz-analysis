@@ -26,9 +26,12 @@ func ConvertMap(list []string) {
 	for _, svg := range list {
 		extension := filepath.Ext(svg)
 		filename := svg[0 : len(svg)-len(extension)]
-		fileArg := fmt.Sprintf("%s/svg/%s", workingDir, svg)
-		exportArg := fmt.Sprintf("--export-png=%s/minimap/%s.png", workingDir, filename)
-		cmd := exec.Command("inkscape", fileArg, exportArg, "--export-height=1000", "--export-id=minimap", "--without-gui")
+		fileArg := fmt.Sprintf("%s/minimap/%s", workingDir, svg)
+		exportArg := fmt.Sprintf("--output=%s/minimap/%s.png", workingDir, filename)
+		cmd := exec.Command("rsvg-convert", "--format=png", exportArg, "--height=1000", "--unlimited", fileArg)
+		// Using inkscape
+		// exportArg := fmt.Sprintf("--export-png=%s/minimap/%s.png", workingDir, filename)
+		// cmd := exec.Command("inkscape", fileArg, exportArg, "--export-height=1000", "--export-id=minimap", "--without-gui")
 		var stderr bytes.Buffer
 		cmd.Stderr = &stderr
 		err := cmd.Run()

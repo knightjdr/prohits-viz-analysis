@@ -32,9 +32,9 @@ func Export(
 	}
 	var content string
 	if imageType == "dotplot" {
-		content = svg.Dotplot(abundance, ratios, scores, annotations, markers, columns, rows, parameters)
+		content = svg.Dotplot(abundance, ratios, scores, annotations, markers, columns, rows, false, parameters)
 	} else {
-		content = svg.Heatmap(abundance, annotations, markers, columns, rows, parameters)
+		content = svg.Heatmap(abundance, annotations, markers, columns, rows, false, parameters)
 	}
 	filename := fmt.Sprintf("svg/%s.svg", imageType)
 	afero.WriteFile(fs.Instance, filename, []byte(content), 0644)

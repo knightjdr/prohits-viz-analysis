@@ -24,13 +24,16 @@ func ConvertPdf(list []string) {
 		return
 	}
 
-	// Convert to PDF using inkscape.
+	// Convert to PDF using rsvg-convert.
 	for _, svg := range list {
 		extension := filepath.Ext(svg)
 		filename := svg[0 : len(svg)-len(extension)]
 		fileArg := fmt.Sprintf("%s/svg/%s", workingDir, svg)
-		exportArg := fmt.Sprintf("--export-pdf=%s/pdf/%s.pdf", workingDir, filename)
-		cmd := exec.Command("inkscape", fileArg, exportArg, "--without-gui")
+		exportArg := fmt.Sprintf("--output=%s/pdf/%s.pdf", workingDir, filename)
+		cmd := exec.Command("rsvg-convert", "--format=pdf", exportArg, "--unlimited", fileArg)
+		// Using inkscape
+		// exportArg := fmt.Sprintf("--export-pdf=%s/pdf/%s.pdf", workingDir, filename)
+		// cmd := exec.Command("inkscape", fileArg, exportArg, "--without-gui")
 		var stderr bytes.Buffer
 		cmd.Stderr = &stderr
 		err := cmd.Run()

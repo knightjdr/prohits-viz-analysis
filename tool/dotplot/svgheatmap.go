@@ -22,7 +22,7 @@ func SvgHeatmap(
 		"abundanceCap": abundanceCap,
 		"rowLabel":     "Readouts",
 	}
-	heatmap := svg.Heatmap(matrix, typedef.Annotations{}, typedef.Markers{}, sortedColumns, sortedRows, parameters)
+	heatmap := svg.Heatmap(matrix, typedef.Annotations{}, typedef.Markers{}, sortedColumns, sortedRows, false, parameters)
 	afero.WriteFile(fs.Instance, "svg/heatmap.svg", []byte(heatmap), 0644)
 	return
 }

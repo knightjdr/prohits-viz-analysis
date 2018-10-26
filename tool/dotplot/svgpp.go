@@ -17,7 +17,7 @@ func SvgRR(dist [][]float64, sorted []string, fillColor string) {
 		"abundanceCap": float64(1),
 		"rowLabel":     "Readouts",
 	}
-	heatmap := svg.Heatmap(dist, typedef.Annotations{}, typedef.Markers{}, sorted, sorted, parameters)
+	heatmap := svg.Heatmap(dist, typedef.Annotations{}, typedef.Markers{}, sorted, sorted, false, parameters)
 	afero.WriteFile(fs.Instance, "svg/readout-readout.svg", []byte(heatmap), 0644)
 	return
 }

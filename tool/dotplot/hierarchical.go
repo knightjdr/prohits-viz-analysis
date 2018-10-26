@@ -88,6 +88,14 @@ func Hierarchical(dataset typedef.Dataset) {
 	if dataset.Parameters.WriteDistance {
 		SvgCC(sortedConditionDist, conditionTree.Order, dataset.Parameters.FillColor)
 
+		// Write minimap.
+		MinimapDistance(
+			sortedConditionDist,
+			conditionTree.Order,
+			dataset.Parameters.FillColor,
+			"condition-condition",
+		)
+
 		// Write distance legend.
 		legendTitle := fmt.Sprintf("Distance - %s", dataset.Parameters.Abundance)
 		distanceLegend := svg.Gradient(dataset.Parameters.FillColor, legendTitle, 101, 0, dataset.Parameters.AbundanceCap)
@@ -97,6 +105,17 @@ func Hierarchical(dataset typedef.Dataset) {
 	// Write condition-readout dotplot.
 	if dataset.Parameters.WriteDotplot {
 		SvgDotplot(
+			sortedAbundance,
+			sortedRatios,
+			sortedScores,
+			conditionTree.Order,
+			readoutTree.Order,
+			false,
+			dataset.Parameters,
+		)
+
+		// Write minimap.
+		Minimap(
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,
@@ -137,6 +156,14 @@ func Hierarchical(dataset typedef.Dataset) {
 	// Write readout-readout svg.
 	if dataset.Parameters.WriteDistance {
 		SvgRR(sortedReadoutDist, readoutTree.Order, dataset.Parameters.FillColor)
+
+		// Write minimap.
+		MinimapDistance(
+			sortedReadoutDist,
+			readoutTree.Order,
+			dataset.Parameters.FillColor,
+			"readout-readout",
+		)
 	}
 
 	// Create pdfs from svg.

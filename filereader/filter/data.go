@@ -16,11 +16,11 @@ func Data(
 	filteredConditionReadout := make([]map[string]string, 0)
 
 	// Filter by both conditions and readouts if desired.
-	if parameters.ConditionClustering == "conditions" && parameters.ReadoutClustering == "readouts" {
+	if parameters.ConditionClustering == "none" && parameters.ReadoutClustering == "none" {
 		filteredConditionReadout = ConditionReadout(data, parameters.ConditionList, parameters.ReadoutList)
-	} else if parameters.ConditionClustering == "conditions" { // Filter by conditions only.
+	} else if parameters.ConditionClustering == "none" { // Filter by conditions only.
 		filteredConditionReadout = Conditions(data, parameters.ConditionList)
-	} else if parameters.ReadoutClustering == "readouts" { // Filter by readouts only.
+	} else if parameters.ReadoutClustering == "none" { // Filter by readouts only.
 		filteredConditionReadout = Readouts(data, parameters.ReadoutList)
 	} else {
 		filteredConditionReadout = data

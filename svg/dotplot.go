@@ -36,19 +36,24 @@ func Dotplot(
 	annotations typedef.Annotations,
 	markers typedef.Markers,
 	columns, rows []string,
+	minimap bool,
 	options map[string]interface{},
 ) string {
 	svg := make([]string, 0)
-	dims := HeatmapDimensions(matrix, columns, rows)
+	dims := HeatmapDimensions(matrix, columns, rows, minimap)
 	parameters := DotplotParameters(dims)
 	svg = append(svg, HeatmapHeader(dims))
-	svg = append(svg, HeatmapColumnNames(dims, columns))
-	svg = append(svg, HeatmapRowNames(dims, rows))
+	if !minimap {
+		svg = append(svg, HeatmapColumnNames(dims, columns))
+		svg = append(svg, HeatmapRowNames(dims, rows))
+	}
 	svg = append(svg, DotplotRows(matrix, ratios, scores, dims, parameters, options))
-	svg = append(svg, HeatmapMarkers(markers, dims))
-	svg = append(svg, HeatmapAnnotations(annotations, dims))
-	svg = append(svg, BoundingBox(dims))
-	svg = append(svg, HeatmapHeadings(dims, options))
+	if !minimap {
+		svg = append(svg, HeatmapMarkers(markers, dims))
+		svg = append(svg, HeatmapAnnotations(annotations, dims))
+		svg = append(svg, BoundingBox(dims))
+		svg = append(svg, HeatmapHeadings(dims, options))
+	}
 	// Add end element wrapper for svg.
 	svg = append(svg, "</svg>\n")
 	return helper.StringConcat(svg)

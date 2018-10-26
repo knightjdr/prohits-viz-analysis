@@ -106,6 +106,17 @@ func Biclustering(dataset typedef.Dataset) {
 			dataset.Parameters,
 		)
 
+		// Write minimap.
+		Minimap(
+			sortedAbundance,
+			sortedRatios,
+			sortedScores,
+			order.Conditions,
+			order.Readouts,
+			false,
+			dataset.Parameters,
+		)
+
 		// Write dotplot legend.
 		legendTitle := fmt.Sprintf("Dotplot - %s", dataset.Parameters.Abundance)
 		dotplotLegend := svg.DotplotLegend(

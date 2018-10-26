@@ -17,7 +17,7 @@ func SvgCC(dist [][]float64, conditions []string, fillColor string) {
 		"invertColor":  true,
 		"rowLabel":     "Conditions",
 	}
-	heatmap := svg.Heatmap(dist, typedef.Annotations{}, typedef.Markers{}, conditions, conditions, parameters)
+	heatmap := svg.Heatmap(dist, typedef.Annotations{}, typedef.Markers{}, conditions, conditions, false, parameters)
 	afero.WriteFile(fs.Instance, "svg/condition-condition.svg", []byte(heatmap), 0644)
 	return
 }

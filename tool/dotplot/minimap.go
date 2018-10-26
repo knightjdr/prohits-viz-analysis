@@ -7,8 +7,8 @@ import (
 	"github.com/spf13/afero"
 )
 
-// SvgDotplot draws a condition readout heatmap.
-func SvgDotplot(
+// Minimap draws a minimap for the dotplot.
+func Minimap(
 	abundance, ratios, scores [][]float64,
 	sortedColumns, sortedRows []string,
 	invertColor bool,
@@ -16,17 +16,16 @@ func SvgDotplot(
 ) {
 	// Define dotplot parameters.
 	parameters := map[string]interface{}{
-		"colLabel":     "Conditions",
+		"abundanceCap": userParams.AbundanceCap,
 		"edgeColor":    userParams.EdgeColor,
 		"fillColor":    userParams.FillColor,
 		"invertColor":  invertColor,
-		"abundanceCap": userParams.AbundanceCap,
+		"minimap":      true,
 		"primary":      userParams.PrimaryFilter,
-		"rowLabel":     "Readouts",
 		"secondary":    userParams.SecondaryFilter,
 		"scoreType":    userParams.ScoreType,
 	}
-	dotplot := svg.Dotplot(abundance, ratios, scores, typedef.Annotations{}, typedef.Markers{}, sortedColumns, sortedRows, false, parameters)
-	afero.WriteFile(fs.Instance, "svg/dotplot.svg", []byte(dotplot), 0644)
+	minimap := svg.Dotplot(abundance, ratios, scores, typedef.Annotations{}, typedef.Markers{}, sortedColumns, sortedRows, true, parameters)
+	afero.WriteFile(fs.Instance, "minimap/dotplot.svg", []byte(minimap), 0644)
 	return
 }
