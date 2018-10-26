@@ -21,6 +21,7 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 	biclusteringApprox := flag.Bool("biclusteringApprox", false, "Perform approximate biclustering")
 	clustering := flag.String("clustering", "", "Clustering type")
 	clusteringMethod := flag.String("clusteringMethod", "", "Clustering type")
+	clusteringOptimize := flag.Bool("clusteringOptimize", false, "Optimize leaf ordering")
 	control := flag.String("control", "", "Control column")
 	distance := flag.String("distance", "", "Distance metric")
 	edgeColor := flag.String("edgeColor", "", "Edge color")
@@ -108,6 +109,7 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 		BiclusteringApprox:   *biclusteringApprox,
 		Clustering:           *clustering,
 		ClusteringMethod:     *clusteringMethod,
+		ClusteringOptimize:   *clusteringOptimize,
 		Condition:            *condition,
 		ConditionClustering:  *conditionClustering,
 		ConditionList:        conditions,

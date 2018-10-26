@@ -110,6 +110,11 @@ func LogParams(parameters typedef.Parameters) {
 	} else {
 		logSlice = append(logSlice, "- no clustering was performed")
 	}
+	if parameters.ClusteringOptimize {
+		logSlice = append(logSlice, "- leaf clusters were optimized")
+	} else {
+		logSlice = append(logSlice, "- leaf clusters were not optimized")
+	}
 	logSlice = append(logSlice, "")
 
 	// Write log to file.

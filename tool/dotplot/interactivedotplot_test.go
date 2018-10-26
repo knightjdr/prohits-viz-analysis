@@ -4,6 +4,7 @@ import (
 	"image"
 	"image/color"
 	"image/png"
+	"strings"
 	"testing"
 
 	"github.com/knightjdr/prohits-viz-analysis/fs"
@@ -34,25 +35,26 @@ func TestInteractiveDotplot(t *testing.T) {
 	}
 	columns := []string{"col1", "col2", "col3"}
 	parameters := typedef.Parameters{
-		Abundance:        "abd",
-		AbundanceCap:     float64(50),
-		AnalysisType:     "dotplot",
-		Condition:        "condition",
-		Clustering:       "hierarchical",
-		ClusteringMethod: "complete",
-		EdgeColor:        "blueBlack",
-		FillColor:        "blueBlack",
-		Control:          "control",
-		Distance:         "euclidean",
-		Files:            []string{"file1.txt", "file2.txt"},
-		LogBase:          "none",
-		MinAbundance:     float64(0),
-		Normalization:    "none",
-		Readout:          "readout",
-		PrimaryFilter:    0.01,
-		Score:            "score",
-		ScoreType:        "lte",
-		SecondaryFilter:  0.05,
+		Abundance:          "abd",
+		AbundanceCap:       float64(50),
+		AnalysisType:       "dotplot",
+		Condition:          "condition",
+		Clustering:         "hierarchical",
+		ClusteringMethod:   "complete",
+		ClusteringOptimize: false,
+		EdgeColor:          "blueBlack",
+		FillColor:          "blueBlack",
+		Control:            "control",
+		Distance:           "euclidean",
+		Files:              []string{"file1.txt", "file2.txt"},
+		LogBase:            "none",
+		MinAbundance:       float64(0),
+		Normalization:      "none",
+		Readout:            "readout",
+		PrimaryFilter:      0.01,
+		Score:              "score",
+		ScoreType:          "lte",
+		SecondaryFilter:    0.05,
 	}
 	ratios := [][]float64{
 		{0.2, 0.5, 1},
@@ -68,13 +70,15 @@ func TestInteractiveDotplot(t *testing.T) {
 
 	// TEST1: typical data conversion to json.
 	want := "{" +
-		"\"columns\":" +
-		"[\"col1\",\"col2\",\"col3\"]," +
+		"\"columns\":{" +
+		"\"names\":[\"col1\",\"col2\",\"col3\"],\"ref\":null" +
+		"}," +
 		"\"parameters\":{" +
 		"\"abundanceColumn\":\"abd\"," +
 		"\"analysisType\":\"dotplot\"," +
 		"\"clustering\":\"hierarchical\"," +
 		"\"clusteringMethod\":\"complete\"," +
+		"\"clusteringOptimize\":false," +
 		"\"conditionColumn\":\"condition\"," +
 		"\"controlColumn\":\"control\"," +
 		"\"distance\":\"euclidean\"," +
@@ -84,8 +88,9 @@ func TestInteractiveDotplot(t *testing.T) {
 		"\"normalization\":\"none\"," +
 		"\"readoutColumn\":\"readout\"," +
 		"\"scoreColumn\":\"score\"," +
-		"\"scoreType\":\"lte\"}," +
-		"\"settings\":{" +
+		"\"scoreType\":\"lte\"" +
+		"}," +
+		"\"settings\":{\"current\":{" +
 		"\"abundanceCap\":50," +
 		"\"edgeColor\":\"blueBlack\"," +
 		"\"fillColor\":\"blueBlack\"," +
@@ -93,8 +98,9 @@ func TestInteractiveDotplot(t *testing.T) {
 		"\"invertColor\":false," +
 		"\"minAbundance\":0," +
 		"\"primaryFilter\":0.01," +
-		"\"secondaryFilter\":0.05}," +
-		"\"rows\":[" +
+		"\"secondaryFilter\":0.05" +
+		"}}," +
+		"\"rows\":{\"list\":[" +
 		"{\"data\":[" +
 		"{\"ratio\":0.2,\"score\":0.01,\"value\":1}," +
 		"{\"ratio\":0.5,\"score\":0.05,\"value\":2}," +
@@ -109,20 +115,24 @@ func TestInteractiveDotplot(t *testing.T) {
 		"{\"ratio\":1,\"score\":0.2,\"value\":7}," +
 		"{\"ratio\":0.2,\"score\":0.7,\"value\":8}," +
 		"{\"ratio\":0.5,\"score\":0.01,\"value\":9}]," +
-		"\"name\":\"row3\"}]," +
-		"\"minimap\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAEElEQVR4nGJiYGAABAAA//8ADAADcZGLFwAAAABJRU5ErkJggg==\"}"
+		"\"name\":\"row3\"}]}," +
+		"\"minimap\":{\"image\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAEElEQVR4nGJiYGAABAAA//8ADAADcZGLFwAAAABJRU5ErkJggg==\"}}"
+	json := InteractiveDotplot(
+		abundance,
+		ratios,
+		scores,
+		columns,
+		rows,
+		parameters,
+		"test.png",
+	)
+	json = strings.Replace(json, " ", "", -1)
+	json = strings.Replace(json, "\n", "", -1)
+	json = strings.Replace(json, "\t", "", -1)
 	assert.Equal(
 		t,
 		want,
-		InteractiveDotplot(
-			abundance,
-			ratios,
-			scores,
-			columns,
-			rows,
-			parameters,
-			"test.png",
-		),
+		json,
 		"JSON not generated correctly",
 	)
 }

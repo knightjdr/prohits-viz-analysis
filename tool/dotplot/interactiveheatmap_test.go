@@ -4,6 +4,7 @@ import (
 	"image"
 	"image/color"
 	"image/png"
+	"strings"
 	"testing"
 
 	"github.com/knightjdr/prohits-viz-analysis/fs"
@@ -34,36 +35,39 @@ func TestInteractiveHeatmap(t *testing.T) {
 	}
 	columns := []string{"col1", "col2", "col3"}
 	parameters := typedef.Parameters{
-		Abundance:        "abd",
-		AbundanceCap:     float64(50),
-		AnalysisType:     "dotplot",
-		Condition:        "condition",
-		Clustering:       "hierarchical",
-		ClusteringMethod: "complete",
-		Control:          "control",
-		Distance:         "euclidean",
-		Files:            []string{"file1.txt", "file2.txt"},
-		FillColor:        "blueBlack",
-		LogBase:          "none",
-		MinAbundance:     float64(0),
-		Normalization:    "none",
-		Readout:          "readout",
-		PrimaryFilter:    0.01,
-		Score:            "score",
-		ScoreType:        "lte",
-		SecondaryFilter:  0.05,
+		Abundance:          "abd",
+		AbundanceCap:       float64(50),
+		AnalysisType:       "dotplot",
+		Condition:          "condition",
+		Clustering:         "hierarchical",
+		ClusteringMethod:   "complete",
+		ClusteringOptimize: false,
+		Control:            "control",
+		Distance:           "euclidean",
+		Files:              []string{"file1.txt", "file2.txt"},
+		FillColor:          "blueBlack",
+		LogBase:            "none",
+		MinAbundance:       float64(0),
+		Normalization:      "none",
+		Readout:            "readout",
+		PrimaryFilter:      0.01,
+		Score:              "score",
+		ScoreType:          "lte",
+		SecondaryFilter:    0.05,
 	}
 	rows := []string{"row1", "row2", "row3"}
 
 	// TEST1: typical date conversion to json.
 	want := "{" +
-		"\"columns\":" +
-		"[\"col1\",\"col2\",\"col3\"]," +
+		"\"columns\":{" +
+		"\"names\":[\"col1\",\"col2\",\"col3\"]," +
+		"\"ref\":null}," +
 		"\"parameters\":{" +
 		"\"abundanceColumn\":\"abd\"," +
 		"\"analysisType\":\"dotplot\"," +
 		"\"clustering\":\"hierarchical\"," +
 		"\"clusteringMethod\":\"complete\"," +
+		"\"clusteringOptimize\":false," +
 		"\"conditionColumn\":\"condition\"," +
 		"\"controlColumn\":\"control\"," +
 		"\"distance\":\"euclidean\"," +
@@ -73,43 +77,38 @@ func TestInteractiveHeatmap(t *testing.T) {
 		"\"normalization\":\"none\"," +
 		"\"readoutColumn\":\"readout\"," +
 		"\"scoreColumn\":\"score\"," +
-		"\"scoreType\":\"lte\"}," +
-		"\"settings\":{" +
+		"\"scoreType\":\"lte\"" +
+		"}," +
+		"\"settings\":{\"current\":{" +
 		"\"abundanceCap\":50," +
 		"\"fillColor\":\"blueBlack\"," +
 		"\"imageType\":\"heatmap\"," +
 		"\"invertColor\":false," +
 		"\"minAbundance\":0," +
 		"\"primaryFilter\":0.01," +
-		"\"secondaryFilter\":0.05}," +
-		"\"rows\":[" +
-		"{\"data\":[" +
-		"{\"value\":1}," +
-		"{\"value\":2}," +
-		"{\"value\":3}]," +
-		"\"name\":\"row1\"}," +
-		"{\"data\":[" +
-		"{\"value\":4}," +
-		"{\"value\":5}," +
-		"{\"value\":6}]," +
-		"\"name\":\"row2\"}," +
-		"{\"data\":[" +
-		"{\"value\":7}," +
-		"{\"value\":8}," +
-		"{\"value\":9}]," +
-		"\"name\":\"row3\"}]," +
-		"\"minimap\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAEElEQVR4nGJiYGAABAAA//8ADAADcZGLFwAAAABJRU5ErkJggg==\"}"
+		"\"secondaryFilter\":0.05" +
+		"}}," +
+		"\"rows\":{\"list\":[" +
+		"{\"data\":[{\"value\":1},{\"value\":2},{\"value\":3}],\"name\":\"row1\"}," +
+		"{\"data\":[{\"value\":4},{\"value\":5},{\"value\":6}],\"name\":\"row2\"}," +
+		"{\"data\":[{\"value\":7},{\"value\":8},{\"value\":9}],\"name\":\"row3\"}" +
+		"]}," +
+		"\"minimap\":{\"image\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAEElEQVR4nGJiYGAABAAA//8ADAADcZGLFwAAAABJRU5ErkJggg==\"}}"
+	json := InteractiveHeatmap(
+		abundance,
+		columns,
+		rows,
+		false,
+		parameters,
+		"test.png",
+	)
+	json = strings.Replace(json, " ", "", -1)
+	json = strings.Replace(json, "\n", "", -1)
+	json = strings.Replace(json, "\t", "", -1)
 	assert.Equal(
 		t,
 		want,
-		InteractiveHeatmap(
-			abundance,
-			columns,
-			rows,
-			false,
-			parameters,
-			"test.png",
-		),
+		json,
 		"JSON not generated correctly",
 	)
 }

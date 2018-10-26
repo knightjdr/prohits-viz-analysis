@@ -75,7 +75,8 @@ func TestLogParams(t *testing.T) {
 		"Clustering\r\n" +
 		"- hierarchical clustering was performed\r\n" +
 		"- distance metric: canberra\r\n" +
-		"- linkage method: ward\r\n"
+		"- linkage method: ward\r\n" +
+		"- leaf clusters were not optimized\r\n"
 	assert.Equal(t, want, string(logfile), "Logfile not correct")
 
 	// TEST2: log normalization to a specific readout.

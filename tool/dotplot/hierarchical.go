@@ -30,8 +30,10 @@ func Hierarchical(dataset typedef.Dataset) {
 	logmessage.CheckError(err, true)
 
 	// Optimize clustering.
-	conditionClust = hclust.Optimize(conditionClust, conditionDist)
-	readoutClust = hclust.Optimize(readoutClust, readoutDist)
+	if dataset.Parameters.ClusteringOptimize {
+		conditionClust = hclust.Optimize(conditionClust, conditionDist)
+		readoutClust = hclust.Optimize(readoutClust, readoutDist)
+	}
 
 	// Create tree and get clustering order.
 	conditionTree, err := hclust.Tree(conditionClust, data.Conditions)

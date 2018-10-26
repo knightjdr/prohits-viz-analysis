@@ -42,6 +42,7 @@ type Parameters struct {
 	BiclusteringApprox   bool
 	Clustering           string
 	ClusteringMethod     string
+	ClusteringOptimize   bool
 	Condition            string
 	ConditionClustering  string
 	ConditionList        []string

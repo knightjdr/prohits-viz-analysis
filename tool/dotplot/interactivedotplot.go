@@ -16,20 +16,21 @@ func InteractiveDotplot(
 ) (json string) {
 	// User parameters.
 	parameters := map[string]interface{}{
-		"abundanceColumn":  userParams.Abundance,
-		"analysisType":     userParams.AnalysisType,
-		"conditionColumn":  userParams.Condition,
-		"clustering":       userParams.Clustering,
-		"clusteringMethod": userParams.ClusteringMethod,
-		"controlColumn":    userParams.Control,
-		"distance":         userParams.Distance,
-		"files":            helper.Filename(userParams.Files),
-		"imageType":        "dotplot",
-		"logBase":          userParams.LogBase,
-		"normalization":    userParams.Normalization,
-		"readoutColumn":    userParams.Readout,
-		"scoreColumn":      userParams.Score,
-		"scoreType":        userParams.ScoreType,
+		"abundanceColumn":    userParams.Abundance,
+		"analysisType":       userParams.AnalysisType,
+		"conditionColumn":    userParams.Condition,
+		"clustering":         userParams.Clustering,
+		"clusteringMethod":   userParams.ClusteringMethod,
+		"clusteringOptimize": userParams.ClusteringOptimize,
+		"controlColumn":      userParams.Control,
+		"distance":           userParams.Distance,
+		"files":              helper.Filename(userParams.Files),
+		"imageType":          "dotplot",
+		"logBase":            userParams.LogBase,
+		"normalization":      userParams.Normalization,
+		"readoutColumn":      userParams.Readout,
+		"scoreColumn":        userParams.Score,
+		"scoreType":          userParams.ScoreType,
 	}
 
 	// Needed settings.
