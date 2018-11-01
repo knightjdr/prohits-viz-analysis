@@ -172,7 +172,39 @@ func TestLogParams(t *testing.T) {
 	matched, _ = regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "Biclustering not recorded in log")
 
-	// TEST4: condition and readout clustering.
+	// TEST4: log approximate biclustering.
+	parameters = typedef.Parameters{
+		Abundance:            "abundanceColumn",
+		AnalysisType:         "dotplot",
+		BiclusteringApprox:   true,
+		Condition:            "conditionColumn",
+		ConditionClustering:  "",
+		Clustering:           "biclustering",
+		ClusteringMethod:     "ward",
+		FillColor:            "blueBlack",
+		Control:              "controlColumn",
+		Distance:             "canberra",
+		Files:                []string{"file1.txt", "file2.txt"},
+		LogBase:              "2",
+		AbundanceCap:         50,
+		MinAbundance:         0,
+		Normalization:        "readout",
+		NormalizationReadout: "readoutX",
+		Readout:              "readoutsColumn",
+		ReadoutClustering:    "",
+		ReadoutLength:        "readoutLengthColumn",
+		PrimaryFilter:        0.01,
+		Score:                "scoreColumn",
+		ScoreType:            "gte",
+		SecondaryFilter:      0.05,
+	}
+	LogParams(parameters)
+	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
+	want = "- approximate biclustering was performed"
+	matched, _ = regexp.MatchString(want, string(logfile))
+	assert.True(t, matched, "Biclustering not recorded in log")
+
+	// TEST5: condition and readout clustering.
 	parameters = typedef.Parameters{
 		Abundance:            "abundanceColumn",
 		AnalysisType:         "dotplot",
@@ -203,38 +235,7 @@ func TestLogParams(t *testing.T) {
 	matched, _ = regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "No clustering not recorded in log")
 
-	// TEST4: condition clustering alone.
-	parameters = typedef.Parameters{
-		Abundance:            "abundanceColumn",
-		AnalysisType:         "dotplot",
-		Condition:            "conditionColumn",
-		ConditionClustering:  "none",
-		Clustering:           "none",
-		ClusteringMethod:     "ward",
-		FillColor:            "blueBlack",
-		Control:              "controlColumn",
-		Distance:             "canberra",
-		Files:                []string{"file1.txt", "file2.txt"},
-		LogBase:              "2",
-		AbundanceCap:         50,
-		MinAbundance:         0,
-		Normalization:        "readout",
-		NormalizationReadout: "readoutX",
-		Readout:              "readoutsColumn",
-		ReadoutClustering:    "readouts",
-		ReadoutLength:        "readoutLengthColumn",
-		PrimaryFilter:        0.01,
-		Score:                "scoreColumn",
-		ScoreType:            "gte",
-		SecondaryFilter:      0.05,
-	}
-	LogParams(parameters)
-	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
-	want = "- conditions were hierarchically clustered"
-	matched, _ = regexp.MatchString(want, string(logfile))
-	assert.True(t, matched, "Exclusive condition clustering not recorded in log")
-
-	// TEST5: readout clustering alone.
+	// TEST6: condition clustering alone.
 	parameters = typedef.Parameters{
 		Abundance:            "abundanceColumn",
 		AnalysisType:         "dotplot",
@@ -253,6 +254,37 @@ func TestLogParams(t *testing.T) {
 		NormalizationReadout: "readoutX",
 		Readout:              "readoutsColumn",
 		ReadoutClustering:    "none",
+		ReadoutLength:        "readoutLengthColumn",
+		PrimaryFilter:        0.01,
+		Score:                "scoreColumn",
+		ScoreType:            "gte",
+		SecondaryFilter:      0.05,
+	}
+	LogParams(parameters)
+	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
+	want = "- conditions were hierarchically clustered"
+	matched, _ = regexp.MatchString(want, string(logfile))
+	assert.True(t, matched, "Exclusive condition clustering not recorded in log")
+
+	// TEST7: readout clustering alone.
+	parameters = typedef.Parameters{
+		Abundance:            "abundanceColumn",
+		AnalysisType:         "dotplot",
+		Condition:            "conditionColumn",
+		ConditionClustering:  "none",
+		Clustering:           "none",
+		ClusteringMethod:     "ward",
+		FillColor:            "blueBlack",
+		Control:              "controlColumn",
+		Distance:             "canberra",
+		Files:                []string{"file1.txt", "file2.txt"},
+		LogBase:              "2",
+		AbundanceCap:         50,
+		MinAbundance:         0,
+		Normalization:        "readout",
+		NormalizationReadout: "readoutX",
+		Readout:              "readoutsColumn",
+		ReadoutClustering:    "readouts",
 		ReadoutLength:        "readoutLengthColumn",
 		PrimaryFilter:        0.01,
 		Score:                "scoreColumn",

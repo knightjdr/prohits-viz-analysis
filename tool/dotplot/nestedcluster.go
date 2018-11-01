@@ -31,6 +31,9 @@ func NestedClustering() (order BiclustOrder) {
 	logmessage.CheckError(cmdErr, true)
 
 	// Move nested cluster files.
+	fs.Instance.Rename("bait_lists", "biclustering/bait_lists")
+	fs.Instance.Rename("bait2bait.pdf", "biclustering/bait2bait.pdf")
+	fs.Instance.Rename("baitClusters", "biclustering/baitClusters")
 	fs.Instance.Rename("condition_lists", "biclustering/condition_lists")
 	fs.Instance.Rename("condition2condition.pdf", "biclustering/condition2condition.pdf")
 	fs.Instance.Rename("conditionClusters", "biclustering/conditionClusters")

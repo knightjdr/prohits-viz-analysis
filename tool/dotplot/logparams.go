@@ -94,7 +94,11 @@ func LogParams(parameters typedef.Parameters) {
 	// Clustering.
 	logSlice = append(logSlice, "Clustering")
 	if parameters.Clustering == "biclustering" {
-		logSlice = append(logSlice, "- biclustering was performed")
+		if parameters.BiclusteringApprox {
+			logSlice = append(logSlice, "- approximate biclustering was performed")
+		} else {
+			logSlice = append(logSlice, "- biclustering was performed")
+		}
 	} else if parameters.Clustering == "hierarchical" {
 		logSlice = append(logSlice, "- hierarchical clustering was performed")
 		logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
@@ -110,11 +114,14 @@ func LogParams(parameters typedef.Parameters) {
 	} else {
 		logSlice = append(logSlice, "- no clustering was performed")
 	}
-	if parameters.ClusteringOptimize {
-		logSlice = append(logSlice, "- leaf clusters were optimized")
-	} else {
-		logSlice = append(logSlice, "- leaf clusters were not optimized")
+	if parameters.Clustering != "biclustering" {
+		if parameters.ClusteringOptimize {
+			logSlice = append(logSlice, "- leaf clusters were optimized")
+		} else {
+			logSlice = append(logSlice, "- leaf clusters were not optimized")
+		}
 	}
+
 	logSlice = append(logSlice, "")
 
 	// Write log to file.
