@@ -77,6 +77,7 @@ pvanalyze -analysisType dotplot
 | abundanceCap          | threshold for capping abundances on the image |
 | edgeColor<sup>1</sup> | edge color on dot plots                       |
 | fillColor<sup>1</sup> | fill color on dot plots and heat maps         |
+
 <sup>1</sup> Options: blueBlack, greenBlack, greyScale, redBlack, yellowBlack
 
 ### Data filtering
