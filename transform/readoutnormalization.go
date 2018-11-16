@@ -16,15 +16,18 @@ func ReadoutNormalization(
 	normalizationReadout string,
 ) (transformed []map[string]interface{}) {
 	transformed = data
+
 	// Grab the readout abundance for each condition.
 	conditions := map[string]float64{}
 	readoutValues := make([]float64, 0)
 	for _, row := range transformed {
+
 		// Add condition to map if it is not present.
 		conditionName := row["condition"].(string)
 		if _, ok := conditions[conditionName]; !ok {
 			conditions[conditionName] = 0 // Use 0 to indicate missing value.
 		}
+
 		// If current readout matches readout for normalization set its condition value.
 		readoutName := row["readout"].(string)
 		if readoutName == normalizationReadout {
