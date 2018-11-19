@@ -31,7 +31,7 @@ func NoCluster(dataset typedef.Dataset) {
 
 		// Optimize clustering.
 		if dataset.Parameters.ClusteringOptimize {
-			conditionClust = hclust.Optimize(conditionClust, conditionDist)
+			conditionClust = hclust.Optimize(conditionClust, conditionDist, ignore)
 		}
 
 		// Create tree and get clustering order.
@@ -120,7 +120,7 @@ func NoCluster(dataset typedef.Dataset) {
 
 		// Optimize clustering.
 		if dataset.Parameters.ClusteringOptimize {
-			readoutClust = hclust.Optimize(readoutClust, readoutDist)
+			readoutClust = hclust.Optimize(readoutClust, readoutDist, ignore)
 		}
 
 		// Create tree and get clustering order.

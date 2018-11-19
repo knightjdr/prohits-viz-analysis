@@ -31,8 +31,8 @@ func Hierarchical(dataset typedef.Dataset) {
 
 	// Optimize clustering.
 	if dataset.Parameters.ClusteringOptimize {
-		conditionClust = hclust.Optimize(conditionClust, conditionDist)
-		readoutClust = hclust.Optimize(readoutClust, readoutDist)
+		conditionClust = hclust.Optimize(conditionClust, conditionDist, ignore)
+		readoutClust = hclust.Optimize(readoutClust, readoutDist, ignore)
 	}
 
 	// Create tree and get clustering order.

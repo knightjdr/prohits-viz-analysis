@@ -10,6 +10,8 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
+const ignore = 250000
+
 // Generate is the entry point for generating dotplots and output files.
 func Generate(dataset typedef.Dataset) {
 	// Create subfolders. Panic if error.
