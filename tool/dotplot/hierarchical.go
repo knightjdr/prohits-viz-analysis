@@ -98,7 +98,7 @@ func Hierarchical(dataset typedef.Dataset) {
 
 		// Write distance legend.
 		legendTitle := fmt.Sprintf("Distance - %s", dataset.Parameters.Abundance)
-		distanceLegend := svg.Gradient(dataset.Parameters.FillColor, legendTitle, 101, 0, dataset.Parameters.AbundanceCap)
+		distanceLegend := svg.Gradient(dataset.Parameters.FillColor, legendTitle, 101, 1, 0, true)
 		afero.WriteFile(fs.Instance, "svg/distance-legend.svg", []byte(distanceLegend), 0644)
 	}
 
@@ -223,7 +223,7 @@ func Hierarchical(dataset typedef.Dataset) {
 		distanceParams.AbundanceCap = 1
 		distanceParams.MinAbundance = 0
 		json := InteractiveHeatmap(
-			normalizedConditionDist,
+			sortedConditionDist,
 			conditionTree.Order,
 			conditionTree.Order,
 			true,
@@ -232,7 +232,7 @@ func Hierarchical(dataset typedef.Dataset) {
 		)
 		afero.WriteFile(fs.Instance, "interactive/condition-condition.json", []byte(json), 0644)
 		json = InteractiveHeatmap(
-			normalizedReadoutDist,
+			sortedReadoutDist,
 			readoutTree.Order,
 			readoutTree.Order,
 			true,

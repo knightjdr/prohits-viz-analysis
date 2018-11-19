@@ -89,7 +89,7 @@ func NoCluster(dataset typedef.Dataset) {
 			distanceParams.AbundanceCap = 1
 			distanceParams.MinAbundance = 0
 			json := InteractiveHeatmap(
-				normalizedConditionDist,
+				sortedConditionDist,
 				conditionOrder,
 				conditionOrder,
 				true,
@@ -178,7 +178,7 @@ func NoCluster(dataset typedef.Dataset) {
 			distanceParams.AbundanceCap = 1
 			distanceParams.MinAbundance = 0
 			json := InteractiveHeatmap(
-				normalizedReadoutDist,
+				sortedReadoutDist,
 				readoutOrder,
 				readoutOrder,
 				true,
@@ -290,7 +290,7 @@ func NoCluster(dataset typedef.Dataset) {
 	if dataset.Parameters.WriteDistance {
 		// Write distance legend.
 		legendTitle := fmt.Sprintf("Distance - %s", dataset.Parameters.Abundance)
-		distanceLegend := svg.Gradient(dataset.Parameters.FillColor, legendTitle, 101, 0, dataset.Parameters.AbundanceCap)
+		distanceLegend := svg.Gradient(dataset.Parameters.FillColor, legendTitle, 101, 1, 0, true)
 		afero.WriteFile(fs.Instance, "svg/distance-legend.svg", []byte(distanceLegend), 0644)
 
 		// Generate pdfs and pngs.

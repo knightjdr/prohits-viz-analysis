@@ -82,6 +82,6 @@ func TestDotplot(t *testing.T) {
 		"\t<text y=\"10\" x=\"87\" font-size=\"12\" text-anchor=\"middle\">Conditions</text>\n" +
 		"\t<text y=\"87\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 87)\">Readouts</text>\n" +
 		"</svg>\n"
-	svg := Dotplot(abundance, ratio, score, annotations, markers, columns, rows, options)
+	svg := Dotplot(abundance, ratio, score, annotations, markers, columns, rows, false, options)
 	assert.Equal(t, want, svg, "Dotplot svg is not correct")
 }

@@ -69,6 +69,6 @@ func TestHeatmap(t *testing.T) {
 		"\t<text y=\"10\" x=\"87\" font-size=\"12\" text-anchor=\"middle\">Conditions</text>\n" +
 		"\t<text y=\"87\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 87)\">Readouts</text>\n" +
 		"</svg>\n"
-	svg := Heatmap(matrix, annotations, markers, columns, rows, options)
+	svg := Heatmap(matrix, annotations, markers, columns, rows, false, options)
 	assert.Equal(t, want, svg, "Heatmap svg is not correct")
 }

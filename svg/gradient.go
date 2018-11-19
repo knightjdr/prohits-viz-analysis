@@ -10,9 +10,9 @@ import (
 
 // Gradient draws a color gradient for a legend. It can either be a complete svg
 // or just the elements for the gradient (i.e. not wrapped by <svg>)
-func Gradient(colorSpace, title string, numColors int, min, max float64) (svg string) {
+func Gradient(colorSpace, title string, numColors int, min, max float64, invert bool) (svg string) {
 	// Get color gradient.
-	gradient := colorGradient(colorSpace, numColors, false)
+	gradient := colorGradient(colorSpace, numColors, invert)
 
 	// Define svg.
 	svgSlice := make([]string, 0)

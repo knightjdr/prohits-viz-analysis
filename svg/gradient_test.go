@@ -27,5 +27,5 @@ func TestGradient(t *testing.T) {
 		"\t<text y=\"65\" x=\"175\" font-size=\"12\" text-anchor=\"middle\">1</text>\n" +
 		"\t<text y=\"65\" x=\"25\" font-size=\"12\" text-anchor=\"middle\">0</text>\n" +
 		"</svg>\n"
-	assert.Equal(t, want, Gradient("blueBlack", "Title - test", 11, 0, 1), "Gradient svg is not correct")
+	assert.Equal(t, want, Gradient("blueBlack", "Title - test", 11, 0, 1, false), "Gradient svg is not correct")
 }
