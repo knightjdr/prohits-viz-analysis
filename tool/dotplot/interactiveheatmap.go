@@ -56,7 +56,7 @@ func InteractiveHeatmap(
 		rowslice := make([]map[string]float64, numCols)
 		for j, value := range row {
 			rowslice[j] = map[string]float64{
-				"value": value,
+				"value": helper.TruncateFloat(value, 2),
 			}
 		}
 		data[i] = map[string]interface{}{

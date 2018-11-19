@@ -56,9 +56,9 @@ func InteractiveDotplot(
 		rowslice := make([]map[string]float64, numCols)
 		for j, value := range row {
 			rowslice[j] = map[string]float64{
-				"ratio": ratios[i][j],
-				"score": scores[i][j],
-				"value": value,
+				"ratio": helper.TruncateFloat(ratios[i][j], 2),
+				"score": helper.TruncateFloat(scores[i][j], 2),
+				"value": helper.TruncateFloat(value, 2),
 			}
 		}
 		data[i] = map[string]interface{}{
