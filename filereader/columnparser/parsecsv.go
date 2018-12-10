@@ -32,6 +32,7 @@ func ParseCsv(
 
 			// Read file.
 			reader := csv.NewReader(file)
+			reader.LazyQuotes = true
 			reader.Comma = delimiter // Set delimiter.
 			lines, err := reader.ReadAll()
 			// Skip if file cannot be read.
