@@ -10,9 +10,8 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 )
 
-// ConvertMap converts svgs to a minimaps. A minimap is a png with height 600px
-// that is used by the interactive viewer at prohis-viz. The svg must have a g
-// element with id="minimap" to use for exporting.
+// ConvertMap converts svgs to minimaps. A minimap is a png with height 1000px
+// that is used by the interactive viewer at prohis-viz.
 func ConvertMap(list []string) {
 	// Get current working directory.
 	workingDir, err := os.Getwd()

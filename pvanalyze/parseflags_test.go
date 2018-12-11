@@ -61,12 +61,12 @@ func TestParseFlagsCorrect(t *testing.T) {
 		"-writeHeatmap=false",
 	}
 	wantMap := map[string]string{
-		"abundance":     "abundanceColumn",
-		"condition":     "conditionColumn",
-		"control":       "controlColumn",
-		"readout":       "readoutColumn",
-		"readoutLength": "readoutLengthColumn",
-		"score":         "scoreColumn",
+		"Abundance":     "abundanceColumn",
+		"Condition":     "conditionColumn",
+		"Control":       "controlColumn",
+		"Readout":       "readoutColumn",
+		"ReadoutLength": "readoutLengthColumn",
+		"Score":         "scoreColumn",
 	}
 	wantParams := typedef.Parameters{
 		Abundance:            "abundanceColumn",

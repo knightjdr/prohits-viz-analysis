@@ -6,8 +6,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
-// InteractiveHeatmap creates vars for passing to the interactive file maker
-// add passes those vars.
+// InteractiveHeatmap creates variables for passing to the interactive file maker.
 func InteractiveHeatmap(
 	abundance [][]float64,
 	columns, rows []string,

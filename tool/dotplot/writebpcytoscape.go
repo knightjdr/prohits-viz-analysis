@@ -40,10 +40,11 @@ func WriteBPCytoscape(dataset typedef.Dataset) {
 	// Write each row in the dataset if the score passed the cutoff.
 	cutoff := dataset.Parameters.PrimaryFilter
 	filterFunc := helper.FilterFunc(dataset.Parameters.ScoreType)
-	for _, row := range dataset.Data {
-		if filterFunc(row["score"].(float64), cutoff) {
+	for _, row := range dataset.FileData {
+		score, _ := strconv.ParseFloat(row["score"], 64)
+		if filterFunc(score, cutoff) {
 			// Abundance could be a pipe separated list. Split and sum to accomodate.
-			abundance := strings.Split(row["abundance"].(string), "|")
+			abundance := strings.Split(row["abundance"], "|")
 			abundanceSum := float64(0)
 			for _, value := range abundance {
 				abdFloat, _ := strconv.ParseFloat(value, 64)
@@ -52,10 +53,10 @@ func WriteBPCytoscape(dataset typedef.Dataset) {
 
 			// Create row to write.
 			rowSlice := make([]string, 4)
-			rowSlice[0] = row["condition"].(string)
-			rowSlice[1] = row["readout"].(string)
+			rowSlice[0] = row["condition"]
+			rowSlice[1] = row["readout"]
 			rowSlice[2] = strconv.FormatFloat(abundanceSum, 'f', 2, 64)
-			rowSlice[3] = strconv.FormatFloat(row["score"].(float64), 'f', 2, 64)
+			rowSlice[3] = row["score"]
 			err = writer.Write(rowSlice)
 
 			// Log if error and return without panic.

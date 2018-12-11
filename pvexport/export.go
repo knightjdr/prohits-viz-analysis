@@ -18,18 +18,14 @@ func Export(
 	columns, rows []string,
 	userParams typedef.Parameters,
 ) {
-	// Define dotplot parameters.
-	parameters := map[string]interface{}{
-		"colLabel":     "Conditions",
-		"edgeColor":    userParams.EdgeColor,
-		"fillColor":    userParams.FillColor,
-		"invertColor":  userParams.InvertColor,
-		"abundanceCap": userParams.AbundanceCap,
-		"primary":      userParams.PrimaryFilter,
-		"rowLabel":     "Readouts",
-		"secondary":    userParams.SecondaryFilter,
-		"scoreType":    userParams.ScoreType,
+	parameters := userParams
+	if parameters.Condition == "" {
+		parameters.Condition = "Conditions"
 	}
+	if parameters.Readout == "" {
+		parameters.Readout = "Readouts"
+	}
+
 	var content string
 	if imageType == "dotplot" {
 		content = svg.Dotplot(abundance, ratios, scores, annotations, markers, columns, rows, false, parameters)

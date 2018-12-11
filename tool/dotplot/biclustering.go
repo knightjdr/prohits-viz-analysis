@@ -7,6 +7,8 @@ import (
 
 	"github.com/knightjdr/hclust"
 	"github.com/knightjdr/prohits-viz-analysis/fs"
+	"github.com/knightjdr/prohits-viz-analysis/helper"
+	"github.com/knightjdr/prohits-viz-analysis/interactive"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
@@ -32,8 +34,8 @@ func Biclustering(dataset typedef.Dataset) {
 	if dataset.Parameters.BiclusteringApprox {
 		// Get number of conditions.
 		uniqueConditions := make(map[string]bool)
-		for _, row := range dataset.Data {
-			condition := row["condition"].(string)
+		for _, row := range dataset.FileData {
+			condition := row["condition"]
 			if _, ok := uniqueConditions[condition]; !ok {
 				uniqueConditions[condition] = true
 			}
@@ -71,7 +73,7 @@ func Biclustering(dataset typedef.Dataset) {
 	afero.WriteFile(fs.Instance, "biclustering/parameters.txt", []byte(parameters), 0644)
 
 	// Generate condition-readout table.
-	data := ConditionReadoutMatrix(dataset.Data, dataset.Parameters.ScoreType)
+	data := helper.ConditionReadoutMatrix(dataset.FileData, dataset.Parameters.ScoreType, true)
 
 	// Subset data matrix to only include readouts that pass the minimum abundance
 	// cutoff for at least two conditions and return normalized matrix. Will also return
@@ -179,7 +181,7 @@ func Biclustering(dataset typedef.Dataset) {
 
 	// Create interactive files.
 	if dataset.Parameters.WriteDotplot {
-		json := InteractiveDotplot(
+		json := interactive.ParseDotplot(
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,

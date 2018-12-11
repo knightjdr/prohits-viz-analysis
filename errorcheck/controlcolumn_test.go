@@ -8,9 +8,9 @@ import (
 
 func TestControlColumn(t *testing.T) {
 	// TEST1: valid control column returns no error.
-	validTests := [2]interface{}{"1", "1|2.3|0.1"}
+	validTests := [2]string{"1", "1|2.3|0.1"}
 	for _, value := range validTests {
-		data := []map[string]interface{}{
+		data := []map[string]string{
 			{"control": value},
 		}
 		err := ControlColumn(data, "controlColumn")
@@ -18,16 +18,16 @@ func TestControlColumn(t *testing.T) {
 	}
 
 	// TEST2: missing control column returns no error.
-	data := []map[string]interface{}{
-		{"control": 10},
+	data := []map[string]string{
+		{"control": "10"},
 	}
 	err := ControlColumn(data, "")
 	assert.Nil(t, err, "Missing control column should not return an error")
 
 	// TEST3: invalid control column returns error.
-	invalidTests := [3]interface{}{"a", "", "1|a|b|0.1"}
+	invalidTests := [3]string{"a", "", "1|a|b|0.1"}
 	for _, value := range invalidTests {
-		data = []map[string]interface{}{
+		data = []map[string]string{
 			{"control": value},
 		}
 		err = ControlColumn(data, "controlColumn")

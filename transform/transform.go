@@ -10,9 +10,9 @@ import "github.com/knightjdr/prohits-viz-analysis/typedef"
 // Readouts is the entry point for readout transformations.
 func Readouts(
 	dataset typedef.Dataset,
-) (transformed []map[string]interface{}) {
+) (transformed []map[string]string) {
 	// Control subtraction.
-	transformed = ControlSubtraction(dataset.Data, dataset.Parameters.Control)
+	transformed = ControlSubtraction(dataset.FileData, dataset.Parameters.Control)
 
 	// Readout length normalization.
 	transformed = ReadoutLength(transformed, dataset.Parameters.ReadoutLength)

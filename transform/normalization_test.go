@@ -7,7 +7,7 @@ import (
 )
 
 func TestNormalization(t *testing.T) {
-	data := []map[string]interface{}{
+	data := []map[string]string{
 		{"condition": "condition1", "readout": "readout1", "abundance": "10"},
 		{"condition": "condition1", "readout": "readout2", "abundance": "5"},
 		{"condition": "condition2", "readout": "readout1", "abundance": "1"},
@@ -27,7 +27,7 @@ func TestNormalization(t *testing.T) {
 	)
 
 	// TEST2: readout normalization.
-	want := []map[string]interface{}{
+	want := []map[string]string{
 		{"condition": "condition1", "readout": "readout1", "abundance": "12.5"},
 		{"condition": "condition1", "readout": "readout2", "abundance": "6.25"},
 		{"condition": "condition2", "readout": "readout1", "abundance": "12.5"},
@@ -46,7 +46,7 @@ func TestNormalization(t *testing.T) {
 	)
 
 	// TEST3: total sum normalization.
-	data = []map[string]interface{}{
+	data = []map[string]string{
 		{"condition": "condition1", "readout": "readout1", "abundance": "10"},
 		{"condition": "condition1", "readout": "readout2", "abundance": "5"},
 		{"condition": "condition2", "readout": "readout1", "abundance": "1"},
@@ -56,7 +56,7 @@ func TestNormalization(t *testing.T) {
 		{"condition": "condition4", "readout": "readout1", "abundance": "15|8|7"},
 		{"condition": "condition5", "readout": "readout2", "abundance": "10"},
 	}
-	want = []map[string]interface{}{
+	want = []map[string]string{
 		{"condition": "condition1", "readout": "readout1", "abundance": "10"},
 		{"condition": "condition1", "readout": "readout2", "abundance": "5"},
 		{"condition": "condition2", "readout": "readout1", "abundance": "5"},

@@ -7,6 +7,7 @@ func Conditions(
 ) (filtered []map[string]string) {
 	// Convert condition slice to map.
 	conditionMap := SliceToMap(conditions)
+
 	// Iterate over slice and keep rows with condition in readoutMap.
 	datalen := len(data)
 	filtered = data

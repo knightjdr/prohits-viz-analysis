@@ -16,7 +16,7 @@ type Annotation struct {
 
 // Dataset contains data to analysis plus parameters.
 type Dataset struct {
-	Data       []map[string]interface{}
+	FileData   []map[string]string
 	Parameters Parameters
 }
 
@@ -32,6 +32,12 @@ type Marker struct {
 	Width  int `json:"width"`
 	X      int `json:"x"`
 	Y      int `json:"y"`
+}
+
+// Matrices holds input data formatted as matrices
+type Matrices struct {
+	Abundance, Score     [][]float64
+	Conditions, Readouts []string
 }
 
 // Parameters for command line arguments.

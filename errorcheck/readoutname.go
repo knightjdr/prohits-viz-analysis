@@ -3,10 +3,10 @@ package errorcheck
 import "errors"
 
 // ReadoutName ensures all readouts have names.
-func ReadoutName(data []map[string]interface{}) (err error) {
+func ReadoutName(data []map[string]string) (err error) {
 	// iterate over data.
 	for _, row := range data {
-		readoutString := row["readout"].(string)
+		readoutString := row["readout"]
 		if readoutString == "" {
 			err = errors.New("All readouts should have a name")
 			return

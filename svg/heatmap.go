@@ -13,7 +13,7 @@ func Heatmap(
 	markers typedef.Markers,
 	columns, rows []string,
 	minimap bool,
-	options map[string]interface{},
+	parameters typedef.Parameters,
 ) string {
 	svg := make([]string, 0)
 	dims := HeatmapDimensions(matrix, columns, rows, minimap)
@@ -22,11 +22,11 @@ func Heatmap(
 		svg = append(svg, HeatmapColumnNames(dims, columns))
 		svg = append(svg, HeatmapRowNames(dims, rows))
 	}
-	svg = append(svg, HeatmapRows(matrix, dims, options))
+	svg = append(svg, HeatmapRows(matrix, dims, parameters))
 	if !minimap {
 		svg = append(svg, HeatmapMarkers(markers, dims))
 		svg = append(svg, HeatmapAnnotations(annotations, dims))
-		svg = append(svg, HeatmapHeadings(dims, options))
+		svg = append(svg, HeatmapHeadings(dims, parameters))
 	}
 	// Add end element wrapper for svg.
 	svg = append(svg, "</svg>\n")

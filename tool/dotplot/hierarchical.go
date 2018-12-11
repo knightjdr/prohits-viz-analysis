@@ -5,6 +5,8 @@ import (
 
 	"github.com/knightjdr/hclust"
 	"github.com/knightjdr/prohits-viz-analysis/fs"
+	"github.com/knightjdr/prohits-viz-analysis/helper"
+	"github.com/knightjdr/prohits-viz-analysis/interactive"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
@@ -17,7 +19,7 @@ func Hierarchical(dataset typedef.Dataset) {
 	LogParams(dataset.Parameters)
 
 	// Generate condition-readout table.
-	data := ConditionReadoutMatrix(dataset.Data, dataset.Parameters.ScoreType)
+	data := helper.ConditionReadoutMatrix(dataset.FileData, dataset.Parameters.ScoreType, true)
 
 	// Generate condition and readout distance matrices.
 	conditionDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, true)
@@ -222,7 +224,7 @@ func Hierarchical(dataset typedef.Dataset) {
 		distanceParams := dataset.Parameters
 		distanceParams.AbundanceCap = 1
 		distanceParams.MinAbundance = 0
-		json := InteractiveHeatmap(
+		json := interactive.ParseHeatmap(
 			sortedConditionDist,
 			conditionTree.Order,
 			conditionTree.Order,
@@ -231,7 +233,7 @@ func Hierarchical(dataset typedef.Dataset) {
 			"minimap/condition-condition.png",
 		)
 		afero.WriteFile(fs.Instance, "interactive/condition-condition.json", []byte(json), 0644)
-		json = InteractiveHeatmap(
+		json = interactive.ParseHeatmap(
 			sortedReadoutDist,
 			readoutTree.Order,
 			readoutTree.Order,
@@ -242,7 +244,7 @@ func Hierarchical(dataset typedef.Dataset) {
 		afero.WriteFile(fs.Instance, "interactive/readout-readout.json", []byte(json), 0644)
 	}
 	if dataset.Parameters.WriteDotplot {
-		json := InteractiveDotplot(
+		json := interactive.ParseDotplot(
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,

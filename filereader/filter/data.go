@@ -12,15 +12,15 @@ import (
 func Data(
 	data []map[string]string,
 	parameters typedef.Parameters,
-) (filtered []map[string]interface{}) {
+) (filtered []map[string]string) {
 	filteredConditionReadout := make([]map[string]string, 0)
 
-	// Filter by both conditions and readouts if desired.
+	// Filter by both conditions and readouts if desired, or either alone.
 	if parameters.ConditionClustering == "none" && parameters.ReadoutClustering == "none" {
 		filteredConditionReadout = ConditionReadout(data, parameters.ConditionList, parameters.ReadoutList)
-	} else if parameters.ConditionClustering == "none" { // Filter by conditions only.
+	} else if parameters.ConditionClustering == "none" {
 		filteredConditionReadout = Conditions(data, parameters.ConditionList)
-	} else if parameters.ReadoutClustering == "none" { // Filter by readouts only.
+	} else if parameters.ReadoutClustering == "none" {
 		filteredConditionReadout = Readouts(data, parameters.ReadoutList)
 	} else {
 		filteredConditionReadout = data
@@ -28,12 +28,11 @@ func Data(
 
 	// If filteredConditionReadout slice is empty, return error.
 	if len(filteredConditionReadout) == 0 {
-		// Log message and panic.
 		logmessage.CheckError(errors.New("No parsed results matching condition and readout criteria"), true)
 	}
 
 	// Filter by score.
-	filtered, err := Score(
+	filtered, err := Reduce(
 		filteredConditionReadout,
 		parameters.PrimaryFilter,
 		parameters.MinAbundance,

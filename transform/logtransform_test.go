@@ -7,7 +7,7 @@ import (
 )
 
 func TestLogTransform(t *testing.T) {
-	data := []map[string]interface{}{
+	data := []map[string]string{
 		{"abundance": "2"},
 		{"abundance": "1"},
 		{"abundance": "8|4"},
@@ -23,7 +23,7 @@ func TestLogTransform(t *testing.T) {
 	)
 
 	// TEST2: log base 2.
-	want := []map[string]interface{}{
+	want := []map[string]string{
 		{"abundance": "1"},
 		{"abundance": "0"},
 		{"abundance": "3|2"},
@@ -37,13 +37,13 @@ func TestLogTransform(t *testing.T) {
 	)
 
 	// TEST3: log base 10.
-	data = []map[string]interface{}{
+	data = []map[string]string{
 		{"abundance": "10"},
 		{"abundance": "1"},
 		{"abundance": "100|0.01"},
 		{"abundance": "3|10|1"},
 	}
-	want = []map[string]interface{}{
+	want = []map[string]string{
 		{"abundance": "1"},
 		{"abundance": "0"},
 		{"abundance": "2|0"},

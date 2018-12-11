@@ -5,6 +5,8 @@ import (
 
 	"github.com/knightjdr/hclust"
 	"github.com/knightjdr/prohits-viz-analysis/fs"
+	"github.com/knightjdr/prohits-viz-analysis/helper"
+	"github.com/knightjdr/prohits-viz-analysis/interactive"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
@@ -17,7 +19,7 @@ func NoCluster(dataset typedef.Dataset) {
 	LogParams(dataset.Parameters)
 
 	// Generate condition-readout table.
-	data := ConditionReadoutMatrix(dataset.Data, dataset.Parameters.ScoreType)
+	data := helper.ConditionReadoutMatrix(dataset.FileData, dataset.Parameters.ScoreType, true)
 
 	// Cluster conditions.
 	var conditionOrder []string
@@ -88,7 +90,7 @@ func NoCluster(dataset typedef.Dataset) {
 			distanceParams := dataset.Parameters
 			distanceParams.AbundanceCap = 1
 			distanceParams.MinAbundance = 0
-			json := InteractiveHeatmap(
+			json := interactive.ParseHeatmap(
 				sortedConditionDist,
 				conditionOrder,
 				conditionOrder,
@@ -177,7 +179,7 @@ func NoCluster(dataset typedef.Dataset) {
 			distanceParams := dataset.Parameters
 			distanceParams.AbundanceCap = 1
 			distanceParams.MinAbundance = 0
-			json := InteractiveHeatmap(
+			json := interactive.ParseHeatmap(
 				sortedReadoutDist,
 				readoutOrder,
 				readoutOrder,
@@ -254,7 +256,7 @@ func NoCluster(dataset typedef.Dataset) {
 		svg.ConvertMap([]string{"dotplot.svg"})
 
 		// Create interactive file.
-		json := InteractiveDotplot(
+		json := interactive.ParseDotplot(
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,

@@ -26,18 +26,16 @@ func TestHeatmap(t *testing.T) {
 			{Height: 2, Width: 2, X: 0, Y: 1},
 		},
 	}
-	options := map[string]interface{}{
-		"annotationFontSize": int(15),
-		"colLabel":           "Conditions",
-		"fillColor":          "blueBlack",
-		"markerColor":        "#000000",
-		"abundanceCap":       float64(50),
-		"invertColor":        false,
-		"rowLabel":           "Readouts",
+	parameters := typedef.Parameters{
+		Condition:    "Conditions",
+		FillColor:    "blueBlack",
+		AbundanceCap: 50,
+		InvertColor:  false,
+		Readout:      "Readouts",
 	}
 	rows := []string{"prey1", "prey2", "prey3"}
 
-	// TEST1: create svg.
+	// TEST: full image, not just minimap
 	want := "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"117\" height=\"117\" viewBox=\"0 0 117 117\">\n" +
 		"\t<g transform=\"translate(57)\">\n" +
 		"\t\t<text y=\"55\" x=\"6\" font-size=\"12\" text-anchor=\"end\" transform=\"rotate(90, 6, 55)\">bait1</text>\n" +
@@ -69,6 +67,23 @@ func TestHeatmap(t *testing.T) {
 		"\t<text y=\"10\" x=\"87\" font-size=\"12\" text-anchor=\"middle\">Conditions</text>\n" +
 		"\t<text y=\"87\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 87)\">Readouts</text>\n" +
 		"</svg>\n"
-	svg := Heatmap(matrix, annotations, markers, columns, rows, false, options)
+	svg := Heatmap(matrix, annotations, markers, columns, rows, false, parameters)
 	assert.Equal(t, want, svg, "Heatmap svg is not correct")
+
+	// TEST: full image, not just minimap
+	want = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"60\" height=\"60\" viewBox=\"0 0 60 60\">\n" +
+		"\t<g id=\"minimap\" transform=\"translate(0, 0)\">\n" +
+		"\t\t<rect fill=\"#0040ff\" y=\"0\" x=\"0\" width=\"20\" height=\"20\" />\n" +
+		"\t\t<rect fill=\"#ccd9ff\" y=\"0\" x=\"20\" width=\"20\" height=\"20\" />\n" +
+		"\t\t<rect fill=\"#000000\" y=\"0\" x=\"40\" width=\"20\" height=\"20\" />\n" +
+		"\t\t<rect fill=\"#000000\" y=\"20\" x=\"0\" width=\"20\" height=\"20\" />\n" +
+		"\t\t<rect fill=\"#0033cc\" y=\"20\" x=\"20\" width=\"20\" height=\"20\" />\n" +
+		"\t\t<rect fill=\"#b8c9ff\" y=\"20\" x=\"40\" width=\"20\" height=\"20\" />\n" +
+		"\t\t<rect fill=\"#ccd9ff\" y=\"40\" x=\"0\" width=\"20\" height=\"20\" />\n" +
+		"\t\t<rect fill=\"#e6ecff\" y=\"40\" x=\"20\" width=\"20\" height=\"20\" />\n" +
+		"\t\t<rect fill=\"#adc2ff\" y=\"40\" x=\"40\" width=\"20\" height=\"20\" />\n" +
+		"\t</g>\n" +
+		"</svg>\n"
+	svg = Heatmap(matrix, annotations, markers, columns, rows, true, parameters)
+	assert.Equal(t, want, svg, "Minimap svg is not correct")
 }

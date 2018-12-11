@@ -36,20 +36,20 @@ func TestDotplot(t *testing.T) {
 			{Height: 2, Width: 2, X: 0, Y: 1},
 		},
 	}
-	options := map[string]interface{}{
-		"colLabel":     "Conditions",
-		"edgeColor":    "blueBlack",
-		"fillColor":    "blueBlack",
-		"abundanceCap": float64(50),
-		"invertColor":  false,
-		"primary":      0.01,
-		"rowLabel":     "Readouts",
-		"secondary":    0.05,
-		"scoreType":    "lte",
+	parameters := typedef.Parameters{
+		Condition:       "Conditions",
+		EdgeColor:       "blueBlack",
+		FillColor:       "blueBlack",
+		AbundanceCap:    50,
+		InvertColor:     false,
+		PrimaryFilter:   0.01,
+		Readout:         "Readouts",
+		SecondaryFilter: 0.05,
+		ScoreType:       "lte",
 	}
 	rows := []string{"prey1", "prey2", "prey3"}
 
-	// TEST1: create svg.
+	// TEST: full image, not just minimap
 	want := "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"117\" height=\"117\" viewBox=\"0 0 117 117\">\n" +
 		"\t<g transform=\"translate(57)\">\n" +
 		"\t\t<text y=\"55\" x=\"6\" font-size=\"12\" text-anchor=\"end\" transform=\"rotate(90, 6, 55)\">bait1</text>\n" +
@@ -82,6 +82,23 @@ func TestDotplot(t *testing.T) {
 		"\t<text y=\"10\" x=\"87\" font-size=\"12\" text-anchor=\"middle\">Conditions</text>\n" +
 		"\t<text y=\"87\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 87)\">Readouts</text>\n" +
 		"</svg>\n"
-	svg := Dotplot(abundance, ratio, score, annotations, markers, columns, rows, false, options)
+	svg := Dotplot(abundance, ratio, score, annotations, markers, columns, rows, false, parameters)
 	assert.Equal(t, want, svg, "Dotplot svg is not correct")
+
+	// TEST: for minimap
+	want = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"60\" height=\"60\" viewBox=\"0 0 60 60\">\n" +
+		"\t<g id=\"minimap\" transform=\"translate(0, 0)\">\n" +
+		"\t\t<circle fill=\"#0040ff\" cy=\"10\" cx=\"10\" r=\"8.500000\" stroke=\"#000000\" stroke-width=\"2.000000\"/>\n" +
+		"\t\t<circle fill=\"#ccd9ff\" cy=\"10\" cx=\"30\" r=\"4.250000\" stroke=\"#000000\" stroke-width=\"2.000000\"/>\n" +
+		"\t\t<circle fill=\"#000000\" cy=\"10\" cx=\"50\" r=\"2.550000\" stroke=\"#0040ff\" stroke-width=\"2.000000\"/>\n" +
+		"\t\t<circle fill=\"#000000\" cy=\"30\" cx=\"10\" r=\"8.500000\" stroke=\"#000000\" stroke-width=\"2.000000\"/>\n" +
+		"\t\t<circle fill=\"#0033cc\" cy=\"30\" cx=\"30\" r=\"2.550000\" stroke=\"#000000\" stroke-width=\"2.000000\"/>\n" +
+		"\t\t<circle fill=\"#b8c9ff\" cy=\"30\" cx=\"50\" r=\"0.850000\" stroke=\"#000000\" stroke-width=\"2.000000\"/>\n" +
+		"\t\t<circle fill=\"#ccd9ff\" cy=\"50\" cx=\"10\" r=\"4.250000\" stroke=\"#0040ff\" stroke-width=\"2.000000\"/>\n" +
+		"\t\t<circle fill=\"#e6ecff\" cy=\"50\" cx=\"30\" r=\"2.130000\" stroke=\"#809fff\" stroke-width=\"2.000000\"/>\n" +
+		"\t\t<circle fill=\"#adc2ff\" cy=\"50\" cx=\"50\" r=\"8.500000\" stroke=\"#000000\" stroke-width=\"2.000000\"/>\n" +
+		"\t</g>\n" +
+		"</svg>\n"
+	svg = Dotplot(abundance, ratio, score, annotations, markers, columns, rows, true, parameters)
+	assert.Equal(t, want, svg, "Minimap svg is not correct")
 }

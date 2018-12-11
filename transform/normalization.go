@@ -7,9 +7,9 @@ package transform
 // is used in place of the total readout abundance. If a condition is missing the requested
 // readout, it will use the median as it's default.
 func Normalization(
-	data []map[string]interface{},
+	data []map[string]string,
 	normalization, normalizationReadout string,
-) (transformed []map[string]interface{}) {
+) (transformed []map[string]string) {
 	transformed = data
 	if normalization == "readout" {
 		// Normalize by readout.

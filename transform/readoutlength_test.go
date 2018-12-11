@@ -7,13 +7,13 @@ import (
 )
 
 func TestReadoutLength(t *testing.T) {
-	data := []map[string]interface{}{
+	data := []map[string]string{
 		{"readout": "readout1", "abundance": "10", "readoutLength": "2"},
 		{"readout": "readout2", "abundance": "1", "readoutLength": "5"},
 		{"readout": "readout1", "abundance": "10|5", "readoutLength": "2"},
 		{"readout": "readout3", "abundance": "10|5|2.5", "readoutLength": "10"},
 	}
-	want := []map[string]interface{}{
+	want := []map[string]string{
 		{"readout": "readout1", "abundance": "25", "readoutLength": "2"},
 		{"readout": "readout2", "abundance": "1", "readoutLength": "5"},
 		{"readout": "readout1", "abundance": "25|12.5", "readoutLength": "2"},

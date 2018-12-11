@@ -33,17 +33,17 @@ func TestWriteBPCytoscape(t *testing.T) {
 		ScoreType:     "lte",
 	}
 	dataset := typedef.Dataset{
-		Data: []map[string]interface{}{
-			{"condition": "condition1", "readout": "readout1", "abundance": "10", "score": 0.01},
-			{"condition": "condition1", "readout": "readout2", "abundance": "5.5", "score": 0.02},
-			{"condition": "condition2", "readout": "readout1", "abundance": "1", "score": float64(0)},
-			{"condition": "condition2", "readout": "readout3", "abundance": "75", "score": 0.01},
+		FileData: []map[string]string{
+			{"condition": "condition1", "readout": "readout1", "abundance": "10", "score": "0.01"},
+			{"condition": "condition1", "readout": "readout2", "abundance": "5.5", "score": "0.02"},
+			{"condition": "condition2", "readout": "readout1", "abundance": "1", "score": "0"},
+			{"condition": "condition2", "readout": "readout3", "abundance": "75", "score": "0.01"},
 		},
 		Parameters: parameters,
 	}
 
 	// TEST1: typical dataset output.
-	want := "Condition\tReadoutGene\tAvgSpec\tBFDR\ncondition1\treadout1\t10.00\t0.01\ncondition2\treadout1\t1.00\t0.00\ncondition2\treadout3\t75.00\t0.01\n"
+	want := "Condition\tReadoutGene\tAvgSpec\tBFDR\ncondition1\treadout1\t10.00\t0.01\ncondition2\treadout1\t1.00\t0\ncondition2\treadout3\t75.00\t0.01\n"
 	WriteBPCytoscape(dataset)
 	tsvFile, _ := afero.ReadFile(fs.Instance, "cytoscape/condition-readout-cytoscape.txt")
 	assert.Equal(t, want, string(tsvFile), "Condition-readout cytoscape file not output correctly")

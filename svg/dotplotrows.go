@@ -5,39 +5,63 @@ import (
 	"math"
 
 	"github.com/knightjdr/prohits-viz-analysis/helper"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
+
+// scoreColorFunc returns a function for determining the gradient index to use
+// for the score color.
+func scoreColorFunc(scoretype string, primary, secondary float64, numColors int) func(score float64) int {
+	if scoretype == "gte" {
+		return func(score float64) int {
+			if score >= primary {
+				return numColors
+			} else if score < primary && score >= secondary {
+				return numColors / 2
+			}
+			return numColors / 4
+		}
+	}
+	return func(score float64) int {
+		if score <= primary {
+			return numColors
+		} else if score > primary && score <= secondary {
+			return numColors / 2
+		}
+		return numColors / 4
+	}
+}
 
 // DotplotRows generates the dotplot element for an SVG.
 func DotplotRows(
 	matrix, ratios, scores [][]float64,
 	dims HDimensions,
-	parameters DParameters,
-	options map[string]interface{},
+	dotplotparameters DParameters,
+	parameters typedef.Parameters,
 ) string {
 	svg := make([]string, 0)
 
 	// Get color gradients.
-	edgeColorGradient := colorGradient(options["edgeColor"].(string), 101, false)
-	fillColorGradient := colorGradient(options["fillColor"].(string), 101, options["invertColor"].(bool))
+	edgeColorGradient := colorGradient(parameters.EdgeColor, 101, false)
+	fillColorGradient := colorGradient(parameters.FillColor, 101, parameters.InvertColor)
 
 	// Get function for determining score edge color.
-	edgeColorFunc := ScoreColorFunc(options["scoreType"].(string), options["primary"].(float64), options["secondary"].(float64), 100)
+	edgeColorFunc := scoreColorFunc(parameters.ScoreType, parameters.PrimaryFilter, parameters.SecondaryFilter, 100)
 
 	// Write rows.
 	svg = append(svg, fmt.Sprintf("\t<g id=\"minimap\" transform=\"translate(%d, %d)\">\n", dims.leftMargin, dims.topMargin))
 	for i, row := range matrix {
 		// Set x position.
-		iPos := (i * dims.cellSize) + parameters.cellSizeHalf
+		iPos := (i * dims.cellSize) + dotplotparameters.cellSizeHalf
 
 		// Draw dots.
 		for j, value := range row {
 			if value > 0 {
 				// Get fill color.
 				var fill string
-				if value > options["abundanceCap"].(float64) {
+				if value > parameters.AbundanceCap {
 					fill = fillColorGradient[100]
 				} else {
-					index := int(math.Round(value / options["abundanceCap"].(float64) * 100))
+					index := int(math.Round(value / parameters.AbundanceCap * 100))
 					fill = fillColorGradient[index]
 				}
 
@@ -46,13 +70,13 @@ func DotplotRows(
 				edgeColor := edgeColorGradient[edgeColorIndex]
 
 				// Get circle radius.
-				radius := helper.Round(ratios[i][j]*parameters.maxRadius, 0.01)
+				radius := helper.Round(ratios[i][j]*dotplotparameters.maxRadius, 0.01)
 
 				// Draw circle.
 				circle := fmt.Sprintf(
 					"\t\t<circle fill=\"%s\" cy=\"%d\" cx=\"%d\" r=\"%f\""+
 						" stroke=\"%s\" stroke-width=\"%f\"/>\n",
-					fill, iPos, (j*dims.cellSize)+parameters.cellSizeHalf, radius, edgeColor, parameters.edgeWidth,
+					fill, iPos, (j*dims.cellSize)+dotplotparameters.cellSizeHalf, radius, edgeColor, dotplotparameters.edgeWidth,
 				)
 				svg = append(svg, circle)
 			}

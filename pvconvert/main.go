@@ -1,4 +1,4 @@
-// Package main takes file from ProHits-viz V1 and converts it to V2 JSON.
+// Package main takes a file from ProHits-viz V1 and converts it to V2 JSON.
 package main
 
 import (
@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/knightjdr/prohits-viz-analysis/filereader/columnparser"
+	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
 func main() {
@@ -16,15 +17,22 @@ func main() {
 	// Set file type and column mapping.
 	fileType := []string{"text/tab-separated-values"}
 	columnMap := map[string]string{
-		"abundance": "column",
+		"condition": "column",
 		"params":    "params",
-		"row":       "row",
+		"readout":   "row",
 		"score":     "score",
 		"value":     "value",
 	}
 
 	// Parse file and parameters.
-	data := columnparser.ParseCsv([]string{*file}, fileType, columnMap)
-	params := parseParams(data)
-	fmt.Println(params)
+	csv := columnparser.ParseCsv([]string{*file}, fileType, columnMap)
+	imageType, parameters := parseParams(csv)
+
+	// Convert csv to matrices
+	matrices := helper.ConditionReadoutMatrix(csv, parameters.ScoreType, false)
+
+	// Generate minimap
+	writeMinimap()
+
+	fmt.Println(matrices, imageType)
 }

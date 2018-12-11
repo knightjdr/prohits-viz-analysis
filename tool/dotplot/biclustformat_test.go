@@ -7,6 +7,7 @@ import (
 
 	"github.com/bouk/monkey"
 	"github.com/knightjdr/prohits-viz-analysis/fs"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -22,7 +23,7 @@ func TestBiclustFormat(t *testing.T) {
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
 	// Data.
-	dataset := Data{
+	dataset := typedef.Matrices{
 		Abundance: [][]float64{
 			{2, 4, 8},
 			{4, 8, 16},

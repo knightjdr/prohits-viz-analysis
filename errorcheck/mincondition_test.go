@@ -7,16 +7,16 @@ import (
 )
 
 func TestMinCondition(t *testing.T) {
-	// TEST1: required condition number does not return an error.
-	data := []map[string]interface{}{
+	// TEST: required condition number does not return an error.
+	data := []map[string]string{
 		{"condition": "a"},
 		{"condition": "c"},
 	}
 	err := MinCondition(data, "dotplot")
 	assert.Nil(t, err, "Required condition number should not return an error")
 
-	// TEST2: invalid data returns an error.
-	data = []map[string]interface{}{
+	// TEST: invalid data returns an error.
+	data = []map[string]string{
 		{"condition": "a"},
 	}
 	err = MinCondition(data, "dotplot")

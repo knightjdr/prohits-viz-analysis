@@ -1,7 +1,7 @@
 package filter
 
-// FilterFunc returns a function for comparing scores against a filter.
-func FilterFunc(scoreType string) func(float64, float64) bool {
+// Scores returns a function for comparing scores against a filter.
+func Scores(scoreType string) func(float64, float64) bool {
 	gteFilter := func(score float64, filter float64) bool {
 		return score >= filter
 	}

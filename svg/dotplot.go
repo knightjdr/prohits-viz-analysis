@@ -6,29 +6,6 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
-// ScoreColorFunc returns a function for determining the gradient index to use
-// for the score color.
-func ScoreColorFunc(scoretype string, primary, secondary float64, numColors int) func(score float64) int {
-	if scoretype == "gte" {
-		return func(score float64) int {
-			if score >= primary {
-				return numColors
-			} else if score < primary && score >= secondary {
-				return numColors / 2
-			}
-			return numColors / 4
-		}
-	}
-	return func(score float64) int {
-		if score <= primary {
-			return numColors
-		} else if score > primary && score <= secondary {
-			return numColors / 2
-		}
-		return numColors / 4
-	}
-}
-
 // Dotplot creates a dotplot from an input matrices of abundance, abundance
 // ratios and score.
 func Dotplot(
@@ -37,22 +14,22 @@ func Dotplot(
 	markers typedef.Markers,
 	columns, rows []string,
 	minimap bool,
-	options map[string]interface{},
+	parameters typedef.Parameters,
 ) string {
 	svg := make([]string, 0)
 	dims := HeatmapDimensions(matrix, columns, rows, minimap)
-	parameters := DotplotParameters(dims)
+	dotplotparameters := DotplotParameters(dims)
 	svg = append(svg, HeatmapHeader(dims))
 	if !minimap {
 		svg = append(svg, HeatmapColumnNames(dims, columns))
 		svg = append(svg, HeatmapRowNames(dims, rows))
 	}
-	svg = append(svg, DotplotRows(matrix, ratios, scores, dims, parameters, options))
+	svg = append(svg, DotplotRows(matrix, ratios, scores, dims, dotplotparameters, parameters))
 	if !minimap {
 		svg = append(svg, HeatmapMarkers(markers, dims))
 		svg = append(svg, HeatmapAnnotations(annotations, dims))
 		svg = append(svg, BoundingBox(dims))
-		svg = append(svg, HeatmapHeadings(dims, options))
+		svg = append(svg, HeatmapHeadings(dims, parameters))
 	}
 	// Add end element wrapper for svg.
 	svg = append(svg, "</svg>\n")

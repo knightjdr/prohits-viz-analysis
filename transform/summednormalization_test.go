@@ -7,7 +7,7 @@ import (
 )
 
 func TestSummedNormalization(t *testing.T) {
-	data := []map[string]interface{}{
+	data := []map[string]string{
 		{"condition": "condition1", "readout": "readout1", "abundance": "10"},
 		{"condition": "condition1", "readout": "readout2", "abundance": "5"},
 		{"condition": "condition2", "readout": "readout1", "abundance": "1"},
@@ -19,7 +19,7 @@ func TestSummedNormalization(t *testing.T) {
 		{"condition": "condition6", "readout": "readout2", "abundance": "0"},
 		{"condition": "condition7", "readout": "readout2", "abundance": "30"},
 	}
-	want := []map[string]interface{}{
+	want := []map[string]string{
 		{"condition": "condition1", "readout": "readout1", "abundance": "10"},
 		{"condition": "condition1", "readout": "readout2", "abundance": "5"},
 		{"condition": "condition2", "readout": "readout1", "abundance": "5"},

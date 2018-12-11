@@ -1,9 +1,11 @@
 package errorcheck
 
-import "errors"
+import (
+	"errors"
+)
 
 // MinData ensures there is data after parsing and filtering.
-func MinData(data []map[string]interface{}) (err error) {
+func MinData(data []map[string]string) (err error) {
 	if len(data) <= 0 {
 		err = errors.New("No data passes the required filters")
 	}

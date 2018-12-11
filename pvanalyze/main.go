@@ -26,7 +26,7 @@ func main() {
 	parsedColumns := columnparser.ReadFile(parameters.Files, columnMap)
 
 	// Filter rows.
-	dataset.Data = filter.Data(parsedColumns, dataset.Parameters)
+	dataset.FileData = filter.Data(parsedColumns, dataset.Parameters)
 
 	// Check for common errors in filtered data that result from incorrect input format.
 	err = errorcheck.Required(dataset)
@@ -35,7 +35,7 @@ func main() {
 	}
 
 	// Transform readout abundances.
-	dataset.Data = transform.Readouts(dataset)
+	dataset.FileData = transform.Readouts(dataset)
 
 	// Perform analysis
 	tool.Start(dataset)

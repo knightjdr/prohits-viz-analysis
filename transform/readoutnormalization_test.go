@@ -7,7 +7,7 @@ import (
 )
 
 func TestReadoutNormalization(t *testing.T) {
-	data := []map[string]interface{}{
+	data := []map[string]string{
 		{"condition": "condition1", "readout": "readout1", "abundance": "10"},
 		{"condition": "condition1", "readout": "readout2", "abundance": "5"},
 		{"condition": "condition2", "readout": "readout1", "abundance": "1"},
@@ -18,7 +18,7 @@ func TestReadoutNormalization(t *testing.T) {
 		{"condition": "condition4", "readout": "readout2", "abundance": "8|2|15.5"},
 		{"condition": "condition5", "readout": "readout2", "abundance": "10"},
 	}
-	want := []map[string]interface{}{
+	want := []map[string]string{
 		{"condition": "condition1", "readout": "readout1", "abundance": "12.5"},
 		{"condition": "condition1", "readout": "readout2", "abundance": "6.25"},
 		{"condition": "condition2", "readout": "readout1", "abundance": "12.5"},

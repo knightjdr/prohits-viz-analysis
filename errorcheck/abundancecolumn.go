@@ -7,9 +7,9 @@ import (
 )
 
 // AbundanceColumn ensures the abundance column is a pipe-separated list of numeric values.
-func AbundanceColumn(data []map[string]interface{}) (err error) {
+func AbundanceColumn(data []map[string]string) (err error) {
 	// Test first abundance column.
-	column := strings.Split(data[0]["abundance"].(string), "|")
+	column := strings.Split(data[0]["abundance"], "|")
 	for _, value := range column {
 		_, err := strconv.ParseFloat(value, 64)
 		if err != nil {

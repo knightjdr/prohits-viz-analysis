@@ -8,7 +8,7 @@ import (
 )
 
 // LogTransform log transforms readout abundance values.
-func LogTransform(data []map[string]interface{}, base string) (transformed []map[string]interface{}) {
+func LogTransform(data []map[string]string, base string) (transformed []map[string]string) {
 	transformed = data
 	// Skip if log transformation not required.
 	validLogs := map[string]bool{
@@ -25,7 +25,7 @@ func LogTransform(data []map[string]interface{}, base string) (transformed []map
 
 	// Iterate over data slice and log transform readout abundance.
 	for _, row := range transformed {
-		abundance := strings.Split(row["abundance"].(string), "|")
+		abundance := strings.Split(row["abundance"], "|")
 		transformedAbdStr := make([]string, 0) // Store as strings for joining.
 		for _, abdValue := range abundance {
 			transformedAbd, _ := strconv.ParseFloat(abdValue, 64)
@@ -36,7 +36,7 @@ func LogTransform(data []map[string]interface{}, base string) (transformed []map
 				transformedAbd = helper.Round(transformedAbd, 0.01) // Round to nearest two decimals.
 			}
 			// Convert float to string and append.
-			transformedAbdStr = append(transformedAbdStr, FloatToString(transformedAbd))
+			transformedAbdStr = append(transformedAbdStr, helper.FloatToString(transformedAbd))
 		}
 		row["abundance"] = strings.Join(transformedAbdStr[:], "|")
 	}

@@ -8,7 +8,7 @@ import (
 
 func TestReadoutName(t *testing.T) {
 	// TEST1: valid readout names returns no error.
-	data := []map[string]interface{}{
+	data := []map[string]string{
 		{"readout": "b"},
 		{"readout": "d"},
 	}
@@ -16,7 +16,7 @@ func TestReadoutName(t *testing.T) {
 	assert.Nil(t, err, "Valid data should not return an error")
 
 	// TEST2: missing readout name returns an error.
-	data = []map[string]interface{}{
+	data = []map[string]string{
 		{"readout": "b"},
 		{"readout": ""},
 	}

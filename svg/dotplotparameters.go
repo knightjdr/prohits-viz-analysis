@@ -13,7 +13,7 @@ type DParameters struct {
 	maxRadius    float64
 }
 
-// DotplotParameters generates dot dimensions for an SVG.
+// DotplotParameters generates dotplot dimensions for an SVG.
 func DotplotParameters(dims HDimensions) (parameters DParameters) {
 	parameters.cellSizeHalf = int(math.Round(float64(dims.cellSize) / float64(2)))
 

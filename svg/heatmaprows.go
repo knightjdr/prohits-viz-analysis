@@ -5,14 +5,15 @@ import (
 	"math"
 
 	"github.com/knightjdr/prohits-viz-analysis/helper"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 // HeatmapRows generates the heatmap element for an SVG.
-func HeatmapRows(matrix [][]float64, dims HDimensions, options map[string]interface{}) string {
+func HeatmapRows(matrix [][]float64, dims HDimensions, parameters typedef.Parameters) string {
 	svg := make([]string, 0)
 
 	// Get color gradient.
-	colorGradient := colorGradient(options["fillColor"].(string), 101, options["invertColor"].(bool))
+	colorGradient := colorGradient(parameters.FillColor, 101, parameters.InvertColor)
 
 	// Write rows.
 	svg = append(svg, fmt.Sprintf("\t<g id=\"minimap\" transform=\"translate(%d, %d)\">\n", dims.leftMargin, dims.topMargin))
@@ -20,10 +21,10 @@ func HeatmapRows(matrix [][]float64, dims HDimensions, options map[string]interf
 		iPos := i * dims.cellSize
 		for j, value := range row {
 			var fill string
-			if value > options["abundanceCap"].(float64) {
+			if value > parameters.AbundanceCap {
 				fill = colorGradient[100]
 			} else {
-				index := int(math.Round(value / options["abundanceCap"].(float64) * 100))
+				index := int(math.Round(value / parameters.AbundanceCap * 100))
 				fill = colorGradient[index]
 			}
 			rect := fmt.Sprintf(

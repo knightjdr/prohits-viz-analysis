@@ -6,6 +6,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/helper"
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 // BiclustData holds information about the input data table.
@@ -20,7 +21,7 @@ type BiclustData struct {
 // (not sure why this normalization is done - taking it frmo HW's script).
 // It returns a 2D matrix sorted by condition and readout alphabetically, as well
 // as the list of readouts kept and readouts omitted (all sorted alphabetically).
-func BiclustFormat(data Data, min float64) (filteredData BiclustData) {
+func BiclustFormat(data typedef.Matrices, min float64) (filteredData BiclustData) {
 	// Condition list doesn't change.
 	filteredData.Conditions = data.Conditions
 
