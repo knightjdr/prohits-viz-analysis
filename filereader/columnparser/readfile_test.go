@@ -41,16 +41,16 @@ func TestReadFile(t *testing.T) {
 		{"condition": "a", "readout": "c"},
 		{"condition": "d", "readout": "f"},
 	}
-	parsed := ReadFile(files, columnMap)
+	parsed := ReadFile(files, columnMap, false)
 	assert.Equal(t, want, parsed, "File not parsed as expected")
 
 	// TEST2: No parsed results should panic.
 	files = []string{"test/empty.txt"}
-	assert.Panics(t, func() { ReadFile(files, columnMap) }, "File with no parsed results should panic")
+	assert.Panics(t, func() { ReadFile(files, columnMap, false) }, "File with no parsed results should panic")
 
 	// TEST3: Invalid file type logs an error.
 	files = []string{"test/testfile.txt", "test/missing.txt"}
-	parsed = ReadFile(files, columnMap)
+	parsed = ReadFile(files, columnMap, false)
 	logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
 	wantMessage := "file does not exist"
 	matched, _ := regexp.MatchString(wantMessage, string(logfile))

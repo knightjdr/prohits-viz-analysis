@@ -50,7 +50,7 @@ func inferSettings(csv []map[string]string, imageType string) typedef.Parameters
 	max := -math.MaxFloat64
 	min := math.MaxFloat64
 	for _, datum := range csv {
-		value, _ := strconv.ParseFloat(datum["value"], 64)
+		value, _ := strconv.ParseFloat(datum["abundance"], 64)
 		if value < min {
 			min = value
 		}
@@ -64,7 +64,7 @@ func inferSettings(csv []map[string]string, imageType string) typedef.Parameters
 		settings.FillColor = "blueBlack"
 		settings.MinAbundance = float64(0)
 	} else {
-		settings.FillColor = "redBlue"
+		settings.FillColor = "blueRed"
 		settings.MinAbundance = float64(math.Floor(min))
 	}
 
@@ -77,7 +77,7 @@ func inferSettings(csv []map[string]string, imageType string) typedef.Parameters
 	return settings
 }
 
-// parseParams parses parameters from
+// parseParams parses parameters from a V1 ProHits-viz file.
 func parseParams(csv []map[string]string) (imageType string, parameters typedef.Parameters) {
 	// Read file parameters.
 	inputParams := &jsonParams{}

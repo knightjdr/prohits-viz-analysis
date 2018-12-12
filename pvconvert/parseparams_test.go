@@ -44,7 +44,7 @@ func TestScoreTypeToBool(t *testing.T) {
 func TestInferSettings(t *testing.T) {
 	// Test dotplot with non-negative values
 	csv := []map[string]string{
-		{"value": "5"}, {"value": "10"}, {"value": "100"}, {"value": "34"},
+		{"abundance": "5"}, {"abundance": "10"}, {"abundance": "100"}, {"abundance": "34"},
 	}
 	inferred := inferSettings(csv, "dotplot")
 	assert.Equal(t, float64(50), inferred.AbundanceCap, "Inferred dotplot abundance cap does not match expected")
@@ -54,17 +54,17 @@ func TestInferSettings(t *testing.T) {
 
 	// Test dotplot with negative values
 	csv = []map[string]string{
-		{"value": "-5.5"}, {"value": "10"}, {"value": "34.3"}, {"value": "-3"},
+		{"abundance": "-5.5"}, {"abundance": "10"}, {"abundance": "34.3"}, {"abundance": "-3"},
 	}
 	inferred = inferSettings(csv, "dotplot")
 	assert.Equal(t, float64(35), inferred.AbundanceCap, "Inferred dotplot abundance cap does not match expected")
 	assert.Equal(t, "blueBlack", inferred.EdgeColor, "Inferred dotplot edge color does not match expected")
-	assert.Equal(t, "redBlue", inferred.FillColor, "Inferred dotplot fill color does not match expected")
+	assert.Equal(t, "blueRed", inferred.FillColor, "Inferred dotplot fill color does not match expected")
 	assert.Equal(t, float64(-6), inferred.MinAbundance, "Inferred dotplot min abundance does not match expected")
 
 	// Test heatmap with non-negative values
 	csv = []map[string]string{
-		{"value": "5"}, {"value": "10"}, {"value": "100"}, {"value": "34"},
+		{"abundance": "5"}, {"abundance": "10"}, {"abundance": "100"}, {"abundance": "34"},
 	}
 	inferred = inferSettings(csv, "heatmap")
 	assert.Equal(t, float64(100), inferred.AbundanceCap, "Inferred heatmap abundance cap does not match expected")
@@ -73,11 +73,11 @@ func TestInferSettings(t *testing.T) {
 
 	// Test dotplot with negative values
 	csv = []map[string]string{
-		{"value": "-5.5"}, {"value": "10"}, {"value": "34.3"}, {"value": "-3"},
+		{"abundance": "-5.5"}, {"abundance": "10"}, {"abundance": "34.3"}, {"abundance": "-3"},
 	}
 	inferred = inferSettings(csv, "heatmap")
 	assert.Equal(t, float64(35), inferred.AbundanceCap, "Inferred dotplot abundance cap does not match expected")
-	assert.Equal(t, "redBlue", inferred.FillColor, "Inferred dotplot fill color does not match expected")
+	assert.Equal(t, "blueRed", inferred.FillColor, "Inferred dotplot fill color does not match expected")
 	assert.Equal(t, float64(-6), inferred.MinAbundance, "Inferred dotplot min abundance does not match expected")
 }
 

@@ -60,11 +60,16 @@ func sortLabels(labels map[string]int, alphabetically bool) []string {
 	return sortedLabels
 }
 
-// ConditionReadoutMatrix generates a 2D matrix with rows (first dimensions) equal to readouts.
-// If the rows and columns should be sorted alphabetically, set resort to true. It does this with
-// both abundance and the score as the matrix value. It also returns lists of the conditions and
-// readouts.
-func ConditionReadoutMatrix(table []map[string]string, scoreType string, resort bool) (data typedef.Matrices) {
+// ConditionReadoutMatrix generates a 2D matrix of conditions v readouts (conditions = columns, readouts = rows).
+// If the rows and columns should be sorted alphabetically, set resort to true. It generates matrices for
+// both an abundance and score column, and can generate row ratios as well if requested.
+// It also returns lists of the conditions and readouts.
+func ConditionReadoutMatrix(
+	table []map[string]string,
+	scoreType string,
+	resort bool,
+	calculateRatios bool,
+) (data typedef.Matrices) {
 	// Get scoring function to use for finding the worst score.
 	scoreCompare := scoreFunc(scoreType)
 	worstScore := float64(0)
@@ -123,6 +128,11 @@ func ConditionReadoutMatrix(table []map[string]string, scoreType string, resort 
 				data.Score[i][j] = worstScore
 			}
 		}
+	}
+
+	// Add row ratios if requested
+	if calculateRatios {
+		data.Ratio = NormalizeMatrix(data.Abundance)
 	}
 
 	return

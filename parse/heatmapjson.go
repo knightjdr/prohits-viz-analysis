@@ -11,16 +11,18 @@ import (
 
 // Data is the struct for the parsed JSON of heatmap/dotplot objects.
 type Data struct {
+	AbundanceCap    float64             `json:"abundanceCap"`
 	Annotations     typedef.Annotations `json:"annotations,omitempty"`
 	Columns         []string            `json:"columns,omitempty"`
+	Condition       string              `json:"condition,omitempty"`
 	EdgeColor       string              `json:"edgeColor,omitempty"`
 	FillColor       string              `json:"fillColor"`
 	ImageType       string              `json:"imageType"`
 	InvertColor     bool                `json:"invertColor"`
 	Markers         typedef.Markers     `json:"markers,omitempty"`
-	AbundanceCap    float64             `json:"abundanceCap"`
-	Rows            []Row               `json:"rows"`
 	PrimaryFilter   float64             `json:"primaryFilter,omitempty"`
+	Readout         string              `json:"readout,omitempty"`
+	Rows            []Row               `json:"rows"`
 	ScoreType       string              `json:"scoreType"`
 	SecondaryFilter float64             `json:"secondaryFilter,omitempty"`
 }

@@ -8,7 +8,7 @@ import (
 )
 
 // ReadFile will read a csv file(s) into a slice.
-func ReadFile(files []string, columnMap map[string]string) (parsed []map[string]string) {
+func ReadFile(files []string, columnMap map[string]string, ignoreMissing bool) (parsed []map[string]string) {
 	// Get mime type for each file.
 	filetype := make([]string, len(files))
 	for i, filename := range files {
@@ -19,7 +19,7 @@ func ReadFile(files []string, columnMap map[string]string) (parsed []map[string]
 	}
 
 	// Read required header columns from files to slice map.
-	parsed = ParseCsv(files, filetype, columnMap)
+	parsed = ParseCsv(files, filetype, columnMap, ignoreMissing)
 
 	// If parsed slice is empty, log and panic.
 	if len(parsed) == 0 {

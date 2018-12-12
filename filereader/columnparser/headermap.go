@@ -1,9 +1,11 @@
 package columnparser
 
-import "errors"
+import (
+	"errors"
+)
 
 // HeaderMap creates a map of specified headers to column numbers.
-func HeaderMap(columnMap map[string]string, header []string) (headerMap map[string]int, err error) {
+func HeaderMap(columnMap map[string]string, header []string, ignoreMissing bool) (headerMap map[string]int, err error) {
 	columnsFound := 0 // Tracks header columns found.
 	headerMap = make(map[string]int)
 
@@ -23,7 +25,7 @@ func HeaderMap(columnMap map[string]string, header []string) (headerMap map[stri
 	}
 
 	// Check if any specified columns were not found.
-	if columnsFound != len(columnMap) {
+	if !ignoreMissing && columnsFound != len(columnMap) {
 		err = errors.New("Missing header column")
 	}
 	return headerMap, err

@@ -6,9 +6,11 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
-// Heatmap creates a heatmap from an input matrix.
+// Heatmap creates a dotplot or heatmap from input matrices of abundance, abundance
+// ratio and score.
 func Heatmap(
-	matrix [][]float64,
+	imageType string,
+	heatmap typedef.Matrices,
 	annotations typedef.Annotations,
 	markers typedef.Markers,
 	columns, rows []string,
@@ -16,13 +18,21 @@ func Heatmap(
 	parameters typedef.Parameters,
 ) string {
 	svg := make([]string, 0)
-	dims := HeatmapDimensions(matrix, columns, rows, minimap)
+	dims := HeatmapDimensions(heatmap.Abundance, columns, rows, minimap)
+	dotplotparameters := DotplotParameters(dims)
 	svg = append(svg, HeatmapHeader(dims))
 	if !minimap {
 		svg = append(svg, HeatmapColumnNames(dims, columns))
 		svg = append(svg, HeatmapRowNames(dims, rows))
 	}
-	svg = append(svg, HeatmapRows(matrix, dims, parameters))
+	if imageType == "dotplot" {
+		svg = append(svg, DotplotRows(heatmap.Abundance, heatmap.Ratio, heatmap.Score, dims, dotplotparameters, parameters))
+		if !minimap {
+			svg = append(svg, BoundingBox(dims))
+		}
+	} else {
+		svg = append(svg, HeatmapRows(heatmap.Abundance, dims, parameters))
+	}
 	if !minimap {
 		svg = append(svg, HeatmapMarkers(markers, dims))
 		svg = append(svg, HeatmapAnnotations(annotations, dims))

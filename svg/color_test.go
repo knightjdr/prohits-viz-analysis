@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestColor(t *testing.T) {
+func TestHSLtoHex(t *testing.T) {
 	testHSL := []map[string]float64{
 		{"h": float64(225) / float64(360), "s": 1, "l": 0.4},
 		{"h": float64(115) / float64(360), "s": 0, "l": 0.67},
@@ -15,7 +15,7 @@ func TestColor(t *testing.T) {
 		{"h": float64(28) / float64(360), "s": 0.52, "l": 0.19},
 	}
 
-	// TEST1: test several colors conversions. This test will test both HSLtoHex
+	// TEST: test several colors conversions. This test will test both HSLtoHex
 	// and HuetoRGB.
 	wantHex := []string{
 		"#0033cc",
@@ -27,8 +27,10 @@ func TestColor(t *testing.T) {
 	for i := range testHSL {
 		assert.Equal(t, wantHex[i], HSLtoHex(testHSL[i]), "HSL color not converted correctly")
 	}
+}
 
-	// TEST2: test generation of blueBlack (default) color gradient.
+func TestColor(t *testing.T) {
+	// TEST: test generation of blueBlack (default) color gradient.
 	want := []string{
 		"#ffffff",
 		"#ccd9ff",
@@ -44,7 +46,7 @@ func TestColor(t *testing.T) {
 	}
 	assert.Equal(t, want, colorGradient("blueBlack", 11, false), "Blue (default) color gradient is not correct")
 
-	// TEST3: test generation of greenBlack color gradient.
+	// TEST: test generation of greenBlack color gradient.
 	want = []string{
 		"#ffffff",
 		"#ccffcc",
@@ -60,7 +62,7 @@ func TestColor(t *testing.T) {
 	}
 	assert.Equal(t, want, colorGradient("greenBlack", 11, false), "Green color gradient is not correct")
 
-	// TEST4: test generation of greyscale color gradient.
+	// TEST: test generation of greyscale color gradient.
 	want = []string{
 		"#ffffff",
 		"#e6e6e6",
@@ -76,7 +78,7 @@ func TestColor(t *testing.T) {
 	}
 	assert.Equal(t, want, colorGradient("greyscale", 11, false), "Grey color gradient is not correct")
 
-	// TEST5: test generation of redBlack color gradient.
+	// TEST: test generation of redBlack color gradient.
 	want = []string{
 		"#ffffff",
 		"#ffcccc",
@@ -92,7 +94,7 @@ func TestColor(t *testing.T) {
 	}
 	assert.Equal(t, want, colorGradient("redBlack", 11, false), "Red color gradient is not correct")
 
-	// TEST5: test generation of yellowBlack color gradient.
+	// TEST: test generation of yellowBlack color gradient.
 	want = []string{
 		"#ffffff",
 		"#ffffcc",
@@ -108,7 +110,39 @@ func TestColor(t *testing.T) {
 	}
 	assert.Equal(t, want, colorGradient("yellowBlack", 11, false), "Yellow color gradient is not correct")
 
-	// TEST6: gradient inversion.
+	// TEST: test generation of blueYellow color gradient.
+	want = []string{
+		"#0040ff",
+		"#3366ff",
+		"#668cff",
+		"#99b3ff",
+		"#ccd9ff",
+		"#ffffff",
+		"#ffffcc",
+		"#ffff99",
+		"#ffff66",
+		"#ffff33",
+		"#ffff00",
+	}
+	assert.Equal(t, want, colorGradient("blueYellow", 11, false), "Blue-yellow color gradient is not correct")
+
+	// TEST: test generation of blueRed color gradient.
+	want = []string{
+		"#0040ff",
+		"#3366ff",
+		"#668cff",
+		"#99b3ff",
+		"#ccd9ff",
+		"#ffffff",
+		"#ffcccc",
+		"#ff9999",
+		"#ff6666",
+		"#ff3333",
+		"#ff0000",
+	}
+	assert.Equal(t, want, colorGradient("blueRed", 11, false), "Blue-red color gradient is not correct")
+
+	// TEST: gradient inversion.
 	want = []string{
 		"#000000",
 		"#000d33",

@@ -3,6 +3,7 @@ package parse
 import (
 	"testing"
 
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -38,23 +39,25 @@ func TestFormatMatrix(t *testing.T) {
 	data := Data{
 		Rows: rows,
 	}
-	wantAbundance := [][]float64{
-		{5, 10, 40},
-		{8, 60, 15},
-		{17, 5, 30},
+	expected := typedef.Matrices{
+		Abundance: [][]float64{
+			{5, 10, 40},
+			{8, 60, 15},
+			{17, 5, 30},
+		},
+		Ratio: [][]float64{
+			{0.2, 0.4, 1},
+			{0.1, 1, 0.2},
+			{0.6, 0.2, 1},
+		},
+		Score: [][]float64{
+			{0.05, 0.01, 0.01},
+			{0.08, 0.01, 0.03},
+			{0.01, 0.05, 0.01},
+		},
 	}
-	wantRatio := [][]float64{
-		{0.2, 0.4, 1},
-		{0.1, 1, 0.2},
-		{0.6, 0.2, 1},
-	}
-	wantScore := [][]float64{
-		{0.05, 0.01, 0.01},
-		{0.08, 0.01, 0.03},
-		{0.01, 0.05, 0.01},
-	}
-	actualAbundance, actualRatio, actualScore := FormatMatrix(&data)
-	assert.ElementsMatch(t, wantAbundance, actualAbundance)
-	assert.ElementsMatch(t, wantRatio, actualRatio)
-	assert.ElementsMatch(t, wantScore, actualScore)
+	result := FormatMatrix(&data)
+	assert.ElementsMatch(t, expected.Abundance, result.Abundance)
+	assert.ElementsMatch(t, expected.Ratio, result.Ratio)
+	assert.ElementsMatch(t, expected.Score, result.Score)
 }

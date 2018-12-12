@@ -2,7 +2,6 @@ package svg
 
 import (
 	"fmt"
-	"math"
 
 	"github.com/knightjdr/prohits-viz-analysis/helper"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
@@ -47,6 +46,9 @@ func DotplotRows(
 	// Get function for determining score edge color.
 	edgeColorFunc := scoreColorFunc(parameters.ScoreType, parameters.PrimaryFilter, parameters.SecondaryFilter, 100)
 
+	// Get range function
+	getIndex := helper.SetRange(parameters.MinAbundance, parameters.AbundanceCap, 0, 100)
+
 	// Write rows.
 	svg = append(svg, fmt.Sprintf("\t<g id=\"minimap\" transform=\"translate(%d, %d)\">\n", dims.leftMargin, dims.topMargin))
 	for i, row := range matrix {
@@ -61,7 +63,7 @@ func DotplotRows(
 				if value > parameters.AbundanceCap {
 					fill = fillColorGradient[100]
 				} else {
-					index := int(math.Round(value / parameters.AbundanceCap * 100))
+					index := int(getIndex(value))
 					fill = fillColorGradient[index]
 				}
 

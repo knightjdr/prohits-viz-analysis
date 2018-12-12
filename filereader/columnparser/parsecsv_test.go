@@ -46,10 +46,10 @@ func TestParseCsv(t *testing.T) {
 		"key2": "column3",
 	}
 
-	// TEST1: a single file return the expected parsed array.
+	// TEST: a single file return the expected parsed array.
 	files := []string{"test/testfile1.txt"}
 	filetype := []string{"text/plain"}
-	data := ParseCsv(files, filetype, columnMap)
+	data := ParseCsv(files, filetype, columnMap, false)
 	want := []map[string]string{
 		{"key1": "a", "key2": "c"},
 	}
@@ -60,10 +60,10 @@ func TestParseCsv(t *testing.T) {
 		"Processed file does not return correct data array",
 	)
 
-	// TEST2: two files return the expected parsed array.
+	// TEST: two files return the expected parsed array.
 	files = []string{"test/testfile1.txt", "test/testfile2.txt"}
 	filetype = []string{"text/plain", "text/csv"}
-	data = ParseCsv(files, filetype, columnMap)
+	data = ParseCsv(files, filetype, columnMap, false)
 	want = []map[string]string{
 		{"key1": "a", "key2": "c"},
 		{"key1": "d", "key2": "f"},
@@ -75,10 +75,10 @@ func TestParseCsv(t *testing.T) {
 		"Processed files do not return correct data array",
 	)
 
-	// TEST3: file with missing header column is skipped.
+	// TEST: file with missing header column is skipped.
 	files = []string{"test/testfile3.txt", "test/testfile1.txt"}
 	filetype = []string{"text/plain", "text/plain"}
-	data = ParseCsv(files, filetype, columnMap)
+	data = ParseCsv(files, filetype, columnMap, false)
 	want = []map[string]string{
 		{"key1": "a", "key2": "c"},
 	}
@@ -89,26 +89,26 @@ func TestParseCsv(t *testing.T) {
 		"Processed files do not return correct data array",
 	)
 
-	// TEST4: missing file logs message (intergration with logger).
+	// TEST: missing file logs message (intergration with logger).
 	files = []string{"test/missing.txt"}
 	filetype = []string{"text/plain"}
-	ParseCsv(files, filetype, columnMap)
+	ParseCsv(files, filetype, columnMap, false)
 	logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
 	wantMessage := "file does not exist"
 	matched, _ := regexp.MatchString(wantMessage, string(logfile))
 	assert.True(t, matched, "message not being logged")
 
 	// Mock HeaderMap
-	fakeHeaderMap := func(columnMap map[string]string, header []string) (map[string]int, error) {
+	fakeHeaderMap := func(columnMap map[string]string, header []string, ignoreMissing bool) (map[string]int, error) {
 		return map[string]int{}, errors.New("Missing header columns")
 	}
 	headerMapPatch := monkey.Patch(HeaderMap, fakeHeaderMap)
 
-	// TEST5: header error logs (intergration with logger).
+	// TEST: header error logs (intergration with logger).
 	afero.WriteFile(fs.Instance, "test/error.txt", []byte(""), 0644) // clear log
 	files = []string{"test/testfile1.txt"}
 	filetype = []string{"text/plain"}
-	ParseCsv(files, filetype, columnMap)
+	ParseCsv(files, filetype, columnMap, false)
 	logfile, _ = afero.ReadFile(fs.Instance, "error.txt")
 	wantMessage = "Missing header columns"
 	matched, _ = regexp.MatchString(wantMessage, string(logfile))

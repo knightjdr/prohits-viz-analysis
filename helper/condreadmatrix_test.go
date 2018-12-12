@@ -65,7 +65,7 @@ func TestConditionReadoutMatrix(t *testing.T) {
 		{"condition": "bcondition", "readout": "xreadout", "abundance": "2", "score": "0.01"},
 	}
 
-	// TEST: dataset converted to matrix with smaller scores better.
+	// TEST: dataset converted to matrix with smaller scores better and alphabetical sorting.
 	wantConditionList := []string{"acondition", "bcondition", "ccondition"}
 	wantAbundance := [][]float64{
 		{5, 2, 14.3},
@@ -78,18 +78,60 @@ func TestConditionReadoutMatrix(t *testing.T) {
 		{0, 0.01, 0.08},
 		{0.02, 0.08, 0.01},
 	}
-	data := ConditionReadoutMatrix(dataset, "lte", true)
-	assert.Equal(t, wantAbundance, data.Abundance, "Data not converted to condition readout abundance matrix")
-	assert.Equal(t, wantConditionList, data.Conditions, "Condition list not correct")
-	assert.Equal(t, wantReadoutList, data.Readouts, "Readout list not correct")
-	assert.Equal(t, wantScore, data.Score, "Data not converted to condition readout score matrix")
+	data := ConditionReadoutMatrix(dataset, "lte", true, false)
+	assert.Equal(
+		t,
+		wantAbundance,
+		data.Abundance,
+		"Data not converted to condition readout abundance matrix with alphabetical sorting",
+	)
+	assert.Equal(t, wantConditionList, data.Conditions, "Condition list not correct with alphabetical sorting")
+	assert.Equal(t, wantReadoutList, data.Readouts, "Readout list not correct with alphabetical sorting")
+	assert.Equal(t, wantScore, data.Score, "Data not converted to condition readout score matrix with alphabetical sorting")
 
-	// TEST: dataset converted to matrix with larger scores better.
+	// TEST: dataset converted to matrix with larger scores better and alphabetical sorting.
 	wantScore = [][]float64{
 		{0.01, 0.01, 0.08},
 		{0, 0.01, 0},
 		{0.02, 0, 0.01},
 	}
-	data = ConditionReadoutMatrix(dataset, "gte", true)
+	data = ConditionReadoutMatrix(dataset, "gte", true, false)
+	assert.Equal(t, wantScore, data.Score, "Data not converted to condition readout score matrix when large scores better")
+
+	// TEST: dataset converted to matrix with smaller scores better and no sorting.
+	wantConditionList = []string{"acondition", "ccondition", "bcondition"}
+	wantAbundance = [][]float64{
+		{5, 14.3, 2},
+		{10, 7, 0},
+		{23, 0, 17.8},
+	}
+	wantReadoutList = []string{"xreadout", "zreadout", "yreadout"}
+	wantScore = [][]float64{
+		{0.01, 0.08, 0.01},
+		{0.02, 0.01, 0.08},
+		{0, 0.08, 0.01},
+	}
+	data = ConditionReadoutMatrix(dataset, "lte", false, false)
+	assert.Equal(t, wantAbundance, data.Abundance, "Data not converted to condition readout abundance matrix")
+	assert.Equal(t, wantConditionList, data.Conditions, "Condition list not correct")
+	assert.Equal(t, wantReadoutList, data.Readouts, "Readout list not correct")
 	assert.Equal(t, wantScore, data.Score, "Data not converted to condition readout score matrix")
+
+	// TEST: dataset converted to matrix and generate ratios.
+	wantRatio := [][]float64{
+		{0.35, 0.14, 1},
+		{1, 0.77, 0},
+		{1, 0, 0.7},
+	}
+	data = ConditionReadoutMatrix(dataset, "lte", true, true)
+	for i, slice := range data.Ratio {
+		assert.InDeltaSlice(
+			t,
+			wantRatio[i],
+			slice,
+			0.001,
+			"Data not converted to condition readout ratios matrix",
+		)
+	}
+
 }

@@ -20,7 +20,6 @@ func Minimap(
 		"edgeColor":    userParams.EdgeColor,
 		"fillColor":    userParams.FillColor,
 		"invertColor":  invertColor,
-		"minimap":      true,
 		"primary":      userParams.PrimaryFilter,
 		"secondary":    userParams.SecondaryFilter,
 		"scoreType":    userParams.ScoreType,

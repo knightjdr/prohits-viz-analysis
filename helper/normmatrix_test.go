@@ -1,4 +1,4 @@
-package dotplot
+package helper
 
 import (
 	"testing"

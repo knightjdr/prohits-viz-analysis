@@ -26,6 +26,7 @@ func TestHeatmapJSON(t *testing.T) {
 				{ "text": "b", "x": 0.6, "y": 0.1 }
 			]
 		},
+		"condition": "Bait",
 		"edgeColor": "blueBlack",
 		"fillColor": "blueBlack",
 		"imageType": "dotplot",
@@ -38,6 +39,7 @@ func TestHeatmapJSON(t *testing.T) {
 			]
 		},
 		"primaryFilter": 0.01,
+		"readout": "Prey",
 		"rows": [
 			{
 				"data": [{"value": 5}, {"value": 10}, {"value": 40}],
@@ -69,7 +71,7 @@ func TestHeatmapJSON(t *testing.T) {
 	oldArgs := os.Args
 	defer func() { os.Args = oldArgs }()
 
-	// TEST1: returns struct from json.
+	// TEST: returns struct from json.
 	annotations := typedef.Annotations{
 		FontSize: 15,
 		List: []typedef.Annotation{
@@ -99,14 +101,16 @@ func TestHeatmapJSON(t *testing.T) {
 		},
 	}
 	dotplotData := Data{
+		AbundanceCap:    50,
 		Annotations:     annotations,
+		Condition:       "Bait",
 		EdgeColor:       "blueBlack",
 		FillColor:       "blueBlack",
 		ImageType:       "dotplot",
 		InvertColor:     false,
 		Markers:         markers,
-		AbundanceCap:    50,
 		PrimaryFilter:   0.01,
+		Readout:         "Prey",
 		Rows:            rows,
 		ScoreType:       "lte",
 		SecondaryFilter: 0.05,

@@ -1,6 +1,4 @@
-package dotplot
-
-import "github.com/knightjdr/prohits-viz-analysis/helper"
+package helper
 
 // NormalizeSlice normalizes the values in a slice to one. The greatest value
 // in the slice will be one and the other values will be divided by this.
@@ -16,7 +14,7 @@ func NormalizeSlice(unnormalized []float64) (normalized []float64) {
 	// Normalize input slice.
 	normalized = make([]float64, len(unnormalized))
 	for i, value := range unnormalized {
-		normalized[i] = helper.Round(value/max, 0.01)
+		normalized[i] = Round(value/max, 0.01)
 	}
 	return
 }

@@ -7,14 +7,53 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/helper"
 )
 
-// colorGradient defines a color gradient to use for fill values. It defines
-// the colors to use via HSL and then converts those to HEX.
-func colorGradient(colorSpace string, numColors int, invertColor bool) (gradient []string) {
+// Define bidirectional color scales
+var twoColor = []string{"blueYellow", "blueRed"}
 
-	// Create hex gradient. The color scale is set using the hue and saturation
-	// components of HSL. The gradient is then defined by changing the lightness
-	// from 1 (light) to 0 (dark). HSL values are on a 0-1 scale.
-	// The maximum hue value of 1 equals 360 so all values are relative to that.
+// biDirection creates a two color hex gradient. The starting color is set using the
+// hue and the first half of the gradient is populated with colors by increasing the
+// lightness from 0.5 to 1. The middle color of the gradient is set to white and
+// the remaining portion of the gradient is created for the end color (also
+// defined by its hue) by decreasing the lightness from 1 to 0.5.
+func biDirection(colorSpace string, numColors int) (gradient []string) {
+	var hEnd, hStart, s float64
+	if colorSpace == "blueYellow" {
+		// Start (HSL value = (225, 100%, 50%).
+		// End (HSL value = (60, 100%, 50%).
+		hEnd = float64(60) / float64(360)
+		hStart = 0.625
+		s = 1
+	} else {
+		// Default blueRed scale
+		// Start (HSL value = (225, 100%, 50%).
+		// End (HSL value = (0, 100%, 50%).
+		hEnd = 0
+		hStart = 0.625
+		s = 1
+	}
+	halfColors := (numColors - 1) / 2
+	increment := 1.00 / float64(numColors-1)
+	startL := .50
+	gradient = make([]string, numColors)
+	for i := 0; i < halfColors; i++ {
+		lightness := helper.Round(startL+(float64(i)*increment), 0.0001)
+		gradient[i] = HSLtoHex(map[string]float64{"h": hStart, "s": s, "l": lightness})
+	}
+	gradient[halfColors] = HSLtoHex(map[string]float64{"h": 0, "s": s, "l": 1})
+	startL = 1.00
+	startIndex := halfColors + 1
+	for i := 0; i < halfColors; i++ {
+		lightness := helper.Round(startL-(float64(i+1)*increment), 0.0001)
+		gradient[i+startIndex] = HSLtoHex(map[string]float64{"h": hEnd, "s": s, "l": lightness})
+	}
+	return
+}
+
+// monoDirection creates a single direction hex gradient. The color scale is set using the hue
+// and saturation components of HSL. The gradient is then defined by changing the lightness
+// from 1 (light) to 0 (dark). HSL values are on a 0-1 scale.
+// The maximum hue value of 1 equals 360 so all values are relative to that.
+func monoDirection(colorSpace string, numColors int) (gradient []string) {
 	var h, s float64
 	if colorSpace == "greenBlack" {
 		// Middle HSL value = (120, 100%, 50%).
@@ -44,7 +83,17 @@ func colorGradient(colorSpace string, numColors int, invertColor bool) (gradient
 		lightness := helper.Round(startL-(float64(i)*increment), 0.0001)
 		gradient[i] = HSLtoHex(map[string]float64{"h": h, "s": s, "l": lightness})
 	}
+	return
+}
 
+// colorGradient defines a color gradient to use for fill values. It defines
+// the colors to use via HSL and then converts those to HEX.
+func colorGradient(colorSpace string, numColors int, invertColor bool) (gradient []string) {
+	if helper.SliceContains(colorSpace, twoColor) {
+		gradient = biDirection(colorSpace, numColors)
+	} else {
+		gradient = monoDirection(colorSpace, numColors)
+	}
 	// Invert gradient if requested.
 	if invertColor {
 		for i, j := 0, numColors-1; i < j; i, j = i+1, j-1 {

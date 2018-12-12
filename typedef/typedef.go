@@ -36,8 +36,8 @@ type Marker struct {
 
 // Matrices holds input data formatted as matrices
 type Matrices struct {
-	Abundance, Score     [][]float64
-	Conditions, Readouts []string
+	Abundance, Ratio, Score [][]float64
+	Conditions, Readouts    []string
 }
 
 // Parameters for command line arguments.

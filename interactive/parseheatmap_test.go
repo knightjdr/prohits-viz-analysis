@@ -44,6 +44,7 @@ func TestParseHeatmap(t *testing.T) {
 		ClusteringOptimize: false,
 		Control:            "control",
 		Distance:           "euclidean",
+		EdgeColor:          "blueBlack",
 		Files:              []string{"file1.txt", "file2.txt"},
 		FillColor:          "blueBlack",
 		LogBase:            "none",
@@ -55,10 +56,90 @@ func TestParseHeatmap(t *testing.T) {
 		ScoreType:          "lte",
 		SecondaryFilter:    0.05,
 	}
+	ratios := [][]float64{
+		{0.2, 0.5, 1},
+		{0.7, 0.8, 1},
+		{1, 0.2, 0.5},
+	}
 	rows := []string{"row1", "row2", "row3"}
+	scores := [][]float64{
+		{0.01, 0.05, 0.08},
+		{1, 0.07, 0.5},
+		{0.2, 0.7, 0.01},
+	}
 
-	// TEST1: typical date conversion to json.
+	// TEST: typical data conversion to dotplot json.
 	want := "{" +
+		"\"columns\":{" +
+		"\"names\":[\"col1\",\"col2\",\"col3\"],\"ref\":null" +
+		"}," +
+		"\"parameters\":{" +
+		"\"abundanceColumn\":\"abd\"," +
+		"\"analysisType\":\"dotplot\"," +
+		"\"clustering\":\"hierarchical\"," +
+		"\"clusteringMethod\":\"complete\"," +
+		"\"clusteringOptimize\":false," +
+		"\"conditionColumn\":\"condition\"," +
+		"\"controlColumn\":\"control\"," +
+		"\"distance\":\"euclidean\"," +
+		"\"files\":[\"file1.txt\",\"file2.txt\"]," +
+		"\"imageType\":\"dotplot\"," +
+		"\"logBase\":\"none\"," +
+		"\"normalization\":\"none\"," +
+		"\"readoutColumn\":\"readout\"," +
+		"\"scoreColumn\":\"score\"," +
+		"\"scoreType\":\"lte\"" +
+		"}," +
+		"\"settings\":{\"current\":{" +
+		"\"abundanceCap\":50," +
+		"\"edgeColor\":\"blueBlack\"," +
+		"\"fillColor\":\"blueBlack\"," +
+		"\"imageType\":\"dotplot\"," +
+		"\"invertColor\":false," +
+		"\"minAbundance\":0," +
+		"\"primaryFilter\":0.01," +
+		"\"secondaryFilter\":0.05" +
+		"}}," +
+		"\"rows\":{\"list\":[" +
+		"{\"data\":[" +
+		"{\"ratio\":0.2,\"score\":0.01,\"value\":1}," +
+		"{\"ratio\":0.5,\"score\":0.05,\"value\":2}," +
+		"{\"ratio\":1,\"score\":0.08,\"value\":3}]," +
+		"\"name\":\"row1\"}," +
+		"{\"data\":[" +
+		"{\"ratio\":0.7,\"score\":1,\"value\":4}," +
+		"{\"ratio\":0.8,\"score\":0.07,\"value\":5}," +
+		"{\"ratio\":1,\"score\":0.5,\"value\":6}]," +
+		"\"name\":\"row2\"}," +
+		"{\"data\":[" +
+		"{\"ratio\":1,\"score\":0.2,\"value\":7}," +
+		"{\"ratio\":0.2,\"score\":0.7,\"value\":8}," +
+		"{\"ratio\":0.5,\"score\":0.01,\"value\":9}]," +
+		"\"name\":\"row3\"}]}," +
+		"\"minimap\":{\"image\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAEElEQVR4nGJiYGAABAAA//8ADAADcZGLFwAAAABJRU5ErkJggg==\"}}"
+	json := ParseHeatmap(
+		"dotplot",
+		abundance,
+		ratios,
+		scores,
+		columns,
+		rows,
+		false,
+		parameters,
+		"test.png",
+	)
+	json = strings.Replace(json, " ", "", -1)
+	json = strings.Replace(json, "\n", "", -1)
+	json = strings.Replace(json, "\t", "", -1)
+	assert.Equal(
+		t,
+		want,
+		json,
+		"Dotplot JSON not generated correctly",
+	)
+
+	// TEST: typical data conversion to heatmap json.
+	want = "{" +
 		"\"columns\":{" +
 		"\"names\":[\"col1\",\"col2\",\"col3\"]," +
 		"\"ref\":null}," +
@@ -94,8 +175,11 @@ func TestParseHeatmap(t *testing.T) {
 		"{\"data\":[{\"value\":7},{\"value\":8},{\"value\":9}],\"name\":\"row3\"}" +
 		"]}," +
 		"\"minimap\":{\"image\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAEElEQVR4nGJiYGAABAAA//8ADAADcZGLFwAAAABJRU5ErkJggg==\"}}"
-	json := ParseHeatmap(
+	json = ParseHeatmap(
+		"heatmap",
 		abundance,
+		[][]float64{},
+		[][]float64{},
 		columns,
 		rows,
 		false,
@@ -109,6 +193,6 @@ func TestParseHeatmap(t *testing.T) {
 		t,
 		want,
 		json,
-		"JSON not generated correctly",
+		"Heatmap JSON not generated correctly",
 	)
 }

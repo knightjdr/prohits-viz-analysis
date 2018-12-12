@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/parse"
 	"github.com/knightjdr/prohits-viz-analysis/svg"
+	"github.com/spf13/afero"
 )
 
 func main() {
@@ -22,25 +24,25 @@ func main() {
 	}
 
 	// Format dataset for svg creator.
-	abundance, ratios, scores := parse.FormatMatrix(data)
+	heatmap := parse.FormatMatrix(data)
 
-	// Format parameters for svg.
+	// Format parameters and generate for names for svg.
 	parameters := FormatParams(data)
-
 	rowNames := RowNames(data.Rows)
 
 	// Create svg.
-	Export(
+	content := svg.Heatmap(
 		data.ImageType,
-		abundance,
-		ratios,
-		scores,
+		heatmap,
 		data.Annotations,
 		data.Markers,
 		data.Columns,
 		rowNames,
+		false,
 		parameters,
 	)
+	filename := fmt.Sprintf("svg/%s.svg", data.ImageType)
+	afero.WriteFile(fs.Instance, filename, []byte(content), 0644)
 
 	// Create additional output type if needed.
 	imageName := fmt.Sprintf("%s.svg", data.ImageType)

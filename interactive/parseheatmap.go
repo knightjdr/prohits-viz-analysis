@@ -5,15 +5,17 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
-// ParseHeatmap creates variables for passing to the interactive file maker.
+// ParseHeatmap creates vars for passing to the interactive file maker
+// add passes those vars.
 func ParseHeatmap(
-	abundance [][]float64,
+	imageType string,
+	abundance, ratios, scores [][]float64,
 	columns, rows []string,
 	invertColor bool,
 	userParams typedef.Parameters,
 	pngfilename string,
 ) (json string) {
-	// Run parameters.
+	// User parameters.
 	parameters := map[string]interface{}{
 		"abundanceColumn":    userParams.Abundance,
 		"analysisType":       userParams.AnalysisType,
@@ -24,7 +26,7 @@ func ParseHeatmap(
 		"controlColumn":      userParams.Control,
 		"distance":           userParams.Distance,
 		"files":              helper.Filename(userParams.Files),
-		"imageType":          "heatmap",
+		"imageType":          imageType,
 		"logBase":            userParams.LogBase,
 		"normalization":      userParams.Normalization,
 		"readoutColumn":      userParams.Readout,
@@ -36,32 +38,20 @@ func ParseHeatmap(
 	settings := map[string]interface{}{
 		"abundanceCap":    userParams.AbundanceCap,
 		"fillColor":       userParams.FillColor,
-		"imageType":       "heatmap",
+		"imageType":       imageType,
 		"invertColor":     invertColor,
 		"minAbundance":    userParams.MinAbundance,
 		"primaryFilter":   userParams.PrimaryFilter,
 		"secondaryFilter": userParams.SecondaryFilter,
 	}
+	if imageType == "dotplot" {
+		settings["edgeColor"] = userParams.EdgeColor
+	}
 
 	// Convert png to url.
 	url := Pngurl(pngfilename)
 
-	// Create row data.
-	numCols := len(columns)
-	numRows := len(rows)
-	data := make([]map[string]interface{}, numRows)
-	for i, row := range abundance {
-		rowslice := make([]map[string]float64, numCols)
-		for j, value := range row {
-			rowslice[j] = map[string]float64{
-				"value": helper.TruncateFloat(value, 2),
-			}
-		}
-		data[i] = map[string]interface{}{
-			"name": rows[i],
-			"data": rowslice,
-		}
-	}
+	data := rowData(imageType, abundance, ratios, scores, columns, rows)
 
 	// Get json.
 	json = Heatmap(data, columns, parameters, settings, url)

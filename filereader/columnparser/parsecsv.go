@@ -19,6 +19,7 @@ func ParseCsv(
 	files []string,
 	filetype []string,
 	columnMap map[string]string,
+	ignoreMissing bool,
 ) (parsed []map[string]string) {
 	for i, filename := range files {
 		// Only parse a file if it's an accepted type.
@@ -43,7 +44,7 @@ func ParseCsv(
 			file.Close()
 
 			// Get header map.
-			headerMap, err := HeaderMap(columnMap, lines[0])
+			headerMap, err := HeaderMap(columnMap, lines[0], ignoreMissing)
 			// Skip if columns missing from file.
 			logmessage.CheckError(err, false)
 			if err != nil {
