@@ -38,6 +38,7 @@ func TestHeatmapJSON(t *testing.T) {
 				{ "height": 12, "width": 20, "x": 3, "y": 7 }
 			]
 		},
+		"minAbundance": 5,
 		"primaryFilter": 0.01,
 		"readout": "Prey",
 		"rows": [
@@ -109,6 +110,7 @@ func TestHeatmapJSON(t *testing.T) {
 		ImageType:       "dotplot",
 		InvertColor:     false,
 		Markers:         markers,
+		MinAbundance:    5,
 		PrimaryFilter:   0.01,
 		Readout:         "Prey",
 		Rows:            rows,

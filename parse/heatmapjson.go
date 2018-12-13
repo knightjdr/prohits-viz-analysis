@@ -20,6 +20,7 @@ type Data struct {
 	ImageType       string              `json:"imageType"`
 	InvertColor     bool                `json:"invertColor"`
 	Markers         typedef.Markers     `json:"markers,omitempty"`
+	MinAbundance    float64             `json:"minAbundance,omitempty"`
 	PrimaryFilter   float64             `json:"primaryFilter,omitempty"`
 	Readout         string              `json:"readout,omitempty"`
 	Rows            []Row               `json:"rows"`

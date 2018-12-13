@@ -12,6 +12,7 @@ func FormatParams(data *parse.Data) (parameters typedef.Parameters) {
 		EdgeColor:       data.EdgeColor,
 		FillColor:       data.FillColor,
 		InvertColor:     data.InvertColor,
+		MinAbundance:    data.MinAbundance,
 		PrimaryFilter:   data.PrimaryFilter,
 		ScoreType:       data.ScoreType,
 		SecondaryFilter: data.SecondaryFilter,
