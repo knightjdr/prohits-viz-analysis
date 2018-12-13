@@ -15,14 +15,26 @@ func SvgHeatmap(
 	abundanceCap float64,
 	invertColor bool,
 ) {
-	parameters := map[string]interface{}{
-		"colLabel":     "Conditions",
-		"fillColor":    fillColor,
-		"invertColor":  invertColor,
-		"abundanceCap": abundanceCap,
-		"rowLabel":     "Readouts",
+	parameters := typedef.Parameters{
+		AbundanceCap: abundanceCap,
+		Condition:    "Conditions",
+		FillColor:    fillColor,
+		InvertColor:  invertColor,
+		Readout:      "Readouts",
 	}
-	heatmap := svg.Heatmap(matrix, typedef.Annotations{}, typedef.Markers{}, sortedColumns, sortedRows, false, parameters)
+	data := typedef.Matrices{
+		Abundance: matrix,
+	}
+	heatmap := svg.Heatmap(
+		"heatmap",
+		data,
+		typedef.Annotations{},
+		typedef.Markers{},
+		sortedColumns,
+		sortedRows,
+		false,
+		parameters,
+	)
 	afero.WriteFile(fs.Instance, "svg/heatmap.svg", []byte(heatmap), 0644)
 	return
 }

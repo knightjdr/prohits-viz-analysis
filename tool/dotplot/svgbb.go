@@ -10,14 +10,27 @@ import (
 // SvgCC draws a condition condition heatmap.
 func SvgCC(dist [][]float64, conditions []string, fillColor string) {
 	// Heatmap parameters.
-	parameters := map[string]interface{}{
-		"abundanceCap": float64(1),
-		"colLabel":     "Conditions",
-		"fillColor":    fillColor,
-		"invertColor":  true,
-		"rowLabel":     "Conditions",
+	parameters := typedef.Parameters{
+		AbundanceCap: float64(1),
+		Condition:    "Conditions",
+		FillColor:    fillColor,
+		InvertColor:  true,
+		Readout:      "Conditions",
 	}
-	heatmap := svg.Heatmap(dist, typedef.Annotations{}, typedef.Markers{}, conditions, conditions, false, parameters)
+
+	data := typedef.Matrices{
+		Abundance: dist,
+	}
+	heatmap := svg.Heatmap(
+		"heatmap",
+		data,
+		typedef.Annotations{},
+		typedef.Markers{},
+		conditions,
+		conditions,
+		false,
+		parameters,
+	)
 	afero.WriteFile(fs.Instance, "svg/condition-condition.svg", []byte(heatmap), 0644)
 	return
 }

@@ -17,15 +17,27 @@ func MinimapDistance(
 	imageName string,
 ) {
 	// Define dotplot parameters.
-	parameters := map[string]interface{}{
-		"abundanceCap": float64(1),
-		"colLabel":     "Conditions",
-		"fillColor":    fillColor,
-		"invertColor":  true,
-		"minimap":      true,
-		"rowLabel":     "Conditions",
+	parameters := typedef.Parameters{
+		AbundanceCap: float64(1),
+		Condition:    "Conditions",
+		FillColor:    fillColor,
+		InvertColor:  true,
+		Readout:      "Conditions",
 	}
-	minimap := svg.Heatmap(abundance, typedef.Annotations{}, typedef.Markers{}, sorted, sorted, true, parameters)
+
+	heatmap := typedef.Matrices{
+		Abundance: abundance,
+	}
+	minimap := svg.Heatmap(
+		"heatmap",
+		heatmap,
+		typedef.Annotations{},
+		typedef.Markers{},
+		sorted,
+		sorted,
+		true,
+		parameters,
+	)
 	fileName := fmt.Sprintf("minimap/%s.svg", imageName)
 	afero.WriteFile(fs.Instance, fileName, []byte(minimap), 0644)
 	return

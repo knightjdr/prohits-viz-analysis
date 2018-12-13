@@ -73,7 +73,7 @@ func Biclustering(dataset typedef.Dataset) {
 	afero.WriteFile(fs.Instance, "biclustering/parameters.txt", []byte(parameters), 0644)
 
 	// Generate condition-readout table.
-	data := helper.ConditionReadoutMatrix(dataset.FileData, dataset.Parameters.ScoreType, true)
+	data := helper.ConditionReadoutMatrix(dataset.FileData, dataset.Parameters.ScoreType, true, false)
 
 	// Subset data matrix to only include readouts that pass the minimum abundance
 	// cutoff for at least two conditions and return normalized matrix. Will also return
@@ -90,7 +90,7 @@ func Biclustering(dataset typedef.Dataset) {
 	// Sort matrices.
 	sortedAbundance, _ := hclust.Sort(data.Abundance, data.Conditions, order.Conditions, "column")
 	sortedAbundance, _ = hclust.Sort(sortedAbundance, data.Readouts, order.Readouts, "row")
-	sortedRatios := NormalizeMatrix(sortedAbundance)
+	sortedRatios := helper.NormalizeMatrix(sortedAbundance)
 	sortedScores, _ := hclust.Sort(data.Score, data.Conditions, order.Conditions, "column")
 	sortedScores, _ = hclust.Sort(sortedScores, data.Readouts, order.Readouts, "row")
 
@@ -181,12 +181,14 @@ func Biclustering(dataset typedef.Dataset) {
 
 	// Create interactive files.
 	if dataset.Parameters.WriteDotplot {
-		json := interactive.ParseDotplot(
+		json := interactive.ParseHeatmap(
+			"dotplot",
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,
 			order.Conditions,
 			order.Readouts,
+			false,
 			dataset.Parameters,
 			"minimap/dotplot.png",
 		)

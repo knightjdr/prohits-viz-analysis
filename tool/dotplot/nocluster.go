@@ -19,7 +19,7 @@ func NoCluster(dataset typedef.Dataset) {
 	LogParams(dataset.Parameters)
 
 	// Generate condition-readout table.
-	data := helper.ConditionReadoutMatrix(dataset.FileData, dataset.Parameters.ScoreType, true)
+	data := helper.ConditionReadoutMatrix(dataset.FileData, dataset.Parameters.ScoreType, true, false)
 
 	// Cluster conditions.
 	var conditionOrder []string
@@ -91,7 +91,10 @@ func NoCluster(dataset typedef.Dataset) {
 			distanceParams.AbundanceCap = 1
 			distanceParams.MinAbundance = 0
 			json := interactive.ParseHeatmap(
+				"heatmap",
 				sortedConditionDist,
+				[][]float64{},
+				[][]float64{},
 				conditionOrder,
 				conditionOrder,
 				true,
@@ -180,7 +183,10 @@ func NoCluster(dataset typedef.Dataset) {
 			distanceParams.AbundanceCap = 1
 			distanceParams.MinAbundance = 0
 			json := interactive.ParseHeatmap(
+				"heatmap",
 				sortedReadoutDist,
+				[][]float64{},
+				[][]float64{},
 				readoutOrder,
 				readoutOrder,
 				true,
@@ -202,7 +208,7 @@ func NoCluster(dataset typedef.Dataset) {
 	// Sort matrices.
 	sortedAbundance, _ := hclust.Sort(data.Abundance, data.Conditions, conditionOrder, "column")
 	sortedAbundance, _ = hclust.Sort(sortedAbundance, data.Readouts, readoutOrder, "row")
-	sortedRatios := NormalizeMatrix(sortedAbundance)
+	sortedRatios := helper.NormalizeMatrix(sortedAbundance)
 	sortedScores, _ := hclust.Sort(data.Score, data.Conditions, conditionOrder, "column")
 	sortedScores, _ = hclust.Sort(sortedScores, data.Readouts, readoutOrder, "row")
 
@@ -256,12 +262,14 @@ func NoCluster(dataset typedef.Dataset) {
 		svg.ConvertMap([]string{"dotplot.svg"})
 
 		// Create interactive file.
-		json := interactive.ParseDotplot(
+		json := interactive.ParseHeatmap(
+			"dotplot",
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,
 			conditionOrder,
 			readoutOrder,
+			false,
 			dataset.Parameters,
 			"minimap/dotplot.png",
 		)

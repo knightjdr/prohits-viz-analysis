@@ -15,18 +15,32 @@ func SvgDotplot(
 	userParams typedef.Parameters,
 ) {
 	// Define dotplot parameters.
-	parameters := map[string]interface{}{
-		"colLabel":     "Conditions",
-		"edgeColor":    userParams.EdgeColor,
-		"fillColor":    userParams.FillColor,
-		"invertColor":  invertColor,
-		"abundanceCap": userParams.AbundanceCap,
-		"primary":      userParams.PrimaryFilter,
-		"rowLabel":     "Readouts",
-		"secondary":    userParams.SecondaryFilter,
-		"scoreType":    userParams.ScoreType,
+	parameters := typedef.Parameters{
+		AbundanceCap:    userParams.AbundanceCap,
+		Condition:       "Conditions",
+		EdgeColor:       userParams.EdgeColor,
+		FillColor:       userParams.FillColor,
+		InvertColor:     invertColor,
+		PrimaryFilter:   userParams.PrimaryFilter,
+		Readout:         "Readouts",
+		SecondaryFilter: userParams.SecondaryFilter,
+		ScoreType:       userParams.ScoreType,
 	}
-	dotplot := svg.Dotplot(abundance, ratios, scores, typedef.Annotations{}, typedef.Markers{}, sortedColumns, sortedRows, false, parameters)
+	data := typedef.Matrices{
+		Abundance: abundance,
+		Ratio:     ratios,
+		Score:     scores,
+	}
+	dotplot := svg.Heatmap(
+		"dotplot",
+		data,
+		typedef.Annotations{},
+		typedef.Markers{},
+		sortedColumns,
+		sortedRows,
+		false,
+		parameters,
+	)
 	afero.WriteFile(fs.Instance, "svg/dotplot.svg", []byte(dotplot), 0644)
 	return
 }

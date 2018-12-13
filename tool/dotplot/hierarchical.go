@@ -19,7 +19,7 @@ func Hierarchical(dataset typedef.Dataset) {
 	LogParams(dataset.Parameters)
 
 	// Generate condition-readout table.
-	data := helper.ConditionReadoutMatrix(dataset.FileData, dataset.Parameters.ScoreType, true)
+	data := helper.ConditionReadoutMatrix(dataset.FileData, dataset.Parameters.ScoreType, true, false)
 
 	// Generate condition and readout distance matrices.
 	conditionDist := hclust.Distance(data.Abundance, dataset.Parameters.Distance, true)
@@ -80,7 +80,7 @@ func Hierarchical(dataset typedef.Dataset) {
 	sortedConditionDist, _ = hclust.Sort(sortedConditionDist, data.Conditions, conditionTree.Order, "row")
 	sortedReadoutDist, _ := hclust.Sort(normalizedReadoutDist, data.Readouts, readoutTree.Order, "column")
 	sortedReadoutDist, _ = hclust.Sort(sortedReadoutDist, data.Readouts, readoutTree.Order, "row")
-	sortedRatios := NormalizeMatrix(sortedAbundance)
+	sortedRatios := helper.NormalizeMatrix(sortedAbundance)
 	sortedScores, _ := hclust.Sort(data.Score, data.Conditions, conditionTree.Order, "column")
 	sortedScores, _ = hclust.Sort(sortedScores, data.Readouts, readoutTree.Order, "row")
 
@@ -225,7 +225,10 @@ func Hierarchical(dataset typedef.Dataset) {
 		distanceParams.AbundanceCap = 1
 		distanceParams.MinAbundance = 0
 		json := interactive.ParseHeatmap(
+			"heatmap",
 			sortedConditionDist,
+			[][]float64{},
+			[][]float64{},
 			conditionTree.Order,
 			conditionTree.Order,
 			true,
@@ -234,7 +237,10 @@ func Hierarchical(dataset typedef.Dataset) {
 		)
 		afero.WriteFile(fs.Instance, "interactive/condition-condition.json", []byte(json), 0644)
 		json = interactive.ParseHeatmap(
+			"heatmap",
 			sortedReadoutDist,
+			[][]float64{},
+			[][]float64{},
 			readoutTree.Order,
 			readoutTree.Order,
 			true,
@@ -244,12 +250,14 @@ func Hierarchical(dataset typedef.Dataset) {
 		afero.WriteFile(fs.Instance, "interactive/readout-readout.json", []byte(json), 0644)
 	}
 	if dataset.Parameters.WriteDotplot {
-		json := interactive.ParseDotplot(
+		json := interactive.ParseHeatmap(
+			"dotplot",
 			sortedAbundance,
 			sortedRatios,
 			sortedScores,
 			conditionTree.Order,
 			readoutTree.Order,
+			false,
 			dataset.Parameters,
 			"minimap/dotplot.png",
 		)
