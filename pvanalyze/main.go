@@ -23,7 +23,7 @@ func main() {
 	dataset := typedef.Dataset{Parameters: parameters}
 
 	// Read needed columns from files.
-	parsedColumns := columnparser.ReadFile(parameters.Files, columnMap)
+	parsedColumns := columnparser.ReadFile(parameters.Files, columnMap, false)
 
 	// Filter rows.
 	dataset.FileData = filter.Data(parsedColumns, dataset.Parameters)

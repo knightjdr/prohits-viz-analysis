@@ -8,15 +8,13 @@ import (
 )
 
 // SvgCC draws a condition condition heatmap.
-func SvgCC(dist [][]float64, conditions []string, fillColor string) {
+func SvgCC(dist [][]float64, conditions []string, userParams typedef.Parameters) {
 	// Heatmap parameters.
-	parameters := typedef.Parameters{
-		AbundanceCap: float64(1),
-		Condition:    "Conditions",
-		FillColor:    fillColor,
-		InvertColor:  true,
-		Readout:      "Conditions",
-	}
+	parameters := userParams
+	parameters.AbundanceCap = float64(1)
+	parameters.XLabel = userParams.Condition
+	parameters.InvertColor = true
+	parameters.YLabel = userParams.Condition
 
 	data := typedef.Matrices{
 		Abundance: dist,

@@ -8,15 +8,13 @@ import (
 )
 
 // SvgRR draws a readout readout heatmap.
-func SvgRR(dist [][]float64, sorted []string, fillColor string) {
+func SvgRR(dist [][]float64, sorted []string, userParams typedef.Parameters) {
 	// Heatmap parameters.
-	parameters := typedef.Parameters{
-		AbundanceCap: float64(1),
-		Condition:    "Readouts",
-		FillColor:    fillColor,
-		InvertColor:  true,
-		Readout:      "Readouts",
-	}
+	parameters := userParams
+	parameters.AbundanceCap = float64(1)
+	parameters.XLabel = userParams.Readout
+	parameters.InvertColor = true
+	parameters.YLabel = userParams.Readout
 	data := typedef.Matrices{
 		Abundance: dist,
 	}

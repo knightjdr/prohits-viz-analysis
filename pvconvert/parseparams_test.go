@@ -86,8 +86,8 @@ func TestParseParams(t *testing.T) {
 	csv := []map[string]string{
 		{"values": "5", "params": `{
 				"type": "dotplot",
-				"xAxis": "Bait",
-				"yAxis": "Prey",
+				"xAxis": "Prey",
+				"yAxis": "Bait",
 				"filterType": 0,
 				"primary": 0.01,
 				"secondary": 0.05,
@@ -104,16 +104,16 @@ func TestParseParams(t *testing.T) {
 	expectedParameters := typedef.Parameters{
 		AbundanceCap:    50,
 		Abundance:       "AvgSpec",
-		Condition:       "Bait",
 		EdgeColor:       "blueBlack",
 		FillColor:       "blueBlack",
 		InvertColor:     true,
 		MinAbundance:    0,
 		PrimaryFilter:   0.01,
-		Readout:         "Prey",
 		Score:           "BFDR",
 		ScoreType:       "lte",
 		SecondaryFilter: 0.05,
+		XLabel:          "Prey",
+		YLabel:          "Bait",
 	}
 	assert.Equal(
 		t,

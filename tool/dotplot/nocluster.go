@@ -65,7 +65,7 @@ func NoCluster(dataset typedef.Dataset) {
 
 		// Write condition-condition svg.
 		if dataset.Parameters.WriteDistance {
-			SvgCC(sortedConditionDist, conditionOrder, dataset.Parameters.FillColor)
+			SvgCC(sortedConditionDist, conditionOrder, dataset.Parameters)
 
 			// Generate pdfs and pngs.
 			if dataset.Parameters.Pdf {
@@ -100,6 +100,8 @@ func NoCluster(dataset typedef.Dataset) {
 				true,
 				distanceParams,
 				"minimap/condition-condition.png",
+				dataset.Parameters.Condition,
+				dataset.Parameters.Condition,
 			)
 			afero.WriteFile(fs.Instance, "interactive/condition-condition.json", []byte(json), 0644)
 		}
@@ -157,7 +159,7 @@ func NoCluster(dataset typedef.Dataset) {
 
 		// Write readout-readout svg.
 		if dataset.Parameters.WriteDistance {
-			SvgRR(sortedReadoutDist, readoutOrder, dataset.Parameters.FillColor)
+			SvgRR(sortedReadoutDist, readoutOrder, dataset.Parameters)
 
 			// Generate pdfs and pngs.
 			if dataset.Parameters.Pdf {
@@ -192,6 +194,8 @@ func NoCluster(dataset typedef.Dataset) {
 				true,
 				distanceParams,
 				"minimap/readout-readout.png",
+				dataset.Parameters.Readout,
+				dataset.Parameters.Readout,
 			)
 			afero.WriteFile(fs.Instance, "interactive/readout-readout.json", []byte(json), 0644)
 		}
@@ -272,6 +276,8 @@ func NoCluster(dataset typedef.Dataset) {
 			false,
 			dataset.Parameters,
 			"minimap/dotplot.png",
+			dataset.Parameters.Condition,
+			dataset.Parameters.Readout,
 		)
 		afero.WriteFile(fs.Instance, "interactive/dotplot.json", []byte(json), 0644)
 	}
@@ -282,8 +288,7 @@ func NoCluster(dataset typedef.Dataset) {
 			sortedAbundance,
 			conditionOrder,
 			readoutOrder,
-			dataset.Parameters.FillColor,
-			dataset.Parameters.AbundanceCap,
+			dataset.Parameters,
 			false,
 		)
 
@@ -300,7 +305,7 @@ func NoCluster(dataset typedef.Dataset) {
 	if dataset.Parameters.WriteDistance {
 		// Write distance legend.
 		legendTitle := fmt.Sprintf("Distance - %s", dataset.Parameters.Abundance)
-		distanceLegend := svg.Gradient(dataset.Parameters.FillColor, legendTitle, 101, 1, 0, true)
+		distanceLegend := svg.Gradient(dataset.Parameters.FillColor, legendTitle, 101, 1, 0, false)
 		afero.WriteFile(fs.Instance, "svg/distance-legend.svg", []byte(distanceLegend), 0644)
 
 		// Generate pdfs and pngs.

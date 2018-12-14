@@ -25,9 +25,11 @@ func TestSvgDotplot(t *testing.T) {
 		{75, 0.2, 0.5},
 	}
 	parameters := typedef.Parameters{
-		FillColor:       "blueBlack",
 		AbundanceCap:    float64(50),
+		Condition:       "Conditions",
+		FillColor:       "blueBlack",
 		PrimaryFilter:   0.01,
+		Readout:         "Readouts",
 		SecondaryFilter: 0.05,
 		ScoreType:       "lte",
 	}

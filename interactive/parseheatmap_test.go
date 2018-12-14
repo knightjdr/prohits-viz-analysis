@@ -88,7 +88,9 @@ func TestParseHeatmap(t *testing.T) {
 		"\"normalization\":\"none\"," +
 		"\"readoutColumn\":\"readout\"," +
 		"\"scoreColumn\":\"score\"," +
-		"\"scoreType\":\"lte\"" +
+		"\"scoreType\":\"lte\"," +
+		"\"xLabel\":\"Conditions\"," +
+		"\"yLabel\":\"Readouts\"" +
 		"}," +
 		"\"settings\":{\"current\":{" +
 		"\"abundanceCap\":50," +
@@ -127,6 +129,8 @@ func TestParseHeatmap(t *testing.T) {
 		false,
 		parameters,
 		"test.png",
+		"Conditions",
+		"Readouts",
 	)
 	json = strings.Replace(json, " ", "", -1)
 	json = strings.Replace(json, "\n", "", -1)
@@ -158,7 +162,9 @@ func TestParseHeatmap(t *testing.T) {
 		"\"normalization\":\"none\"," +
 		"\"readoutColumn\":\"readout\"," +
 		"\"scoreColumn\":\"score\"," +
-		"\"scoreType\":\"lte\"" +
+		"\"scoreType\":\"lte\"," +
+		"\"xLabel\":\"Conditions\"," +
+		"\"yLabel\":\"Readouts\"" +
 		"}," +
 		"\"settings\":{\"current\":{" +
 		"\"abundanceCap\":50," +
@@ -185,6 +191,8 @@ func TestParseHeatmap(t *testing.T) {
 		false,
 		parameters,
 		"test.png",
+		"Conditions",
+		"Readouts",
 	)
 	json = strings.Replace(json, " ", "", -1)
 	json = strings.Replace(json, "\n", "", -1)

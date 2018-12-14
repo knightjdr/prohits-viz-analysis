@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/knightjdr/prohits-viz-analysis/fs"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -25,6 +26,12 @@ func TestSvgHeatmap(t *testing.T) {
 	}
 	sortedColumns := []string{"col1", "col3", "col2"}
 	sortedRows := []string{"row2", "row3", "row1"}
+	parameters := typedef.Parameters{
+		AbundanceCap: 50,
+		Condition:    "Conditions",
+		FillColor:    "blueBlack",
+		Readout:      "Readouts",
+	}
 
 	// TEST1: condition-readout heatmap
 	want := "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"105\" height=\"105\" viewBox=\"0 0 105 105\">\n" +
@@ -52,7 +59,7 @@ func TestSvgHeatmap(t *testing.T) {
 		"\t<text y=\"10\" x=\"75\" font-size=\"12\" text-anchor=\"middle\">Conditions</text>\n" +
 		"\t<text y=\"75\" x=\"10\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90, 10, 75)\">Readouts</text>\n" +
 		"</svg>\n"
-	SvgHeatmap(matrix, sortedColumns, sortedRows, "blueBlack", 50, false)
+	SvgHeatmap(matrix, sortedColumns, sortedRows, parameters, false)
 	svg, _ := afero.ReadFile(fs.Instance, "svg/heatmap.svg")
 	assert.Equal(t, want, string(svg), "Heatmap svg not generated correctly")
 }

@@ -15,17 +15,9 @@ func SvgDotplot(
 	userParams typedef.Parameters,
 ) {
 	// Define dotplot parameters.
-	parameters := typedef.Parameters{
-		AbundanceCap:    userParams.AbundanceCap,
-		Condition:       "Conditions",
-		EdgeColor:       userParams.EdgeColor,
-		FillColor:       userParams.FillColor,
-		InvertColor:     invertColor,
-		PrimaryFilter:   userParams.PrimaryFilter,
-		Readout:         "Readouts",
-		SecondaryFilter: userParams.SecondaryFilter,
-		ScoreType:       userParams.ScoreType,
-	}
+	parameters := userParams
+	parameters.XLabel = userParams.Condition
+	parameters.YLabel = userParams.Readout
 	data := typedef.Matrices{
 		Abundance: abundance,
 		Ratio:     ratios,

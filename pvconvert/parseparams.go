@@ -12,14 +12,14 @@ import (
 // jsonParams contains the specified file parameters.
 type jsonParams struct {
 	AbundanceColumn string  `json:"abundance,omitempty"`
-	ConditionColumn string  `json:"xAxis,omitempty"`
 	ImageType       string  `json:"type,omitempty"`
 	InvertColor     int     `json:"invert,omitempty"`
 	PrimaryFilter   float64 `json:"primary,omitempty"`
-	ReadoutColumn   string  `json:"yAxis,omitempty"`
 	SecondaryFilter float64 `json:"secondary,omitempty"`
 	ScoreColumn     string  `json:"score"`
 	ScoreType       int     `json:"filterType,omitempty"`
+	XLabel          string  `json:"xAxis,omitempty"`
+	YLabel          string  `json:"yAxis,omitempty"`
 }
 
 func invertColorToBool(invertColor int) bool {
@@ -97,13 +97,13 @@ func parseParams(csv []map[string]string) (imageType string, parameters typedef.
 
 	// Convert file parameters to output parameters.
 	parameters.Abundance = inputParams.AbundanceColumn
-	parameters.Condition = inputParams.ConditionColumn
 	parameters.InvertColor = invertColorToBool(inputParams.InvertColor)
-	parameters.Readout = inputParams.ReadoutColumn
 	parameters.PrimaryFilter = inputParams.PrimaryFilter
 	parameters.Score = inputParams.ScoreColumn
 	parameters.ScoreType = scoreTypeToBool(inputParams.ScoreType)
 	parameters.SecondaryFilter = inputParams.SecondaryFilter
+	parameters.XLabel = inputParams.XLabel
+	parameters.YLabel = inputParams.YLabel
 
 	// Infer missing colors and abundance thresholds.
 	inferred := inferSettings(csv, imageType)

@@ -14,6 +14,7 @@ func ParseHeatmap(
 	invertColor bool,
 	userParams typedef.Parameters,
 	pngfilename string,
+	xLabel, yLabel string,
 ) (json string) {
 	// User parameters.
 	parameters := map[string]interface{}{
@@ -32,6 +33,8 @@ func ParseHeatmap(
 		"readoutColumn":      userParams.Readout,
 		"scoreColumn":        userParams.Score,
 		"scoreType":          userParams.ScoreType,
+		"xLabel":             xLabel,
+		"yLabel":             yLabel,
 	}
 
 	// Needed settings.

@@ -11,17 +11,12 @@ import (
 func SvgHeatmap(
 	matrix [][]float64,
 	sortedColumns, sortedRows []string,
-	fillColor string,
-	abundanceCap float64,
+	userParams typedef.Parameters,
 	invertColor bool,
 ) {
-	parameters := typedef.Parameters{
-		AbundanceCap: abundanceCap,
-		Condition:    "Conditions",
-		FillColor:    fillColor,
-		InvertColor:  invertColor,
-		Readout:      "Readouts",
-	}
+	parameters := userParams
+	parameters.XLabel = userParams.Condition
+	parameters.YLabel = userParams.Readout
 	data := typedef.Matrices{
 		Abundance: matrix,
 	}

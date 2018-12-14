@@ -72,6 +72,8 @@ type Parameters struct {
 	Score                string
 	ScoreType            string
 	SecondaryFilter      float64
+	XLabel               string
+	YLabel               string
 	WriteDistance        bool
 	WriteDotplot         bool
 	WriteHeatmap         bool

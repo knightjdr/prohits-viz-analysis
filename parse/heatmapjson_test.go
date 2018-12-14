@@ -26,7 +26,6 @@ func TestHeatmapJSON(t *testing.T) {
 				{ "text": "b", "x": 0.6, "y": 0.1 }
 			]
 		},
-		"condition": "Bait",
 		"edgeColor": "blueBlack",
 		"fillColor": "blueBlack",
 		"imageType": "dotplot",
@@ -40,7 +39,6 @@ func TestHeatmapJSON(t *testing.T) {
 		},
 		"minAbundance": 5,
 		"primaryFilter": 0.01,
-		"readout": "Prey",
 		"rows": [
 			{
 				"data": [{"value": 5}, {"value": 10}, {"value": 40}],
@@ -56,7 +54,9 @@ func TestHeatmapJSON(t *testing.T) {
 			}
 		],
 		"scoreType": "lte",
-		"secondaryFilter": 0.05
+		"secondaryFilter": 0.05,
+		"xLabel": "Bait",
+		"yLabel": "Prey"
 	}`
 
 	// create test directory and files.
@@ -104,7 +104,6 @@ func TestHeatmapJSON(t *testing.T) {
 	dotplotData := Data{
 		AbundanceCap:    50,
 		Annotations:     annotations,
-		Condition:       "Bait",
 		EdgeColor:       "blueBlack",
 		FillColor:       "blueBlack",
 		ImageType:       "dotplot",
@@ -112,10 +111,11 @@ func TestHeatmapJSON(t *testing.T) {
 		Markers:         markers,
 		MinAbundance:    5,
 		PrimaryFilter:   0.01,
-		Readout:         "Prey",
 		Rows:            rows,
 		ScoreType:       "lte",
 		SecondaryFilter: 0.05,
+		XLabel:          "Bait",
+		YLabel:          "Prey",
 	}
 
 	os.Args = []string{

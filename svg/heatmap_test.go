@@ -39,15 +39,15 @@ func TestHeatmap(t *testing.T) {
 		},
 	}
 	parameters := typedef.Parameters{
-		Condition:       "Conditions",
 		EdgeColor:       "blueBlack",
 		FillColor:       "blueBlack",
 		AbundanceCap:    50,
 		InvertColor:     false,
 		PrimaryFilter:   0.01,
-		Readout:         "Readouts",
 		SecondaryFilter: 0.05,
 		ScoreType:       "lte",
+		XLabel:          "Conditions",
+		YLabel:          "Readouts",
 	}
 	rows := []string{"prey1", "prey2", "prey3"}
 

@@ -7,7 +7,9 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 )
 
-// ReadFile will read a csv file(s) into a slice.
+// ReadFile will read a csv file(s) into a slice. The columnMap specifies the
+// how to map the columns to interface keys. "ignoreMissing" declares if missing
+// interface keys can be safely ignored.
 func ReadFile(files []string, columnMap map[string]string, ignoreMissing bool) (parsed []map[string]string) {
 	// Get mime type for each file.
 	filetype := make([]string, len(files))

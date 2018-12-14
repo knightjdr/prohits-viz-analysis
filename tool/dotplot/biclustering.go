@@ -141,8 +141,7 @@ func Biclustering(dataset typedef.Dataset) {
 			sortedAbundance,
 			order.Conditions,
 			order.Readouts,
-			dataset.Parameters.FillColor,
-			dataset.Parameters.AbundanceCap,
+			dataset.Parameters,
 			false,
 		)
 	}
@@ -191,6 +190,8 @@ func Biclustering(dataset typedef.Dataset) {
 			false,
 			dataset.Parameters,
 			"minimap/dotplot.png",
+			dataset.Parameters.Condition,
+			dataset.Parameters.Readout,
 		)
 		afero.WriteFile(fs.Instance, "interactive/dotplot.json", []byte(json), 0644)
 	}

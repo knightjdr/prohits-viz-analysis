@@ -70,6 +70,8 @@ func main() {
 		parameters.InvertColor,
 		parameters,
 		mapPngPath,
+		parameters.XLabel,
+		parameters.YLabel,
 	)
 	interactivePath := fmt.Sprintf("interactive/%s.json", imageType)
 	afero.WriteFile(fs.Instance, interactivePath, []byte(json), 0644)
