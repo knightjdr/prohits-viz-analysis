@@ -112,7 +112,8 @@ func NoCluster(dataset typedef.Dataset) {
 		// Write newick tree to file.
 		afero.WriteFile(fs.Instance, "other/condition-dendrogram.txt", []byte(conditionTree.Newick), 0644)
 	} else {
-		conditionOrder = dataset.Parameters.ConditionList
+		// Only keep user specified conditions that are actually in the file
+		conditionOrder = checkList(dataset.FileData, "condition", dataset.Parameters.ConditionList)
 	}
 
 	// Cluster readouts.
@@ -206,7 +207,8 @@ func NoCluster(dataset typedef.Dataset) {
 		// Write newick tree to file.
 		afero.WriteFile(fs.Instance, "other/readout-dendrogram.txt", []byte(readoutTree.Newick), 0644)
 	} else {
-		readoutOrder = dataset.Parameters.ReadoutList
+		// Only keep user specified readouts that are actually in the file
+		readoutOrder = checkList(dataset.FileData, "readout", dataset.Parameters.ReadoutList)
 	}
 
 	// Sort matrices.

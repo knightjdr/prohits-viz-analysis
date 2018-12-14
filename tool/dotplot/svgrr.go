@@ -15,6 +15,7 @@ func SvgRR(dist [][]float64, sorted []string, userParams typedef.Parameters) {
 	parameters.XLabel = userParams.Readout
 	parameters.InvertColor = true
 	parameters.YLabel = userParams.Readout
+
 	data := typedef.Matrices{
 		Abundance: dist,
 	}
