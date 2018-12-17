@@ -4,6 +4,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"path/filepath"
 
 	"github.com/knightjdr/prohits-viz-analysis/filereader/columnparser"
 	"github.com/knightjdr/prohits-viz-analysis/fs"
@@ -77,6 +78,6 @@ func main() {
 	afero.WriteFile(fs.Instance, interactivePath, []byte(json), 0644)
 
 	// Remove minimap folder.
-	// mapFolder := filepath.Join(".", "minimap")
-	// fs.Instance.RemoveAll(mapFolder)
+	mapFolder := filepath.Join(".", "minimap")
+	fs.Instance.RemoveAll(mapFolder)
 }
