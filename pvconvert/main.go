@@ -9,10 +9,8 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/filereader/columnparser"
 	"github.com/knightjdr/prohits-viz-analysis/fs"
 	"github.com/knightjdr/prohits-viz-analysis/helper"
-	"github.com/knightjdr/prohits-viz-analysis/interactive"
-	"github.com/knightjdr/prohits-viz-analysis/svg"
-	"github.com/knightjdr/prohits-viz-analysis/typedef"
-	"github.com/spf13/afero"
+	"github.com/knightjdr/prohits-viz-analysis/image/interactive"
+	"github.com/knightjdr/prohits-viz-analysis/image/minimap"
 )
 
 func main() {
@@ -35,47 +33,29 @@ func main() {
 	imageType, parameters := parseParams(csv)
 
 	// Convert csv to matrices
-	matrices := helper.ConditionReadoutMatrix(csv, parameters.ScoreType, false, true)
+	matrices := helper.ConditionReadoutMatrix(&csv, parameters.ScoreType, false, true)
 
 	// Create folders
 	helper.CreateFolders([]string{"interactive", "minimap"})
 
-	// Generate svg for minimap
-	content := svg.Heatmap(
-		imageType,
-		matrices,
-		typedef.Annotations{},
-		typedef.Markers{},
-		matrices.Conditions,
-		matrices.Readouts,
-		true,
-		parameters,
-	)
-	mapSvg := fmt.Sprintf("%s.svg", imageType)
-	mapSvgPath := fmt.Sprintf("minimap/%s.svg", imageType)
-	afero.WriteFile(fs.Instance, mapSvgPath, []byte(content), 0644)
-
 	// Generate minimap
-	svgMiniList := []string{mapSvg}
-	svg.ConvertMap(svgMiniList)
+	mapData := minimap.Data{
+		ImageType:  imageType,
+		Matrices:   matrices,
+		Parameters: parameters,
+		Path:       "minimap",
+	}
+	minimap.Write(&mapData)
 
 	// Generate interactive file
-	mapPngPath := fmt.Sprintf("minimap/%s.png", imageType)
-	json := interactive.ParseHeatmap(
-		imageType,
-		matrices.Abundance,
-		matrices.Ratio,
-		matrices.Score,
-		matrices.Conditions,
-		matrices.Readouts,
-		parameters.InvertColor,
-		parameters,
-		mapPngPath,
-		parameters.XLabel,
-		parameters.YLabel,
-	)
-	interactivePath := fmt.Sprintf("interactive/%s.json", imageType)
-	afero.WriteFile(fs.Instance, interactivePath, []byte(json), 0644)
+	interactiveData := interactive.Data{
+		ImageType:  imageType,
+		Matrices:   matrices,
+		Minimap:    "minimap/minimap.png",
+		Parameters: parameters,
+		Path:       fmt.Sprintf("interactive/%s.json", imageType),
+	}
+	interactive.ParseHeatmap(&interactiveData)
 
 	// Remove minimap folder.
 	mapFolder := filepath.Join(".", "minimap")

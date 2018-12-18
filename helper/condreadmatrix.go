@@ -65,11 +65,11 @@ func sortLabels(labels map[string]int, alphabetically bool) []string {
 // both an abundance and score column, and can generate row ratios as well if requested.
 // It also returns lists of the conditions and readouts.
 func ConditionReadoutMatrix(
-	table []map[string]string,
+	table *[]map[string]string,
 	scoreType string,
 	resort bool,
 	calculateRatios bool,
-) (data typedef.Matrices) {
+) *typedef.Matrices {
 	// Get scoring function to use for finding the worst score.
 	scoreCompare := scoreFunc(scoreType)
 	worstScore := float64(0)
@@ -78,7 +78,7 @@ func ConditionReadoutMatrix(
 	conditions := make(map[string]int, 0)
 	readouts := make(map[string]int, 0)
 	readoutCondition := make(map[conditionReadout]readoutData)
-	for _, row := range table {
+	for _, row := range *table {
 		conditionName := row["condition"]
 		readoutName := row["readout"]
 
@@ -109,6 +109,7 @@ func ConditionReadoutMatrix(
 	}
 
 	// Sort conditions and readouts.
+	data := new(typedef.Matrices)
 	data.Conditions = sortLabels(conditions, resort)
 	data.Readouts = sortLabels(readouts, resort)
 
@@ -135,5 +136,5 @@ func ConditionReadoutMatrix(
 		data.Ratio = NormalizeMatrix(data.Abundance)
 	}
 
-	return
+	return data
 }
