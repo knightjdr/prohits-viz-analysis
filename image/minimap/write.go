@@ -19,18 +19,18 @@ func Write(data *Data) {
 		imageType = "dotplot"
 	}
 
+	svgName := fmt.Sprintf("%s.svg", data.Filename)
 	svgData := svg.Data{
 		Annotations: typedef.Annotations{},
+		Filename:    svgName,
 		ImageType:   imageType,
 		Markers:     typedef.Markers{},
 		Matrices:    data.Matrices,
 		Minimap:     true,
 		Parameters:  data.Parameters,
-		Path:        fmt.Sprintf("%s/minimap.svg", data.Path),
 	}
 	svg.Heatmap(&svgData)
 
 	// Generate minimap
-	svgMiniList := []string{"minimap.svg"}
-	svg.ConvertMap("minimap", svgMiniList)
+	svg.ConvertMap(svgName)
 }

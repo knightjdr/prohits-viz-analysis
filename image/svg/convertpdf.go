@@ -11,10 +11,7 @@ import (
 )
 
 // ConvertPdf converts svg files to PDFs in the current working directory
-// in a subfolder called "pdf". The conversion is done using inkscape
-// which requires the full path to svg files and output files. Because
-// inkscape needs full paths, this can't be unit tested by mocking
-// with afero.
+// in a subfolder called "pdf". The conversion is done using rsvg-convert.
 func ConvertPdf(list []string) {
 	// Get current working directory.
 	workingDir, err := os.Getwd()

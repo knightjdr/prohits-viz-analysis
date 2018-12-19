@@ -12,12 +12,12 @@ func Reduce(
 	primaryFilter float64,
 	minimum float64,
 	scoreType string,
-) (filtered []map[string]string, err error) {
+) ([]map[string]string, error) {
 	// Check if first datum score is numeric, if not return err.
-	_, err = strconv.ParseFloat(data[0]["score"], 64)
+	_, err := strconv.ParseFloat(data[0]["score"], 64)
 	if err != nil {
 		err = errors.New("Score column is not numeric")
-		return
+		return nil, err
 	}
 
 	// Get filter function.
@@ -48,14 +48,17 @@ func Reduce(
 	}
 
 	// Remove readouts not passing score in at least one condition.
-	filtered = data
-	filteredlen := len(data)
-	for i := filteredlen - 1; i >= 0; i-- {
+	filtered := data
+	for i := len(data) - 1; i >= 0; i-- {
 		readout := data[i]["readout"]
 		if _, ok := readouts[readout]; !ok {
 			filtered = append(filtered[:i], filtered[i+1:]...)
 		}
 	}
 
-	return
+	// Return a new copied slice so that we don't need to keep the entire file array.
+	copied := make([]map[string]string, len(filtered))
+	copy(copied, filtered)
+
+	return copied, err
 }

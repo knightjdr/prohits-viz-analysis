@@ -6,17 +6,13 @@ import (
 	"strconv"
 
 	"github.com/knightjdr/prohits-viz-analysis/helper"
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 // DotplotLegend creates a legend for a dotplot.
-func DotplotLegend(
-	fillColor, title string,
-	numColors int,
-	min, max, primary, secondary float64,
-	score, scoreType string,
-) (svg string) {
+func DotplotLegend(title string, numColors int, parameters typedef.Parameters) (svg string) {
 	// Get color gradient.
-	gradient := colorGradient(fillColor, numColors, false)
+	gradient := colorGradient(parameters.FillColor, numColors, false)
 
 	// Define svg.
 	svgSlice := make([]string, 0)
@@ -52,12 +48,12 @@ func DotplotLegend(
 	// Add min and max labels.
 	maxLabel := fmt.Sprintf("\t<text y=\"65\" x=\"175\" font-size=\"12\""+
 		" text-anchor=\"middle\">%s</text>\n",
-		strconv.FormatFloat(max, 'f', -1, 64),
+		strconv.FormatFloat(parameters.AbundanceCap, 'f', -1, 64),
 	)
 	svgSlice = append(svgSlice, maxLabel)
 	minLabel := fmt.Sprintf("\t<text y=\"65\" x=\"25\" font-size=\"12\""+
 		" text-anchor=\"middle\">%s</text>\n",
-		strconv.FormatFloat(min, 'f', -1, 64),
+		strconv.FormatFloat(parameters.MinAbundance, 'f', -1, 64),
 	)
 	svgSlice = append(svgSlice, minLabel)
 
@@ -80,7 +76,7 @@ func DotplotLegend(
 	svgSlice = append(svgSlice, "\t<g>\n")
 	scoreText := fmt.Sprintf("\t\t<text y=\"220\" x=\"100\" font-size=\"12\""+
 		" text-anchor=\"middle\">%s</text>\n",
-		score,
+		parameters.Score,
 	)
 	svgSlice = append(svgSlice, scoreText)
 
@@ -93,15 +89,15 @@ func DotplotLegend(
 
 	// Create primary text based on scoretype.
 	var primaryText string
-	if scoreType == "gte" {
+	if parameters.ScoreType == "gte" {
 		primaryText = fmt.Sprintf("\t\t<text y=\"195\" x=\"50\" font-size=\"12\""+
 			" text-anchor=\"middle\">≥ %s</text>\n",
-			strconv.FormatFloat(primary, 'f', -1, 64),
+			strconv.FormatFloat(parameters.PrimaryFilter, 'f', -1, 64),
 		)
 	} else {
 		primaryText = fmt.Sprintf("\t\t<text y=\"195\" x=\"50\" font-size=\"12\""+
 			" text-anchor=\"middle\">≤ %s</text>\n",
-			strconv.FormatFloat(primary, 'f', -1, 64),
+			strconv.FormatFloat(parameters.PrimaryFilter, 'f', -1, 64),
 		)
 	}
 	svgSlice = append(svgSlice, primaryText)
@@ -115,15 +111,15 @@ func DotplotLegend(
 
 	// Create secondary text based on scoretype.
 	var secondaryText string
-	if scoreType == "gte" {
+	if parameters.ScoreType == "gte" {
 		secondaryText = fmt.Sprintf("\t\t<text y=\"195\" x=\"100\" font-size=\"12\""+
 			" text-anchor=\"middle\">≥ %s</text>\n",
-			strconv.FormatFloat(secondary, 'f', -1, 64),
+			strconv.FormatFloat(parameters.SecondaryFilter, 'f', -1, 64),
 		)
 	} else {
 		secondaryText = fmt.Sprintf("\t\t<text y=\"195\" x=\"100\" font-size=\"12\""+
 			" text-anchor=\"middle\">≤ %s</text>\n",
-			strconv.FormatFloat(secondary, 'f', -1, 64),
+			strconv.FormatFloat(parameters.SecondaryFilter, 'f', -1, 64),
 		)
 	}
 	svgSlice = append(svgSlice, secondaryText)
@@ -137,15 +133,15 @@ func DotplotLegend(
 
 	// Create tertiary text based on scoretype.
 	var tertiaryText string
-	if scoreType == "gte" {
+	if parameters.ScoreType == "gte" {
 		tertiaryText = fmt.Sprintf("\t\t<text y=\"195\" x=\"150\" font-size=\"12\""+
 			" text-anchor=\"middle\">< %s</text>\n",
-			strconv.FormatFloat(secondary, 'f', -1, 64),
+			strconv.FormatFloat(parameters.SecondaryFilter, 'f', -1, 64),
 		)
 	} else {
 		tertiaryText = fmt.Sprintf("\t\t<text y=\"195\" x=\"150\" font-size=\"12\""+
 			" text-anchor=\"middle\">> %s</text>\n",
-			strconv.FormatFloat(secondary, 'f', -1, 64),
+			strconv.FormatFloat(parameters.SecondaryFilter, 'f', -1, 64),
 		)
 	}
 	svgSlice = append(svgSlice, tertiaryText)

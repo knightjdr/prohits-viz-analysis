@@ -5,7 +5,7 @@ import (
 )
 
 // FormatMatrix converts json data slice to matrices for svg creation.
-func FormatMatrix(data *Data) typedef.Matrices {
+func FormatMatrix(data *Data) *typedef.Matrices {
 	// Define matrix dimensions.
 	colNum := len(data.Rows[0].Data)
 	rowNum := len(data.Rows)
@@ -28,5 +28,5 @@ func FormatMatrix(data *Data) typedef.Matrices {
 			heatmap.Score[i][j] = cell.Score
 		}
 	}
-	return heatmap
+	return &heatmap
 }

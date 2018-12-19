@@ -78,7 +78,7 @@ func TestConditionReadoutMatrix(t *testing.T) {
 		{0, 0.01, 0.08},
 		{0.02, 0.08, 0.01},
 	}
-	data := ConditionReadoutMatrix(&dataset, "lte", true, false)
+	data := ConditionReadoutMatrix(dataset, "lte", true, false)
 	assert.Equal(
 		t,
 		wantAbundance,
@@ -95,7 +95,7 @@ func TestConditionReadoutMatrix(t *testing.T) {
 		{0, 0.01, 0},
 		{0.02, 0, 0.01},
 	}
-	data = ConditionReadoutMatrix(&dataset, "gte", true, false)
+	data = ConditionReadoutMatrix(dataset, "gte", true, false)
 	assert.Equal(t, wantScore, data.Score, "Data not converted to condition readout score matrix when large scores better")
 
 	// TEST: dataset converted to matrix with smaller scores better and no sorting.
@@ -111,7 +111,7 @@ func TestConditionReadoutMatrix(t *testing.T) {
 		{0.02, 0.01, 0.08},
 		{0, 0.08, 0.01},
 	}
-	data = ConditionReadoutMatrix(&dataset, "lte", false, false)
+	data = ConditionReadoutMatrix(dataset, "lte", false, false)
 	assert.Equal(t, wantAbundance, data.Abundance, "Data not converted to condition readout abundance matrix")
 	assert.Equal(t, wantConditionList, data.Conditions, "Condition list not correct")
 	assert.Equal(t, wantReadoutList, data.Readouts, "Readout list not correct")
@@ -123,7 +123,7 @@ func TestConditionReadoutMatrix(t *testing.T) {
 		{1, 0.77, 0},
 		{1, 0, 0.7},
 	}
-	data = ConditionReadoutMatrix(&dataset, "lte", true, true)
+	data = ConditionReadoutMatrix(dataset, "lte", true, true)
 	for i, slice := range data.Ratio {
 		assert.InDeltaSlice(
 			t,

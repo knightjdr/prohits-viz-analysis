@@ -47,6 +47,7 @@ func TestParseHeatmap(t *testing.T) {
 		{0.2, 0.7, 0.01},
 	}
 	data := new(Data)
+	data.Filename = "test/interactive.json"
 	data.Matrices = matrices
 	data.Minimap = "test.png"
 	data.Parameters = typedef.Parameters{
@@ -73,7 +74,6 @@ func TestParseHeatmap(t *testing.T) {
 		XLabel:             "Conditions",
 		YLabel:             "Readouts",
 	}
-	data.Path = "test/interactive.json"
 
 	// TEST: typical data conversion to dotplot json.
 	data.ImageType = "dotplot"

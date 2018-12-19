@@ -4,12 +4,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 
-	"github.com/knightjdr/prohits-viz-analysis/fs"
+	"github.com/knightjdr/prohits-viz-analysis/helper"
+	"github.com/knightjdr/prohits-viz-analysis/image/svg"
+	"github.com/knightjdr/prohits-viz-analysis/logmessage"
 	"github.com/knightjdr/prohits-viz-analysis/parse"
-	"github.com/knightjdr/prohits-viz-analysis/svg"
-	"github.com/spf13/afero"
 )
 
 func main() {
@@ -19,30 +18,34 @@ func main() {
 	flag.Parse()
 
 	data, err := parse.HeatmapJSON(*jsonFile)
-	if err != nil {
-		os.Exit(1)
-	}
+	logmessage.CheckError(err, true)
 
 	// Format dataset for svg creator.
-	heatmap := parse.FormatMatrix(data)
+	matrices := parse.FormatMatrix(data)
 
-	// Format parameters and generate for names for svg.
+	// Format parameters and generate readout names for svg.
 	parameters := FormatParams(data)
-	rowNames := RowNames(data.Rows)
+	matrices.Readouts = RowNames(data.Rows)
+
+	// Create folders
+	folders := make([]string, 2)
+	folders[0] = "svg"
+	if *outputType != "svg" {
+		folders[1] = *outputType
+	}
+	helper.CreateFolders(folders)
 
 	// Create svg.
-	content := svg.Heatmap(
-		data.ImageType,
-		heatmap,
-		data.Annotations,
-		data.Markers,
-		data.Columns,
-		rowNames,
-		false,
-		parameters,
-	)
-	filename := fmt.Sprintf("svg/%s.svg", data.ImageType)
-	afero.WriteFile(fs.Instance, filename, []byte(content), 0644)
+	svgData := svg.Data{
+		Annotations: data.Annotations,
+		Filename:    fmt.Sprintf("svg/%s.svg", data.ImageType),
+		ImageType:   data.ImageType,
+		Markers:     data.Markers,
+		Matrices:    matrices,
+		Minimap:     false,
+		Parameters:  parameters,
+	}
+	svg.Heatmap(&svgData)
 
 	// Create additional output type if needed.
 	imageName := fmt.Sprintf("%s.svg", data.ImageType)

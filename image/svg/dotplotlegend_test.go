@@ -3,11 +3,21 @@ package svg
 import (
 	"testing"
 
+	"github.com/knightjdr/prohits-viz-analysis/typedef"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestDotplotLegend(t *testing.T) {
-	// TEST1: draw legend svg with lte as score type.
+	// TEST: draw legend svg with lte as score type.
+	parameters := typedef.Parameters{
+		AbundanceCap:    50,
+		FillColor:       "blueBlack",
+		MinAbundance:    0,
+		PrimaryFilter:   0.01,
+		SecondaryFilter: 0.05,
+		Score:           "FDR",
+		ScoreType:       "lte",
+	}
 	want := "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"200\" height=\"240\" viewBox=\"0 0 200 240\">\n" +
 		"\t<text y=\"20\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Title - test</text>\n" +
 		"\t<g>\n" +
@@ -43,14 +53,9 @@ func TestDotplotLegend(t *testing.T) {
 		"\t\t<text y=\"195\" x=\"150\" font-size=\"12\" text-anchor=\"middle\">> 0.05</text>\n" +
 		"\t</g>\n" +
 		"</svg>\n"
-	assert.Equal(
-		t,
-		want,
-		DotplotLegend("blueBlack", "Title - test", 11, 0, 50, 0.01, 0.05, "FDR", "lte"),
-		"Dotplot legend is not correct for lte score type",
-	)
+	assert.Equal(t, want, DotplotLegend("Title - test", 11, parameters), "Dotplot legend is not correct for lte score type")
 
-	// TEST2: draw legend svg with gte as score type.
+	// TEST: draw legend svg with gte as score type.
 	want = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"200\" height=\"240\" viewBox=\"0 0 200 240\">\n" +
 		"\t<text y=\"20\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Title - test</text>\n" +
 		"\t<g>\n" +
@@ -86,10 +91,6 @@ func TestDotplotLegend(t *testing.T) {
 		"\t\t<text y=\"195\" x=\"150\" font-size=\"12\" text-anchor=\"middle\">< 0.05</text>\n" +
 		"\t</g>\n" +
 		"</svg>\n"
-	assert.Equal(
-		t,
-		want,
-		DotplotLegend("blueBlack", "Title - test", 11, 0, 50, 0.01, 0.05, "FDR", "gte"),
-		"Dotplot legend is not correct for gte score type",
-	)
+	parameters.ScoreType = "gte"
+	assert.Equal(t, want, DotplotLegend("Title - test", 11, parameters), "Dotplot legend is not correct for gte score type")
 }

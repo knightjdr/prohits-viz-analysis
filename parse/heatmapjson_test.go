@@ -63,7 +63,7 @@ func TestHeatmapJSON(t *testing.T) {
 	fs.Instance.MkdirAll("test", 0755)
 	afero.WriteFile(
 		fs.Instance,
-		"test/testfile1.txt",
+		"test/testfile1.json",
 		[]byte(json),
 		0444,
 	)
@@ -120,9 +120,14 @@ func TestHeatmapJSON(t *testing.T) {
 
 	os.Args = []string{
 		"cmd",
-		"-json", "test/testfile1.txt",
+		"-json", "test/testfile1.json",
 	}
-	dotplotOutput, dotplotErr := HeatmapJSON("test/testfile1.txt")
+	dotplotOutput, dotplotErr := HeatmapJSON("test/testfile1.json")
 	assert.Nil(t, dotplotErr, "All required arguments specified should not return an error")
 	assert.EqualValues(t, &dotplotData, dotplotOutput)
+
+	// Test: missing file should return error
+	_, dotplotErr = HeatmapJSON("test/testfile2.json")
+	assert.NotNil(t, dotplotErr, "Missing file should return error")
+
 }

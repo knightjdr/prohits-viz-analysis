@@ -42,14 +42,17 @@ type Column struct {
 }
 
 // HeatmapJSON parses the command line arguments.
-func HeatmapJSON(jsonFile string) (data *Data, err error) {
+func HeatmapJSON(jsonFile string) (*Data, error) {
 	// Open JSON.
-	byteValue, err := afero.ReadFile(fs.Instance, jsonFile)
+	bytes, err := afero.ReadFile(fs.Instance, jsonFile)
+	if err != nil {
+		return nil, err
+	}
 
 	// Parse JSON.
-	data = &Data{
+	data := Data{
 		Rows: []Row{},
 	}
-	err = json.Unmarshal(byteValue, data)
-	return
+	err = json.Unmarshal(bytes, &data)
+	return &data, err
 }

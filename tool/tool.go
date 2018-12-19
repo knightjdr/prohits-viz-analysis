@@ -7,7 +7,7 @@ import (
 )
 
 // Start passes a dataset to the correct tool for analysis
-func Start(dataset typedef.Dataset) {
+func Start(dataset *typedef.Dataset) {
 	if dataset.Parameters.AnalysisType == "dotplot" {
 		dotplot.Generate(dataset)
 	}

@@ -11,10 +11,7 @@ import (
 )
 
 // ConvertPng converts svg files to PNGs in the current working directory
-// in a subfolder called "png". The conversion is done using inkscape
-// which requires the full path to svg files and output files. Because
-// inkscape needs full paths, this can't be unit tested by mocking
-// with afero.
+// in a subfolder called "png". The conversion is done using rsvg-convert.
 func ConvertPng(list []string) {
 	// Get current working directory.
 	workingDir, err := os.Getwd()

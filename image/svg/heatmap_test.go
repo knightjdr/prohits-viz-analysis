@@ -158,8 +158,8 @@ func TestHeatmap(t *testing.T) {
 
 	// TEST: full heatmap image writing to file
 	data.ImageType = "heatmap"
+	data.Filename = "test/heatmap.svg"
 	data.Minimap = false
-	data.Path = "test/heatmap.svg"
 	want = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"117\" height=\"117\" viewBox=\"0 0 117 117\">\n" +
 		"\t<g transform=\"translate(57)\">\n" +
 		"\t\t<text y=\"55\" x=\"6\" font-size=\"12\" text-anchor=\"end\" transform=\"rotate(90, 6, 55)\">bait1</text>\n" +

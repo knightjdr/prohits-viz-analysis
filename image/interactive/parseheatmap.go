@@ -48,6 +48,6 @@ func ParseHeatmap(data *Data) {
 	rowData := rowData(data.ImageType, data.Matrices)
 
 	// Write json.
-	Heatmap(data.Matrices.Conditions, rowData, parameters, settings, url, data.Path)
+	Heatmap(data.Matrices.Conditions, rowData, parameters, settings, url, data.Filename)
 	return
 }

@@ -33,27 +33,27 @@ func main() {
 	imageType, parameters := parseParams(csv)
 
 	// Convert csv to matrices
-	matrices := helper.ConditionReadoutMatrix(&csv, parameters.ScoreType, false, true)
+	matrices := helper.ConditionReadoutMatrix(csv, parameters.ScoreType, false, true)
 
 	// Create folders
 	helper.CreateFolders([]string{"interactive", "minimap"})
 
 	// Generate minimap
 	mapData := minimap.Data{
+		Filename:   "minimap/minimap",
 		ImageType:  imageType,
 		Matrices:   matrices,
 		Parameters: parameters,
-		Path:       "minimap",
 	}
 	minimap.Write(&mapData)
 
 	// Generate interactive file
 	interactiveData := interactive.Data{
+		Filename:   fmt.Sprintf("interactive/%s.json", imageType),
 		ImageType:  imageType,
 		Matrices:   matrices,
 		Minimap:    "minimap/minimap.png",
 		Parameters: parameters,
-		Path:       fmt.Sprintf("interactive/%s.json", imageType),
 	}
 	interactive.ParseHeatmap(&interactiveData)
 

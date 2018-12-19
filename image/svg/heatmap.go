@@ -27,7 +27,7 @@ func Heatmap(data *Data) string {
 	dotplotparameters := DotplotParametersDefine(dims)
 
 	// Open file for writing if requested
-	file, err := file.Create(data.Path)
+	file, err := file.Create(data.Filename)
 	logmessage.CheckError(err, true)
 	if file != nil {
 		defer file.Close()
