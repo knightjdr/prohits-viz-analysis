@@ -26,7 +26,7 @@ func main() {
 	dataset.FileData = columnparser.ReadFile(parameters.Files, columnMap, false)
 
 	// Filter rows.
-	dataset.FileData = filter.Data(parsedColumns, dataset.Parameters)
+	dataset.FileData = filter.Data(dataset.FileData, dataset.Parameters)
 
 	// Check for common errors in filtered data that result from incorrect input format.
 	err = errorcheck.Required(dataset)
