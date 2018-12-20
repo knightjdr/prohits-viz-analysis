@@ -12,7 +12,6 @@ func InteractiveHeatmap(
 	imageType string,
 	abundance, ratios, scores [][]float64,
 	columns, rows []string,
-	filename string,
 	parameters typedef.Parameters,
 ) {
 	matrices := typedef.Matrices{
@@ -25,10 +24,10 @@ func InteractiveHeatmap(
 	parameters.XLabel = parameters.Condition
 	parameters.YLabel = parameters.Readout
 	interactiveData := interactive.Data{
-		Filename:   fmt.Sprintf("interactive/%s.json", filename),
+		Filename:   fmt.Sprintf("interactive/%s.json", imageType),
 		ImageType:  imageType,
 		Matrices:   &matrices,
-		Minimap:    fmt.Sprintf("minimap/%s.png", filename),
+		Minimap:    fmt.Sprintf("minimap/%s.png", imageType),
 		Parameters: parameters,
 	}
 	interactive.ParseHeatmap(&interactiveData)

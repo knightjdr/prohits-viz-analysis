@@ -26,7 +26,7 @@ func TestInteractiveHeatmap(t *testing.T) {
 	pngImage := image.NewRGBA(image.Rectangle{image.Point{0, 0}, image.Point{1, 1}})
 	c := color.RGBA{uint8(0), uint8(0), uint8(0), 255}
 	pngImage.Set(0, 0, c)
-	myfile, _ := fs.Instance.Create("minimap/test.png")
+	myfile, _ := fs.Instance.Create("minimap/heatmap.png")
 	png.Encode(myfile, pngImage)
 
 	// Starting with some hypothetical data for a dotplot, generate a data matrix
@@ -99,8 +99,8 @@ func TestInteractiveHeatmap(t *testing.T) {
 		"{\"data\":[{\"value\":7},{\"value\":8},{\"value\":9}],\"name\":\"row3\"}" +
 		"]}," +
 		"\"minimap\":{\"image\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAEElEQVR4nGJiYGAABAAA//8ADAADcZGLFwAAAABJRU5ErkJggg==\"}}"
-	InteractiveHeatmap("heatmap", abundance, [][]float64{}, [][]float64{}, columns, rows, "test", parameters)
-	bytes, _ := afero.ReadFile(fs.Instance, "interactive/test.json")
+	InteractiveHeatmap("heatmap", abundance, [][]float64{}, [][]float64{}, columns, rows, parameters)
+	bytes, _ := afero.ReadFile(fs.Instance, "interactive/heatmap.json")
 	json := string(bytes)
 	json = strings.Replace(json, " ", "", -1)
 	json = strings.Replace(json, "\n", "", -1)

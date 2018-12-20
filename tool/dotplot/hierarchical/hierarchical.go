@@ -76,7 +76,6 @@ func Run(dataset *typedef.Dataset) {
 			sortedScores,
 			conditionTree.Order,
 			readoutTree.Order,
-			"minimap/dotplot.png",
 			dataset.Parameters,
 		)
 
