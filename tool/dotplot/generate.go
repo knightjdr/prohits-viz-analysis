@@ -17,9 +17,6 @@ func Generate(dataset *typedef.Dataset) {
 	// Determine folders to create.
 	folders := make([]string, 0)
 	folders = append(folders, []string{"cytoscape", "interactive", "minimap", "other", "svg"}...)
-	if dataset.Parameters.Pdf {
-		folders = append(folders, "pdf")
-	}
 	if dataset.Parameters.Png {
 		folders = append(folders, "png")
 	}

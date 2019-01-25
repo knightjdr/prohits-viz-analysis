@@ -2,6 +2,7 @@
 package tool
 
 import (
+	"github.com/knightjdr/prohits-viz-analysis/tool/circheatmap"
 	"github.com/knightjdr/prohits-viz-analysis/tool/dotplot"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
@@ -10,5 +11,7 @@ import (
 func Start(dataset *typedef.Dataset) {
 	if dataset.Parameters.AnalysisType == "dotplot" {
 		dotplot.Generate(dataset)
+	} else if dataset.Parameters.AnalysisType == "circheatmap" {
+		circheatmap.Generate(dataset)
 	}
 }

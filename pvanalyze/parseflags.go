@@ -15,23 +15,27 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 	abundance := flag.String("abundance", "", "Abundance column")
 	abundanceCap := flag.Float64("abundanceCap", 50, "Maximum abundance")
 	analysisType := flag.String("analysisType", "", "Analysis type, one of: conditioncondition, correlation, dotplot or specificity")
-	condition := flag.String("condition", "", "Condition column")
-	conditionClustering := flag.String("conditionClustering", "", "Should conditions be clustered: one of conditions or none")
-	conditionList := flag.String("conditionList", "", "List of conditions")
 	biclusteringApprox := flag.Bool("biclusteringApprox", false, "Perform approximate biclustering")
 	clustering := flag.String("clustering", "", "Clustering type")
 	clusteringMethod := flag.String("clusteringMethod", "", "Clustering type")
 	clusteringOptimize := flag.Bool("clusteringOptimize", false, "Optimize leaf ordering")
+	condition := flag.String("condition", "", "Condition column")
+	conditionClustering := flag.String("conditionClustering", "", "Should conditions be clustered: one of conditions or none")
+	conditionList := flag.String("conditionList", "", "List of conditions")
+	conditionMap := flag.String("conditionMap", "", "File for mapping condition names to gene names")
 	control := flag.String("control", "", "Control column")
 	distance := flag.String("distance", "", "Distance metric")
 	edgeColor := flag.String("edgeColor", "", "Edge color")
 	fileList := flag.String("fileList", "", "Input files as comma-separated list")
 	fillColor := flag.String("fillColor", "", "Fill color")
 	invertColor := flag.Bool("invertColor", false, "Invert fill color")
+	known := flag.Bool("known", false, "Determine known readouts")
+	knownFile := flag.String("knownFile", "", "File with information on known criterion")
 	logBase := flag.String("logBase", "", "Base for log transformation")
 	minAbundance := flag.Float64("minAbundance", 0, "Minimum abundance")
 	normalization := flag.String("normalization", "", "Normalization type")
 	normalizationReadout := flag.String("normalizationReadout", "", "Readout to use for normalization")
+	otherAbundance := flag.String("otherAbundance", "", "Other abundance columns to display on circular heat maps")
 	pdf := flag.Bool("pdf", false, "Generate pdf files")
 	png := flag.Bool("png", false, "Generate png files")
 	readout := flag.String("readout", "", "Readout column")
@@ -42,6 +46,9 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 	score := flag.String("score", "", "Score column")
 	scoreType := flag.String("scoreType", "lte", "Score type")
 	secondaryFilter := flag.Float64("secondaryFilter", 0, "Secondary filter")
+	species := flag.String("species", "", "Species for to use for evaluating known criterion")
+	tissueFile := flag.String("tissueFile", "", "File with information on RNA tissue expression")
+	tissues := flag.String("tissues", "", "RNA expression tissues to display on circular heat maps")
 	writeDistance := flag.Bool("writeDistance", false, "Generate SVG files for distance matrix")
 	writeDotplot := flag.Bool("writeDotplot", false, "Generate SVG file for dotplot")
 	writeHeatmap := flag.Bool("writeHeatmap", false, "Generate SVG file for heatmap")
@@ -91,6 +98,14 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 		"score":         *score,
 	}
 
+	// Add other columns to columnMap if requested, and store with lowercase keys
+	otherColumns := strings.Split(*otherAbundance, ",")
+	if len(otherColumns) > 0 {
+		for _, column := range otherColumns {
+			columnMap[column] = column
+		}
+	}
+
 	// Split condition and readout lists.
 	conditions := []string{}
 	if *conditionList != "" {
@@ -113,16 +128,20 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 		Condition:            *condition,
 		ConditionClustering:  *conditionClustering,
 		ConditionList:        conditions,
+		ConditionMap:         *conditionMap,
 		EdgeColor:            *edgeColor,
 		Control:              *control,
 		Distance:             *distance,
 		FillColor:            *fillColor,
 		Files:                files,
 		InvertColor:          *invertColor,
+		Known:                *known,
+		KnownFile:            *knownFile,
 		LogBase:              *logBase,
 		MinAbundance:         *minAbundance,
 		Normalization:        *normalization,
 		NormalizationReadout: *normalizationReadout,
+		OtherAbundance:       otherColumns,
 		Pdf:                  *pdf,
 		Png:                  *png,
 		Readout:              *readout,
@@ -133,6 +152,9 @@ func ParseFlags() (columnMap map[string]string, parameters typedef.Parameters, e
 		Score:                *score,
 		ScoreType:            *scoreType,
 		SecondaryFilter:      *secondaryFilter,
+		Species:              *species,
+		TissueFile:           *tissueFile,
+		Tissues:              strings.Split(*tissues, ","),
 		WriteDistance:        *writeDistance,
 		WriteDotplot:         *writeDotplot,
 		WriteHeatmap:         *writeHeatmap,

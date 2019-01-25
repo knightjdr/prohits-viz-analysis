@@ -52,16 +52,20 @@ type Parameters struct {
 	Condition            string
 	ConditionClustering  string
 	ConditionList        []string
+	ConditionMap         string
 	EdgeColor            string
 	FillColor            string
 	Control              string
 	Distance             string
 	Files                []string
 	InvertColor          bool
+	Known                bool
+	KnownFile            string
 	LogBase              string
 	MinAbundance         float64
 	Normalization        string
 	NormalizationReadout string
+	OtherAbundance       []string
 	Pdf                  bool
 	Png                  bool
 	PrimaryFilter        float64
@@ -72,6 +76,9 @@ type Parameters struct {
 	Score                string
 	ScoreType            string
 	SecondaryFilter      float64
+	Species              string
+	TissueFile           string
+	Tissues              []string
 	XLabel               string
 	YLabel               string
 	WriteDistance        bool

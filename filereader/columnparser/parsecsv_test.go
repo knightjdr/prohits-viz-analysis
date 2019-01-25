@@ -43,7 +43,6 @@ func TestParseCsv(t *testing.T) {
 		[]byte("column1\tcolumn2\tcolumn3\tcolumn4\na\tb\tc\n"),
 		0444,
 	)
-	afero.WriteFile(fs.Instance, "test/unreadable.txt", []byte(""), 0444)
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
 	// Reusable vars.
