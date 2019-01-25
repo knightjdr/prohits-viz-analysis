@@ -33,10 +33,11 @@ func ParseCsv(
 
 			// Read file.
 			reader := csv.NewReader(file)
+			reader.Comma = delimiter    // Set delimiter.
+			reader.FieldsPerRecord = -1 // Negative so that rows with different number of fields are still parsed.
 			reader.LazyQuotes = true
-			reader.Comma = delimiter // Set delimiter.
 			lines, err := reader.ReadAll()
-			// Skip if file cannot be read.
+			// Skip if file cannot be read
 			logmessage.CheckError(err, false)
 			if err != nil {
 				continue

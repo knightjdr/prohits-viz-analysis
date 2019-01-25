@@ -37,6 +37,12 @@ func TestParseCsv(t *testing.T) {
 		[]byte("column1\tcolumn2\ng\th\n"),
 		0444,
 	)
+	afero.WriteFile(
+		fs.Instance,
+		"test/testfile4.txt",
+		[]byte("column1\tcolumn2\tcolumn3\tcolumn4\na\tb\tc\n"),
+		0444,
+	)
 	afero.WriteFile(fs.Instance, "test/unreadable.txt", []byte(""), 0444)
 	afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
@@ -46,7 +52,7 @@ func TestParseCsv(t *testing.T) {
 		"key2": "column3",
 	}
 
-	// TEST: a single file return the expected parsed array.
+	// TEST: a single file returns the expected parsed array.
 	files := []string{"test/testfile1.txt"}
 	filetype := []string{"text/plain"}
 	data := ParseCsv(files, filetype, columnMap, false)
@@ -73,6 +79,20 @@ func TestParseCsv(t *testing.T) {
 		want,
 		data,
 		"Processed files do not return correct data array",
+	)
+
+	// TEST: a file with an extra header column is still parsed.
+	files = []string{"test/testfile4.txt"}
+	filetype = []string{"text/plain"}
+	data = ParseCsv(files, filetype, columnMap, false)
+	want = []map[string]string{
+		{"key1": "a", "key2": "c"},
+	}
+	assert.Equal(
+		t,
+		want,
+		data,
+		"Processed file does not return correct data array",
 	)
 
 	// TEST: file with missing header column is skipped.
