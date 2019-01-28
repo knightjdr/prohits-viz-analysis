@@ -2,25 +2,22 @@
 package circheatmap
 
 import (
+	"fmt"
+
 	"github.com/knightjdr/prohits-viz-analysis/helper"
-	"github.com/knightjdr/prohits-viz-analysis/tool/dotplot/file"
+	"github.com/knightjdr/prohits-viz-analysis/tool/circheatmap/file"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
 
 // Generate is the entry point for generating circular heatmaps and output files.
 func Generate(dataset *typedef.Dataset) {
-	// Determine folders to create.
+	// Create subfolders. Will panic if error.
 	folders := make([]string, 0)
 	folders = append(folders, []string{"interactive", "svg"}...)
 	if dataset.Parameters.Png {
 		folders = append(folders, "png")
 	}
-
-	// Create subfolders. Will panic if error.
 	helper.CreateFolders(folders)
-
-	// Write log.
-	file.LogParams(dataset.Parameters)
 
 	// Determine what metrics are being read from data file.
 	readoutMetrics := metrics(dataset.Parameters)
@@ -52,7 +49,7 @@ func Generate(dataset *typedef.Dataset) {
 	if len(dataset.Parameters.Tissues) > 0 {
 		// Add tissue names to readout metrics
 		for _, tissue := range dataset.Parameters.Tissues {
-			readoutMetrics[tissue] = tissue
+			readoutMetrics[tissue] = "RNA expression " + tissue
 		}
 
 		// Get expression data for readouts
@@ -71,6 +68,10 @@ func Generate(dataset *typedef.Dataset) {
 			}
 		}
 	}
+
+	fmt.Println(readoutMetrics)
+
+	file.Interactive(conditionNames, conditionData, dataset.Parameters, readoutMetrics)
 
 	return
 }

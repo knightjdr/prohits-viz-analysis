@@ -9,6 +9,9 @@ import (
 
 // Start passes a dataset to the correct tool for analysis
 func Start(dataset *typedef.Dataset) {
+	// Write log.
+	logParams(dataset.Parameters)
+
 	if dataset.Parameters.AnalysisType == "dotplot" {
 		dotplot.Generate(dataset)
 	} else if dataset.Parameters.AnalysisType == "circheatmap" {

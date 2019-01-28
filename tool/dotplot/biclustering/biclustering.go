@@ -20,9 +20,6 @@ import (
 // "biclustering" and the order of conditions and readouts from that will be used
 // for the images.
 func Run(dataset *typedef.Dataset) {
-	// Write log.
-	file.LogParams(dataset.Parameters)
-
 	// Create folder for biclustering files.
 	biclustPath := filepath.Join(".", "biclustering")
 	err := fs.Instance.MkdirAll(biclustPath, os.ModePerm)

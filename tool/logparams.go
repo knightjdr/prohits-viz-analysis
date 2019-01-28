@@ -1,4 +1,4 @@
-package file
+package tool
 
 import (
 	"fmt"
@@ -11,12 +11,13 @@ import (
 	"github.com/spf13/afero"
 )
 
-// LogParams writes parameters used to a log file.
-func LogParams(parameters typedef.Parameters) {
+func logParams(parameters typedef.Parameters) {
+	analysisType := parameters.AnalysisType
+
 	logSlice := make([]string, 0)
 
 	// Analysis type.
-	logSlice = append(logSlice, fmt.Sprintf("Analysis type: %s", parameters.AnalysisType))
+	logSlice = append(logSlice, fmt.Sprintf("Analysis type: %s", analysisType))
 	logSlice = append(logSlice, "")
 
 	// Files.
@@ -68,10 +69,12 @@ func LogParams(parameters typedef.Parameters) {
 		logSlice,
 		fmt.Sprintf("- minimum abundance required: %s", strconv.FormatFloat(parameters.MinAbundance, 'f', -1, 64)),
 	)
-	logSlice = append(
-		logSlice,
-		fmt.Sprintf("- abundances were capped at %s for visualization", strconv.FormatFloat(parameters.AbundanceCap, 'f', -1, 64)),
-	)
+	if analysisType == "circheatmap" || analysisType == "dotplot" {
+		logSlice = append(
+			logSlice,
+			fmt.Sprintf("- abundances were capped at %s for visualization", strconv.FormatFloat(parameters.AbundanceCap, 'f', -1, 64)),
+		)
+	}
 	logSlice = append(logSlice, "")
 
 	// Scoring.
@@ -85,44 +88,47 @@ func LogParams(parameters typedef.Parameters) {
 		logSlice,
 		fmt.Sprintf("- primary filter: %s", strconv.FormatFloat(parameters.PrimaryFilter, 'f', -1, 64)),
 	)
-	logSlice = append(
-		logSlice,
-		fmt.Sprintf("- secondary filter: %s", strconv.FormatFloat(parameters.SecondaryFilter, 'f', -1, 64)),
-	)
+	if analysisType == "dotplot" {
+		logSlice = append(
+			logSlice,
+			fmt.Sprintf("- secondary filter: %s", strconv.FormatFloat(parameters.SecondaryFilter, 'f', -1, 64)),
+		)
+	}
 	logSlice = append(logSlice, "")
 
 	// Clustering.
-	logSlice = append(logSlice, "Clustering")
-	if parameters.Clustering == "biclustering" {
-		if parameters.BiclusteringApprox {
-			logSlice = append(logSlice, "- approximate biclustering was performed")
+	if analysisType == "dotplot" {
+		logSlice = append(logSlice, "Clustering")
+		if parameters.Clustering == "biclustering" {
+			if parameters.BiclusteringApprox {
+				logSlice = append(logSlice, "- approximate biclustering was performed")
+			} else {
+				logSlice = append(logSlice, "- biclustering was performed")
+			}
+		} else if parameters.Clustering == "hierarchical" {
+			logSlice = append(logSlice, "- hierarchical clustering was performed")
+			logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
+			logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))
+		} else if parameters.ConditionClustering == "none" && parameters.ReadoutClustering == "readouts" {
+			logSlice = append(logSlice, "- readouts were hierarchically clustered")
+			logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
+			logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))
+		} else if parameters.ReadoutClustering == "none" && parameters.ConditionClustering == "conditions" {
+			logSlice = append(logSlice, "- conditions were hierarchically clustered")
+			logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
+			logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))
 		} else {
-			logSlice = append(logSlice, "- biclustering was performed")
+			logSlice = append(logSlice, "- no clustering was performed")
 		}
-	} else if parameters.Clustering == "hierarchical" {
-		logSlice = append(logSlice, "- hierarchical clustering was performed")
-		logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
-		logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))
-	} else if parameters.ConditionClustering == "none" && parameters.ReadoutClustering == "readouts" {
-		logSlice = append(logSlice, "- readouts were hierarchically clustered")
-		logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
-		logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))
-	} else if parameters.ReadoutClustering == "none" && parameters.ConditionClustering == "conditions" {
-		logSlice = append(logSlice, "- conditions were hierarchically clustered")
-		logSlice = append(logSlice, fmt.Sprintf("- distance metric: %s", parameters.Distance))
-		logSlice = append(logSlice, fmt.Sprintf("- linkage method: %s", parameters.ClusteringMethod))
-	} else {
-		logSlice = append(logSlice, "- no clustering was performed")
-	}
-	if parameters.Clustering != "biclustering" {
-		if parameters.ClusteringOptimize {
-			logSlice = append(logSlice, "- leaf clusters were optimized")
-		} else {
-			logSlice = append(logSlice, "- leaf clusters were not optimized")
+		if parameters.Clustering != "biclustering" {
+			if parameters.ClusteringOptimize {
+				logSlice = append(logSlice, "- leaf clusters were optimized")
+			} else {
+				logSlice = append(logSlice, "- leaf clusters were not optimized")
+			}
 		}
+		logSlice = append(logSlice, "")
 	}
-
-	logSlice = append(logSlice, "")
 
 	// Write log to file.
 	logString := strings.Join(logSlice, "\r\n")

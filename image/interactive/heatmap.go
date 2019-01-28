@@ -31,8 +31,7 @@ type rowObj struct {
 }
 
 // Heatmap creates an interactive heatmap as json. The data matrix, row and column
-// names should already be sorted. UserParams has the parameters used for the
-// analysis.
+// names should already be sorted.
 func Heatmap(
 	columns []string,
 	rowdata []map[string]interface{},

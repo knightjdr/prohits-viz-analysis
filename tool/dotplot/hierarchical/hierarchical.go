@@ -17,9 +17,6 @@ const ignore = 250000
 
 // Run clusters dataset hierarchically and outputs files.
 func Run(dataset *typedef.Dataset) {
-	// Write log.
-	file.LogParams(dataset.Parameters)
-
 	// Generate condition-readout table.
 	matrices := helper.ConditionReadoutMatrix(dataset.FileData, dataset.Parameters.ScoreType, true, false)
 

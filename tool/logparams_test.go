@@ -1,4 +1,4 @@
-package file
+package tool
 
 import (
 	"regexp"
@@ -16,7 +16,7 @@ func TestLogParams(t *testing.T) {
 	defer func() { fs.Instance = oldFs }()
 	fs.Instance = afero.NewMemMapFs()
 
-	// TEST1: test typical run with hierarchical clustering.
+	// TEST: dotplot, test typical run with hierarchical clustering.
 	parameters := typedef.Parameters{
 		Abundance:            "abundanceColumn",
 		AnalysisType:         "dotplot",
@@ -41,7 +41,7 @@ func TestLogParams(t *testing.T) {
 		ScoreType:            "lte",
 		SecondaryFilter:      0.05,
 	}
-	LogParams(parameters)
+	logParams(parameters)
 	logfile, _ := afero.ReadFile(fs.Instance, "log.txt")
 	want := "Analysis type: dotplot\r\n" +
 		"\r\n" +
@@ -79,7 +79,7 @@ func TestLogParams(t *testing.T) {
 		"- leaf clusters were not optimized\r\n"
 	assert.Equal(t, want, string(logfile), "Logfile not correct")
 
-	// TEST2: log normalization to a specific readout.
+	// TEST: dotplot, log normalization to a specific readout.
 	parameters = typedef.Parameters{
 		Abundance:            "abundanceColumn",
 		AnalysisType:         "dotplot",
@@ -104,13 +104,13 @@ func TestLogParams(t *testing.T) {
 		ScoreType:            "lte",
 		SecondaryFilter:      0.05,
 	}
-	LogParams(parameters)
+	logParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- condition normalization was performed using the readout: readoutX"
 	matched, _ := regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "Condition normalization to a readout not recorded in log")
 
-	// TEST3: log higher scores are better.
+	// TEST: dotplot, log higher scores are better.
 	parameters = typedef.Parameters{
 		Abundance:            "abundanceColumn",
 		AnalysisType:         "dotplot",
@@ -135,13 +135,13 @@ func TestLogParams(t *testing.T) {
 		ScoreType:            "gte",
 		SecondaryFilter:      0.05,
 	}
-	LogParams(parameters)
+	logParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- larger scores are better"
 	matched, _ = regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "Larger scores are better not recorded in log")
 
-	// TEST3: log biclustering.
+	// TEST: dotplot, log biclustering.
 	parameters = typedef.Parameters{
 		Abundance:            "abundanceColumn",
 		AnalysisType:         "dotplot",
@@ -166,13 +166,13 @@ func TestLogParams(t *testing.T) {
 		ScoreType:            "gte",
 		SecondaryFilter:      0.05,
 	}
-	LogParams(parameters)
+	logParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- biclustering was performed"
 	matched, _ = regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "Biclustering not recorded in log")
 
-	// TEST4: log approximate biclustering.
+	// TEST: dotplot, log approximate biclustering.
 	parameters = typedef.Parameters{
 		Abundance:            "abundanceColumn",
 		AnalysisType:         "dotplot",
@@ -198,13 +198,13 @@ func TestLogParams(t *testing.T) {
 		ScoreType:            "gte",
 		SecondaryFilter:      0.05,
 	}
-	LogParams(parameters)
+	logParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- approximate biclustering was performed"
 	matched, _ = regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "Biclustering not recorded in log")
 
-	// TEST5: condition and readout clustering.
+	// TEST: dotplot, condition and readout clustering.
 	parameters = typedef.Parameters{
 		Abundance:            "abundanceColumn",
 		AnalysisType:         "dotplot",
@@ -229,13 +229,13 @@ func TestLogParams(t *testing.T) {
 		ScoreType:            "gte",
 		SecondaryFilter:      0.05,
 	}
-	LogParams(parameters)
+	logParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- no clustering was performed"
 	matched, _ = regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "No clustering not recorded in log")
 
-	// TEST6: condition clustering alone.
+	// TEST: dotplot, condition clustering alone.
 	parameters = typedef.Parameters{
 		Abundance:            "abundanceColumn",
 		AnalysisType:         "dotplot",
@@ -260,13 +260,13 @@ func TestLogParams(t *testing.T) {
 		ScoreType:            "gte",
 		SecondaryFilter:      0.05,
 	}
-	LogParams(parameters)
+	logParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- conditions were hierarchically clustered"
 	matched, _ = regexp.MatchString(want, string(logfile))
 	assert.True(t, matched, "Exclusive condition clustering not recorded in log")
 
-	// TEST7: readout clustering alone.
+	// TEST: dotplot, readout clustering alone.
 	parameters = typedef.Parameters{
 		Abundance:            "abundanceColumn",
 		AnalysisType:         "dotplot",
@@ -291,7 +291,7 @@ func TestLogParams(t *testing.T) {
 		ScoreType:            "gte",
 		SecondaryFilter:      0.05,
 	}
-	LogParams(parameters)
+	logParams(parameters)
 	logfile, _ = afero.ReadFile(fs.Instance, "log.txt")
 	want = "- readouts were hierarchically clustered"
 	matched, _ = regexp.MatchString(want, string(logfile))
