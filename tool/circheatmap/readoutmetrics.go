@@ -2,7 +2,7 @@ package circheatmap
 
 import "github.com/knightjdr/prohits-viz-analysis/typedef"
 
-func metrics(parameters typedef.Parameters) map[string]string {
+func readoutMetrics(parameters typedef.Parameters) map[string]string {
 	columns := make(map[string]string)
 	columns["abundance"] = parameters.Abundance
 

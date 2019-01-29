@@ -14,6 +14,27 @@ type Annotation struct {
 	Y    float64 `json:"y"`
 }
 
+// CircHeatmapPlot describes an individual circular heatmap plot
+type CircHeatmapPlot struct {
+	Name     string                   `json:"name"`
+	Readouts []map[string]interface{} `json:"readouts"`
+	Segments []CircHeatmapSegments    `json:"segments"`
+}
+
+// CircHeatmapSegments describes a segment on a circular heatmap
+type CircHeatmapSegments struct {
+	Name   string    `json:"name"`
+	Values []float64 `json:"values"`
+}
+
+// CircHeatmapSetttings describes a segment on a circular heatmap
+type CircHeatmapSetttings struct {
+	AbundanceCap float64 `json:"abundanceCap"`
+	Color        string  `json:"color"`
+	MinAbundance float64 `json:"minAbundance"`
+	Name         string  `json:"name"`
+}
+
 // Dataset contains data to analysis plus parameters.
 type Dataset struct {
 	FileData   []map[string]string

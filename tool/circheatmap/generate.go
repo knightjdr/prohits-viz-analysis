@@ -2,8 +2,6 @@
 package circheatmap
 
 import (
-	"fmt"
-
 	"github.com/knightjdr/prohits-viz-analysis/helper"
 	"github.com/knightjdr/prohits-viz-analysis/tool/circheatmap/file"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
@@ -20,58 +18,31 @@ func Generate(dataset *typedef.Dataset) {
 	helper.CreateFolders(folders)
 
 	// Determine what metrics are being read from data file.
-	readoutMetrics := metrics(dataset.Parameters)
+	metrics := readoutMetrics(dataset.Parameters)
 
 	// Parse data
-	conditionNames, readoutNames, conditionData := parseConditions(dataset.FileData, dataset.Parameters, readoutMetrics)
+	conditionNames, readoutNames, conditionData := parseConditions(dataset.FileData, dataset.Parameters, metrics)
 
 	// Set how real gene names should be mapped to condition names.
 	mapping := parseMapFile(conditionNames, dataset.Parameters.ConditionMap)
 
-	// Add known metric if requested.
-	if dataset.Parameters.Known {
-		// Get known readout data
-		known := parseKnownReadouts(mapping, dataset.Parameters.KnownFile, dataset.Parameters.Species)
+	// Add "known" property to readouts
+	conditionData = addKnown(conditionData, mapping, dataset.Parameters)
 
-		// Add known status to readouts
-		for condition, readouts := range conditionData {
-			for readout := range readouts {
-				if known[condition][readout] {
-					conditionData[condition][readout]["known"] = 1
-				} else {
-					conditionData[condition][readout]["known"] = 0
-				}
-			}
-		}
+	// Add expression data to readouts
+	conditionData, metrics = addExpression(conditionData, readoutNames, metrics, dataset.Parameters)
+
+	// Get order for metrics and create segment settings
+	metricOrder, settings := segmentSettings(metrics, dataset.Parameters)
+
+	// Format condition data as plots for svg and interactive file.
+	plots := make([]typedef.CircHeatmapPlot, len(conditionNames))
+	for index, condition := range conditionNames {
+		plots[index] = formatCondition(condition, conditionData[condition], dataset.Parameters.Known, metricOrder, metrics)
 	}
 
-	// Add tissue expression if requested.
-	if len(dataset.Parameters.Tissues) > 0 {
-		// Add tissue names to readout metrics
-		for _, tissue := range dataset.Parameters.Tissues {
-			readoutMetrics[tissue] = "RNA expression " + tissue
-		}
-
-		// Get expression data for readouts
-		expression := parseTissues(readoutNames, dataset.Parameters.TissueFile, dataset.Parameters.Tissues)
-
-		// Add expression data to condition data.
-		for condition, readouts := range conditionData {
-			for readout := range readouts {
-				for _, tissue := range dataset.Parameters.Tissues {
-					if expression[readout][tissue] > 0 {
-						conditionData[condition][readout][tissue] = expression[readout][tissue]
-					} else {
-						conditionData[condition][readout][tissue] = 0
-					}
-				}
-			}
-		}
-	}
-
-	fmt.Println(readoutMetrics)
-
-	file.Interactive(conditionNames, conditionData, dataset.Parameters, readoutMetrics)
+	// Create interactive file
+	file.Interactive(plots, dataset.Parameters, settings)
 
 	return
 }

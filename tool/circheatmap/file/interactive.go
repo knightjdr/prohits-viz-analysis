@@ -7,14 +7,17 @@ import (
 
 // Interactive creates an interactive file for a circular heatmap.
 func Interactive(
-	conditionOrder []string,
-	data map[string]map[string]map[string]float64,
-	parameters typedef.Parameters,
-	readoutMetrics map[string]string,
+	plots []typedef.CircHeatmapPlot,
+	userParameters typedef.Parameters,
+	segmentSettings []typedef.CircHeatmapSetttings,
 ) {
+	parameters := map[string]interface{}{
+		"files":     userParameters.Files,
+		"imageType": "circ-heatmap",
+	}
 	settings := map[string]interface{}{
-		"known": parameters.Known,
+		"known": userParameters.Known,
 		"plot":  0,
 	}
-	interactive.CircHeatmap(conditionOrder, data, settings, readoutMetrics, "interactive/circheatmap.json")
+	interactive.CircHeatmap(plots, parameters, settings, segmentSettings, "interactive/circheatmap.json")
 }
