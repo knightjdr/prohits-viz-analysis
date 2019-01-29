@@ -55,7 +55,7 @@ func formatCondition(
 	for readoutIndex, readout := range sortedReadouts {
 		readouts[readoutIndex] = readoutFunc(readout, data[readout])
 		for metricIndex, metricName := range metricOrder {
-			segments[metricIndex].Values[readoutIndex] = data[readout][metricName]
+			segments[metricIndex].Values[readoutIndex] = helper.TruncateFloat(data[readout][metricName], 2)
 		}
 	}
 

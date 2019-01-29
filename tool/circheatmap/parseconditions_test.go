@@ -7,6 +7,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestCheckScore(t *testing.T) {
+	// TEST: smaller scores better
+	testFunc := checkScore("lte", 0.01)
+	inputs := []float64{0, 0.01, 0.005, 0.011, 0.2}
+	want := []bool{true, true, true, false, false}
+	for index, input := range inputs {
+		assert.Equal(t, want[index], testFunc(input), "Value should be filtered correctly")
+	}
+
+	// TEST: larger scores better
+	testFunc = checkScore("gte", 0.01)
+	inputs = []float64{0, 0.01, 0.005, 0.011, 0.2}
+	want = []bool{false, true, false, true, true}
+	for index, input := range inputs {
+		assert.Equal(t, want[index], testFunc(input), "Value should be filtered correctly")
+	}
+}
+
 func TestParseConditions(t *testing.T) {
 	fileData := []map[string]string{
 		{"abundance": "10.5", "condition": "a", "Other": "4", "readout": "readout1", "score": "0"},
