@@ -1,6 +1,7 @@
 package file
 
 import (
+	"github.com/knightjdr/prohits-viz-analysis/helper"
 	"github.com/knightjdr/prohits-viz-analysis/image/interactive"
 	"github.com/knightjdr/prohits-viz-analysis/typedef"
 )
@@ -12,7 +13,7 @@ func Interactive(
 	segmentSettings []typedef.CircHeatmapSetttings,
 ) {
 	parameters := map[string]interface{}{
-		"files":     userParameters.Files,
+		"files":     helper.Filename(userParameters.Files),
 		"imageType": "circ-heatmap",
 	}
 	settings := map[string]interface{}{
