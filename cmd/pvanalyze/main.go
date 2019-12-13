@@ -1,20 +1,13 @@
-// Package main takes input files and Parameters and runs prohits-viz analysis
 package main
 
 import (
-	"os"
-
-	"github.com/knightjdr/prohits-viz-analysis/errorcheck"
-	"github.com/knightjdr/prohits-viz-analysis/filereader/columnparser"
-	"github.com/knightjdr/prohits-viz-analysis/filereader/filter"
-	"github.com/knightjdr/prohits-viz-analysis/tool"
-	"github.com/knightjdr/prohits-viz-analysis/transform"
-	"github.com/knightjdr/prohits-viz-analysis/typedef"
+	"github.com/knightjdr/prohits-viz-analysis/internal/analyze"
 )
 
 func main() {
-	// Parse flags.
-	columnMap, parameters, err := ParseFlags()
+	analyze.Run()
+	/* // Parse flags.
+	columnMap, parameters, err := parseFlags()
 	if err != nil {
 		os.Exit(1)
 	}
@@ -38,5 +31,5 @@ func main() {
 	dataset.FileData = transform.Readouts(dataset)
 
 	// Perform analysis
-	tool.Start(&dataset)
+	tool.Start(&dataset) */
 }
