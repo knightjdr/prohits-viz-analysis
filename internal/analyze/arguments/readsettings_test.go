@@ -8,19 +8,18 @@ import (
 	"github.com/spf13/afero"
 )
 
-var settingsText = `{
-	"file": {
-		"abundance": "avgspec",
-		"condition": "bait",
-		"control": "ctrl",
-		"files": ["file1.txt", "file2.txt"],
-		"readout":       "prey",
-		"readoutLength": "preyLength",
-		"score":         "fdr"
-	},
+var jsonText = `{
+	"abundance": "avgspec",
 	"abundanceCap": 50,
 	"biclusteringApprox":  true,
-	"clustering": "hierarchical"
+	"clustering": "hierarchical",
+	"condition": "bait",
+	"control": "ctrl",
+	"files": ["file1.txt", "file2.txt"],
+	"readout":       "prey",
+	"readoutLength": "preyLength",
+	"score":         "fdr",
+	"type": "dotplot"
 }`
 
 var _ = Describe("Read settings", func() {
@@ -32,22 +31,23 @@ var _ = Describe("Read settings", func() {
 
 		// Create test directory and files.
 		fs.Instance.MkdirAll("test", 0755)
-		afero.WriteFile(fs.Instance, "test/settings.json", []byte(settingsText), 0644)
+		afero.WriteFile(fs.Instance, "test/settings.json", []byte(jsonText), 0644)
 
-		expected := &types.Dotplot{
-			File: types.File{
-				Abundance:     "avgspec",
-				Condition:     "bait",
-				Control:       "ctrl",
-				Files:         []string{"file1.txt", "file2.txt"},
-				Readout:       "prey",
-				ReadoutLength: "preyLength",
-				Score:         "fdr",
+		expected := &types.Analysis{
+			Settings: types.Settings{
+				Abundance:          "avgspec",
+				AbundanceCap:       50,
+				BiclusteringApprox: true,
+				Clustering:         "hierarchical",
+				Condition:          "bait",
+				Control:            "ctrl",
+				Files:              []string{"file1.txt", "file2.txt"},
+				Readout:            "prey",
+				ReadoutLength:      "preyLength",
+				Score:              "fdr",
+				Type:               "dotplot",
 			},
-			AbundanceCap:       50,
-			BiclusteringApprox: true,
-			Clustering:         "hierarchical",
 		}
-		Expect(readSettings("dotplot", "test/settings.json")).To(Equal(expected))
+		Expect(readSettings("test/settings.json")).To(Equal(expected))
 	})
 })

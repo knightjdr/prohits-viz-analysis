@@ -1,30 +1,32 @@
 // Package types contains type declarations.
 package types
 
-// Analysis settings.
+// Analysis files, file settings, analysis settings and column mapping.
 type Analysis struct {
 	Columns  map[string]string
-	FileData []map[string]string
-	Settings interface{}
-	Type     string
+	Data     []map[string]string
+	Settings Settings
 }
 
-// CircHeatmap contains command line argument for the circular heat map tool.
-type CircHeatmap struct {
-	File           `json:"file"`
-	ConditionMap   string
-	Known          bool
-	KnownFile      string
-	OtherAbundance []string
-	Png            bool
-	Species        string
-	TissueFile     string
-	Tissues        []string
-}
+// Settings contains tool-specific analysis settings.
+type Settings struct {
+	// Shared settings
+	Abundance            string
+	Condition            string
+	Control              string
+	Files                []string
+	LogBase              string
+	Normalization        string
+	NormalizationReadout string
+	Png                  bool
+	PrimaryFilter        float64
+	Readout              string
+	ReadoutLength        string
+	Score                string
+	ScoreType            string
+	Type                 string
 
-// Dotplot contains command line argument for the dot plot tool.
-type Dotplot struct {
-	File                `json:"file"`
+	// dotplot settings
 	AbundanceCap        float64
 	BiclusteringApprox  bool
 	Clustering          string
@@ -37,7 +39,6 @@ type Dotplot struct {
 	Distance            string
 	InvertColor         bool
 	MinAbundance        float64
-	Png                 bool
 	ReadoutClustering   string
 	ReadoutList         []string
 	SecondaryFilter     float64
@@ -46,20 +47,13 @@ type Dotplot struct {
 	WriteDistance       bool
 	WriteDotplot        bool
 	WriteHeatmap        bool
-}
 
-// File contains settings for reading and transforming the input file.
-type File struct {
-	Abundance            string
-	Condition            string
-	Control              string
-	Files                []string
-	LogBase              string
-	Normalization        string
-	NormalizationReadout string
-	PrimaryFilter        float64
-	Readout              string
-	ReadoutLength        string
-	Score                string
-	ScoreType            string
+	// circheatmap settings
+	ConditionMap   string
+	Known          bool
+	KnownFile      string
+	OtherAbundance []string
+	Species        string
+	TissueFile     string
+	Tissues        []string
 }

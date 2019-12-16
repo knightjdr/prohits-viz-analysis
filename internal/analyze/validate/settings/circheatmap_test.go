@@ -9,32 +9,42 @@ import (
 
 var _ = Describe("CircHeatmap validation", func() {
 	It("should validate settings and append abundance columns to column map", func() {
-		settings := &types.CircHeatmap{
-			File: types.File{
-				Abundance:     "avgSpec",
-				Condition:     "bait",
-				Control:       "ctrl",
-				Files:         []string{"file.txt"},
-				Readout:       "prey",
-				ReadoutLength: "preyLength",
-				Score:         "fdr",
+		analysis := &types.Analysis{
+			Settings: types.Settings{
+				Abundance:      "avgSpec",
+				Condition:      "bait",
+				Control:        "ctrl",
+				Files:          []string{"file.txt"},
+				OtherAbundance: []string{"column1", "column2"},
+				Readout:        "prey",
+				ReadoutLength:  "preyLength",
+				Score:          "fdr",
 			},
-			OtherAbundance: []string{"column1", "column2"},
 		}
 
-		expectedColumnMap := map[string]string{
-			"abundance":     "avgSpec",
-			"column1":       "column1",
-			"column2":       "column2",
-			"condition":     "bait",
-			"control":       "ctrl",
-			"readout":       "prey",
-			"readoutLength": "preyLength",
-			"score":         "fdr",
+		expected := &types.Analysis{
+			Columns: map[string]string{
+				"abundance":     "avgSpec",
+				"column1":       "column1",
+				"column2":       "column2",
+				"condition":     "bait",
+				"control":       "ctrl",
+				"readout":       "prey",
+				"readoutLength": "preyLength",
+				"score":         "fdr",
+			},
+			Settings: types.Settings{
+				Abundance:      "avgSpec",
+				Condition:      "bait",
+				Control:        "ctrl",
+				Files:          []string{"file.txt"},
+				OtherAbundance: []string{"column1", "column2"},
+				Readout:        "prey",
+				ReadoutLength:  "preyLength",
+				Score:          "fdr",
+			},
 		}
-		expectedSettings := settings
-		actualColumnMap, acutalSettings := validateCircHeatmapSettings(settings)
-		Expect(actualColumnMap).To(Equal(expectedColumnMap), "should return column map")
-		Expect(acutalSettings).To(Equal(expectedSettings), "should return settings")
+		validateCircHeatmapSettings(analysis)
+		Expect(analysis).To(Equal(expected))
 	})
 })

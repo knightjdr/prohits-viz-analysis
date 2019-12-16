@@ -7,12 +7,12 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
-func validateFileSettings(settings types.File) map[string]string {
+func validateFileSettings(settings types.Settings) map[string]string {
 	validateColumns(settings)
 	return createColumnMap(settings)
 }
 
-func validateColumns(settings types.File) {
+func validateColumns(settings types.Settings) {
 	hasFileError := false
 	if settings.Abundance == "" {
 		log.Write("No abundance column specified")
@@ -40,7 +40,7 @@ func validateColumns(settings types.File) {
 	}
 }
 
-func createColumnMap(fileSettings types.File) map[string]string {
+func createColumnMap(fileSettings types.Settings) map[string]string {
 	return map[string]string{
 		"abundance":     fileSettings.Abundance,
 		"condition":     fileSettings.Condition,

@@ -9,17 +9,17 @@ import (
 	"github.com/spf13/afero"
 )
 
-func readSettings(analysisType, filename string) (settings interface{}) {
+func readSettings(filename string) *types.Analysis {
 	file, err := fs.Instance.Open(filename)
 	log.CheckError(err, true)
 
 	bytes, err := afero.ReadAll(file)
 	log.CheckError(err, true)
 
-	if analysisType == "dotplot" {
-		settings = &types.Dotplot{}
-		json.Unmarshal(bytes, settings)
-	}
+	settings := &types.Settings{}
+	json.Unmarshal(bytes, settings)
 
-	return settings
+	return &types.Analysis{
+		Settings: *settings,
+	}
 }

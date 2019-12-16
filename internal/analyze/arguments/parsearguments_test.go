@@ -21,15 +21,14 @@ var _ = Describe("Parse arguments", func() {
 
 		// Create test directory and files.
 		fs.Instance.MkdirAll("test", 0755)
-		afero.WriteFile(fs.Instance, "test/settings.json", []byte(settingsText), 0644)
+		afero.WriteFile(fs.Instance, "test/settings.json", []byte(jsonText), 0644)
 
 		os.Args = []string{
 			"cmd",
-			"-analysisType=dotplot",
 			"--settings", "test/settings.json",
 		}
 
-		expected := types.Analysis{
+		expected := &types.Analysis{
 			Columns: map[string]string{
 				"abundance":     "avgspec",
 				"condition":     "bait",
@@ -38,21 +37,19 @@ var _ = Describe("Parse arguments", func() {
 				"readoutLength": "preyLength",
 				"score":         "fdr",
 			},
-			Settings: &types.Dotplot{
-				File: types.File{
-					Abundance:     "avgspec",
-					Condition:     "bait",
-					Control:       "ctrl",
-					Files:         []string{"file1.txt", "file2.txt"},
-					Readout:       "prey",
-					ReadoutLength: "preyLength",
-					Score:         "fdr",
-				},
+			Settings: types.Settings{
+				Abundance:          "avgspec",
 				AbundanceCap:       50,
 				BiclusteringApprox: true,
 				Clustering:         "hierarchical",
+				Condition:          "bait",
+				Control:            "ctrl",
+				Files:              []string{"file1.txt", "file2.txt"},
+				Readout:            "prey",
+				ReadoutLength:      "preyLength",
+				Score:              "fdr",
+				Type:               "dotplot",
 			},
-			Type: "dotplot",
 		}
 		Expect(Parse()).To(Equal(expected))
 	})
@@ -67,31 +64,29 @@ var _ = Describe("Read arguments", func() {
 
 		// Create test directory and files.
 		fs.Instance.MkdirAll("test", 0755)
-		afero.WriteFile(fs.Instance, "test/settings.json", []byte(settingsText), 0644)
+		afero.WriteFile(fs.Instance, "test/settings.json", []byte(jsonText), 0644)
 
 		os.Args = []string{
 			"cmd",
-			"-analysisType=dotplot",
 			"--settings", "test/settings.json",
 		}
 
-		expectedSettings := &types.Dotplot{
-			File: types.File{
-				Abundance:     "avgspec",
-				Condition:     "bait",
-				Control:       "ctrl",
-				Files:         []string{"file1.txt", "file2.txt"},
-				Readout:       "prey",
-				ReadoutLength: "preyLength",
-				Score:         "fdr",
+		expected := &types.Analysis{
+			Settings: types.Settings{
+				Abundance:          "avgspec",
+				AbundanceCap:       50,
+				BiclusteringApprox: true,
+				Clustering:         "hierarchical",
+				Condition:          "bait",
+				Control:            "ctrl",
+				Files:              []string{"file1.txt", "file2.txt"},
+				Readout:            "prey",
+				ReadoutLength:      "preyLength",
+				Score:              "fdr",
+				Type:               "dotplot",
 			},
-			AbundanceCap:       50,
-			BiclusteringApprox: true,
-			Clustering:         "hierarchical",
 		}
-		actualType, actualSettings := readArguments()
-		Expect(actualType).To(Equal("dotplot"))
-		Expect(actualSettings).To(Equal(expectedSettings))
+		Expect(readArguments()).To(Equal(expected))
 	})
 
 	It("should exit when missing required arguments", func() {
@@ -118,9 +113,7 @@ var _ = Describe("Read arguments", func() {
 		Expect(func() { readArguments() }).To((Panic()), "should exit when missing required arguments")
 
 		logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
-		matched, _ := regexp.MatchString("No analysis type specified", string(logfile))
-		Expect(matched).To(BeTrue(), "should write error when missing analysis type")
-		matched, _ = regexp.MatchString("No settings file specified", string(logfile))
+		matched, _ := regexp.MatchString("No settings file specified", string(logfile))
 		Expect(matched).To(BeTrue(), "should write error when missing settings file")
 	})
 })

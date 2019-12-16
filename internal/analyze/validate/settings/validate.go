@@ -9,18 +9,13 @@ import (
 )
 
 // Validate user analysis settings.
-func Validate(analysis types.Analysis) (map[string]string, interface{}) {
-	var columnMap map[string]string
-	var validatedSettings interface{}
-
-	switch analysis.Type {
+func Validate(analysis *types.Analysis) {
+	switch analysis.Settings.Type {
 	case "circheatmap":
-		columnMap, validatedSettings = validateCircHeatmapSettings(analysis.Settings)
+		validateCircHeatmapSettings(analysis)
 	case "dotplot":
-		columnMap, validatedSettings = validateDotplotSettings(analysis.Settings)
+		validateDotplotSettings(analysis)
 	default:
-		log.WriteAndExit(fmt.Sprintf("Unknown anaylsis type: %s", analysis.Type))
+		log.WriteAndExit(fmt.Sprintf("Unknown anaylsis type: %s", analysis.Settings.Type))
 	}
-
-	return columnMap, validatedSettings
 }

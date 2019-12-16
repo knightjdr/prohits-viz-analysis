@@ -14,42 +14,50 @@ import (
 
 var _ = Describe("Setting validation", func() {
 	It("should validate circheatmap", func() {
-		settings := &types.CircHeatmap{
-			File: types.File{
-				Abundance:     "avgSpec",
-				Condition:     "bait",
-				Control:       "ctrl",
-				Files:         []string{"file.txt"},
-				Readout:       "prey",
-				ReadoutLength: "preyLength",
-				Score:         "fdr",
+		analysis := &types.Analysis{
+			Settings: types.Settings{
+				Abundance:      "avgSpec",
+				Condition:      "bait",
+				Control:        "ctrl",
+				Files:          []string{"file.txt"},
+				OtherAbundance: []string{"column1", "column2"},
+				Readout:        "prey",
+				ReadoutLength:  "preyLength",
+				Score:          "fdr",
+				Type:           "circheatmap",
 			},
-			OtherAbundance: []string{"column1", "column2"},
-		}
-		analysis := types.Analysis{
-			Settings: settings,
-			Type:     "circheatmap",
 		}
 
-		expectedColumnMap := map[string]string{
-			"abundance":     "avgSpec",
-			"column1":       "column1",
-			"column2":       "column2",
-			"condition":     "bait",
-			"control":       "ctrl",
-			"readout":       "prey",
-			"readoutLength": "preyLength",
-			"score":         "fdr",
+		expected := &types.Analysis{
+			Columns: map[string]string{
+				"abundance":     "avgSpec",
+				"column1":       "column1",
+				"column2":       "column2",
+				"condition":     "bait",
+				"control":       "ctrl",
+				"readout":       "prey",
+				"readoutLength": "preyLength",
+				"score":         "fdr",
+			},
+			Settings: types.Settings{
+				Abundance:      "avgSpec",
+				Condition:      "bait",
+				Control:        "ctrl",
+				Files:          []string{"file.txt"},
+				OtherAbundance: []string{"column1", "column2"},
+				Readout:        "prey",
+				ReadoutLength:  "preyLength",
+				Score:          "fdr",
+				Type:           "circheatmap",
+			},
 		}
-		expectedSettings := settings
-		actualColumnMap, acutalSettings := Validate(analysis)
-		Expect(actualColumnMap).To(Equal(expectedColumnMap), "should return column map")
-		Expect(acutalSettings).To(Equal(expectedSettings), "should return validated settings")
+		Validate(analysis)
+		Expect(analysis).To(Equal(expected))
 	})
 
 	It("should validate dotplot", func() {
-		settings := &types.Dotplot{
-			File: types.File{
+		analysis := types.Analysis{
+			Settings: types.Settings{
 				Abundance:     "avgSpec",
 				Condition:     "bait",
 				Control:       "ctrl",
@@ -57,25 +65,32 @@ var _ = Describe("Setting validation", func() {
 				Readout:       "prey",
 				ReadoutLength: "preyLength",
 				Score:         "fdr",
+				Type:          "dotplot",
 			},
 		}
-		analysis := types.Analysis{
-			Settings: settings,
-			Type:     "dotplot",
-		}
 
-		expectedColumnMap := map[string]string{
-			"abundance":     "avgSpec",
-			"condition":     "bait",
-			"control":       "ctrl",
-			"readout":       "prey",
-			"readoutLength": "preyLength",
-			"score":         "fdr",
+		expected := types.Analysis{
+			Columns: map[string]string{
+				"abundance":     "avgSpec",
+				"condition":     "bait",
+				"control":       "ctrl",
+				"readout":       "prey",
+				"readoutLength": "preyLength",
+				"score":         "fdr",
+			},
+			Settings: types.Settings{
+				Abundance:     "avgSpec",
+				Condition:     "bait",
+				Control:       "ctrl",
+				Files:         []string{"file.txt"},
+				Readout:       "prey",
+				ReadoutLength: "preyLength",
+				Score:         "fdr",
+				Type:          "dotplot",
+			},
 		}
-		expectedSettings := settings
-		actualColumnMap, acutalSettings := Validate(analysis)
-		Expect(actualColumnMap).To(Equal(expectedColumnMap), "should return column map")
-		Expect(acutalSettings).To(Equal(expectedSettings), "should return validated settings")
+		Validate(&analysis)
+		Expect(analysis).To(Equal(expected))
 	})
 
 	It("should exit when missing required file settings", func() {
@@ -89,8 +104,9 @@ var _ = Describe("Setting validation", func() {
 		afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
 		analysis := types.Analysis{
-			Settings: types.Dotplot{},
-			Type:     "unknown",
+			Settings: types.Settings{
+				Type: "unknown",
+			},
 		}
 
 		// Mock exit.
@@ -100,6 +116,6 @@ var _ = Describe("Setting validation", func() {
 		exitPatch := monkey.Patch(os.Exit, fakeExit)
 		defer exitPatch.Unpatch()
 
-		Expect(func() { Validate(analysis) }).To((Panic()), "should exit when missing required settings")
+		Expect(func() { Validate(&analysis) }).To((Panic()), "should exit when missing required settings")
 	})
 })

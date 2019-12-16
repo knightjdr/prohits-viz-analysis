@@ -9,8 +9,8 @@ import (
 
 var _ = Describe("Dotplot validation", func() {
 	It("should validate settings", func() {
-		settings := &types.Dotplot{
-			File: types.File{
+		analysis := &types.Analysis{
+			Settings: types.Settings{
 				Abundance:     "avgSpec",
 				Condition:     "bait",
 				Control:       "ctrl",
@@ -21,17 +21,26 @@ var _ = Describe("Dotplot validation", func() {
 			},
 		}
 
-		expectedColumnMap := map[string]string{
-			"abundance":     "avgSpec",
-			"condition":     "bait",
-			"control":       "ctrl",
-			"readout":       "prey",
-			"readoutLength": "preyLength",
-			"score":         "fdr",
+		expected := &types.Analysis{
+			Columns: map[string]string{
+				"abundance":     "avgSpec",
+				"condition":     "bait",
+				"control":       "ctrl",
+				"readout":       "prey",
+				"readoutLength": "preyLength",
+				"score":         "fdr",
+			},
+			Settings: types.Settings{
+				Abundance:     "avgSpec",
+				Condition:     "bait",
+				Control:       "ctrl",
+				Files:         []string{"file.txt"},
+				Readout:       "prey",
+				ReadoutLength: "preyLength",
+				Score:         "fdr",
+			},
 		}
-		expectedSettings := settings
-		actualColumnMap, acutalSettings := validateDotplotSettings(settings)
-		Expect(actualColumnMap).To(Equal(expectedColumnMap), "should return column map")
-		Expect(acutalSettings).To(Equal(expectedSettings), "should return settings")
+		validateDotplotSettings(analysis)
+		Expect(analysis).To(Equal(expected))
 	})
 })

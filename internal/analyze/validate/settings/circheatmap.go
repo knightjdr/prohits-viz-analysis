@@ -2,11 +2,9 @@ package settings
 
 import "github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 
-func validateCircHeatmapSettings(settings interface{}) (map[string]string, interface{}) {
-	castSettings := settings.(*types.CircHeatmap)
-	columnMap := validateFileSettings(castSettings.File)
-	columnMap = appendOtherAbundanceColumns(columnMap, castSettings.OtherAbundance)
-	return columnMap, settings
+func validateCircHeatmapSettings(analysis *types.Analysis) {
+	columnMap := validateFileSettings(analysis.Settings)
+	analysis.Columns = appendOtherAbundanceColumns(columnMap, analysis.Settings.OtherAbundance)
 }
 
 func appendOtherAbundanceColumns(columnMap map[string]string, otherAbundanceColumns []string) map[string]string {

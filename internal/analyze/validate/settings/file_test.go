@@ -15,7 +15,7 @@ import (
 
 var _ = Describe("File validation", func() {
 	It("should validate file settings and return column map", func() {
-		settings := types.File{
+		settings := types.Settings{
 			Abundance:     "avgSpec",
 			Condition:     "bait",
 			Control:       "ctrl",
@@ -48,7 +48,7 @@ var _ = Describe("Validate columns", func() {
 		fs.Instance.MkdirAll("test", 0755)
 		afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
-		settings := types.File{
+		settings := types.Settings{
 			Abundance: "avgSpec",
 			Condition: "bait",
 			Files:     []string{"file.txt"},
@@ -76,7 +76,7 @@ var _ = Describe("Validate columns", func() {
 		fs.Instance.MkdirAll("test", 0755)
 		afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
 
-		settings := types.File{}
+		settings := types.Settings{}
 
 		// Mock exit.
 		fakeExit := func(int) {
@@ -103,7 +103,7 @@ var _ = Describe("Validate columns", func() {
 
 var _ = Describe("Map columns", func() {
 	It("should map columns to fields", func() {
-		settings := types.File{
+		settings := types.Settings{
 			Abundance:     "avgSpec",
 			Condition:     "bait",
 			Control:       "ctrl",
