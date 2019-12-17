@@ -12,7 +12,7 @@ func filterByAbundanceAndScore(analysis *types.Analysis) {
 
 	passingReadouts := make(map[string]bool, 0)
 	for _, row := range analysis.Data {
-		abundance := parse.PipeSeparatedFloat(row["abundance"])
+		abundance := parse.PipeSeparatedStringToMean(row["abundance"])
 		score := parseScore(row["score"])
 
 		if filterByCriteria(abundance, score) {
