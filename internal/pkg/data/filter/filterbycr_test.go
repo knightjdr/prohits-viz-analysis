@@ -1,49 +1,94 @@
 package filter
 
 import (
-	"testing"
-
-	"github.com/stretchr/testify/assert"
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
-func TestConditionReadout(t *testing.T) {
-	data := []map[string]string{
-		{"condition": "condition1", "readout": "readout1"},
-		{"condition": "condition2", "readout": "readout2"},
-	}
+var _ = Describe("Filter by conditions and readouts", func() {
+	It("should filter out entries not satisfying both requested conditions and readouts", func() {
+		analysis := &types.Analysis{
+			Data: []map[string]string{
+				map[string]string{"condition": "conditionA", "readout": "readoutA"},
+				map[string]string{"condition": "conditionB", "readout": "readoutB"},
+				map[string]string{"condition": "conditionA", "readout": "readoutC"},
+				map[string]string{"condition": "conditionB", "readout": "readoutC"},
+				map[string]string{"condition": "conditionC", "readout": "readoutA"},
+				map[string]string{"condition": "conditionC", "readout": "readoutB"},
+			},
+			Settings: types.Settings{
+				ConditionClustering: "none",
+				ConditionList:       []string{"conditionA", "conditionB"},
+				ReadoutClustering:   "none",
+				ReadoutList:         []string{"readoutA", "readoutB"},
+			},
+		}
 
-	// TEST1: filter by a single condition and readout.
-	conditions := []string{"condition2"}
-	readouts := []string{"readout2"}
-	want := []map[string]string{
-		{"condition": "condition2", "readout": "readout2"},
-	}
-	assert.Equal(
-		t,
-		want,
-		ConditionReadout(data, conditions, readouts),
-		"Single condition and readout filter is not returning correct slice map",
-	)
+		expected := []map[string]string{
+			map[string]string{"condition": "conditionA", "readout": "readoutA"},
+			map[string]string{"condition": "conditionB", "readout": "readoutB"},
+		}
 
-	// TEST2: return empty slice map when not matches to condition and readout lists.
-	conditions = []string{"condition2"}
-	readouts = []string{"readout1"}
-	want = []map[string]string{}
-	assert.Equal(
-		t,
-		want,
-		ConditionReadout(data, conditions, readouts),
-		"Returned value should have length zero",
-	)
+		filterByConditionsAndReadouts(analysis)
+		Expect(analysis.Data).To(Equal(expected))
+	})
 
-	// TEST3: filter by a multiple conditions and readouts.
-	conditions = []string{"condition1", "condition2"}
-	readouts = []string{"readout1", "readout2"}
-	want = data
-	assert.Equal(
-		t,
-		want,
-		ConditionReadout(data, conditions, readouts),
-		"Multiple condition and readout filter is not returning correct slice map",
-	)
-}
+	It("should filter by conditions only", func() {
+		analysis := &types.Analysis{
+			Data: []map[string]string{
+				map[string]string{"condition": "conditionA", "readout": "readoutA"},
+				map[string]string{"condition": "conditionB", "readout": "readoutB"},
+				map[string]string{"condition": "conditionA", "readout": "readoutC"},
+				map[string]string{"condition": "conditionB", "readout": "readoutC"},
+				map[string]string{"condition": "conditionC", "readout": "readoutA"},
+				map[string]string{"condition": "conditionC", "readout": "readoutB"},
+			},
+			Settings: types.Settings{
+				ConditionClustering: "none",
+				ConditionList:       []string{"conditionA", "conditionB"},
+				ReadoutClustering:   "hierarchical",
+				ReadoutList:         []string{"readoutA", "readoutB"},
+			},
+		}
+
+		expected := []map[string]string{
+			map[string]string{"condition": "conditionA", "readout": "readoutA"},
+			map[string]string{"condition": "conditionB", "readout": "readoutB"},
+			map[string]string{"condition": "conditionA", "readout": "readoutC"},
+			map[string]string{"condition": "conditionB", "readout": "readoutC"},
+		}
+
+		filterByConditionsAndReadouts(analysis)
+		Expect(analysis.Data).To(Equal(expected))
+	})
+
+	It("should filter by readouts only", func() {
+		analysis := &types.Analysis{
+			Data: []map[string]string{
+				map[string]string{"condition": "conditionA", "readout": "readoutA"},
+				map[string]string{"condition": "conditionB", "readout": "readoutB"},
+				map[string]string{"condition": "conditionA", "readout": "readoutC"},
+				map[string]string{"condition": "conditionB", "readout": "readoutC"},
+				map[string]string{"condition": "conditionC", "readout": "readoutA"},
+				map[string]string{"condition": "conditionC", "readout": "readoutB"},
+			},
+			Settings: types.Settings{
+				ConditionClustering: "hierarchical",
+				ConditionList:       []string{"conditionA", "conditionB"},
+				ReadoutClustering:   "none",
+				ReadoutList:         []string{"readoutA", "readoutB"},
+			},
+		}
+
+		expected := []map[string]string{
+			map[string]string{"condition": "conditionA", "readout": "readoutA"},
+			map[string]string{"condition": "conditionB", "readout": "readoutB"},
+			map[string]string{"condition": "conditionC", "readout": "readoutA"},
+			map[string]string{"condition": "conditionC", "readout": "readoutB"},
+		}
+
+		filterByConditionsAndReadouts(analysis)
+		Expect(analysis.Data).To(Equal(expected))
+	})
+})

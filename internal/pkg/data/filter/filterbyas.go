@@ -1,58 +1,33 @@
 package filter
 
 import (
-	"errors"
 	"strconv"
-	"strings"
 
-	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/log"
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/parse"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
-	"github.com/knightjdr/prohits-viz-analysis/pkg/stats"
 )
 
 func filterByAbundanceAndScore(analysis *types.Analysis) {
-	filterByCriteria := getFilterCriteria(analysis.Settings)
+	filterByCriteria := getAbundanceAndScoreFilter(analysis.Settings)
 
 	passingReadouts := make(map[string]bool, 0)
 	for _, row := range analysis.Data {
-		abundance := parseAbundance(row["abundance"])
+		abundance := parse.PipeSeparatedFloat(row["abundance"])
 		score := parseScore(row["score"])
 
 		if filterByCriteria(abundance, score) {
 			readout := row["readout"]
-			if _, ok := passingReadouts[readout]; !ok {
-				passingReadouts[readout] = true
-			}
+			passingReadouts[readout] = true
 		}
 	}
 
 	removeReadouts(analysis, passingReadouts)
-
-	if len(analysis.Data) == 0 {
-		err := errors.New("No parsed results matching filter criteria")
-		log.CheckError(err, true)
-	}
-}
-
-func parseAbundance(abundanceString string) float64 {
-	abundances := strings.Split(abundanceString, "|")
-
-	parsedAbundances := make([]float64, 0)
-	for _, str := range abundances {
-		value, err := strconv.ParseFloat(str, 64)
-		if err == nil {
-			parsedAbundances = append(parsedAbundances, value)
-		}
-	}
-
-	return stats.MeanFloat(parsedAbundances)
 }
 
 func parseScore(score string) float64 {
 	parsedScore, err := strconv.ParseFloat(score, 64)
 	if err != nil {
-		err = errors.New("score column is not numeric")
-		log.CheckError(err, true)
+		return 0
 	}
 
 	return parsedScore

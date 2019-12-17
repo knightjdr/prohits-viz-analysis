@@ -3,6 +3,7 @@ package analyze
 
 import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/arguments"
+	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/validate/data"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/data/filter"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/data/parser"
 )
@@ -13,4 +14,13 @@ func Run() {
 
 	parser.Read(analysis, false)
 	filter.Process(analysis)
+	data.Validate(analysis)
+
+	/*
+		// Transform readout abundances.
+		dataset.FileData = transform.Readouts(dataset)
+
+		// Perform analysis
+		tool.Start(&dataset)
+	*/
 }
