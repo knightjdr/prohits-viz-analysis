@@ -8,6 +8,12 @@ type Analysis struct {
 	Settings Settings
 }
 
+// Matrices holds input data formatted as matrices.
+type Matrices struct {
+	Abundance, Ratio, Score [][]float64
+	Conditions, Readouts    []string
+}
+
 // Settings contains tool-specific analysis settings.
 type Settings struct {
 	// Shared settings
