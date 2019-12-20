@@ -1,9 +1,9 @@
 package downsample
 
 // Should a matrix be downsampled. Any matrix with a dimension
-// > 1000 should be.
-func Should(matrix [][]float64) bool {
-	if len(matrix) > 1000 || len(matrix[0]) > 1000 {
+// > maxDimension should be.
+func Should(matrix [][]float64, maxDimension int) bool {
+	if len(matrix) > maxDimension || len(matrix[0]) > maxDimension {
 		return true
 	}
 	return false

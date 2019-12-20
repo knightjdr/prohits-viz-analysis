@@ -6,7 +6,23 @@ import (
 )
 
 var _ = Describe("Downsample", func() {
-	It("should downsample a matrix based on input scale", func() {
+	It("should downsample a matrix based on integer input scale", func() {
+		matrix := [][]float64{
+			{1, 1, 2, 2},
+			{2, 2, 2, 3},
+			{1, 1, 4, 1},
+			{4, 2, 2, 3},
+		}
+		scale := 2.0
+
+		expected := [][]float64{
+			{1.5, 2.25},
+			{2, 2.5},
+		}
+		Expect(downsample(matrix, scale)).To(Equal(expected))
+	})
+
+	It("should downsample a matrix based on fractional input scale", func() {
 		matrix := [][]float64{
 			{1, 1, 2, 2, 2},
 			{2, 2, 2, 3, 3},
@@ -62,7 +78,7 @@ var _ = Describe("Initialize subgrid", func() {
 })
 
 var _ = Describe("Update subgrid", func() {
-	It("should update based on previous subgrid", func() {
+	It("should update based on previous subgrid with fractional multiplier(s)", func() {
 		subgrid := gridParameters{
 			multipliers: []float64{1, 1, 1, 1, 0.3},
 			scale:       4.3,
@@ -75,6 +91,29 @@ var _ = Describe("Update subgrid", func() {
 			scale:       4.3,
 			startIndex:  4,
 			totalCells:  5,
+		}
+		actual := updateSubgrid(subgrid, 1)
+		for i, value := range actual.multipliers {
+			Expect(value).To(BeNumerically("~", expected.multipliers[i], 0.001), "should update multipliers")
+		}
+		Expect(actual.scale).To(BeNumerically("~", expected.scale, 0.001), "should set scale")
+		Expect(actual.startIndex).To(Equal(expected.startIndex), "should update start index")
+		Expect(actual.totalCells).To(Equal(expected.totalCells), "should set total cell number")
+	})
+
+	It("should update based on previous subgrid with integer multipliers", func() {
+		subgrid := gridParameters{
+			multipliers: []float64{1, 1, 1, 1},
+			scale:       4,
+			startIndex:  0,
+			totalCells:  4,
+		}
+
+		expected := gridParameters{
+			multipliers: []float64{1, 1, 1, 1},
+			scale:       4,
+			startIndex:  4,
+			totalCells:  4,
 		}
 		actual := updateSubgrid(subgrid, 1)
 		for i, value := range actual.multipliers {

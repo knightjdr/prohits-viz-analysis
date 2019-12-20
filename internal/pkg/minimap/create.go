@@ -2,9 +2,6 @@
 package minimap
 
 import (
-	"fmt"
-
-	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/downsample"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
@@ -19,10 +16,6 @@ type Data struct {
 // Create a minimap for a dotplot or heatmap.
 func Create(data *Data) {
 	imageType := defineImageType(data)
-
-	if downsample.Should(data.Matrices.Abundance) {
-		data.Matrices.Abundance = downsample.Matrix(data.Matrices.Abundance, 1000)
-	}
-
-	fmt.Println(imageType)
+	downsampleIfNeeded(data)
+	createImage(imageType, data)
 }

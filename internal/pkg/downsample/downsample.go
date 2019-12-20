@@ -61,15 +61,19 @@ func updateSubgrid(previousGrid gridParameters, index int) gridParameters {
 	scale := previousGrid.scale
 	totalCells := previousGrid.totalCells
 
+	multipliers := make([]float64, 0)
+
 	lastMultiplierIndex := len(previousGrid.multipliers) - 1
-	startMultiplier := 1.0 - previousGrid.multipliers[lastMultiplierIndex]
+	firstMultiplier := 1.0 - previousGrid.multipliers[lastMultiplierIndex]
+	if firstMultiplier > 0 {
+		multipliers = append(multipliers, firstMultiplier)
+	}
 
-	fullCells := math.Floor(scale - startMultiplier)
-
-	multipliers := []float64{startMultiplier}
+	fullCells := math.Floor(scale - firstMultiplier)
 	multipliers = append(multipliers, addFullCellMultipliers(fullCells)...)
+
 	if totalCells > len(multipliers) {
-		multipliers = append(multipliers, goMath.Mod(scale-float64(fullCells)-startMultiplier, 1.0))
+		multipliers = append(multipliers, goMath.Mod(scale-float64(fullCells)-firstMultiplier, 1.0))
 	}
 
 	return gridParameters{

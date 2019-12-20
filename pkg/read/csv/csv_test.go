@@ -27,13 +27,18 @@ var _ = Describe("CSV reader", func() {
 		fs.Instance.MkdirAll("test", 0755)
 		afero.WriteFile(fs.Instance, "test/csv.txt", []byte(csvText), 0444)
 
-		expected := []map[string]string{
-			{"field1": "A", "field2": "1", "field3": "C"},
-			{"field1": "D", "field2": "2", "field3": "F"},
-			{"field1": "G", "field2": "3", "field3": "I"},
+		headerMap := map[string]string{
+			"field1": "field-1",
+			"field3": "field-3",
 		}
 
-		Expect(Read("test/csv.txt", '\t')).To(Equal(expected))
+		expected := []map[string]string{
+			{"field-1": "A", "field2": "1", "field-3": "C"},
+			{"field-1": "D", "field2": "2", "field-3": "F"},
+			{"field-1": "G", "field2": "3", "field-3": "I"},
+		}
+
+		Expect(Read("test/csv.txt", '\t', headerMap)).To(Equal(expected))
 	})
 })
 

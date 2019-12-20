@@ -10,13 +10,15 @@ import (
 	"github.com/spf13/afero"
 )
 
-// Read a csv file to a slice with header as map keys.
-func Read(filename string, sep rune) []map[string]string {
+// Read a csv file to a slice. Using the columnMap to map from column name to
+// row field.
+func Read(filename string, sep rune, columnMap map[string]string) []map[string]string {
 	file := openFile(filename)
 	reader := createReader(file, sep)
 
 	header := readHeader(reader)
-	return readLines(reader, header)
+	headerMap := mapHeaders(header, columnMap)
+	return readLines(reader, header, headerMap)
 }
 
 func openFile(filename string) afero.File {
@@ -41,7 +43,21 @@ func readHeader(reader *gocsv.Reader) []string {
 	return header
 }
 
-func readLines(reader *gocsv.Reader, header []string) []map[string]string {
+func mapHeaders(header []string, columnMap map[string]string) map[string]string {
+	headerMap := make(map[string]string, len(header))
+
+	for _, column := range header {
+		if _, ok := columnMap[column]; ok {
+			headerMap[column] = columnMap[column]
+		} else {
+			headerMap[column] = column
+		}
+	}
+
+	return headerMap
+}
+
+func readLines(reader *gocsv.Reader, header []string, headerMap map[string]string) []map[string]string {
 	data := make([]map[string]string, 0)
 
 	for {
@@ -52,7 +68,8 @@ func readLines(reader *gocsv.Reader, header []string) []map[string]string {
 		log.CheckError(err, true)
 
 		parsedLine := make(map[string]string, len(header))
-		for i, field := range header {
+		for i, column := range header {
+			field := headerMap[column]
 			parsedLine[field] = line[i]
 		}
 

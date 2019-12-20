@@ -3,30 +3,27 @@ package convert
 
 import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/convert/settings"
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/files"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/read/csv"
 )
 
 // File converts a file from v1 format to v2.
 func File() {
 	file := parseArguments()
-	csv := csv.Read(file, '\t')
+	headerMap := map[string]string{
+		"column": "condition",
+		"row":    "readout",
+		"score":  "score",
+		"value":  "abundance",
+	}
+	csv := csv.Read(file, '\t', headerMap)
 	settings := settings.Parse(csv)
 
 	matrices := createMatrices(&csv, settings.ScoreType)
+	files.CreateFolders([]string{"interactive", "minimap"})
+	createMinimap(matrices, settings)
 
 	/*
-		// Create folders
-		helper.CreateFolders([]string{"interactive", "minimap"})
-
-		// Generate minimap
-		mapData := minimap.Data{
-			Filename:   "minimap/minimap",
-			ImageType:  imageType,
-			Matrices:   matrices,
-			Parameters: parameters,
-		}
-		minimap.Write(&mapData)
-
 		// Generate interactive file
 		interactiveData := interactive.Data{
 			Filename:   fmt.Sprintf("interactive/%s.json", imageType),
