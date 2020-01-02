@@ -2,8 +2,11 @@
 package convert
 
 import (
+	"path/filepath"
+
 	"github.com/knightjdr/prohits-viz-analysis/internal/convert/settings"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/files"
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/fs"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/read/csv"
 )
 
@@ -33,9 +36,8 @@ func File() {
 			Parameters: parameters,
 		}
 		interactive.ParseHeatmap(&interactiveData)
-
-		// Remove minimap folder.
-		mapFolder := filepath.Join(".", "minimap")
-		fs.Instance.RemoveAll(mapFolder)
 	*/
+
+	mapFolder := filepath.Join(".", "minimap")
+	fs.Instance.RemoveAll(mapFolder)
 }

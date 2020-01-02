@@ -25,4 +25,10 @@ var _ = Describe("Should downsample", func() {
 		matrix[0] = make([]float64, 1001)
 		Expect(Should(matrix, 1000)).To(BeTrue())
 	})
+
+	It("should downsample a matrix when supplied threshold is zero/not supplied", func() {
+		matrix := make([][]float64, 1000)
+		matrix[0] = make([]float64, 1001)
+		Expect(Should(matrix, 0)).To(BeTrue())
+	})
 })

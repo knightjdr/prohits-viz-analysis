@@ -1,8 +1,6 @@
 package dimensions
 
 const idealCellSize int = 20
-const idealCircleSpace float64 = 1.5
-const idealEdgeWidth int = 2
 const idealFontSize int = 12
 
 // Min ratio for shrinking an image is based on the idealCellSize.

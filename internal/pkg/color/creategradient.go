@@ -7,7 +7,6 @@ import (
 // Gradient type.
 type Gradient struct {
 	ColorSpace string
-	ColorType  string // Hex or RGB
 	Invert     bool
 	NumColors  int
 }
@@ -16,7 +15,6 @@ type Gradient struct {
 func InitializeGradient() *Gradient {
 	gradient := &Gradient{
 		ColorSpace: "blue",
-		ColorType:  "Hex",
 		Invert:     false,
 		NumColors:  101,
 	}

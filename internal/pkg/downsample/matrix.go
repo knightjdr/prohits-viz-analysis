@@ -3,6 +3,7 @@ package downsample
 
 // Matrix downsamples a matrix.
 func Matrix(matrix [][]float64, maxDimension int) [][]float64 {
-	scale := calculateScale(matrix, maxDimension)
+	treshold := defineThreshold(maxDimension)
+	scale := calculateScale(matrix, treshold)
 	return downsample(matrix, scale)
 }
