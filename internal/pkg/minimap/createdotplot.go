@@ -7,13 +7,12 @@ import (
 
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/heatmap/dimensions"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/svg"
-	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/svg/dotplot"
 )
 
 var convertSVG = svg.ConvertToPNG
 
 func createDotplot(data *Data, dims *dimensions.Heatmap) {
-	image := dotplot.Initialize()
+	image := svg.InitializeDotplot()
 	image.AbundanceCap = data.Settings.AbundanceCap
 	image.BoundingBox = false
 	image.CellSize = dims.CellSize

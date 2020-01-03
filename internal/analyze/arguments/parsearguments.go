@@ -2,8 +2,6 @@
 package arguments
 
 import (
-	"os"
-
 	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/validate/settings"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/log"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
@@ -21,14 +19,8 @@ func readArguments() *types.Analysis {
 	args := flags.Parse()
 	settingsFile := flags.SetString("settings", args, "")
 
-	isMissingArgument := false
 	if settingsFile == "" {
-		log.Write("No settings file specified")
-		isMissingArgument = true
-	}
-
-	if isMissingArgument {
-		os.Exit(1)
+		log.WriteAndExit("no settings file specified")
 	}
 
 	return readSettings(settingsFile)

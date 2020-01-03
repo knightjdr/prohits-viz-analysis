@@ -2,11 +2,11 @@ package minimap
 
 import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/heatmap/dimensions"
-	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/png/heatmap"
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/png"
 )
 
 func createHeatmap(data *Data, dims *dimensions.Heatmap) {
-	image := heatmap.Initialize()
+	image := png.InitializeHeatmap()
 	image.AbundanceCap = data.Settings.AbundanceCap
 	image.ColorSpace = data.Settings.FillColor
 	image.CellSize = dims.CellSize

@@ -113,7 +113,7 @@ var _ = Describe("Read arguments", func() {
 		Expect(func() { readArguments() }).To((Panic()), "should exit when missing required arguments")
 
 		logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
-		matched, _ := regexp.MatchString("No settings file specified", string(logfile))
+		matched, _ := regexp.MatchString("no settings file specified", string(logfile))
 		Expect(matched).To(BeTrue(), "should write error when missing settings file")
 	})
 })
