@@ -6,11 +6,11 @@ import (
 	"strings"
 
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/heatmap/dimensions"
-	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/svg/convert"
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/svg"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/svg/dotplot"
 )
 
-var convertSVG = convert.RSVG
+var convertSVG = svg.ConvertToPNG
 
 func createDotplot(data *Data, dims *dimensions.Heatmap) {
 	image := dotplot.Initialize()
@@ -35,5 +35,5 @@ func createDotplot(data *Data, dims *dimensions.Heatmap) {
 	svgFileName := fmt.Sprintf("%s.svg", filename)
 
 	image.Draw(svgFileName)
-	convertSVG(svgFileName, data.Filename)
+	convertSVG(svgFileName, data.Filename, "none")
 }

@@ -19,7 +19,7 @@ var _ = Describe("Create minimap", func() {
 		fs.Instance.MkdirAll("test", 0755)
 
 		oldConvert := convertSVG
-		convertSVG = func(string, string) {}
+		convertSVG = func(string, string, string) {}
 		defer func() { convertSVG = oldConvert }()
 
 		data := &Data{

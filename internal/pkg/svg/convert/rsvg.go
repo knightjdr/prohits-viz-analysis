@@ -11,18 +11,18 @@ import (
 )
 
 // RSVG converts an svg to PNG using rsvg-convert.
-func RSVG(svg, targetFile string) {
+func RSVG(svg, targetFileName, bgColor string) {
 	workingDir, err := os.Getwd()
 	log.CheckError(err, true)
 
 	fileArg := fmt.Sprintf("%s/%s", workingDir, svg)
-	exportArg := fmt.Sprintf("--output=%s/%s", workingDir, targetFile)
+	exportArg := fmt.Sprintf("--output=%s/%s", workingDir, targetFileName)
 
 	cmd := exec.Command(
 		"rsvg-convert",
 		"--format=png",
 		exportArg,
-		"--background-color=white",
+		fmt.Sprintf("--background-color=%s", bgColor),
 		"--unlimited",
 		fileArg,
 	)

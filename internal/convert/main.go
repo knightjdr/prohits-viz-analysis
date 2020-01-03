@@ -23,20 +23,10 @@ func File() {
 	settings := settings.Parse(csv)
 
 	matrices := createMatrices(&csv, settings.ScoreType)
+
 	files.CreateFolders([]string{"interactive", "minimap"})
 	createMinimap(matrices, settings)
-
-	/*
-		// Generate interactive file
-		interactiveData := interactive.Data{
-			Filename:   fmt.Sprintf("interactive/%s.json", imageType),
-			ImageType:  imageType,
-			Matrices:   matrices,
-			Minimap:    "minimap/minimap.png",
-			Parameters: parameters,
-		}
-		interactive.ParseHeatmap(&interactiveData)
-	*/
+	createInteractive(matrices, settings)
 
 	mapFolder := filepath.Join(".", "minimap")
 	fs.Instance.RemoveAll(mapFolder)
