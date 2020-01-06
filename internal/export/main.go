@@ -11,6 +11,10 @@ func Image() {
 
 	switch params.imageType {
 	case "heatmap":
-		heatmap.Export(params.jsonFile, params.format)
+		settings := heatmap.Settings{
+			FontPath: params.fontPath,
+			Format:   params.format,
+		}
+		heatmap.Export(params.jsonFile, settings)
 	}
 }

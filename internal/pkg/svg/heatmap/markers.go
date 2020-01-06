@@ -9,12 +9,15 @@ func writeMarkers(h *Heatmap, writeString func(string)) {
 		return
 	}
 
+	plotHeight := float64(h.PlotHeight)
+	plotWidth := float64(h.PlotWidth)
+
 	writeString(fmt.Sprintf("\t<g transform=\"translate(%d, %d)\">\n", h.LeftMargin, h.TopMargin))
 	for _, marker := range h.Markers.List {
 		height := marker.Height * h.CellSize
 		width := marker.Width * h.CellSize
-		x := marker.X * h.CellSize
-		y := marker.Y * h.CellSize
+		x := int(marker.X * plotWidth)
+		y := int(marker.Y * plotHeight)
 
 		rect := fmt.Sprintf(
 			"\t\t<rect y=\"%d\" x=\"%d\" width=\"%d\" height=\"%d\""+

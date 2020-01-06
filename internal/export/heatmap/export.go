@@ -2,13 +2,19 @@
 package heatmap
 
 import (
-	"fmt"
-
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/downsample"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
+// Settings for heatmap export.
+type Settings struct {
+	DownsampleThreshold int
+	FontPath string
+	Format string
+}
+
 // Export image.
-func Export(filename, format string) {
+func Export(filename string, settings Settings) {
 	data := readJSON(filename)
 
 	matrix := createMatrix(data)
@@ -19,5 +25,10 @@ func Export(filename, format string) {
 		Conditions: columns,
 		Readouts:   rows,
 	}
-	fmt.Println(matrices)
+
+	if settings.Format == "png" || downsample.Should(matrix, settings.DownsampleThreshold) {
+		createPNG(data, matrices, settings)
+	} else {
+		createSVG(data, matrices)
+	}
 }

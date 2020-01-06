@@ -16,11 +16,13 @@ var _ = Describe("Parse arguments", func() {
 		os.Args = []string{
 			"cmd",
 			"--file", "file.json",
+			"--font", "./font.ttf",
 			"--format", "png",
 			"--imageType", "heatmap",
 		}
 
 		expected := parameters{
+			fontPath:  "./font.ttf",
 			format:    "png",
 			imageType: "heatmap",
 			jsonFile:  "file.json",
@@ -28,14 +30,15 @@ var _ = Describe("Parse arguments", func() {
 		Expect(parseArguments()).To(Equal(expected))
 	})
 
-	It("should set default output format when argument not supplied", func() {
+	It("should set defaults when arguments not supplied", func() {
 		os.Args = []string{
 			"cmd",
 			"--file", "file.json",
 			"--imageType", "heatmap",
 		}
 		actual := parseArguments()
-		Expect(actual.format).To(Equal("svg"))
+		Expect(actual.fontPath).To(Equal(""), "should set font path")
+		Expect(actual.format).To(Equal("svg"), "should set output format")
 	})
 
 	It("should exit when JSON file is missing", func() {

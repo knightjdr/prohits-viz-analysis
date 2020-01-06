@@ -21,14 +21,16 @@ var _ = Describe("Write markers", func() {
 			Markers: types.Markers{
 				Color: "#000000",
 				List: map[string]types.Marker{
-					"a": {Height: 2, Width: 2, X: 0, Y: 1},
+					"a": {Height: 2, Width: 2, X: 0.25, Y: 0.2},
 				},
 			},
-			TopMargin: 50,
+			PlotHeight: 100,
+			PlotWidth:  200,
+			TopMargin:  50,
 		}
 
 		expected := "\t<g transform=\"translate(50, 50)\">\n" +
-			"\t\t<rect y=\"20\" x=\"0\" width=\"40\" height=\"40\" stroke=\"#000000\" stroke-width=\"1\" fill=\"none\"/>\n" +
+			"\t\t<rect y=\"20\" x=\"50\" width=\"40\" height=\"40\" stroke=\"#000000\" stroke-width=\"1\" fill=\"none\"/>\n" +
 			"\t</g>\n"
 		writeMarkers(h, writeString)
 		Expect(svg.String()).To(Equal(expected))

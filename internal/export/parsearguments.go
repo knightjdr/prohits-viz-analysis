@@ -9,6 +9,7 @@ import (
 )
 
 type parameters struct {
+	fontPath  string
 	format    string
 	imageType string
 	jsonFile  string
@@ -18,6 +19,7 @@ func parseArguments() parameters {
 	params := parameters{}
 
 	args := flags.Parse()
+	params.fontPath = flags.SetString("font", args, "")
 	params.format = flags.SetString("format", args, "svg")
 	params.imageType = flags.SetString("imageType", args, "")
 	params.jsonFile = flags.SetString("file", args, "")

@@ -28,6 +28,6 @@ type Markers struct {
 type Marker struct {
 	Height int
 	Width  int
-	X      int
-	Y      int
+	X      float64
+	Y      float64
 }
