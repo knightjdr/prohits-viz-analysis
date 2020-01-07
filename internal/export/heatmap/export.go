@@ -9,16 +9,16 @@ import (
 // Settings for heatmap export.
 type Settings struct {
 	DownsampleThreshold int
-	FontPath string
-	Format string
+	FontPath            string
+	Format              string
 }
 
 // Export image.
 func Export(filename string, settings Settings) {
-	data := readJSON(filename)
+	data := ReadJSON(filename)
 
 	matrix := createMatrix(data)
-	columns, rows := getColumnsAndRows(data)
+	columns, rows := GetColumnsAndRows(data)
 
 	matrices := &types.Matrices{
 		Abundance:  matrix,

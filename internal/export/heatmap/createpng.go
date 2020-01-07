@@ -7,10 +7,10 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
-func createPNG(data *heatmap, matrices *types.Matrices, settings Settings) {
+func createPNG(data *Heatmap, matrices *types.Matrices, settings Settings) {
 	files.CreateFolders([]string{"png"})
 
-	downsampleData(data, matrices, settings.DownsampleThreshold)
+	DownsampleData(data, matrices, settings.DownsampleThreshold)
 
 	dims := dimensions.Calculate(matrices.Abundance, []string{}, []string{}, false)
 

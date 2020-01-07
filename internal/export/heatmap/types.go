@@ -2,21 +2,26 @@ package heatmap
 
 import "github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 
-type heatmap struct {
+// Heatmap data for exporting image.
+type Heatmap struct {
 	Annotations types.Annotations
 	ColumnDB    []string
 	ColumnOrder []int
 	Markers     types.Markers
-	RowDB       []rows
+	RowDB       []Rows
 	RowOrder    []int
 	Settings    types.Settings
 }
 
-type rows struct {
-	Data []cell
+// Rows contains heatmap row information.
+type Rows struct {
+	Data []Cell
 	Name string
 }
 
-type cell struct {
+// Cell contains individual heatmap cell information.
+type Cell struct {
+	Ratio float64
+	Score float64
 	Value float64
 }

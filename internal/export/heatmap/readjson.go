@@ -8,14 +8,15 @@ import (
 	"github.com/spf13/afero"
 )
 
-func readJSON(filename string) *heatmap {
+// ReadJSON heatmap information for exporting as image.
+func ReadJSON(filename string) *Heatmap {
 	file, err := fs.Instance.Open(filename)
 	log.CheckError(err, true)
 
 	bytes, err := afero.ReadAll(file)
 	log.CheckError(err, true)
 
-	data := &heatmap{}
+	data := &Heatmap{}
 	json.Unmarshal(bytes, data)
 
 	return data

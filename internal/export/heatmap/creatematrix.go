@@ -1,6 +1,6 @@
 package heatmap
 
-func createMatrix(data *heatmap) [][]float64 {
+func createMatrix(data *Heatmap) [][]float64 {
 	matrix := make([][]float64, len(data.RowOrder))
 
 	for i, rowIndex := range data.RowOrder {

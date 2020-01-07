@@ -1,6 +1,7 @@
 package heatmap
 
-func getColumnsAndRows(data *heatmap) ([]string, []string) {
+// GetColumnsAndRows parses column and row names from input data.
+func GetColumnsAndRows(data *Heatmap) ([]string, []string) {
 	columns := make([]string, len(data.ColumnOrder))
 	for i, columnIndex := range data.ColumnOrder {
 		columns[i] = data.ColumnDB[columnIndex]

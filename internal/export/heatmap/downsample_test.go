@@ -8,7 +8,7 @@ import (
 
 var _ = Describe("Downsample", func() {
 	It("should not downsample", func() {
-		data := &heatmap{
+		data := &Heatmap{
 			Annotations: types.Annotations{
 				FontSize: 16,
 				List: map[string]types.Annotation{
@@ -33,7 +33,7 @@ var _ = Describe("Downsample", func() {
 			},
 		}
 
-		expectedData := &heatmap{
+		expectedData := &Heatmap{
 			Annotations: types.Annotations{
 				FontSize: 16,
 				List: map[string]types.Annotation{
@@ -57,13 +57,13 @@ var _ = Describe("Downsample", func() {
 			},
 		}
 
-		downsampleData(data, matrices, downsampleTreshold)
+		DownsampleData(data, matrices, downsampleTreshold)
 		Expect(data).To(Equal(expectedData), "should not alter data")
 		Expect(matrices).To(Equal(expectedMatrices), "should not alter matrices")
 	})
 
 	It("should downsample", func() {
-		data := &heatmap{
+		data := &Heatmap{
 			Annotations: types.Annotations{
 				FontSize: 16,
 				List: map[string]types.Annotation{
@@ -88,7 +88,7 @@ var _ = Describe("Downsample", func() {
 			},
 		}
 
-		expectedData := &heatmap{
+		expectedData := &Heatmap{
 			Annotations: types.Annotations{
 				FontSize: 16,
 				List: map[string]types.Annotation{
@@ -110,7 +110,7 @@ var _ = Describe("Downsample", func() {
 			},
 		}
 
-		downsampleData(data, matrices, downsampleTreshold)
+		DownsampleData(data, matrices, downsampleTreshold)
 		Expect(data).To(Equal(expectedData), "should adjust data annotations and markers")
 		Expect(matrices).To(Equal(expectedMatrices), "should downsample matrices")
 	})

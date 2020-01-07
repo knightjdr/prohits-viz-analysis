@@ -7,7 +7,8 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
-func downsampleData(data *heatmap, matrices *types.Matrices, downsampleTreshold int) {
+// DownsampleData for a heatmap.
+func DownsampleData(data *Heatmap, matrices *types.Matrices, downsampleTreshold int) {
 	if downsample.Should(matrices.Abundance, downsampleTreshold) {
 		startingSize := len(matrices.Abundance)
 		matrices.Abundance = downsample.Matrix(matrices.Abundance, downsampleTreshold)
