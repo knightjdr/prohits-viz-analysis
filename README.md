@@ -5,7 +5,7 @@ Golang scripts for analyzing data at ProHits-viz.
 ## Prerequisites
 
 * [librsvg](https://gitlab.gnome.org/GNOME/librsvg/)
-* [nestedcluster](https://sourceforge.net/projects/nestedcluster/), only required when using biclustering option
+* [nestedcluster](https://sourceforge.net/projects/nestedcluster/), only required when using biclustering option for clustering
 
 ## Install
 
@@ -13,7 +13,7 @@ Golang scripts for analyzing data at ProHits-viz.
 go get github.com/knightjdr/prohits-viz-analysis
 cd $HOME/go/src/github.com/knightjdr/prohits-viz-analysis
 go get -d ./...
-go install ./...
+go install cmd/...
 ```
 
 ## Nomenclature
@@ -38,15 +38,23 @@ A sample file for testing can be found in `sample-files/analysis-file.txt`
 
 ## Command line arguments
 
+Use a json file to specify all analysis settings. The `type` field is used to specify
+the type of analysis being performed.
+
 ```
-pvanalyze -h
+pvanalyze --settings="settings.json"
+```
+
+Settings file format
+```
+{
+  "fileList": ["file1.txt", "file2.txt"],
+  "primaryFilter": 0.01,
+  "type": "dotplot"
+}
 ```
 
 ## Dot plot analysis
-
-```
-pvanalyze -analysisType dotplot
-```
 
 ### Required arguments
 
@@ -64,8 +72,7 @@ pvanalyze -analysisType dotplot
 
 | Argument      | Description                                                      |
 |---------------|------------------------------------------------------------------|
-| pdf           | out pdfs in addition to svg                                      |
-| pnf           | out pngs in addition to svg                                      |
+| png           | out pngs in addition to svg                                      |
 | writeDotplot  | output a dot plot image                                          |
 | writeHeatmap  | output a heat map image                                          |
 | writeDistance | output condition-condition and readout-readout distance matrices |
@@ -78,7 +85,7 @@ pvanalyze -analysisType dotplot
 | edgeColor<sup>1</sup> | edge color on dot plots                       |
 | fillColor<sup>1</sup> | fill color on dot plots and heat maps         |
 
-<sup>1</sup> Options: blueBlack, greenBlack, greyScale, redBlack, yellowBlack
+<sup>1</sup> Options: blue, green, grey, red, yellow
 
 ### Data filtering
 | Argument         | Description                                                |
@@ -132,9 +139,12 @@ Data can be transformed prior to analysis:
 | readoutClustering   | cluster by readouts; options: none or readouts    |
 | readoutList         | ordered and comma separated list of readouts      |
 
-To create images with conditions in a specific order, set conditionClustering to "none" and specify a list of conditions in the order you wish them to appear. If conditionClustering is set to "conditions", conditions will be hierarchically clustered.
+To create images with conditions in a specific order, set conditionClustering to "none" and specify a list of conditions
+in the order you wish them to appear. If conditionClustering is set to "conditions", conditions will be hierarchically clustered.
 
-You can control what conditions and readouts are shown on the image by setting both conditionClustering and readoutClustering to "none" and supplying lists for each. Alternatively, if you only what to specify a list of conditions, set readoutClustering to "readouts" and all readouts will be included in the analysis and they will be hierarchically clustered.
+You can control what conditions and readouts are shown on the image by setting both conditionClustering and readoutClustering
+to "none" and supplying lists for each. Alternatively, if you only what to specify a list of conditions, set readoutClustering
+to "readouts" and all readouts will be included in the analysis and they will be hierarchically clustered.
 
 ## Tests
 
