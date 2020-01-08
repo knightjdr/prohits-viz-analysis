@@ -4,6 +4,7 @@ package dotplot
 import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/export/heatmap"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/downsample"
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/matrix/frontend"
 )
 
 // Settings for dotplot export.
@@ -17,8 +18,9 @@ type Settings struct {
 func Export(filename string, settings Settings) {
 	data := heatmap.ReadJSON(filename)
 
-	matrices := createMatrices(data)
-	matrices.Conditions, matrices.Readouts = heatmap.GetColumnsAndRows(data)
+	matrices := frontend.CreateDotplotMatrices(data.RowDB, map[string][]int{"columns": data.ColumnOrder, "rows": data.RowOrder})
+	matrices.Conditions = frontend.GetColumnNames(data.ColumnDB, data.ColumnOrder)
+	matrices.Readouts = frontend.GetRowNames(data.RowDB, data.RowOrder)
 
 	if settings.Format == "png" || downsample.Should(matrices.Abundance, settings.DownsampleThreshold) {
 		createPNG(data, matrices, settings)

@@ -12,11 +12,11 @@ func Image() {
 
 	switch params.imageType {
 	case "dotplot":
-			settings := dotplot.Settings{
-				FontPath: params.fontPath,
-				Format:   params.format,
-			}
-			dotplot.Export(params.jsonFile, settings)
+		settings := dotplot.Settings{
+			FontPath: params.fontPath,
+			Format:   params.format,
+		}
+		dotplot.Export(params.jsonFile, settings)
 	case "heatmap":
 		settings := heatmap.Settings{
 			FontPath: params.fontPath,

@@ -36,7 +36,7 @@ var _ = Describe("Draw a dotplot", func() {
 		dotplot.Markers = types.Markers{
 			Color: "#000000",
 			List: map[string]types.Marker{
-				"a": {Height: 2, Width: 2, X: 0, Y: 1},
+				"a": {Height: 2, Width: 2, X: 0, Y: 0.5},
 			},
 		}
 		dotplot.Matrices = &types.Matrices{
@@ -97,7 +97,7 @@ var _ = Describe("Draw a dotplot", func() {
 			"\t<rect fill=\"none\" y=\"50\" x=\"50\" width=\"100\" height=\"200\"" +
 			" stroke=\"#000000\" stroke-width=\"0.5\" />\n" +
 			"\t<g transform=\"translate(50, 50)\">\n" +
-			"\t\t<rect y=\"20\" x=\"0\" width=\"40\" height=\"40\" stroke=\"#000000\" stroke-width=\"1\" fill=\"none\"/>\n" +
+			"\t\t<rect y=\"100\" x=\"0\" width=\"40\" height=\"40\" stroke=\"#000000\" stroke-width=\"1\" fill=\"none\"/>\n" +
 			"\t</g>\n" +
 			"\t<g transform=\"translate(50, 50)\">\n" +
 			"\t\t<text y=\"40\" x=\"50\" font-size=\"15\" text-anchor=\"middle\">a</text>\n" +

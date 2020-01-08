@@ -1,16 +1,14 @@
-package heatmap
+package sync
 
 import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/matrix/frontend"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
-// Heatmap data for exporting image.
-type Heatmap struct {
-	Annotations types.Annotations
+type minimap struct {
 	ColumnDB    []string
 	ColumnOrder []int
-	Markers     types.Markers
+	ImageType   string
 	RowDB       []frontend.Row
 	RowOrder    []int
 	Settings    types.Settings

@@ -1,4 +1,4 @@
-package heatmap
+package sync
 
 import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/fs"
@@ -12,6 +12,7 @@ import (
 var jsonText = `{
 	"columnDB": ["column1", "column2", "column3"],
 	"columnOrder": [1, 2, 0],
+	"imageType": "dotplot",
 	"rowOrder": [0, 1, 3],
 	"rowDB": [
 		{
@@ -46,9 +47,10 @@ var _ = Describe("Read JSON", func() {
 		fs.Instance.MkdirAll("test", 0755)
 		afero.WriteFile(fs.Instance, "test/file.json", []byte(jsonText), 0644)
 
-		expected := &Heatmap{
+		expected := &minimap{
 			ColumnDB:    []string{"column1", "column2", "column3"},
 			ColumnOrder: []int{1, 2, 0},
+			ImageType:   "dotplot",
 			RowDB: []frontend.Row{
 				{Name: "row1", Data: []frontend.Cell{{Value: 1}, {Value: 2}, {Value: 3}}},
 				{Name: "row2", Data: []frontend.Cell{{Value: 4}, {Value: 5}, {Value: 6}}},
@@ -61,6 +63,6 @@ var _ = Describe("Read JSON", func() {
 				ScoreType:    "lte",
 			},
 		}
-		Expect(ReadJSON("test/file.json")).To(Equal(expected))
+		Expect(readJSON("test/file.json")).To(Equal(expected))
 	})
 })

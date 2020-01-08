@@ -3,6 +3,7 @@ package heatmap
 
 import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/downsample"
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/matrix/frontend"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
@@ -17,16 +18,13 @@ type Settings struct {
 func Export(filename string, settings Settings) {
 	data := ReadJSON(filename)
 
-	matrix := createMatrix(data)
-	columns, rows := GetColumnsAndRows(data)
-
 	matrices := &types.Matrices{
-		Abundance:  matrix,
-		Conditions: columns,
-		Readouts:   rows,
+		Abundance:  frontend.CreateHeatmapMatrix(data.RowDB, map[string][]int{"columns": data.ColumnOrder, "rows": data.RowOrder}),
+		Conditions: frontend.GetColumnNames(data.ColumnDB, data.ColumnOrder),
+		Readouts:   frontend.GetRowNames(data.RowDB, data.RowOrder),
 	}
 
-	if settings.Format == "png" || downsample.Should(matrix, settings.DownsampleThreshold) {
+	if settings.Format == "png" || downsample.Should(matrices.Abundance, settings.DownsampleThreshold) {
 		createPNG(data, matrices, settings)
 	} else {
 		createSVG(data, matrices)
