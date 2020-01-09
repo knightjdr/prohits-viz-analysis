@@ -4,7 +4,6 @@ package convert
 import (
 	"bytes"
 	"fmt"
-	"os"
 	"os/exec"
 
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/log"
@@ -12,24 +11,22 @@ import (
 
 // RSVG converts an svg to PNG using rsvg-convert.
 func RSVG(svg, targetFileName, bgColor string) {
-	workingDir, err := os.Getwd()
-	log.CheckError(err, true)
-
-	fileArg := fmt.Sprintf("%s/%s", workingDir, svg)
-	exportArg := fmt.Sprintf("--output=%s/%s", workingDir, targetFileName)
+	cmdStr := fmt.Sprintf(
+		"docker run -v $(pwd):/files/ rsvg --format=png --output=%s --background-color=%s --unlimited %s",
+		targetFileName,
+		bgColor,
+		svg,
+	)
 
 	cmd := exec.Command(
-		"rsvg-convert",
-		"--format=png",
-		exportArg,
-		fmt.Sprintf("--background-color=%s", bgColor),
-		"--unlimited",
-		fileArg,
+		"/bin/sh",
+		"-c",
+		cmdStr,
 	)
 
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
-	err = cmd.Run()
+	err := cmd.Run()
 
 	log.CheckError(err, true)
 }
