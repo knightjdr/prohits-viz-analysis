@@ -51,7 +51,6 @@ type Settings struct {
 	XLabel              string
 	YLabel              string
 	WriteDistance       bool
-	WriteDotplot        bool
 	WriteHeatmap        bool
 
 	// circheatmap settings

@@ -3,6 +3,8 @@ package analyze
 
 import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/arguments"
+	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/dotplot"
+	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/settings"
 	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/validate/data"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/data/filter"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/data/parser"
@@ -18,8 +20,10 @@ func Run() {
 	data.Validate(analysis)
 	transform.Abundance(analysis)
 
-	/*
-		// Perform analysis
-		tool.Start(&dataset)
-	*/
+	settings.Log(analysis.Settings)
+
+	switch analysis.Settings.Type {
+	case "dotplot":
+		dotplot.Generate(analysis)
+	}
 }
