@@ -8,14 +8,16 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/minimap"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/svg"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/svg/dotplot"
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/treeview"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
-func createDotplot(data *sortedData, settings types.Settings) {
+func createDotplot(data *sortedData, clusteredData hclustData, settings types.Settings) {
 	createDotplotSVG(data, settings)
+	createLegend(data, settings)
 	createMinimap(data, settings)
 	createInteractive(data, settings)
-	createLegend(data, settings)
+	createTreeview(data, clusteredData)
 }
 
 func createDotplotSVG(data *sortedData, settings types.Settings) {
@@ -78,4 +80,23 @@ func createLegend(data *sortedData, settings types.Settings) {
 		Title:     fmt.Sprintf("Dotplot - %s", settings.Abundance),
 	}
 	dotplot.CreateLegend(legendData)
+}
+
+func createTreeview(data *sortedData, clusteredData hclustData) {
+	treeviewData := treeview.Data{
+		Filename: "treeview/bait-prey",
+		Matrix:   data.matrices.Abundance,
+		Names: treeview.Names{
+			Columns:         clusteredData.tree["condition"].Order,
+			Rows:            clusteredData.tree["readout"].Order,
+			UnsortedColumns: clusteredData.unsortedNames["condition"],
+			UnsortedRows:    clusteredData.unsortedNames["readout"],
+		},
+		Trees: treeview.Trees{
+			Column: clusteredData.dendrogram["condition"],
+			Row:    clusteredData.dendrogram["readout"],
+		},
+	}
+
+	treeview.Export(treeviewData)
 }

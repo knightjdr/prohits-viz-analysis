@@ -17,5 +17,5 @@ func Cluster(analysis *types.Analysis) {
 	clusteredData := cluster(matrices, analysis.Settings)
 	sortedMatrices := sortMatrices(matrices, clusteredData)
 
-	createDotplot(sortedMatrices, analysis.Settings)
+	createDotplot(sortedMatrices, clusteredData, analysis.Settings)
 }

@@ -10,18 +10,23 @@ import (
 const ignoreNodes = 250000
 
 type hclustData struct {
-	clustering         map[string][]hclust.SubCluster
+	dendrogram         map[string][]hclust.SubCluster
 	distance           map[string][][]float64
 	normalizedDistance map[string][][]float64
 	tree               map[string]hclust.TreeLayout
+	unsortedNames      map[string][]string
 }
 
 func cluster(matrices *types.Matrices, settings types.Settings) hclustData {
 	data := hclustData{
-		clustering:         make(map[string][]hclust.SubCluster, 2),
+		dendrogram:         make(map[string][]hclust.SubCluster, 2),
 		distance:           make(map[string][][]float64, 2),
 		normalizedDistance: make(map[string][][]float64, 2),
 		tree:               make(map[string]hclust.TreeLayout, 2),
+		unsortedNames: map[string][]string{
+			"condition": matrices.Conditions,
+			"readout":   matrices.Readouts,
+		},
 	}
 
 	// Generate condition and readout distance matrices.
@@ -31,21 +36,21 @@ func cluster(matrices *types.Matrices, settings types.Settings) hclustData {
 	var err error
 
 	// Condition and readout clustering.
-	data.clustering["condition"], err = hclust.Cluster(data.distance["condition"], settings.ClusteringMethod)
+	data.dendrogram["condition"], err = hclust.Cluster(data.distance["condition"], settings.ClusteringMethod)
 	log.CheckError(err, true)
-	data.clustering["readout"], err = hclust.Cluster(data.distance["readout"], settings.ClusteringMethod)
+	data.dendrogram["readout"], err = hclust.Cluster(data.distance["readout"], settings.ClusteringMethod)
 	log.CheckError(err, true)
 
 	// Optimize clustering.
 	if settings.ClusteringOptimize {
-		data.clustering["condition"] = hclust.Optimize(data.clustering["condition"], data.distance["condition"], ignoreNodes)
-		data.clustering["readout"] = hclust.Optimize(data.clustering["readout"], data.distance["readout"], ignoreNodes)
+		data.dendrogram["condition"] = hclust.Optimize(data.dendrogram["condition"], data.distance["condition"], ignoreNodes)
+		data.dendrogram["readout"] = hclust.Optimize(data.dendrogram["readout"], data.distance["readout"], ignoreNodes)
 	}
 
 	// Create tree and get clustering order.
-	data.tree["condition"], err = hclust.Tree(data.clustering["condition"], matrices.Conditions)
+	data.tree["condition"], err = hclust.Tree(data.dendrogram["condition"], matrices.Conditions)
 	log.CheckError(err, true)
-	data.tree["readout"], err = hclust.Tree(data.clustering["readout"], matrices.Readouts)
+	data.tree["readout"], err = hclust.Tree(data.dendrogram["readout"], matrices.Readouts)
 	log.CheckError(err, true)
 
 	// Normalize distance matrices to 1.
