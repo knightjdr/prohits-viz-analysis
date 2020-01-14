@@ -7,7 +7,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
-const ignoreNodes = 250000
+const ignoreNodes = types.HclustIgnore
 
 type hclustData struct {
 	dendrogram         map[string][]hclust.SubCluster

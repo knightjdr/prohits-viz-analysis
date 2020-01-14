@@ -54,7 +54,7 @@ var _ = Describe("Define score filter", func() {
 		filter := 0.05
 		scoreType := "lte"
 
-		filterByScore := defineScoreFilter(scoreType, filter)
+		filterByScore := DefineScoreFilter(scoreType, filter)
 		Expect(filterByScore(0.04)).To(BeTrue(), "should return true when value is less than filter")
 		Expect(filterByScore(0.05)).To(BeTrue(), "should return true when value is equal to  filter")
 		Expect(filterByScore(0.06)).To(BeFalse(), "should return false when value is greater than filter")
@@ -64,7 +64,7 @@ var _ = Describe("Define score filter", func() {
 		filter := 0.05
 		scoreType := "gte"
 
-		filterByScore := defineScoreFilter(scoreType, filter)
+		filterByScore := DefineScoreFilter(scoreType, filter)
 		Expect(filterByScore(0.04)).To(BeFalse(), "should return false when value is less than filter")
 		Expect(filterByScore(0.05)).To(BeTrue(), "should return true when value is equal to  filter")
 		Expect(filterByScore(0.06)).To(BeTrue(), "should return true when value is greater than filter")

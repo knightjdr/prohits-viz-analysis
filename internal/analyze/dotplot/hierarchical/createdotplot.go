@@ -14,10 +14,10 @@ import (
 
 func createDotplot(data *sortedData, clusteredData hclustData, settings types.Settings) {
 	createDotplotSVG(data, settings)
-	createLegend(data, settings)
-	createMinimap(data, settings)
-	createInteractive(data, settings)
-	createTreeview(data, clusteredData)
+	createDotplotLegend(data, settings)
+	createDotplotMinimap(data, settings)
+	createDotplotInteractive(data, settings)
+	createDotplotTreeview(data, clusteredData, settings)
 }
 
 func createDotplotSVG(data *sortedData, settings types.Settings) {
@@ -50,29 +50,7 @@ func createDotplotSVG(data *sortedData, settings types.Settings) {
 	dotplot.Draw("svg/dotplot.svg")
 }
 
-func createMinimap(data *sortedData, settings types.Settings) {
-	minimapData := &minimap.Data{
-		DownsampleThreshold: 1000,
-		Filename:            "minimap/minimap.png",
-		ImageType:           "dotplot",
-		Matrices:            data.matrices,
-		Settings:            settings,
-	}
-	minimap.Create(minimapData)
-}
-
-func createInteractive(data *sortedData, settings types.Settings) {
-	interactiveData := &interactive.HeatmapData{
-		Filename:  "interactive/dotplot.json",
-		ImageType: "dotplot",
-		Matrices:  data.matrices,
-		Minimap:   "minimap/minimap.png",
-		Settings:  settings,
-	}
-	interactive.CreateHeatmap(interactiveData)
-}
-
-func createLegend(data *sortedData, settings types.Settings) {
+func createDotplotLegend(data *sortedData, settings types.Settings) {
 	legendData := dotplot.Legend{
 		Filename:  "svg/dotplot-legend.svg",
 		NumColors: 101,
@@ -82,9 +60,31 @@ func createLegend(data *sortedData, settings types.Settings) {
 	dotplot.CreateLegend(legendData)
 }
 
-func createTreeview(data *sortedData, clusteredData hclustData) {
+func createDotplotMinimap(data *sortedData, settings types.Settings) {
+	minimapData := &minimap.Data{
+		DownsampleThreshold: 1000,
+		Filename:            "minimap/dotplot.png",
+		ImageType:           "dotplot",
+		Matrices:            data.matrices,
+		Settings:            settings,
+	}
+	minimap.Create(minimapData)
+}
+
+func createDotplotInteractive(data *sortedData, settings types.Settings) {
+	interactiveData := &interactive.HeatmapData{
+		Filename:  "interactive/dotplot.json",
+		ImageType: "dotplot",
+		Matrices:  data.matrices,
+		Minimap:   "minimap/dotplot.png",
+		Settings:  settings,
+	}
+	interactive.CreateHeatmap(interactiveData)
+}
+
+func createDotplotTreeview(data *sortedData, clusteredData hclustData, settings types.Settings) {
 	treeviewData := treeview.Data{
-		Filename: "treeview/bait-prey",
+		Filename: fmt.Sprintf("treeview/%s-%s", settings.Condition, settings.Readout),
 		Matrix:   data.matrices.Abundance,
 		Names: treeview.Names{
 			Columns:         clusteredData.tree["condition"].Order,

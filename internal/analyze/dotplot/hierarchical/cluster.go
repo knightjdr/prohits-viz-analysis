@@ -18,4 +18,10 @@ func Cluster(analysis *types.Analysis) {
 	sortedMatrices := sortMatrices(matrices, clusteredData)
 
 	createDotplot(sortedMatrices, clusteredData, analysis.Settings)
+	createHeatmap(sortedMatrices, clusteredData, analysis.Settings)
+	writeDistance(sortedMatrices, clusteredData, analysis.Settings)
+	createPNGs(sortedMatrices, clusteredData, analysis.Settings)
+	createCytoscape(analysis.Data, sortedMatrices, analysis.Settings)
+	writeMatrices(sortedMatrices)
+	writeTrees(clusteredData, analysis.Settings)
 }

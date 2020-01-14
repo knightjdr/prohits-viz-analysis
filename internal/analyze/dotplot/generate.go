@@ -2,10 +2,7 @@
 package dotplot
 
 import (
-	"path/filepath"
-
 	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/dotplot/hierarchical"
-	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/fs"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
@@ -20,5 +17,5 @@ func Generate(analysis *types.Analysis) {
 		hierarchical.Cluster(analysis)
 	}
 
-	fs.Instance.Remove(filepath.Join(".", "minimap"))
+	// fs.Instance.Remove(filepath.Join(".", "minimap"))
 }

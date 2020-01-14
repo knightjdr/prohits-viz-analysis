@@ -7,7 +7,7 @@ import (
 
 func getAbundanceAndScoreFilter(settings types.Settings) func(float64, float64) bool {
 	filterByAbundance := defineAbundanceFilter(settings.MinAbundance)
-	filterByScore := defineScoreFilter(settings.ScoreType, settings.PrimaryFilter)
+	filterByScore := DefineScoreFilter(settings.ScoreType, settings.PrimaryFilter)
 
 	return func(abundance, score float64) bool {
 		return filterByAbundance(abundance) && filterByScore(score)
@@ -29,7 +29,8 @@ func defineAbundanceFilter(minAbundance float64) func(float64) bool {
 	}
 }
 
-func defineScoreFilter(scoreType string, filter float64) func(float64) bool {
+// DefineScoreFilter returns a function for filtering by score.
+func DefineScoreFilter(scoreType string, filter float64) func(float64) bool {
 	if scoreType == "gte" {
 		return func(score float64) bool {
 			return score >= filter
