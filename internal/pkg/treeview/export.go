@@ -25,8 +25,8 @@ type Names struct {
 
 // Trees contains row and column dendorgrams.
 type Trees struct {
-	Column []hclust.SubCluster
-	Row    []hclust.SubCluster
+	Column hclust.Dendrogram
+	Row    hclust.Dendrogram
 }
 
 // Export a matrix to treeview format.
