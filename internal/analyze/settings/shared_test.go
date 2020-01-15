@@ -12,12 +12,10 @@ var _ = Describe("Log shared settings", func() {
 	It("should log settings", func() {
 		settings := types.Settings{
 			Abundance:       "abundanceColumn",
-			AbundanceCap:    10.00,
 			Condition:       "conditionColumn",
 			Control:         "controlColumn",
 			Files:           []string{"/folder/file1.txt", "file2.txt"},
 			LogBase:         "2",
-			MinAbundance:    5.00,
 			Normalization:   "total",
 			PrimaryFilter:   0.01,
 			Readout:         "readoutColumn",
@@ -43,14 +41,7 @@ var _ = Describe("Log shared settings", func() {
 			"- control subtraction was performed\n" +
 			"- readout length normalization was performed\n" +
 			"- condition normalization was performed using total abundance\n" +
-			"- data was log-transformed with base 2\n\n" +
-			"Abundance\n" +
-			"- minimum abundance required: 5\n" +
-			"- abundances were capped at 10 for visualization\n\n" +
-			"Scoring\n" +
-			"- smaller scores are better\n" +
-			"- primary filter: 0.01\n" +
-			"- secondary filter: 0.05\n\n"
+			"- data was log-transformed with base 2\n\n"
 
 		var messages strings.Builder
 		logSharedSettings(&messages, settings)
@@ -165,70 +156,6 @@ var _ = Describe("Log data transformations", func() {
 
 		var messages strings.Builder
 		logTransformations(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-})
-
-var _ = Describe("Log abundance settings", func() {
-	It("should log minimum abundance", func() {
-		settings := types.Settings{
-			MinAbundance: 5.00,
-		}
-
-		expected := "Abundance\n" +
-			"- minimum abundance required: 5\n\n"
-
-		var messages strings.Builder
-		logAbundance(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-
-	It("should log abundance cap", func() {
-		settings := types.Settings{
-			AbundanceCap: 10.00,
-			MinAbundance: 5.00,
-		}
-
-		expected := "Abundance\n" +
-			"- minimum abundance required: 5\n" +
-			"- abundances were capped at 10 for visualization\n\n"
-
-		var messages strings.Builder
-		logAbundance(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-})
-
-var _ = Describe("Log score settings", func() {
-	It("should log score settings for lte", func() {
-		settings := types.Settings{
-			PrimaryFilter:   0.01,
-			ScoreType:       "lte",
-			SecondaryFilter: 0.05,
-		}
-
-		expected := "Scoring\n" +
-			"- smaller scores are better\n" +
-			"- primary filter: 0.01\n" +
-			"- secondary filter: 0.05\n\n"
-
-		var messages strings.Builder
-		logScoring(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-
-	It("should log score settings for gte", func() {
-		settings := types.Settings{
-			PrimaryFilter: 0.01,
-			ScoreType:     "gte",
-		}
-
-		expected := "Scoring\n" +
-			"- larger scores are better\n" +
-			"- primary filter: 0.01\n\n"
-
-		var messages strings.Builder
-		logScoring(&messages, settings)
 		Expect(messages.String()).To(Equal(expected))
 	})
 })

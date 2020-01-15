@@ -16,6 +16,8 @@ func Log(settings types.Settings) {
 	logSharedSettings(&messages, settings)
 
 	switch settings.Type {
+	case "correlation":
+		logCorrelationSettings(&messages, settings)
 	case "dotplot":
 		logDotplotSettings(&messages, settings)
 	}

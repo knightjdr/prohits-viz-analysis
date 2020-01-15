@@ -32,7 +32,29 @@ type Settings struct {
 	ScoreType            string
 	Type                 string
 
-	// dotplot settings
+	// circheatmap
+	ConditionMap   string
+	Known          bool
+	KnownFile      string
+	OtherAbundance []string
+	Species        string
+	TissueFile     string
+	Tissues        []string
+
+	// correlation
+	AlwaysIncludePreysPassingFilter bool
+	BaitAbundanceFilter             float64
+	BaitScoreFilter                 float64
+	Correlation                     string
+	CytoscapeCutoff                 float64
+	IgnoreSourceGenes               bool
+	MinBait                         int
+	MockCountsForBait               bool
+	PreyAbundanceFilter             float64
+	PreyScoreFilter                 float64
+	UseReplicates                   bool
+
+	// dotplot
 	AbundanceCap        float64
 	BiclusteringApprox  bool
 	Clustering          string
@@ -52,13 +74,4 @@ type Settings struct {
 	YLabel              string
 	WriteDistance       bool
 	WriteHeatmap        bool
-
-	// circheatmap settings
-	ConditionMap   string
-	Known          bool
-	KnownFile      string
-	OtherAbundance []string
-	Species        string
-	TissueFile     string
-	Tissues        []string
 }

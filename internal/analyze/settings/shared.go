@@ -6,7 +6,6 @@ import (
 
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/files"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
-	"github.com/knightjdr/prohits-viz-analysis/pkg/float"
 )
 
 func logSharedSettings(messages *strings.Builder, settings types.Settings) {
@@ -14,8 +13,6 @@ func logSharedSettings(messages *strings.Builder, settings types.Settings) {
 	logFiles(messages, settings.Files)
 	logColumns(messages, settings)
 	logTransformations(messages, settings)
-	logAbundance(messages, settings)
-	logScoring(messages, settings)
 }
 
 func logAnalysisType(messages *strings.Builder, analysisType string) {
@@ -70,33 +67,6 @@ func logTransformations(messages *strings.Builder, settings types.Settings) {
 	}
 	if settings.LogBase != "" {
 		messages.WriteString(fmt.Sprintf("- data was log-transformed with base %s\n", settings.LogBase))
-	}
-
-	messages.WriteString("\n")
-}
-
-func logAbundance(messages *strings.Builder, settings types.Settings) {
-	messages.WriteString(fmt.Sprintf("Abundance\n- minimum abundance required: %s\n", float.RemoveTrailingZeros(settings.MinAbundance)))
-	if settings.AbundanceCap > 0 {
-		messages.WriteString(fmt.Sprintf("- abundances were capped at %s for visualization\n", float.RemoveTrailingZeros(settings.AbundanceCap)))
-	}
-
-	messages.WriteString("\n")
-}
-
-func logScoring(messages *strings.Builder, settings types.Settings) {
-	messages.WriteString("Scoring\n")
-
-	if settings.ScoreType == "gte" {
-		messages.WriteString("- larger scores are better\n")
-	} else {
-		messages.WriteString("- smaller scores are better\n")
-	}
-
-	messages.WriteString(fmt.Sprintf("- primary filter: %s\n", float.RemoveTrailingZeros(settings.PrimaryFilter)))
-
-	if settings.SecondaryFilter != 0 {
-		messages.WriteString(fmt.Sprintf("- secondary filter: %s\n", float.RemoveTrailingZeros(settings.SecondaryFilter)))
 	}
 
 	messages.WriteString("\n")
