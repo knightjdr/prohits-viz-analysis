@@ -9,29 +9,30 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
-func createHeatmap(data *sortedData, clusteredData hclustData, settings types.Settings) {
+// CreateHeatmap image.
+func CreateHeatmap(data *SortedData, clusteredData HclustData, settings types.Settings) {
 	if settings.WriteHeatmap {
 		createHeatmapSVG(data, settings)
 		createHeatmapLegend(settings)
 	}
 }
 
-func createHeatmapSVG(data *sortedData, settings types.Settings) {
-	dims := dimensions.Calculate(data.matrices.Abundance, data.matrices.Conditions, data.matrices.Readouts, false)
+func createHeatmapSVG(data *SortedData, settings types.Settings) {
+	dims := dimensions.Calculate(data.Matrices.Abundance, data.Matrices.Conditions, data.Matrices.Readouts, false)
 
 	heatmap := svg.InitializeHeatmap()
 	heatmap.AbundanceCap = settings.AbundanceCap
 	heatmap.CellSize = dims.CellSize
-	heatmap.Columns = data.matrices.Conditions
+	heatmap.Columns = data.Matrices.Conditions
 	heatmap.FillColor = settings.FillColor
 	heatmap.FontSize = dims.FontSize
 	heatmap.Invert = settings.InvertColor
 	heatmap.LeftMargin = dims.LeftMargin
-	heatmap.Matrix = data.matrices.Abundance
+	heatmap.Matrix = data.Matrices.Abundance
 	heatmap.MinAbundance = settings.MinAbundance
 	heatmap.PlotHeight = dims.PlotHeight
 	heatmap.PlotWidth = dims.PlotWidth
-	heatmap.Rows = data.matrices.Readouts
+	heatmap.Rows = data.Matrices.Readouts
 	heatmap.SvgHeight = dims.SvgHeight
 	heatmap.SvgWidth = dims.SvgWidth
 	heatmap.TopMargin = dims.TopMargin

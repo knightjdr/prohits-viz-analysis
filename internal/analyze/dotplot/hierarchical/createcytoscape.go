@@ -13,31 +13,34 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/stats"
 )
 
-func createCytoscape(fileData []map[string]string, data *sortedData, settings types.Settings) {
-	writeDistanceCytoscape(data.conditionDist, data.matrices.Conditions, data.matrices.Conditions, settings.Condition)
-	writeDistanceCytoscape(data.readoutDist, data.matrices.Readouts, data.matrices.Readouts, settings.Readout)
+// CreateCytoscape files.
+func CreateCytoscape(fileData []map[string]string, data *SortedData, settings types.Settings) {
+	writeDistanceCytoscape(data.ConditionDist, data.Matrices.Conditions, data.Matrices.Conditions, settings.Condition)
+	writeDistanceCytoscape(data.ReadoutDist, data.Matrices.Readouts, data.Matrices.Readouts, settings.Readout)
 	writeFileDataCytoscape(fileData, settings)
 }
 
 func writeDistanceCytoscape(matrix [][]float64, source, target []string, filehandle string) {
-	file, err := fs.Instance.Create(fmt.Sprintf("cytoscape/%[1]s-%[1]s-cytoscape.txt", filehandle))
-	log.CheckError(err, false)
-	if err != nil {
-		return
-	}
-	defer file.Close()
-
-	var buffer strings.Builder
-	buffer.WriteString("source\ttarget\tdistance\n")
-
-	noSource := len(source)
-	for i, row := range matrix {
-		for j := i + 1; j < noSource; j++ {
-			value := float.RemoveTrailingZeros(row[j])
-			buffer.WriteString(fmt.Sprintf("%s\t%s\t%s\n", source[i], target[j], value))
+	if len(matrix) > 0 {
+		file, err := fs.Instance.Create(fmt.Sprintf("cytoscape/%[1]s-%[1]s-cytoscape.txt", filehandle))
+		log.CheckError(err, false)
+		if err != nil {
+			return
 		}
+		defer file.Close()
+
+		var buffer strings.Builder
+		buffer.WriteString("source\ttarget\tdistance\n")
+
+		noSource := len(source)
+		for i, row := range matrix {
+			for j := i + 1; j < noSource; j++ {
+				value := float.RemoveTrailingZeros(row[j])
+				buffer.WriteString(fmt.Sprintf("%s\t%s\t%s\n", source[i], target[j], value))
+			}
+		}
+		file.WriteString(buffer.String())
 	}
-	file.WriteString(buffer.String())
 }
 
 func writeFileDataCytoscape(data []map[string]string, settings types.Settings) {

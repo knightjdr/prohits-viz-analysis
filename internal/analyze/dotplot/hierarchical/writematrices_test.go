@@ -16,8 +16,8 @@ var _ = Describe("Write matrices to file", func() {
 
 		fs.Instance.MkdirAll("other", 0755)
 
-		data := &sortedData{
-			matrices: &types.Matrices{
+		data := &SortedData{
+			Matrices: &types.Matrices{
 				Abundance: [][]float64{
 					{0, 10, 74.2},
 					{5, 7.2, 90.12},
@@ -33,7 +33,7 @@ var _ = Describe("Write matrices to file", func() {
 			},
 		}
 
-		writeMatrices(data)
+		WriteMatrices(data)
 
 		expectedAbundance := "\tcondition1\tcondition2\tcondition3\n" +
 			"readout1\t0.00\t10.00\t74.20\n" +

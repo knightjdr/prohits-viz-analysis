@@ -4,16 +4,19 @@ import (
 	"fmt"
 
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/downsample"
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/fs"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/heatmap/dimensions"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/png/heatmap"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/svg"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
+	"github.com/spf13/afero"
 )
 
-func createPNGs(data *sortedData, clusteredData hclustData, settings types.Settings) {
+// CreatePNGs as output format.
+func CreatePNGs(data *SortedData, clusteredData HclustData, settings types.Settings) {
 	if settings.Png {
-		createDotplotPNG(data.matrices.Abundance, settings)
-		createHeatmapPNG(data.matrices.Abundance, settings)
+		createDotplotPNG(data.Matrices.Abundance, settings)
+		createHeatmapPNG(data.Matrices.Abundance, settings)
 		createDistancePNG(data, settings)
 		convertLegends(settings)
 	}
@@ -29,7 +32,7 @@ func createHeatmapPNG(matrix [][]float64, settings types.Settings) {
 	}
 }
 
-func createDistancePNG(data *sortedData, settings types.Settings) {
+func createDistancePNG(data *SortedData, settings types.Settings) {
 	if settings.WriteDistance {
 		distanceSettings := types.Settings{
 			AbundanceCap: 1,
@@ -37,12 +40,16 @@ func createDistancePNG(data *sortedData, settings types.Settings) {
 			InvertColor:  true,
 			MinAbundance: 0,
 		}
-		writeHeatmapPNG(data.conditionDist, distanceSettings, fmt.Sprintf("%[1]s-%[1]s", settings.Condition))
-		writeHeatmapPNG(data.readoutDist, distanceSettings, fmt.Sprintf("%[1]s-%[1]s", settings.Readout))
+		writeHeatmapPNG(data.ConditionDist, distanceSettings, fmt.Sprintf("%[1]s-%[1]s", settings.Condition))
+		writeHeatmapPNG(data.ReadoutDist, distanceSettings, fmt.Sprintf("%[1]s-%[1]s", settings.Readout))
 	}
 }
 
 func writeHeatmapPNG(matrix [][]float64, settings types.Settings, filehandle string) {
+	if len(matrix) == 0 {
+		return
+	}
+
 	if downsample.Should(matrix, 0) {
 		downsampled := downsample.Matrix(matrix, 0)
 		dims := dimensions.Calculate(downsampled, []string{}, []string{}, false)
@@ -72,8 +79,17 @@ func convertLegends(settings types.Settings) {
 
 	if settings.WriteDistance {
 		conditionFileName := fmt.Sprintf("%s-distance-legend", settings.Condition)
-		svg.ConvertToPNG(fmt.Sprintf("svg/%s.svg", conditionFileName), fmt.Sprintf("png/%s.png", conditionFileName), "white")
+		conditionFilePath := fmt.Sprintf("svg/%s.svg", conditionFileName)
+		exists, _ := afero.Exists(fs.Instance, conditionFilePath)
+		if exists {
+			svg.ConvertToPNG(conditionFilePath, fmt.Sprintf("png/%s.png", conditionFileName), "white")
+		}
+
 		readoutFileName := fmt.Sprintf("%s-distance-legend", settings.Readout)
-		svg.ConvertToPNG(fmt.Sprintf("svg/%s.svg", readoutFileName), fmt.Sprintf("png/%s.png", readoutFileName), "white")
+		readoutFilePath := fmt.Sprintf("svg/%s.svg", readoutFileName)
+		exists, _ = afero.Exists(fs.Instance, readoutFilePath)
+		if exists {
+			svg.ConvertToPNG(readoutFilePath, fmt.Sprintf("png/%s.png", readoutFileName), "white")
+		}
 	}
 }

@@ -12,7 +12,8 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
-func createDotplot(data *sortedData, clusteredData hclustData, settings types.Settings) {
+// CreateDotplot image.
+func CreateDotplot(data *SortedData, clusteredData HclustData, settings types.Settings) {
 	createDotplotSVG(data, settings)
 	createDotplotLegend(data, settings)
 	createDotplotMinimap(data, settings)
@@ -20,25 +21,25 @@ func createDotplot(data *sortedData, clusteredData hclustData, settings types.Se
 	createDotplotTreeview(data, clusteredData, settings)
 }
 
-func createDotplotSVG(data *sortedData, settings types.Settings) {
-	dims := dimensions.Calculate(data.matrices.Abundance, data.matrices.Conditions, data.matrices.Readouts, false)
+func createDotplotSVG(data *SortedData, settings types.Settings) {
+	dims := dimensions.Calculate(data.Matrices.Abundance, data.Matrices.Conditions, data.Matrices.Readouts, false)
 
 	dotplot := svg.InitializeDotplot()
 	dotplot.AbundanceCap = settings.AbundanceCap
 	dotplot.CellSize = dims.CellSize
-	dotplot.Columns = data.matrices.Conditions
+	dotplot.Columns = data.Matrices.Conditions
 	dotplot.EdgeColor = settings.EdgeColor
 	dotplot.FillColor = settings.FillColor
 	dotplot.FontSize = dims.FontSize
 	dotplot.Invert = settings.InvertColor
 	dotplot.LeftMargin = dims.LeftMargin
-	dotplot.Matrices = data.matrices
+	dotplot.Matrices = data.Matrices
 	dotplot.MinAbundance = settings.MinAbundance
 	dotplot.PlotHeight = dims.PlotHeight
 	dotplot.PlotWidth = dims.PlotWidth
 	dotplot.PrimaryFilter = settings.PrimaryFilter
 	dotplot.Ratio = dims.Ratio
-	dotplot.Rows = data.matrices.Readouts
+	dotplot.Rows = data.Matrices.Readouts
 	dotplot.ScoreType = settings.ScoreType
 	dotplot.SecondaryFilter = settings.SecondaryFilter
 	dotplot.SvgHeight = dims.SvgHeight
@@ -50,7 +51,7 @@ func createDotplotSVG(data *sortedData, settings types.Settings) {
 	dotplot.Draw("svg/dotplot.svg")
 }
 
-func createDotplotLegend(data *sortedData, settings types.Settings) {
+func createDotplotLegend(data *SortedData, settings types.Settings) {
 	legendData := dotplot.Legend{
 		Filename:  "svg/dotplot-legend.svg",
 		NumColors: 101,
@@ -60,41 +61,41 @@ func createDotplotLegend(data *sortedData, settings types.Settings) {
 	dotplot.CreateLegend(legendData)
 }
 
-func createDotplotMinimap(data *sortedData, settings types.Settings) {
+func createDotplotMinimap(data *SortedData, settings types.Settings) {
 	minimapData := &minimap.Data{
 		DownsampleThreshold: 1000,
 		Filename:            "minimap/dotplot.png",
 		ImageType:           "dotplot",
-		Matrices:            data.matrices,
+		Matrices:            data.Matrices,
 		Settings:            settings,
 	}
 	minimap.Create(minimapData)
 }
 
-func createDotplotInteractive(data *sortedData, settings types.Settings) {
+func createDotplotInteractive(data *SortedData, settings types.Settings) {
 	interactiveData := &interactive.HeatmapData{
 		Filename:  "interactive/dotplot.json",
 		ImageType: "dotplot",
-		Matrices:  data.matrices,
+		Matrices:  data.Matrices,
 		Minimap:   "minimap/dotplot.png",
 		Settings:  settings,
 	}
 	interactive.CreateHeatmap(interactiveData)
 }
 
-func createDotplotTreeview(data *sortedData, clusteredData hclustData, settings types.Settings) {
+func createDotplotTreeview(data *SortedData, clusteredData HclustData, settings types.Settings) {
 	treeviewData := treeview.Data{
 		Filename: fmt.Sprintf("treeview/%s-%s", settings.Condition, settings.Readout),
-		Matrix:   data.matrices.Abundance,
+		Matrix:   data.Matrices.Abundance,
 		Names: treeview.Names{
-			Columns:         clusteredData.tree["condition"].Order,
-			Rows:            clusteredData.tree["readout"].Order,
-			UnsortedColumns: clusteredData.unsortedNames["condition"],
-			UnsortedRows:    clusteredData.unsortedNames["readout"],
+			Columns:         clusteredData.Tree["condition"].Order,
+			Rows:            clusteredData.Tree["readout"].Order,
+			UnsortedColumns: clusteredData.UnsortedNames["condition"],
+			UnsortedRows:    clusteredData.UnsortedNames["readout"],
 		},
 		Trees: treeview.Trees{
-			Column: clusteredData.dendrogram["condition"],
-			Row:    clusteredData.dendrogram["readout"],
+			Column: clusteredData.Dendrogram["condition"],
+			Row:    clusteredData.Dendrogram["readout"],
 		},
 	}
 

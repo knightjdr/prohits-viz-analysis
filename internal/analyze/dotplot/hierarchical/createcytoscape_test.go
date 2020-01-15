@@ -16,17 +16,17 @@ var _ = Describe("Create cytoscape files", func() {
 
 		fs.Instance.MkdirAll("cytoscape", 0755)
 
-		data := &sortedData{
-			conditionDist: [][]float64{
+		data := &SortedData{
+			ConditionDist: [][]float64{
 				{0, 10, 74.2},
 				{10, 0, 90.12},
 				{74.2, 90.12, 0},
 			},
-			matrices: &types.Matrices{
+			Matrices: &types.Matrices{
 				Conditions: []string{"condition1", "condition2", "condition3"},
 				Readouts:   []string{"readout1", "readout2", "readout3"},
 			},
-			readoutDist: [][]float64{
+			ReadoutDist: [][]float64{
 				{0, 5, 34.7},
 				{5, 0, 8.9},
 				{34.7, 8.9, 0},
@@ -47,7 +47,7 @@ var _ = Describe("Create cytoscape files", func() {
 			ScoreType:     "lte",
 		}
 
-		createCytoscape(fileData, data, settings)
+		CreateCytoscape(fileData, data, settings)
 
 		expectedConditionFile := "source\ttarget\tdistance\n" +
 			"condition1\tcondition2\t10\n" +

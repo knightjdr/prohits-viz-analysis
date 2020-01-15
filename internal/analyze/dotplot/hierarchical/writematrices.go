@@ -8,9 +8,10 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/log"
 )
 
-func writeMatrices(data *sortedData) {
-	writeMatrix(data.matrices.Abundance, data.matrices.Conditions, data.matrices.Readouts, "other/data-transformed.txt")
-	writeMatrix(data.matrices.Ratio, data.matrices.Conditions, data.matrices.Readouts, "other/data-transformed-ratios.txt")
+// WriteMatrices for transformed data.
+func WriteMatrices(data *SortedData) {
+	writeMatrix(data.Matrices.Abundance, data.Matrices.Conditions, data.Matrices.Readouts, "other/data-transformed.txt")
+	writeMatrix(data.Matrices.Ratio, data.Matrices.Conditions, data.Matrices.Readouts, "other/data-transformed-ratios.txt")
 }
 
 func writeMatrix(matrix [][]float64, conditions, readouts []string, filename string) {

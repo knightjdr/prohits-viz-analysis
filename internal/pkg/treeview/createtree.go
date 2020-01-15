@@ -12,21 +12,25 @@ import (
 )
 
 func createATR(data Data) {
-	file, err := fs.Instance.Create(fmt.Sprintf("%s.atr", data.Filename))
-	log.CheckError(err, true)
-	defer file.Close()
+	if len(data.Trees.Column) > 0 {
+		file, err := fs.Instance.Create(fmt.Sprintf("%s.atr", data.Filename))
+		log.CheckError(err, true)
+		defer file.Close()
 
-	label := getTreeLabeler(data.Names.Columns, data.Names.UnsortedColumns, "ARRY")
-	writeTreeNodes(file, data.Trees.Column, label)
+		label := getTreeLabeler(data.Names.Columns, data.Names.UnsortedColumns, "ARRY")
+		writeTreeNodes(file, data.Trees.Column, label)
+	}
 }
 
 func createGTR(data Data) {
-	file, err := fs.Instance.Create(fmt.Sprintf("%s.gtr", data.Filename))
-	log.CheckError(err, true)
-	defer file.Close()
+	if len(data.Trees.Row) > 0 {
+		file, err := fs.Instance.Create(fmt.Sprintf("%s.gtr", data.Filename))
+		log.CheckError(err, true)
+		defer file.Close()
 
-	label := getTreeLabeler(data.Names.Rows, data.Names.UnsortedRows, "GENE")
-	writeTreeNodes(file, data.Trees.Row, label)
+		label := getTreeLabeler(data.Names.Rows, data.Names.UnsortedRows, "GENE")
+		writeTreeNodes(file, data.Trees.Row, label)
+	}
 }
 
 func writeTreeNodes(file afero.File, dendrogram []hclust.SubCluster, label func(int) string) {

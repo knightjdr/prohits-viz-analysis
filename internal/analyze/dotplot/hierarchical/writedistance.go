@@ -12,22 +12,23 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
-func writeDistance(data *sortedData, clusteredData hclustData, settings types.Settings) {
+// WriteDistance images.
+func WriteDistance(data *SortedData, clusteredData HclustData, settings types.Settings) {
 	if settings.WriteDistance {
-		createDistanceSVG(data.conditionDist, data.matrices.Conditions, settings, settings.Condition)
-		createDistanceSVG(data.readoutDist, data.matrices.Readouts, settings, settings.Readout)
-
-		createDistanceLegend(settings, settings.Condition)
-		createDistanceLegend(settings, settings.Readout)
-
-		createDistanceMinimap(data.conditionDist, settings, "condition")
-		createDistanceMinimap(data.readoutDist, settings, "readout")
-
-		createDistanceInteractive(data.conditionDist, data.matrices.Conditions, settings, "condition")
-		createDistanceInteractive(data.readoutDist, data.matrices.Readouts, settings, "readout")
-
-		createConditionDistanceTreeview(data, clusteredData, settings)
-		createReadoutDistanceTreeview(data, clusteredData, settings)
+		if len(data.ConditionDist) > 0 {
+			createDistanceSVG(data.ConditionDist, data.Matrices.Conditions, settings, settings.Condition)
+			createDistanceLegend(settings, settings.Condition)
+			createDistanceMinimap(data.ConditionDist, settings, settings.Condition)
+			createDistanceInteractive(data.ConditionDist, data.Matrices.Conditions, settings, settings.Condition)
+			createConditionDistanceTreeview(data, clusteredData, settings)
+		}
+		if len(data.ReadoutDist) > 0 {
+			createDistanceSVG(data.ReadoutDist, data.Matrices.Readouts, settings, settings.Readout)
+			createDistanceLegend(settings, settings.Readout)
+			createDistanceMinimap(data.ReadoutDist, settings, settings.Readout)
+			createDistanceInteractive(data.ReadoutDist, data.Matrices.Readouts, settings, settings.Readout)
+			createReadoutDistanceTreeview(data, clusteredData, settings)
+		}
 	}
 }
 
@@ -109,38 +110,38 @@ func createDistanceInteractive(matrix [][]float64, labels []string, settings typ
 	interactive.CreateHeatmap(interactiveData)
 }
 
-func createConditionDistanceTreeview(data *sortedData, clusteredData hclustData, settings types.Settings) {
+func createConditionDistanceTreeview(data *SortedData, clusteredData HclustData, settings types.Settings) {
 	treeviewData := treeview.Data{
 		Filename: fmt.Sprintf("treeview/%[1]s-%[1]s", settings.Condition),
-		Matrix:   data.conditionDist,
+		Matrix:   data.ConditionDist,
 		Names: treeview.Names{
-			Columns:         clusteredData.tree["condition"].Order,
-			Rows:            clusteredData.tree["condition"].Order,
-			UnsortedColumns: clusteredData.unsortedNames["condition"],
-			UnsortedRows:    clusteredData.unsortedNames["condition"],
+			Columns:         clusteredData.Tree["condition"].Order,
+			Rows:            clusteredData.Tree["condition"].Order,
+			UnsortedColumns: clusteredData.UnsortedNames["condition"],
+			UnsortedRows:    clusteredData.UnsortedNames["condition"],
 		},
 		Trees: treeview.Trees{
-			Column: clusteredData.dendrogram["condition"],
-			Row:    clusteredData.dendrogram["condition"],
+			Column: clusteredData.Dendrogram["condition"],
+			Row:    clusteredData.Dendrogram["condition"],
 		},
 	}
 
 	treeview.Export(treeviewData)
 }
 
-func createReadoutDistanceTreeview(data *sortedData, clusteredData hclustData, settings types.Settings) {
+func createReadoutDistanceTreeview(data *SortedData, clusteredData HclustData, settings types.Settings) {
 	treeviewData := treeview.Data{
 		Filename: fmt.Sprintf("treeview/%[1]s-%[1]s", settings.Readout),
-		Matrix:   data.readoutDist,
+		Matrix:   data.ReadoutDist,
 		Names: treeview.Names{
-			Columns:         clusteredData.tree["readout"].Order,
-			Rows:            clusteredData.tree["readout"].Order,
-			UnsortedColumns: clusteredData.unsortedNames["readout"],
-			UnsortedRows:    clusteredData.unsortedNames["readout"],
+			Columns:         clusteredData.Tree["readout"].Order,
+			Rows:            clusteredData.Tree["readout"].Order,
+			UnsortedColumns: clusteredData.UnsortedNames["readout"],
+			UnsortedRows:    clusteredData.UnsortedNames["readout"],
 		},
 		Trees: treeview.Trees{
-			Column: clusteredData.dendrogram["readout"],
-			Row:    clusteredData.dendrogram["readout"],
+			Column: clusteredData.Dendrogram["readout"],
+			Row:    clusteredData.Dendrogram["readout"],
 		},
 	}
 

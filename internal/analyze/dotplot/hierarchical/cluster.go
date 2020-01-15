@@ -17,11 +17,11 @@ func Cluster(analysis *types.Analysis) {
 	clusteredData := cluster(matrices, analysis.Settings)
 	sortedMatrices := sortMatrices(matrices, clusteredData)
 
-	createDotplot(sortedMatrices, clusteredData, analysis.Settings)
-	createHeatmap(sortedMatrices, clusteredData, analysis.Settings)
-	writeDistance(sortedMatrices, clusteredData, analysis.Settings)
-	createPNGs(sortedMatrices, clusteredData, analysis.Settings)
-	createCytoscape(analysis.Data, sortedMatrices, analysis.Settings)
-	writeMatrices(sortedMatrices)
-	writeTrees(clusteredData, analysis.Settings)
+	CreateDotplot(sortedMatrices, clusteredData, analysis.Settings)
+	CreateHeatmap(sortedMatrices, clusteredData, analysis.Settings)
+	WriteDistance(sortedMatrices, clusteredData, analysis.Settings)
+	CreatePNGs(sortedMatrices, clusteredData, analysis.Settings)
+	CreateCytoscape(analysis.Data, sortedMatrices, analysis.Settings)
+	WriteMatrices(sortedMatrices)
+	WriteTrees(clusteredData, analysis.Settings)
 }

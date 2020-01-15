@@ -8,11 +8,14 @@ import (
 	"github.com/spf13/afero"
 )
 
-func writeTrees(clusteredData hclustData, settings types.Settings) {
-	writeTree(clusteredData.tree["condition"].Newick, settings.Condition)
-	writeTree(clusteredData.tree["readout"].Newick, settings.Readout)
+// WriteTrees for newick format.
+func WriteTrees(clusteredData HclustData, settings types.Settings) {
+	writeTree(clusteredData.Tree["condition"].Newick, settings.Condition)
+	writeTree(clusteredData.Tree["readout"].Newick, settings.Readout)
 }
 
 func writeTree(tree string, filehandle string) {
-	afero.WriteFile(fs.Instance, fmt.Sprintf("other/%s-dendrogram.txt", filehandle), []byte(tree), 0644)
+	if len(tree) > 0 {
+		afero.WriteFile(fs.Instance, fmt.Sprintf("other/%s-dendrogram.txt", filehandle), []byte(tree), 0644)
+	}
 }
