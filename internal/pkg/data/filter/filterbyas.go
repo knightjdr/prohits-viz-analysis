@@ -1,44 +1,67 @@
 package filter
 
 import (
-	"strconv"
-
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/parse"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
 func filterByAbundanceAndScore(analysis *types.Analysis) {
-	filterByCriteria := getAbundanceAndScoreFilter(analysis.Settings)
+	doesReadoutPassFilters := getAbundanceAndScoreFilter(analysis.Settings)
 
-	passingReadouts := make(map[string]bool, 0)
+	passingReadouts := make(map[string]map[string]bool, 0)
 	for _, row := range analysis.Data {
 		abundance := parse.PipeSeparatedStringToMean(row["abundance"])
-		score := parseScore(row["score"])
+		score := parse.Score(row["score"])
 
-		if filterByCriteria(abundance, score) {
-			readout := row["readout"]
-			passingReadouts[readout] = true
+		if doesReadoutPassFilters(abundance, score) {
+			addReadout(&passingReadouts, row)
 		}
 	}
 
-	removeReadouts(analysis, passingReadouts)
+	filterFailingReadouts(analysis, passingReadouts)
 }
 
-func parseScore(score string) float64 {
-	parsedScore, err := strconv.ParseFloat(score, 64)
-	if err != nil {
-		return 0
+func addReadout(passingReadouts *map[string]map[string]bool, row map[string]string) {
+	condition := row["condition"]
+	readout := row["readout"]
+
+	if _, ok := (*passingReadouts)[readout]; !ok {
+		(*passingReadouts)[readout] = make(map[string]bool)
 	}
 
-	return parsedScore
+	(*passingReadouts)[readout][condition] = true
 }
 
-func removeReadouts(analysis *types.Analysis, passingReadouts map[string]bool) {
+func filterFailingReadouts(analysis *types.Analysis, passingReadouts map[string]map[string]bool) {
+	shouldRemoveReadout := filterByReadout(passingReadouts, analysis.Settings)
 	dataLength := len(analysis.Data)
 	for i := dataLength - 1; i >= 0; i-- {
+		condition := analysis.Data[i]["condition"]
 		readout := analysis.Data[i]["readout"]
-		if _, ok := passingReadouts[readout]; !ok {
+		if shouldRemoveReadout(condition, readout) {
 			analysis.Data = append(analysis.Data[:i], analysis.Data[i+1:]...)
 		}
+	}
+}
+
+func filterByReadout(passingReadouts map[string]map[string]bool, settings types.Settings) func(string, string) bool {
+	if settings.ParsimoniousReadoutFiltering {
+		return func(condition, readout string) bool {
+			_, okReadout := passingReadouts[readout]
+			_, okCondition := passingReadouts[readout][condition]
+			if okReadout &&
+				okCondition &&
+				len(passingReadouts[readout]) >= settings.MinConditions {
+				return false
+			}
+			return true
+		}
+	}
+	return func(condition, readout string) bool {
+		if _, ok := passingReadouts[readout]; ok &&
+			len(passingReadouts[readout]) >= settings.MinConditions {
+			return false
+		}
+		return true
 	}
 }

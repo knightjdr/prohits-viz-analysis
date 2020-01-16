@@ -13,15 +13,21 @@ var _ = Describe("Log dotplot settings", func() {
 		settings := types.Settings{
 			AbundanceCap:       10.00,
 			BiclusteringApprox: true,
+			Condition:          "Bait",
 			Clustering:         "biclustering",
 			MinAbundance:       5.00,
+			MinConditions:      0,
 			PrimaryFilter:      0.01,
+			Readout:            "Prey",
 			Score:              "scoreColumn",
 			ScoreType:          "lte",
 			SecondaryFilter:    0.05,
 		}
 
-		expected := "Abundance\n" +
+		expected := "Filtering\n" +
+			"- minimum Bait requirement: 0\n" +
+			"- parsimonius Prey inclusion: false\n\n" +
+			"Abundance\n" +
 			"- minimum abundance required: 5\n" +
 			"- abundances were capped at 10 for visualization\n\n" +
 			"Scoring\n" +
@@ -33,56 +39,6 @@ var _ = Describe("Log dotplot settings", func() {
 
 		var messages strings.Builder
 		logDotplotSettings(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-})
-
-var _ = Describe("Log dotplot clustering settings", func() {
-	It("should log biclustering settings", func() {
-		settings := types.Settings{
-			BiclusteringApprox: true,
-			Clustering:         "biclustering",
-		}
-
-		expected := "Clustering\n" +
-			"- approximate biclustering was performed\n\n"
-
-		var messages strings.Builder
-		logDotplotClustering(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-
-	It("should log hierarchical clustering settings", func() {
-		settings := types.Settings{
-			Clustering:         "hierarchical",
-			ClusteringMethod:   "complete",
-			ClusteringOptimize: true,
-			Distance:           "canberra",
-		}
-
-		expected := "Clustering\n" +
-			"- hierarchical clustering was performed\n" +
-			"- distance metric: canberra\n" +
-			"- linkage method: complete\n" +
-			"- leaf clusters were optimized\n\n"
-
-		var messages strings.Builder
-		logDotplotClustering(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-
-	It("should log no clustering settings", func() {
-		settings := types.Settings{
-			Clustering:          "none",
-			ConditionClustering: "none",
-			ReadoutClustering:   "none",
-		}
-
-		expected := "Clustering\n" +
-			"- no clustering was performed\n\n"
-
-		var messages strings.Builder
-		logDotplotClustering(&messages, settings)
 		Expect(messages.String()).To(Equal(expected))
 	})
 })
@@ -151,210 +107,52 @@ var _ = Describe("Log dotplot score settings", func() {
 	})
 })
 
-var _ = Describe("Log biclustering settings", func() {
-	It("should log nothing when clustering is not set to biclustering", func() {
-		settings := types.Settings{
-			Clustering: "hierarchical",
-		}
-
-		expected := ""
-
-		var messages strings.Builder
-		logBiclustering(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-
-	It("should log settings", func() {
-		settings := types.Settings{
-			BiclusteringApprox: false,
-			Clustering:         "biclustering",
-		}
-
-		expected := "- biclustering was performed\n"
-
-		var messages strings.Builder
-		logBiclustering(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-
-	It("should log settings for approximation", func() {
+var _ = Describe("Log dotplot clustering settings", func() {
+	It("should log biclustering settings", func() {
 		settings := types.Settings{
 			BiclusteringApprox: true,
 			Clustering:         "biclustering",
 		}
 
-		expected := "- approximate biclustering was performed\n"
+		expected := "Clustering\n" +
+			"- approximate biclustering was performed\n\n"
 
 		var messages strings.Builder
-		logBiclustering(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-})
-
-var _ = Describe("Log hierarchical clustering settings", func() {
-	It("should log nothing when clustering is not set to hierarchical", func() {
-		settings := types.Settings{
-			Clustering: "biclustering",
-		}
-
-		expected := ""
-
-		var messages strings.Builder
-		logHierarchical(&messages, settings)
+		logDotplotClustering(&messages, settings)
 		Expect(messages.String()).To(Equal(expected))
 	})
 
-	It("should log settings", func() {
+	It("should log hierarchical clustering settings", func() {
 		settings := types.Settings{
-			Clustering:       "hierarchical",
-			ClusteringMethod: "complete",
-			Distance:         "canberra",
+			Clustering:         "hierarchical",
+			ClusteringMethod:   "complete",
+			ClusteringOptimize: true,
+			Distance:           "canberra",
 		}
 
-		expected := "- hierarchical clustering was performed\n" +
+		expected := "Clustering\n" +
+			"- hierarchical clustering was performed\n" +
 			"- distance metric: canberra\n" +
-			"- linkage method: complete\n"
+			"- linkage method: complete\n" +
+			"- leaf clusters were optimized\n\n"
 
 		var messages strings.Builder
-		logHierarchical(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-})
-
-var _ = Describe("Log no clustering settings", func() {
-	It("should log nothing when clustering is not selected", func() {
-		settings := types.Settings{
-			Clustering: "hierarchical",
-		}
-
-		expected := ""
-
-		var messages strings.Builder
-		logNoClustering(&messages, settings)
+		logDotplotClustering(&messages, settings)
 		Expect(messages.String()).To(Equal(expected))
 	})
 
-	It("should log that no clustering was performed when conditions and readouts are specified", func() {
+	It("should log no clustering settings", func() {
 		settings := types.Settings{
 			Clustering:          "none",
 			ConditionClustering: "none",
 			ReadoutClustering:   "none",
 		}
 
-		expected := "- no clustering was performed\n"
+		expected := "Clustering\n" +
+			"- no clustering was performed\n\n"
 
 		var messages strings.Builder
-		logNoClustering(&messages, settings)
+		logDotplotClustering(&messages, settings)
 		Expect(messages.String()).To(Equal(expected))
-	})
-
-	It("should log that conditions were clustered", func() {
-		settings := types.Settings{
-			Clustering:          "none",
-			ClusteringMethod:    "complete",
-			ConditionClustering: "hierarchical",
-			Distance:            "canberra",
-			ReadoutClustering:   "none",
-		}
-
-		expected := "- conditions were hierarchically clustered\n" +
-			"- distance metric: canberra\n" +
-			"- linkage method: complete\n"
-
-		var messages strings.Builder
-		logNoClustering(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-
-	It("should log that readouts were clustered", func() {
-		settings := types.Settings{
-			Clustering:          "none",
-			ClusteringMethod:    "complete",
-			ConditionClustering: "none",
-			Distance:            "canberra",
-			ReadoutClustering:   "hierarchical",
-		}
-
-		expected := "- readouts were hierarchically clustered\n" +
-			"- distance metric: canberra\n" +
-			"- linkage method: complete\n"
-
-		var messages strings.Builder
-		logNoClustering(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-})
-
-var _ = Describe("Log clustering optimization", func() {
-	It("should log nothing when hierarchical clustering is not performed", func() {
-		settings := types.Settings{
-			Clustering: "biclustering",
-		}
-
-		expected := ""
-
-		var messages strings.Builder
-		logClusteringOptimization(&messages, settings)
-		Expect(messages.String()).To(Equal(expected))
-	})
-
-	Describe("all data hierarchically clustered", func() {
-		It("should log that optimization was performed", func() {
-			settings := types.Settings{
-				Clustering:         "hierarchical",
-				ClusteringOptimize: true,
-			}
-
-			expected := "- leaf clusters were optimized\n"
-
-			var messages strings.Builder
-			logClusteringOptimization(&messages, settings)
-			Expect(messages.String()).To(Equal(expected))
-		})
-
-		It("should log that optimization was not performed", func() {
-			settings := types.Settings{
-				Clustering:         "hierarchical",
-				ClusteringOptimize: false,
-			}
-
-			expected := "- leaf clusters were not optimized\n"
-
-			var messages strings.Builder
-			logClusteringOptimization(&messages, settings)
-			Expect(messages.String()).To(Equal(expected))
-		})
-	})
-
-	Describe("conditions hierarchically clustered", func() {
-		It("should log that optimization was performed", func() {
-			settings := types.Settings{
-				Clustering:          "none",
-				ClusteringOptimize:  true,
-				ConditionClustering: "hierarchical",
-			}
-
-			expected := "- leaf clusters were optimized\n"
-
-			var messages strings.Builder
-			logClusteringOptimization(&messages, settings)
-			Expect(messages.String()).To(Equal(expected))
-		})
-	})
-
-	Describe("conditions hierarchically clustered", func() {
-		It("should log that optimization was performed", func() {
-			settings := types.Settings{
-				Clustering:         "none",
-				ClusteringOptimize: true,
-				ReadoutClustering:  "hierarchical",
-			}
-
-			expected := "- leaf clusters were optimized\n"
-
-			var messages strings.Builder
-			logClusteringOptimization(&messages, settings)
-			Expect(messages.String()).To(Equal(expected))
-		})
 	})
 })

@@ -17,20 +17,23 @@ type Matrices struct {
 // Settings contains tool-specific analysis settings.
 type Settings struct {
 	// Shared settings
-	Abundance            string
-	Condition            string
-	Control              string
-	Files                []string
-	LogBase              string
-	Normalization        string
-	NormalizationReadout string
-	Png                  bool
-	PrimaryFilter        float64
-	Readout              string
-	ReadoutLength        string
-	Score                string
-	ScoreType            string
-	Type                 string
+	Abundance                    string
+	Condition                    string
+	Control                      string
+	Files                        []string
+	LogBase                      string
+	MinConditions                int
+	MockConditionAbundance       bool
+	Normalization                string
+	NormalizationReadout         string
+	ParsimoniousReadoutFiltering bool
+	Png                          bool
+	PrimaryFilter                float64
+	Readout                      string
+	ReadoutLength                string
+	Score                        string
+	ScoreType                    string
+	Type                         string
 
 	// circheatmap
 	ConditionMap   string
@@ -42,17 +45,14 @@ type Settings struct {
 	Tissues        []string
 
 	// correlation
-	AlwaysIncludePreysPassingFilter bool
-	BaitAbundanceFilter             float64
-	BaitScoreFilter                 float64
-	Correlation                     string
-	CytoscapeCutoff                 float64
-	IgnoreSourceGenes               bool
-	MinBait                         int
-	MockCountsForBait               bool
-	PreyAbundanceFilter             float64
-	PreyScoreFilter                 float64
-	UseReplicates                   bool
+	ConditionAbundanceFilter float64
+	ConditionScoreFilter     float64
+	Correlation              string
+	CytoscapeCutoff          float64
+	IgnoreSourceGenes        bool
+	ReadoutAbundanceFilter   float64
+	ReadoutScoreFilter       float64
+	UseReplicates            bool
 
 	// dotplot
 	AbundanceCap        float64

@@ -17,32 +17,32 @@ var _ = Describe("Log", func() {
 		fs.Instance = afero.NewMemMapFs()
 
 		settings := types.Settings{
-			Abundance:                       "abundanceColumn",
-			AlwaysIncludePreysPassingFilter: true,
-			BaitAbundanceFilter:             5,
-			BaitScoreFilter:                 0.01,
-			Clustering:                      "hierarchical",
-			ClusteringMethod:                "complete",
-			ClusteringOptimize:              true,
-			Condition:                       "conditionColumn",
-			Control:                         "controlColumn",
-			Correlation:                     "pearson",
-			CytoscapeCutoff:                 0.7,
-			Distance:                        "canberra",
-			Files:                           []string{"/folder/file1.txt", "file2.txt"},
-			IgnoreSourceGenes:               true,
-			LogBase:                         "2",
-			MinBait:                         2,
-			MockCountsForBait:               true,
-			Normalization:                   "total",
-			PreyAbundanceFilter:             10,
-			PreyScoreFilter:                 0.05,
-			Readout:                         "readoutColumn",
-			ReadoutLength:                   "readoutLengthColumn",
-			Score:                           "scoreColumn",
-			ScoreType:                       "lte",
-			Type:                            "correlation",
-			UseReplicates:                   true,
+			Abundance:                    "abundanceColumn",
+			Clustering:                   "hierarchical",
+			ClusteringMethod:             "complete",
+			ClusteringOptimize:           true,
+			Condition:                    "Bait",
+			ConditionAbundanceFilter:     5,
+			ConditionScoreFilter:         0.01,
+			Control:                      "controlColumn",
+			Correlation:                  "pearson",
+			CytoscapeCutoff:              0.7,
+			Distance:                     "canberra",
+			Files:                        []string{"/folder/file1.txt", "file2.txt"},
+			IgnoreSourceGenes:            true,
+			LogBase:                      "2",
+			MinConditions:                2,
+			MockConditionAbundance:       true,
+			Normalization:                "total",
+			ParsimoniousReadoutFiltering: true,
+			ReadoutAbundanceFilter:       10,
+			ReadoutScoreFilter:           0.05,
+			Readout:                      "Prey",
+			ReadoutLength:                "readoutLengthColumn",
+			Score:                        "scoreColumn",
+			ScoreType:                    "lte",
+			Type:                         "correlation",
+			UseReplicates:                true,
 		}
 
 		expected := "Analysis type: correlation\n\n" +
@@ -51,29 +51,30 @@ var _ = Describe("Log", func() {
 			"- file2.txt\n\n" +
 			"Columns used\n" +
 			"- abundance: abundanceColumn\n" +
-			"- condition: conditionColumn\n" +
-			"- readout: readoutColumn\n" +
+			"- condition: Bait\n" +
+			"- readout: Prey\n" +
 			"- score: scoreColumn\n" +
 			"- control: controlColumn\n" +
 			"- readout length: readoutLengthColumn\n\n" +
-			"Readout abundance transformations\n" +
+			"Prey abundance transformations\n" +
 			"- control subtraction was performed\n" +
-			"- readout length normalization was performed\n" +
-			"- condition normalization was performed using total abundance\n" +
-			"- data was log-transformed with base 2\n\n" +
+			"- Prey length normalization was performed\n" +
+			"- Bait normalization was performed using total abundance\n" +
+			"- data was log-transformed with base 2\n" +
+			"- abundance values were mocked for Bait(s) with missing values\n\n" +
+			"Filtering\n" +
+			"- minimum Bait requirement: 2\n" +
+			"- parsimonius Prey inclusion: true\n\n" +
 			"Abundance\n" +
-			"- minimum abundance for bait correlation: 5\n" +
-			"- minimum abundance for prey correlation: 10\n\n" +
+			"- minimum abundance for Bait correlation: 5\n" +
+			"- minimum abundance for Prey correlation: 10\n\n" +
 			"Scoring\n" +
 			"- smaller scores are better\n" +
-			"- score filter for bait correlation: 0.01\n" +
-			"- score filter for prey correlation: 0.05\n\n" +
+			"- score filter for Bait correlation: 0.01\n" +
+			"- score filter for Prey correlation: 0.05\n\n" +
 			"Correlation\n" +
 			"- correlation method: pearson\n" +
 			"- treat replicates as separate data points: true\n" +
-			"- minimum bait requirement: 2\n" +
-			"- always include preys passing filter criteria: true\n" +
-			"- mock spectral counts for bait genes: true\n" +
 			"- ignore source genes in pairwise correlations: true\n" +
 			"- cytoscape cutoff: 0.7\n\n" +
 			"Clustering\n" +
@@ -98,7 +99,7 @@ var _ = Describe("Log", func() {
 			Clustering:         "hierarchical",
 			ClusteringMethod:   "complete",
 			ClusteringOptimize: true,
-			Condition:          "conditionColumn",
+			Condition:          "Bait",
 			Control:            "controlColumn",
 			Distance:           "canberra",
 			Files:              []string{"/folder/file1.txt", "file2.txt"},
@@ -106,7 +107,7 @@ var _ = Describe("Log", func() {
 			MinAbundance:       5.00,
 			Normalization:      "total",
 			PrimaryFilter:      0.01,
-			Readout:            "readoutColumn",
+			Readout:            "Prey",
 			ReadoutLength:      "readoutLengthColumn",
 			Score:              "scoreColumn",
 			ScoreType:          "lte",
@@ -120,16 +121,19 @@ var _ = Describe("Log", func() {
 			"- file2.txt\n\n" +
 			"Columns used\n" +
 			"- abundance: abundanceColumn\n" +
-			"- condition: conditionColumn\n" +
-			"- readout: readoutColumn\n" +
+			"- condition: Bait\n" +
+			"- readout: Prey\n" +
 			"- score: scoreColumn\n" +
 			"- control: controlColumn\n" +
 			"- readout length: readoutLengthColumn\n\n" +
-			"Readout abundance transformations\n" +
+			"Prey abundance transformations\n" +
 			"- control subtraction was performed\n" +
-			"- readout length normalization was performed\n" +
-			"- condition normalization was performed using total abundance\n" +
+			"- Prey length normalization was performed\n" +
+			"- Bait normalization was performed using total abundance\n" +
 			"- data was log-transformed with base 2\n\n" +
+			"Filtering\n" +
+			"- minimum Bait requirement: 0\n" +
+			"- parsimonius Prey inclusion: false\n\n" +
 			"Abundance\n" +
 			"- minimum abundance required: 5\n" +
 			"- abundances were capped at 10 for visualization\n\n" +

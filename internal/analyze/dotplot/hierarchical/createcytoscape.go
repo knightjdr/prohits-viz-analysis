@@ -54,7 +54,7 @@ func writeFileDataCytoscape(data []map[string]string, settings types.Settings) {
 	var buffer strings.Builder
 	buffer.WriteString(fmt.Sprintf("%s\t%s\t%s\t%s\n", settings.Condition, settings.Readout, settings.Abundance, settings.Score))
 
-	filter := filter.DefineScoreFilter(settings.ScoreType, settings.PrimaryFilter)
+	filter := filter.DefineScoreFilter(settings)
 	for _, row := range data {
 		score, _ := strconv.ParseFloat(row["score"], 64)
 		if filter(score) {

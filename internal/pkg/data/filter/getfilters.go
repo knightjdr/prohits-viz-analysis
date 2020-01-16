@@ -6,8 +6,8 @@ import (
 )
 
 func getAbundanceAndScoreFilter(settings types.Settings) func(float64, float64) bool {
-	filterByAbundance := defineAbundanceFilter(settings.MinAbundance)
-	filterByScore := DefineScoreFilter(settings.ScoreType, settings.PrimaryFilter)
+	filterByAbundance := defineAbundanceFilter(settings)
+	filterByScore := DefineScoreFilter(settings)
 
 	return func(abundance, score float64) bool {
 		return filterByAbundance(abundance) && filterByScore(score)
@@ -23,22 +23,48 @@ func getConditionAndReadoutFilter(settings types.Settings) func(string, string) 
 	}
 }
 
-func defineAbundanceFilter(minAbundance float64) func(float64) bool {
+func defineAbundanceFilter(settings types.Settings) func(float64) bool {
+	minAbundance := defineMinAbundance(settings)
 	return func(abundance float64) bool {
 		return abundance >= minAbundance
 	}
 }
 
+func defineMinAbundance(settings types.Settings) float64 {
+	if settings.Type == "correlation" {
+		if settings.ConditionAbundanceFilter >= settings.ReadoutAbundanceFilter {
+			return settings.ConditionAbundanceFilter
+		}
+		return settings.ReadoutAbundanceFilter
+
+	}
+	return settings.MinAbundance
+}
+
 // DefineScoreFilter returns a function for filtering by score.
-func DefineScoreFilter(scoreType string, filter float64) func(float64) bool {
+func DefineScoreFilter(settings types.Settings) func(float64) bool {
+	primaryFilter := definePrimaryFilter(settings)
+	scoreType := settings.ScoreType
 	if scoreType == "gte" {
 		return func(score float64) bool {
-			return score >= filter
+			return score >= primaryFilter
 		}
 	}
 	return func(score float64) bool {
-		return score <= filter
+		return score <= primaryFilter
 	}
+}
+
+func definePrimaryFilter(settings types.Settings) float64 {
+	if settings.Type == "correlation" {
+		if (settings.ScoreType == "lte" && settings.ConditionScoreFilter <= settings.ReadoutScoreFilter) ||
+			(settings.ScoreType == "gte" && settings.ConditionScoreFilter >= settings.ReadoutScoreFilter) {
+			return settings.ConditionScoreFilter
+		}
+		return settings.ReadoutScoreFilter
+
+	}
+	return settings.PrimaryFilter
 }
 
 func defineNameFilter(clusteringType string, names []string) func(string) bool {

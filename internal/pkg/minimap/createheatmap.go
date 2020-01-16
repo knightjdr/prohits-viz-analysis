@@ -5,7 +5,10 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/png"
 )
 
-func createHeatmap(data *Data, dims *dimensions.Heatmap) {
+func createHeatmap(data *Data) {
+	matrix := downsampleIfNeeded(data)
+	dims := dimensions.Calculate(data.Matrices.Abundance, []string{}, []string{}, true)
+
 	image := png.InitializeHeatmap()
 	image.AbundanceCap = data.Settings.AbundanceCap
 	image.ColorSpace = data.Settings.FillColor
@@ -15,5 +18,5 @@ func createHeatmap(data *Data, dims *dimensions.Heatmap) {
 	image.MinAbundance = data.Settings.MinAbundance
 	image.Width = dims.PlotWidth
 
-	image.Draw(data.Matrices.Abundance, data.Filename)
+	image.Draw(matrix, data.Filename)
 }

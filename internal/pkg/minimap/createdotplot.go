@@ -11,7 +11,9 @@ import (
 
 var convertSVG = svg.ConvertToPNG
 
-func createDotplot(data *Data, dims *dimensions.Heatmap) {
+func createDotplot(data *Data) {
+	dims := dimensions.Calculate(data.Matrices.Abundance, []string{}, []string{}, true)
+
 	image := svg.InitializeDotplot()
 	image.AbundanceCap = data.Settings.AbundanceCap
 	image.BoundingBox = false

@@ -51,23 +51,37 @@ func logColumns(messages *strings.Builder, settings types.Settings) {
 }
 
 func logTransformations(messages *strings.Builder, settings types.Settings) {
-	messages.WriteString("Readout abundance transformations\n")
+	var buffer strings.Builder
 
 	if settings.Control != "" {
-		messages.WriteString("- control subtraction was performed\n")
+		buffer.WriteString("- control subtraction was performed\n")
 	}
 	if settings.ReadoutLength != "" {
-		messages.WriteString("- readout length normalization was performed\n")
+		buffer.WriteString(fmt.Sprintf("- %s length normalization was performed\n", settings.Readout))
 	}
 	if settings.Normalization == "total" {
-		messages.WriteString("- condition normalization was performed using total abundance\n")
+		buffer.WriteString(fmt.Sprintf("- %s normalization was performed using total abundance\n", settings.Condition))
 	}
 	if settings.Normalization == "readout" {
-		messages.WriteString(fmt.Sprintf("- condition normalization was performed using the readout: %s\n", settings.NormalizationReadout))
+		buffer.WriteString(
+			fmt.Sprintf(
+				"- %s normalization was performed using the %s: %s\n",
+				settings.Condition,
+				settings.Readout,
+				settings.NormalizationReadout,
+			),
+		)
 	}
 	if settings.LogBase != "" {
-		messages.WriteString(fmt.Sprintf("- data was log-transformed with base %s\n", settings.LogBase))
+		buffer.WriteString(fmt.Sprintf("- data was log-transformed with base %s\n", settings.LogBase))
+	}
+	if settings.MockConditionAbundance == true {
+		buffer.WriteString(fmt.Sprintf("- abundance values were mocked for %s(s) with missing values\n", settings.Condition))
 	}
 
-	messages.WriteString("\n")
+	if buffer.String() != "" {
+		messages.WriteString(fmt.Sprintf("%s abundance transformations\n", settings.Readout))
+		messages.WriteString(buffer.String())
+		messages.WriteString("\n")
+	}
 }

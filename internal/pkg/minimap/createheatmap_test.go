@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/fs"
-	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/heatmap/dimensions"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -34,15 +33,10 @@ var _ = Describe("Draw heatmap", func() {
 				MinAbundance: 0,
 			},
 		}
-		dims := &dimensions.Heatmap{
-			CellSize:   2,
-			PlotHeight: 4,
-			PlotWidth:  4,
-		}
 
-		createHeatmap(data, dims)
+		createHeatmap(data)
 
-		expected := "iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAHElEQVR4nGL6DwYMYMDEgAQYIRREEkUGEAAA//9Y1Aj/wbgG8AAAAABJRU5ErkJggg=="
+		expected := "iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAR0lEQVR4nOzWsQnAQAxDUTlk/5WdHXSQ5t7vzQNXenc3bTNT3z715WFgMBgMBoPB/9ePpiQne+2+V4PBYDAYDL4Y/gIAAP//cy8GT45ahrIAAAAASUVORK5CYII="
 
 		pngContent, _ := afero.ReadFile(fs.Instance, "test/heatmap.png")
 		actual := base64.StdEncoding.EncodeToString(pngContent)

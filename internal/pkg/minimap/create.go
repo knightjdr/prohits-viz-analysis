@@ -2,7 +2,7 @@
 package minimap
 
 import (
-	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/heatmap/dimensions"
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/downsample"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
@@ -17,14 +17,9 @@ type Data struct {
 
 // Create a minimap for a dotplot or heatmap.
 func Create(data *Data) {
-	imageType := defineImageType(data)
-	downsampleIfNeeded(data)
-
-	dims := dimensions.Calculate(data.Matrices.Abundance, []string{}, []string{}, true)
-
-	if imageType == "dotplot" {
-		createDotplot(data, dims)
+	if !downsample.Should(data.Matrices.Abundance, data.DownsampleThreshold) && data.ImageType == "dotplot" {
+		createDotplot(data)
 	} else {
-		createHeatmap(data, dims)
+		createHeatmap(data)
 	}
 }

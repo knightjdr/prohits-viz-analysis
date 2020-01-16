@@ -9,6 +9,7 @@ import (
 )
 
 func logCorrelationSettings(messages *strings.Builder, settings types.Settings) {
+	logFiltering(messages, settings)
 	logCorrelationAbundance(messages, settings)
 	logCorrelationScoring(messages, settings)
 	logCorrelationDetails(messages, settings)
@@ -19,10 +20,12 @@ func logCorrelationAbundance(messages *strings.Builder, settings types.Settings)
 	messages.WriteString(
 		fmt.Sprintf(
 			"Abundance\n"+
-				"- minimum abundance for bait correlation: %s\n"+
-				"- minimum abundance for prey correlation: %s\n\n",
-			float.RemoveTrailingZeros(settings.BaitAbundanceFilter),
-			float.RemoveTrailingZeros(settings.PreyAbundanceFilter),
+				"- minimum abundance for %s correlation: %s\n"+
+				"- minimum abundance for %s correlation: %s\n\n",
+			settings.Condition,
+			float.RemoveTrailingZeros(settings.ConditionAbundanceFilter),
+			settings.Readout,
+			float.RemoveTrailingZeros(settings.ReadoutAbundanceFilter),
 		),
 	)
 }
@@ -38,10 +41,12 @@ func logCorrelationScoring(messages *strings.Builder, settings types.Settings) {
 
 	messages.WriteString(
 		fmt.Sprintf(
-			"- score filter for bait correlation: %s\n"+
-				"- score filter for prey correlation: %s\n\n",
-			float.RemoveTrailingZeros(settings.BaitScoreFilter),
-			float.RemoveTrailingZeros(settings.PreyScoreFilter),
+			"- score filter for %s correlation: %s\n"+
+				"- score filter for %s correlation: %s\n\n",
+			settings.Condition,
+			float.RemoveTrailingZeros(settings.ConditionScoreFilter),
+			settings.Readout,
+			float.RemoveTrailingZeros(settings.ReadoutScoreFilter),
 		),
 	)
 }
@@ -52,16 +57,10 @@ func logCorrelationDetails(messages *strings.Builder, settings types.Settings) {
 			"Correlation\n"+
 				"- correlation method: %s\n"+
 				"- treat replicates as separate data points: %t\n"+
-				"- minimum bait requirement: %d\n"+
-				"- always include preys passing filter criteria: %t\n"+
-				"- mock spectral counts for bait genes: %t\n"+
 				"- ignore source genes in pairwise correlations: %t\n"+
 				"- cytoscape cutoff: %s\n\n",
 			settings.Correlation,
 			settings.UseReplicates,
-			settings.MinBait,
-			settings.AlwaysIncludePreysPassingFilter,
-			settings.MockCountsForBait,
 			settings.IgnoreSourceGenes,
 			float.RemoveTrailingZeros(settings.CytoscapeCutoff),
 		),

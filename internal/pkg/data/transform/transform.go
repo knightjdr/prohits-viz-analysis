@@ -5,6 +5,7 @@
 // 2) readout length
 // 3) normalized across conditions
 // 4) log transformation
+// 5) mock condition abundances when missing.
 package transform
 
 import "github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
@@ -15,4 +16,5 @@ func Abundance(analysis *types.Analysis) {
 	adjustByReadoutLength(analysis)
 	normalize(analysis)
 	logTransform(analysis)
+	mockConditionAbundance(analysis)
 }

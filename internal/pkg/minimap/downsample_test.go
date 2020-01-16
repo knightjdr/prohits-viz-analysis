@@ -26,8 +26,8 @@ var _ = Describe("Downsample", func() {
 			{1.6, 2.24},
 			{3.04, 2.08},
 		}
-		downsampleIfNeeded(data)
-		Expect(data.Matrices.Abundance).To(Equal(expected))
+
+		Expect(downsampleIfNeeded(data)).To(Equal(expected))
 	})
 
 	It("should not downsample matrix", func() {
@@ -52,7 +52,7 @@ var _ = Describe("Downsample", func() {
 			{4, 2, 2, 3, 1},
 			{5, 3, 4, 1, 3},
 		}
-		downsampleIfNeeded(data)
-		Expect(data.Matrices.Abundance).To(Equal(expected))
+
+		Expect(downsampleIfNeeded(data)).To(Equal(expected))
 	})
 })
