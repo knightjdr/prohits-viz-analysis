@@ -49,7 +49,7 @@ type Settings struct {
 	ConditionScoreFilter     float64
 	Correlation              string
 	CytoscapeCutoff          float64
-	IgnoreSourceGenes        bool
+	IgnoreSourceTargetPairs  bool
 	ReadoutAbundanceFilter   float64
 	ReadoutScoreFilter       float64
 	UseReplicates            bool

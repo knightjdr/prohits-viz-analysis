@@ -29,7 +29,7 @@ var _ = Describe("Log", func() {
 			CytoscapeCutoff:              0.7,
 			Distance:                     "canberra",
 			Files:                        []string{"/folder/file1.txt", "file2.txt"},
-			IgnoreSourceGenes:            true,
+			IgnoreSourceTargetPairs:      true,
 			LogBase:                      "2",
 			MinConditions:                2,
 			MockConditionAbundance:       true,

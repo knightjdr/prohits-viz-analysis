@@ -1,7 +1,7 @@
-package math
+package math_test
 
 import (
-	. "github.com/knightjdr/cmgo/pkg/math"
+	. "github.com/knightjdr/prohits-viz-analysis/pkg/math"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
