@@ -74,7 +74,7 @@ func defineNameFilter(clusteringType string, names []string) func(string) bool {
 		}
 	}
 
-	dict := slice.ConvertToMap(names)
+	dict := slice.ConvertToBoolMap(names)
 	return func(name string) bool {
 		if _, ok := dict[name]; ok {
 			return true

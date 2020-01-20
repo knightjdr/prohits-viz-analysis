@@ -7,8 +7,9 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/sort"
 )
 
+// Kendall performs correlation using the Kendall statistic.
 // Modified from https://github.com/scipy/scipy/blob/v1.4.1/scipy/stats/stats.py#L3974-L4169
-func kendall(dataX, dataY []float64) float64 {
+func Kendall(dataX, dataY []float64) float64 {
 	n := int(goMath.Min(float64(len(dataX)), float64(len(dataY))))
 	x := dataX[0:n]
 	y := dataY[0:n]

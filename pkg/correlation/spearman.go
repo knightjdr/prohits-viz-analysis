@@ -6,9 +6,9 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/sort"
 )
 
+// Spearman performs correlation using the Pearson statistic. For tied ranks, the average method is used.
 // Modified from https://github.com/scipy/scipy/blob/v0.14.0/scipy/stats/stats.py#L2608
-// For tied ranks, the average method is used.
-func spearman(dataX, dataY []float64) float64 {
+func Spearman(dataX, dataY []float64) float64 {
 	n := int(math.Min(float64(len(dataX)), float64(len(dataY))))
 	x := dataX[0:n]
 	y := dataY[0:n]
@@ -16,7 +16,7 @@ func spearman(dataX, dataY []float64) float64 {
 	xRanks := rankArray(x)
 	yRanks := rankArray(y)
 
-	return pearson(xRanks, yRanks)
+	return Pearson(xRanks, yRanks)
 }
 
 func rankArray(x []float64) []float64 {

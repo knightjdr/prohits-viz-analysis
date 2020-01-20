@@ -25,7 +25,7 @@ var _ = Describe("Kendall method", func() {
 		expected := []float64{1, -1, -0.2}
 
 		for i, test := range tests {
-			Expect(kendall(test["x"], test["y"])).To(BeNumerically("~", expected[i], 0.001))
+			Expect(Kendall(test["x"], test["y"])).To(BeNumerically("~", expected[i], 0.001))
 		}
 	})
 })

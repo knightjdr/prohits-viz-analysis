@@ -17,6 +17,18 @@ var _ = Describe("Convert to map", func() {
 			"c": true,
 		}
 
-		Expect(ConvertToMap(s)).To(Equal(expected))
+		Expect(ConvertToBoolMap(s)).To(Equal(expected))
+	})
+
+	It("should conver a slice of strings to a map of ints", func() {
+		s := []string{"a", "b", "c"}
+
+		expected := map[string]int{
+			"a": 0,
+			"b": 1,
+			"c": 2,
+		}
+
+		Expect(ConvertToIntMap(s)).To(Equal(expected))
 	})
 })

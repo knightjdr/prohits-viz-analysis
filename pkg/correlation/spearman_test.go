@@ -25,7 +25,7 @@ var _ = Describe("Spearman method", func() {
 		expected := []float64{1, -1, -0.5}
 
 		for i, test := range tests {
-			Expect(spearman(test["x"], test["y"])).To(BeNumerically("~", expected[i], 0.001))
+			Expect(Spearman(test["x"], test["y"])).To(BeNumerically("~", expected[i], 0.001))
 		}
 	})
 })
