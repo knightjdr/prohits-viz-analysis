@@ -93,19 +93,26 @@ func createDistanceMinimap(matrix [][]float64, settings types.Settings, title st
 
 func createDistanceInteractive(matrix [][]float64, labels []string, settings types.Settings, title string) {
 	interactiveData := &interactive.HeatmapData{
-		Filename:  fmt.Sprintf("interactive/%[1]s-%[1]s.json", title),
-		ImageType: "heatmap",
+		AnalysisType: "heatmap",
+		Filename:     fmt.Sprintf("interactive/%[1]s-%[1]s.json", title),
 		Matrices: &types.Matrices{
 			Abundance:  matrix,
 			Conditions: labels,
 			Readouts:   labels,
 		},
-		Minimap:  fmt.Sprintf("minimap/%s.png", title),
-		Settings: settings,
+		Minimap:    fmt.Sprintf("minimap/%s.png", title),
+		Parameters: settings,
+		Settings: map[string]interface{}{
+			"abundanceCap":  1,
+			"fillColor":     settings.FillColor,
+			"imageType":     "heatmap",
+			"invertColor":   true,
+			"minAbundance":  0,
+			"primaryFilter": 0,
+		},
 	}
-	interactiveData.Settings.AbundanceCap = 1
-	interactiveData.Settings.InvertColor = true
-	interactiveData.Settings.MinAbundance = 0
+	interactiveData.Parameters.XLabel = title
+	interactiveData.Parameters.YLabel = title
 
 	interactive.CreateHeatmap(interactiveData)
 }

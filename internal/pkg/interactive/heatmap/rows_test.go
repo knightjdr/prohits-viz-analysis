@@ -16,7 +16,7 @@ var _ = Describe("Rows", func() {
 		}
 
 		data := &Data{
-			ImageType: "heatmap",
+			AnalysisType: "heatmap",
 			Matrices: &types.Matrices{
 				Abundance: [][]float64{
 					{25, 5, 50.2},
@@ -65,7 +65,7 @@ var _ = Describe("Rows", func() {
 		}
 
 		data := &Data{
-			ImageType: "dotplot",
+			AnalysisType: "dotplot",
 			Matrices: &types.Matrices{
 				Abundance: [][]float64{
 					{25, 5, 50.2},

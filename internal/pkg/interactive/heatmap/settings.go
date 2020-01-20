@@ -3,26 +3,22 @@ package heatmap
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 
-	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/mapf"
 )
 
-func parseSettings(imageType string, settings types.Settings) string {
+func parseSettings(settings map[string]interface{}) string {
 	imageSettings := map[string]map[string]map[string]interface{}{
 		"main": map[string]map[string]interface{}{
-			"current": map[string]interface{}{
-				"abundanceCap":  settings.AbundanceCap,
-				"fillColor":     settings.FillColor,
-				"imageType":     imageType,
-				"invertColor":   settings.InvertColor,
-				"minAbundance":  settings.MinAbundance,
-				"primaryFilter": settings.PrimaryFilter,
-			},
+			"current": map[string]interface{}{},
 		},
 	}
-	if imageType == "dotplot" {
-		imageSettings["main"]["current"]["edgeColor"] = settings.EdgeColor
-		imageSettings["main"]["current"]["secondaryFilter"] = settings.SecondaryFilter
+
+	keys := mapf.KeysStringInterface(settings)
+	sort.Strings(keys)
+	for _, key := range keys {
+		imageSettings["main"]["current"][key] = settings[key]
 	}
 
 	jsonString, _ := json.Marshal(imageSettings)

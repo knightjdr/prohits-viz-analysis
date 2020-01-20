@@ -127,18 +127,6 @@ var _ = Describe("Define primary filter", func() {
 
 	It("should return ConditionScoreFilter value when lte and Type is correlation", func() {
 		settings := types.Settings{
-			ConditionScoreFilter: 0.02,
-			PrimaryFilter:        0.01,
-			ReadoutScoreFilter:   0.03,
-			ScoreType:            "lte",
-			Type:                 "correlation",
-		}
-
-		Expect(definePrimaryFilter(settings)).To(Equal(0.02))
-	})
-
-	It("should return ReadoutScoreFilter value when lte and Type is correlation", func() {
-		settings := types.Settings{
 			ConditionScoreFilter: 0.04,
 			PrimaryFilter:        0.01,
 			ReadoutScoreFilter:   0.02,
@@ -146,31 +134,43 @@ var _ = Describe("Define primary filter", func() {
 			Type:                 "correlation",
 		}
 
-		Expect(definePrimaryFilter(settings)).To(Equal(0.02))
-	})
-
-	It("should return ConditionScoreFilter value when gte and Type is correlation", func() {
-		settings := types.Settings{
-			ConditionScoreFilter: 0.04,
-			PrimaryFilter:        0.01,
-			ReadoutScoreFilter:   0.03,
-			ScoreType:            "gte",
-			Type:                 "correlation",
-		}
-
 		Expect(definePrimaryFilter(settings)).To(Equal(0.04))
 	})
 
-	It("should return ReadoutScoreFilter value when gte and Type is correlation", func() {
+	It("should return ReadoutScoreFilter value when lte and Type is correlation", func() {
 		settings := types.Settings{
 			ConditionScoreFilter: 0.02,
 			PrimaryFilter:        0.01,
 			ReadoutScoreFilter:   0.03,
+			ScoreType:            "lte",
+			Type:                 "correlation",
+		}
+
+		Expect(definePrimaryFilter(settings)).To(Equal(0.03))
+	})
+
+	It("should return ConditionScoreFilter value when gte and Type is correlation", func() {
+		settings := types.Settings{
+			ConditionScoreFilter: 0.03,
+			PrimaryFilter:        0.01,
+			ReadoutScoreFilter:   0.04,
 			ScoreType:            "gte",
 			Type:                 "correlation",
 		}
 
 		Expect(definePrimaryFilter(settings)).To(Equal(0.03))
+	})
+
+	It("should return ReadoutScoreFilter value when gte and Type is correlation", func() {
+		settings := types.Settings{
+			ConditionScoreFilter: 0.03,
+			PrimaryFilter:        0.01,
+			ReadoutScoreFilter:   0.02,
+			ScoreType:            "gte",
+			Type:                 "correlation",
+		}
+
+		Expect(definePrimaryFilter(settings)).To(Equal(0.02))
 	})
 })
 

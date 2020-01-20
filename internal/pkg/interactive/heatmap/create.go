@@ -17,8 +17,8 @@ func Create(data *Data) {
 	writeString := write(file)
 
 	writeString("{\n")
-	writeString(fmt.Sprintf("\t%s,\n", parseParameters(data.ImageType, data.Settings)))
-	writeString(fmt.Sprintf("\t%s,\n", parseSettings(data.ImageType, data.Settings)))
+	writeString(fmt.Sprintf("\t%s,\n", parseParameters(data.AnalysisType, data.Parameters)))
+	writeString(fmt.Sprintf("\t%s,\n", parseSettings(data.Settings)))
 	writeString(fmt.Sprintf("\t%s,\n", parseColumns(data.Matrices.Conditions)))
 	parseRows(data, writeString)
 	writeString(fmt.Sprintf("\t%s\n", parseMinimap(data.Minimap)))

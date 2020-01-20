@@ -38,7 +38,7 @@ func defineRowStartWriter(writeString func(string)) func(string) {
 func defineRowWriter(data *Data, writeString func(string)) func(int) {
 	writeColumnTerminator := defineColumnTerminatorWriter(writeString, len(data.Matrices.Abundance[0]))
 
-	if data.ImageType == "dotplot" {
+	if data.AnalysisType == "dotplot" {
 		return func(rowIndex int) {
 			for columnIndex := range data.Matrices.Abundance[rowIndex] {
 				abundance := data.Matrices.Abundance[rowIndex][columnIndex]

@@ -31,7 +31,7 @@ var _ = Describe("Filter by abundance and score", func() {
 			map[string]string{"abundance": "9", "readout": "readoutE", "score": "0.06"},
 		}
 
-		filterByAbundanceAndScore(analysis)
+		FilterByAbundanceAndScore(analysis)
 		Expect(analysis.Data).To(Equal(expected))
 	})
 })

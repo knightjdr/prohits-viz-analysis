@@ -74,12 +74,25 @@ func createDotplotMinimap(data *SortedData, settings types.Settings) {
 
 func createDotplotInteractive(data *SortedData, settings types.Settings) {
 	interactiveData := &interactive.HeatmapData{
-		Filename:  "interactive/dotplot.json",
-		ImageType: "dotplot",
-		Matrices:  data.Matrices,
-		Minimap:   "minimap/dotplot.png",
-		Settings:  settings,
+		AnalysisType: "dotplot",
+		Filename:     "interactive/dotplot.json",
+		Matrices:     data.Matrices,
+		Minimap:      "minimap/dotplot.png",
+		Parameters:   settings,
+		Settings: map[string]interface{}{
+			"abundanceCap":    settings.AbundanceCap,
+			"edgeColor":       settings.EdgeColor,
+			"fillColor":       settings.FillColor,
+			"imageType":       "dotplot",
+			"invertColor":     settings.InvertColor,
+			"minAbundance":    settings.MinAbundance,
+			"primaryFilter":   settings.PrimaryFilter,
+			"secondaryFilter": settings.SecondaryFilter,
+		},
 	}
+	interactiveData.Parameters.XLabel = settings.Condition
+	interactiveData.Parameters.YLabel = settings.Readout
+
 	interactive.CreateHeatmap(interactiveData)
 }
 

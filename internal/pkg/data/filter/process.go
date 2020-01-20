@@ -8,5 +8,5 @@ import (
 // Process filters first by condition and readout, then score.
 func Process(analysis *types.Analysis) {
 	filterByConditionsAndReadouts(analysis)
-	filterByAbundanceAndScore(analysis)
+	FilterByAbundanceAndScore(analysis)
 }

@@ -3,6 +3,7 @@ package analyze
 
 import (
 	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/arguments"
+	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/correlation"
 	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/dotplot"
 	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/settings"
 	"github.com/knightjdr/prohits-viz-analysis/internal/analyze/validate/data"
@@ -23,6 +24,8 @@ func Run() {
 	settings.Log(analysis.Settings)
 
 	switch analysis.Settings.Type {
+	case "correlation":
+		correlation.Generate(analysis)
 	case "dotplot":
 		dotplot.Generate(analysis)
 	}

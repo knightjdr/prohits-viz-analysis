@@ -59,9 +59,9 @@ func definePrimaryFilter(settings types.Settings) float64 {
 	if settings.Type == "correlation" {
 		if (settings.ScoreType == "lte" && settings.ConditionScoreFilter <= settings.ReadoutScoreFilter) ||
 			(settings.ScoreType == "gte" && settings.ConditionScoreFilter >= settings.ReadoutScoreFilter) {
-			return settings.ConditionScoreFilter
+			return settings.ReadoutScoreFilter
 		}
-		return settings.ReadoutScoreFilter
+		return settings.ConditionScoreFilter
 
 	}
 	return settings.PrimaryFilter

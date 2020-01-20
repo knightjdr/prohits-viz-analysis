@@ -9,6 +9,21 @@ import (
 )
 
 var _ = Describe("Keys", func() {
+	Describe("Map of type map[string]interface", func() {
+		It("should return keys from map[string]interface", func() {
+			m := map[string]interface{}{
+				"a": 0.01,
+				"d": 0.05,
+				"c": 2,
+			}
+
+			actual := KeysStringInterface(m)
+			sort.Strings(actual)
+			expected := []string{"a", "c", "d"}
+			Expect(actual).To(Equal(expected), "should return integer keys")
+		})
+	})
+
 	Describe("Map of type map[int]bool", func() {
 		It("should return integer keys", func() {
 			m := map[int]bool{

@@ -13,9 +13,11 @@ func Validate(analysis *types.Analysis) {
 	switch analysis.Settings.Type {
 	case "circheatmap":
 		validateCircHeatmapSettings(analysis)
+	case "correlation":
+		validateCorrelationSettings(analysis)
 	case "dotplot":
 		validateDotplotSettings(analysis)
 	default:
-		log.WriteAndExit(fmt.Sprintf("Unknown anaylsis type: %s", analysis.Settings.Type))
+		log.WriteAndExit(fmt.Sprintf("Unknown analysis type: %s", analysis.Settings.Type))
 	}
 }
