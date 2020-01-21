@@ -19,11 +19,11 @@ func cluster(corrData *correlationData, settings types.Settings) {
 		corrData.dendrogram = hclust.Optimize(corrData.dendrogram, distance, ignoreNodes)
 	}
 
-	tree, err := hclust.Tree(corrData.dendrogram, corrData.labels)
+	corrData.tree, err = hclust.Tree(corrData.dendrogram, corrData.labels)
 	log.CheckError(err, true)
 
-	corrData.matrix, _ = hclust.Sort(corrData.matrix, corrData.labels, tree.Order, "column")
-	corrData.matrix, _ = hclust.Sort(corrData.matrix, corrData.labels, tree.Order, "row")
+	corrData.matrix, _ = hclust.Sort(corrData.matrix, corrData.labels, corrData.tree.Order, "column")
+	corrData.matrix, _ = hclust.Sort(corrData.matrix, corrData.labels, corrData.tree.Order, "row")
 
-	corrData.sortedLabels = tree.Order
+	corrData.sortedLabels = corrData.tree.Order
 }

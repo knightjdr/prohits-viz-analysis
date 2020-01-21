@@ -8,6 +8,7 @@ import (
 // ConversionSettings stores parameters for converting from a table to a matrix.
 type ConversionSettings struct {
 	CalculateRatios bool
+	KeepReps        bool
 	Resort          bool
 	ScoreType       string
 }
@@ -17,7 +18,7 @@ type ConversionSettings struct {
 // both the abundance and score column, and can generate row ratios as well if requested.
 // It also returns lists of the conditions and readouts.
 func FromTable(table *[]map[string]string, settings ConversionSettings) *types.Matrices {
-	data := parseTable(table, settings.ScoreType)
+	data := parseTable(table, settings)
 
 	matrices := &types.Matrices{
 		Conditions: sortLabels(data.conditions, settings.Resort),

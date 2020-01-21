@@ -3,9 +3,11 @@ package correlation
 import (
 	"fmt"
 
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/downsample"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/heatmap/dimensions"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/interactive"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/minimap"
+	heatmapPNG "github.com/knightjdr/prohits-viz-analysis/internal/pkg/png/heatmap"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/svg"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/svg/heatmap"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/treeview"
@@ -19,6 +21,9 @@ func createCorrelationImages(conditionData, readoutData *correlationData, settin
 	createCorrelationLegend(settings, settings.Condition)
 	createCorrelationLegend(settings, settings.Readout)
 
+	createPNG(conditionData.matrix, settings, settings.Condition)
+	createPNG(readoutData.matrix, settings, settings.Readout)
+
 	createCorrelationMinimap(conditionData, settings, settings.Condition)
 	createCorrelationMinimap(readoutData, settings, settings.Readout)
 
@@ -27,7 +32,6 @@ func createCorrelationImages(conditionData, readoutData *correlationData, settin
 
 	createCorrelationTreeview(conditionData, settings, settings.Condition)
 	createCorrelationTreeview(readoutData, settings, settings.Readout)
-
 }
 
 func createCorrelationSVG(data *correlationData, settings types.Settings, label string) {
@@ -56,8 +60,10 @@ func createCorrelationSVG(data *correlationData, settings types.Settings, label 
 }
 
 func createCorrelationLegend(settings types.Settings, label string) {
+	filename := fmt.Sprintf("%[1]s-%[1]s-legend", label)
+
 	legendData := heatmap.Legend{
-		Filename:  fmt.Sprintf("svg/%[1]s-%[1]s.svg", label),
+		Filename:  fmt.Sprintf("svg/%s.svg", filename),
 		NumColors: 101,
 		Settings: types.Settings{
 			AbundanceCap: 1,
@@ -68,6 +74,32 @@ func createCorrelationLegend(settings types.Settings, label string) {
 		Title: fmt.Sprintf("Correlation - %s", label),
 	}
 	heatmap.CreateLegend(legendData)
+
+	if settings.Png {
+		svg.ConvertToPNG(fmt.Sprintf("svg/%s.svg", filename), fmt.Sprintf("png/%s.png", filename), "white")
+	}
+}
+
+func createPNG(matrix [][]float64, settings types.Settings, label string) {
+	outfile := fmt.Sprintf("png/%[1]s-%[1]s.png", label)
+
+	if downsample.Should(matrix, 0) {
+		downsampled := downsample.Matrix(matrix, 0)
+		dims := dimensions.Calculate(downsampled, []string{}, []string{}, false)
+
+		heatmap := heatmapPNG.Initialize()
+		heatmap.AbundanceCap = 1
+		heatmap.CellSize = dims.CellSize
+		heatmap.ColorSpace = settings.FillColor
+		heatmap.Height = dims.PlotHeight
+		heatmap.Invert = settings.InvertColor
+		heatmap.MinAbundance = -1
+		heatmap.Width = dims.PlotWidth
+
+		heatmap.Draw(downsampled, outfile)
+	} else {
+		svg.ConvertToPNG(fmt.Sprintf("svg/%[1]s-%[1]s.svg", label), outfile, "white")
+	}
 }
 
 func createCorrelationMinimap(data *correlationData, settings types.Settings, label string) {

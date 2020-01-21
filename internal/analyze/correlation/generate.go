@@ -2,6 +2,9 @@
 package correlation
 
 import (
+	"path/filepath"
+
+	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/fs"
 	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/types"
 )
 
@@ -15,6 +18,9 @@ func Generate(analysis *types.Analysis) {
 	cluster(corrReadouts, analysis.Settings)
 
 	createCorrelationImages(corrConditions, corrReadouts, analysis.Settings)
+	createCytoscapeFiles(corrConditions, corrReadouts, analysis.Settings)
+	writeTrees(corrConditions, corrReadouts, analysis.Settings)
+	createBaitPreyImages(analysis, corrConditions, corrReadouts)
 
-	// fs.Instance.Remove(filepath.Join(".", "minimap"))
+	fs.Instance.Remove(filepath.Join(".", "minimap"))
 }

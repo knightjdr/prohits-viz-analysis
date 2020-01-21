@@ -13,6 +13,7 @@ type correlationData struct {
 	labels       []string
 	matrix       [][]float64
 	sortedLabels []string
+	tree hclust.TreeLayout
 }
 
 func correlateConditions(analysis *types.Analysis) *correlationData {
@@ -61,6 +62,7 @@ func correlateReadouts(analysis *types.Analysis) *correlationData {
 
 	matrixSettings := convert.ConversionSettings{
 		CalculateRatios: false,
+		KeepReps:        true,
 		ScoreType:       analysis.Settings.ScoreType,
 	}
 	matrices := convert.FromTable(&analysis.Data, matrixSettings)
