@@ -62,9 +62,9 @@ type Settings struct {
 	ClusteringOptimize  bool
 	ConditionClustering string
 	ConditionList       []string
+	Distance            string
 	EdgeColor           string
 	FillColor           string
-	Distance            string
 	InvertColor         bool
 	MinAbundance        float64
 	ReadoutClustering   string
