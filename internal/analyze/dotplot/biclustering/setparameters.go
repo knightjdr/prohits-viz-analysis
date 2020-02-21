@@ -23,21 +23,23 @@ func setParameters(noConditions int, settings types.Settings) {
 				"rho 1.0\n"+
 				"gamma 1.0\n"+
 				"nburn 50\n"+
-				"niter 500\n", noConditions,
+				"niter 500\n",
+			noConditions,
 		)
 	} else {
 		biclustParameters = fmt.Sprintln(
-			"np 10\n" +
-				"nb 100\n" +
-				"a 1.0\n" +
-				"b 1.0\n" +
-				"lambda 0.0\n" +
-				"nu 25.0\n" +
-				"alpha 1.0\n" +
-				"rho 1.0\n" +
-				"gamma 1.0\n" +
-				"nburn 5000\n" +
+			"np 10\n"+
+				"nb %d\n"+
+				"a 1.0\n"+
+				"b 1.0\n"+
+				"lambda 0.0\n"+
+				"nu 25.0\n"+
+				"alpha 1.0\n"+
+				"rho 1.0\n"+
+				"gamma 1.0\n"+
+				"nburn 5000\n"+
 				"niter 10000\n",
+			noConditions,
 		)
 	}
 	afero.WriteFile(fs.Instance, "biclustering/parameters.txt", []byte(biclustParameters), 0644)
