@@ -13,7 +13,7 @@ type correlationData struct {
 	labels       []string
 	matrix       [][]float64
 	sortedLabels []string
-	tree hclust.TreeLayout
+	tree         hclust.TreeLayout
 }
 
 func correlateConditions(analysis *types.Analysis) *correlationData {
@@ -34,12 +34,12 @@ func correlateConditions(analysis *types.Analysis) *correlationData {
 	matrices := convert.FromTable(&analysis.Data, matrixSettings)
 
 	corrData := correlation.Data{
-		Columns:                 matrices.Conditions,
-		Dimension:               "column",
-		IgnoreSourceTargetPairs: analysis.Settings.IgnoreSourceTargetPairs,
-		Matrix:                  matrices.Abundance,
-		Method:                  analysis.Settings.Correlation,
-		Rows:                    matrices.Readouts,
+		Columns:                   matrices.Conditions,
+		Dimension:                 "column",
+		IgnoreSourceTargetMatches: analysis.Settings.IgnoreSourceTargetMatches,
+		Matrix:                    matrices.Abundance,
+		Method:                    analysis.Settings.Correlation,
+		Rows:                      matrices.Readouts,
 	}
 	correlationMatrix := corrData.Correlate()
 
@@ -68,12 +68,12 @@ func correlateReadouts(analysis *types.Analysis) *correlationData {
 	matrices := convert.FromTable(&analysis.Data, matrixSettings)
 
 	corrData := correlation.Data{
-		Columns:                 matrices.Readouts,
-		Dimension:               "row",
-		IgnoreSourceTargetPairs: analysis.Settings.IgnoreSourceTargetPairs,
-		Matrix:                  matrices.Abundance,
-		Method:                  analysis.Settings.Correlation,
-		Rows:                    matrices.Readouts,
+		Columns:                   matrices.Readouts,
+		Dimension:                 "row",
+		IgnoreSourceTargetMatches: analysis.Settings.IgnoreSourceTargetMatches,
+		Matrix:                    matrices.Abundance,
+		Method:                    analysis.Settings.Correlation,
+		Rows:                      matrices.Readouts,
 	}
 	correlationMatrix := corrData.Correlate()
 

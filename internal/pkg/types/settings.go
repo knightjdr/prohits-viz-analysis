@@ -45,14 +45,14 @@ type Settings struct {
 	Tissues        []string
 
 	// correlation
-	ConditionAbundanceFilter float64
-	ConditionScoreFilter     float64
-	Correlation              string
-	CytoscapeCutoff          float64
-	IgnoreSourceTargetPairs  bool
-	ReadoutAbundanceFilter   float64
-	ReadoutScoreFilter       float64
-	UseReplicates            bool
+	ConditionAbundanceFilter  float64
+	ConditionScoreFilter      float64
+	Correlation               string
+	CytoscapeCutoff           float64
+	IgnoreSourceTargetMatches bool
+	ReadoutAbundanceFilter    float64
+	ReadoutScoreFilter        float64
+	UseReplicates             bool
 
 	// dotplot
 	AbundanceCap        float64

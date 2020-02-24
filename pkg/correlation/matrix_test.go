@@ -106,8 +106,8 @@ var _ = Describe("Correlation", func() {
 
 	It("should calculate correlation coefficient and ignore source target pairs", func() {
 		data := Data{
-			Columns:                 []string{"a", "b", "c", "d", "e"},
-			IgnoreSourceTargetPairs: true,
+			Columns:                   []string{"a", "b", "c", "d", "e"},
+			IgnoreSourceTargetMatches: true,
 			Matrix: [][]float64{
 				[]float64{1, 5, 10, 10, 15},
 				[]float64{2, 10, 20, 12, 8},

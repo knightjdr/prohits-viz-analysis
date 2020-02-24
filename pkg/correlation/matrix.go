@@ -10,12 +10,12 @@ import (
 
 // Data correlation settings.
 type Data struct {
-	Columns                 []string
-	Dimension               string // Either "column" or "row" (default).
-	IgnoreSourceTargetPairs bool
-	Matrix                  [][]float64
-	Method                  string
-	Rows                    []string
+	Columns                   []string
+	Dimension                 string // Either "column" or "row" (default).
+	IgnoreSourceTargetMatches bool
+	Matrix                    [][]float64
+	Method                    string
+	Rows                      []string
 }
 
 // Correlate calculates the correlation between the columns or rows.
@@ -30,7 +30,7 @@ func (data *Data) Correlate() [][]float64 {
 	}
 
 	calculateStatistic := getStatistic(data.Method)
-	filterData := getDataFilter(matrix, data.IgnoreSourceTargetPairs, columns, rows)
+	filterData := getDataFilter(matrix, data.IgnoreSourceTargetMatches, columns, rows)
 
 	for i := 0; i < n; i++ {
 		correlation[i][i] = 1
@@ -63,8 +63,8 @@ func getStatistic(method string) func([]float64, []float64) float64 {
 	}
 }
 
-func getDataFilter(matrix [][]float64, ignoreSourceTargetPairs bool, columns, rows []string) func(int, int) ([]float64, []float64) {
-	if ignoreSourceTargetPairs {
+func getDataFilter(matrix [][]float64, IgnoreSourceTargetMatches bool, columns, rows []string) func(int, int) ([]float64, []float64) {
+	if IgnoreSourceTargetMatches {
 		columnMap := slice.ConvertToIntMap(columns)
 
 		addIndex := func(indices *[]int, name string) {

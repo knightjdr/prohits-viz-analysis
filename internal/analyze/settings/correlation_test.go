@@ -20,7 +20,7 @@ var _ = Describe("Log correlation settings", func() {
 			Correlation:                  "pearson",
 			CytoscapeCutoff:              0.7,
 			Distance:                     "canberra",
-			IgnoreSourceTargetPairs:      true,
+			IgnoreSourceTargetMatches:    true,
 			MinConditions:                2,
 			MockConditionAbundance:       true,
 			ParsimoniousReadoutFiltering: true,
@@ -120,10 +120,10 @@ var _ = Describe("Log correlation score settings", func() {
 var _ = Describe("Log correlation-specifc settings", func() {
 	It("should log settings", func() {
 		settings := types.Settings{
-			Correlation:             "pearson",
-			UseReplicates:           true,
-			IgnoreSourceTargetPairs: true,
-			CytoscapeCutoff:         0.7,
+			Correlation:               "pearson",
+			UseReplicates:             true,
+			IgnoreSourceTargetMatches: true,
+			CytoscapeCutoff:           0.7,
 		}
 
 		expected := "Correlation\n" +

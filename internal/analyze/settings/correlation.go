@@ -61,7 +61,7 @@ func logCorrelationDetails(messages *strings.Builder, settings types.Settings) {
 				"- cytoscape cutoff: %s\n\n",
 			settings.Correlation,
 			settings.UseReplicates,
-			settings.IgnoreSourceTargetPairs,
+			settings.IgnoreSourceTargetMatches,
 			float.RemoveTrailingZeros(settings.CytoscapeCutoff),
 		),
 	)
