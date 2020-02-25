@@ -97,23 +97,25 @@ func createConditionReadoutLegend(settings types.Settings) {
 }
 
 func createConditionReadoutPNG(matrix [][]float64, settings types.Settings) {
-	outfile := fmt.Sprintf("png/%s-%s.png", settings.Condition, settings.Readout)
+	if settings.Png {
+		outfile := fmt.Sprintf("png/%s-%s.png", settings.Condition, settings.Readout)
 
-	if downsample.Should(matrix, 0) {
-		downsampled := downsample.Matrix(matrix, 0)
-		dims := dimensions.Calculate(downsampled, []string{}, []string{}, false)
+		if downsample.Should(matrix, 0) {
+			downsampled := downsample.Matrix(matrix, 0)
+			dims := dimensions.Calculate(downsampled, []string{}, []string{}, false)
 
-		heatmap := heatmapPNG.Initialize()
-		heatmap.AbundanceCap = settings.AbundanceCap
-		heatmap.CellSize = dims.CellSize
-		heatmap.ColorSpace = "blue"
-		heatmap.Height = dims.PlotHeight
-		heatmap.MinAbundance = settings.ReadoutAbundanceFilter
-		heatmap.Width = dims.PlotWidth
+			heatmap := heatmapPNG.Initialize()
+			heatmap.AbundanceCap = settings.AbundanceCap
+			heatmap.CellSize = dims.CellSize
+			heatmap.ColorSpace = "blue"
+			heatmap.Height = dims.PlotHeight
+			heatmap.MinAbundance = settings.ReadoutAbundanceFilter
+			heatmap.Width = dims.PlotWidth
 
-		heatmap.Draw(downsampled, outfile)
-	} else {
-		svg.ConvertToPNG(fmt.Sprintf("svg/%s-%s.svg", settings.Condition, settings.Readout), outfile, "white")
+			heatmap.Draw(downsampled, outfile)
+		} else {
+			svg.ConvertToPNG(fmt.Sprintf("svg/%s-%s.svg", settings.Condition, settings.Readout), outfile, "white")
+		}
 	}
 }
 

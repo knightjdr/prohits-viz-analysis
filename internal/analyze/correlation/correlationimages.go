@@ -21,8 +21,10 @@ func createCorrelationImages(conditionData, readoutData *correlationData, settin
 	createCorrelationLegend(settings, settings.Condition)
 	createCorrelationLegend(settings, settings.Readout)
 
-	createPNG(conditionData.matrix, settings, settings.Condition)
-	createPNG(readoutData.matrix, settings, settings.Readout)
+	if settings.Png {
+		createPNG(conditionData.matrix, settings, settings.Condition)
+		createPNG(readoutData.matrix, settings, settings.Readout)
+	}
 
 	createCorrelationMinimap(conditionData, settings, settings.Condition)
 	createCorrelationMinimap(readoutData, settings, settings.Readout)

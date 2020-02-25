@@ -72,7 +72,7 @@ func logTransformations(messages *strings.Builder, settings types.Settings) {
 			),
 		)
 	}
-	if settings.LogBase != "" {
+	if settings.LogBase != "" && settings.LogBase != "none" {
 		buffer.WriteString(fmt.Sprintf("- data was log-transformed with base %s\n", settings.LogBase))
 	}
 	if settings.MockConditionAbundance == true {
