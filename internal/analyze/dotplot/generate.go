@@ -24,5 +24,5 @@ func Generate(analysis *types.Analysis) {
 		hierarchical.Cluster(analysis)
 	}
 
-	fs.Instance.Remove(filepath.Join(".", "minimap"))
+	fs.Instance.RemoveAll(filepath.Join(".", "minimap"))
 }
