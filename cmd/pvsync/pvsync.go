@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/knightjdr/prohits-viz-analysis/internal/sync"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/sync"
 )
 
 func main() {

@@ -5,8 +5,8 @@ import (
 	gocsv "encoding/csv"
 	"io"
 
-	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/fs"
-	"github.com/knightjdr/prohits-viz-analysis/internal/pkg/log"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/fs"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/log"
 	"github.com/spf13/afero"
 )
 

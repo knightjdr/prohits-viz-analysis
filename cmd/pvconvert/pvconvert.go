@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/knightjdr/prohits-viz-analysis/internal/convert"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/convert"
 )
 
 func main() {
