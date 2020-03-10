@@ -7,7 +7,7 @@ import (
 
 func createHeatmap(data *Data) {
 	matrix := downsampleIfNeeded(data)
-	dims := dimensions.Calculate(data.Matrices.Abundance, []string{}, []string{}, true)
+	dims := dimensions.Calculate(matrix, []string{}, []string{}, true)
 
 	image := png.InitializeHeatmap()
 	image.AbundanceCap = data.Settings.AbundanceCap
