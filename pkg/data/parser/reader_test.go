@@ -16,8 +16,8 @@ var _ = Describe("CSV reader", func() {
 		parsed, _ := r2.ReadAll()
 
 		expected := [][]string{
-			[]string{"column1	column2	column3"},
-			[]string{"a	b	c"},
+			{"column1	column2	column3"},
+			{"a	b	c"},
 		}
 		Expect(parsed).To(Equal(expected))
 	})
@@ -29,8 +29,8 @@ var _ = Describe("CSV reader", func() {
 		parsed, _ := r2.ReadAll()
 
 		expected := [][]string{
-			[]string{"column1	column2	column3"},
-			[]string{"a	b	c"},
+			{"column1	column2	column3"},
+			{"a	b	c"},
 		}
 		Expect(parsed).To(Equal(expected))
 	})
@@ -42,8 +42,8 @@ var _ = Describe("CSV reader", func() {
 		parsed, _ := r2.ReadAll()
 
 		expected := [][]string{
-			[]string{"column1	column2	column3"},
-			[]string{"a	b	c"},
+			{"column1	column2	column3"},
+			{"a	b	c"},
 		}
 		Expect(parsed).To(Equal(expected))
 	})
