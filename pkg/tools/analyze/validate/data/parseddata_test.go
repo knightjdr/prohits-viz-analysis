@@ -10,7 +10,7 @@ import (
 var _ = Describe("Validate parsed data length", func() {
 	It("should return nil when there is data", func() {
 		data := []map[string]string{
-			map[string]string{"condition": "conditionA", "readout": "readoutA"},
+			{"condition": "conditionA", "readout": "readoutA"},
 		}
 
 		Expect(confirmParsedData(data)).To(BeNil())

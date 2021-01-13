@@ -16,10 +16,14 @@ func Log(settings types.Settings) {
 	logSharedSettings(&messages, settings)
 
 	switch settings.Type {
+	case "condition-condition":
+		logCCSettings(&messages, settings)
 	case "correlation":
 		logCorrelationSettings(&messages, settings)
 	case "dotplot":
 		logDotplotSettings(&messages, settings)
+	case "specificity":
+		logSpecificitySettings(&messages, settings)
 	}
 
 	afero.WriteFile(fs.Instance, "log.txt", []byte(messages.String()), 0644)

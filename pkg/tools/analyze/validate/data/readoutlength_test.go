@@ -10,12 +10,12 @@ import (
 var _ = Describe("Validate readout lengths", func() {
 	It("should return nil when no readout length columns is specified", func() {
 		data := []map[string]string{
-			map[string]string{"condition": "conditionA", "readout": "readoutA", "readoutLength": "10"},
-			map[string]string{"condition": "conditionB", "readout": "readoutB", "readoutLength": "15"},
-			map[string]string{"condition": "conditionA", "readout": "readoutC", "readoutLength": "25"},
-			map[string]string{"condition": "conditionB", "readout": "readoutC", "readoutLength": "7"},
-			map[string]string{"condition": "conditionC", "readout": "readoutA", "readoutLength": "8"},
-			map[string]string{"condition": "conditionC", "readout": "readoutB", "readoutLength": "12"},
+			{"condition": "conditionA", "readout": "readoutA", "readoutLength": "10"},
+			{"condition": "conditionB", "readout": "readoutB", "readoutLength": "15"},
+			{"condition": "conditionA", "readout": "readoutC", "readoutLength": "25"},
+			{"condition": "conditionB", "readout": "readoutC", "readoutLength": "7"},
+			{"condition": "conditionC", "readout": "readoutA", "readoutLength": "8"},
+			{"condition": "conditionC", "readout": "readoutB", "readoutLength": "12"},
 		}
 		readoutLength := ""
 
@@ -24,12 +24,12 @@ var _ = Describe("Validate readout lengths", func() {
 
 	It("should return nil when readout length columns contains ints", func() {
 		data := []map[string]string{
-			map[string]string{"condition": "conditionA", "readout": "readoutA", "readoutLength": "10"},
-			map[string]string{"condition": "conditionB", "readout": "readoutB", "readoutLength": "15"},
-			map[string]string{"condition": "conditionA", "readout": "readoutC", "readoutLength": "25"},
-			map[string]string{"condition": "conditionB", "readout": "readoutC", "readoutLength": "7"},
-			map[string]string{"condition": "conditionC", "readout": "readoutA", "readoutLength": "8"},
-			map[string]string{"condition": "conditionC", "readout": "readoutB", "readoutLength": "12"},
+			{"condition": "conditionA", "readout": "readoutA", "readoutLength": "10"},
+			{"condition": "conditionB", "readout": "readoutB", "readoutLength": "15"},
+			{"condition": "conditionA", "readout": "readoutC", "readoutLength": "25"},
+			{"condition": "conditionB", "readout": "readoutC", "readoutLength": "7"},
+			{"condition": "conditionC", "readout": "readoutA", "readoutLength": "8"},
+			{"condition": "conditionC", "readout": "readoutB", "readoutLength": "12"},
 		}
 		readoutLength := "PreyLength"
 
@@ -38,12 +38,12 @@ var _ = Describe("Validate readout lengths", func() {
 
 	It("should return an error when a readout length value is not parseable as an int", func() {
 		data := []map[string]string{
-			map[string]string{"condition": "conditionA", "readout": "readoutA", "readoutLength": "10"},
-			map[string]string{"condition": "conditionB", "readout": "readoutB", "readoutLength": "15"},
-			map[string]string{"condition": "conditionA", "readout": "readoutC", "readoutLength": "25"},
-			map[string]string{"condition": "conditionB", "readout": "readoutC", "readoutLength": "7.3"},
-			map[string]string{"condition": "conditionC", "readout": "readoutA", "readoutLength": "8"},
-			map[string]string{"condition": "conditionC", "readout": "readoutB", "readoutLength": "12"},
+			{"condition": "conditionA", "readout": "readoutA", "readoutLength": "10"},
+			{"condition": "conditionB", "readout": "readoutB", "readoutLength": "15"},
+			{"condition": "conditionA", "readout": "readoutC", "readoutLength": "25"},
+			{"condition": "conditionB", "readout": "readoutC", "readoutLength": "7.3"},
+			{"condition": "conditionC", "readout": "readoutA", "readoutLength": "8"},
+			{"condition": "conditionC", "readout": "readoutB", "readoutLength": "12"},
 		}
 		readoutLength := "PreyLength"
 

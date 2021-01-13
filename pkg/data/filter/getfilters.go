@@ -1,8 +1,8 @@
 package filter
 
 import (
-	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/slice"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
 func getAbundanceAndScoreFilter(settings types.Settings) func(float64, float64) bool {
@@ -43,19 +43,22 @@ func defineMinAbundance(settings types.Settings) float64 {
 
 // DefineScoreFilter returns a function for filtering by score.
 func DefineScoreFilter(settings types.Settings) func(float64) bool {
-	primaryFilter := definePrimaryFilter(settings)
+	scoreFilter := defineUltimateFilter(settings)
 	scoreType := settings.ScoreType
 	if scoreType == "gte" {
 		return func(score float64) bool {
-			return score >= primaryFilter
+			return score >= scoreFilter
 		}
 	}
 	return func(score float64) bool {
-		return score <= primaryFilter
+		return score <= scoreFilter
 	}
 }
 
-func definePrimaryFilter(settings types.Settings) float64 {
+func defineUltimateFilter(settings types.Settings) float64 {
+	if settings.Type == "condition-condition" {
+		return settings.SecondaryFilter
+	}
 	if settings.Type == "correlation" {
 		if (settings.ScoreType == "lte" && settings.ConditionScoreFilter <= settings.ReadoutScoreFilter) ||
 			(settings.ScoreType == "gte" && settings.ConditionScoreFilter >= settings.ReadoutScoreFilter) {

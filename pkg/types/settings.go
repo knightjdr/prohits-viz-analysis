@@ -22,6 +22,7 @@ type Settings struct {
 	Control                      string
 	Files                        []string
 	LogBase                      string
+	MinAbundance                 float64
 	MinConditions                int
 	MockConditionAbundance       bool
 	Normalization                string
@@ -33,6 +34,7 @@ type Settings struct {
 	ReadoutLength                string
 	Score                        string
 	ScoreType                    string
+	SecondaryFilter              float64
 	Type                         string
 
 	// circheatmap
@@ -43,6 +45,10 @@ type Settings struct {
 	Species        string
 	TissueFile     string
 	Tissues        []string
+
+	// condition-condition
+	ConditionX string
+	ConditionY string
 
 	// correlation
 	ConditionAbundanceFilter  float64
@@ -66,12 +72,13 @@ type Settings struct {
 	EdgeColor           string
 	FillColor           string
 	InvertColor         bool
-	MinAbundance        float64
 	ReadoutClustering   string
 	ReadoutList         []string
-	SecondaryFilter     float64
 	XLabel              string
 	YLabel              string
 	WriteDistance       bool
 	WriteHeatmap        bool
+
+	// specificity
+	SpecificityMetric string
 }

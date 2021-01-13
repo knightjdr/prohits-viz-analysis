@@ -10,12 +10,12 @@ import (
 var _ = Describe("Validate data for minimum conditions", func() {
 	It("should return nil when data satisfies minimum conditions", func() {
 		data := []map[string]string{
-			map[string]string{"condition": "conditionA", "readout": "readoutA"},
-			map[string]string{"condition": "conditionB", "readout": "readoutB"},
-			map[string]string{"condition": "conditionA", "readout": "readoutC"},
-			map[string]string{"condition": "conditionB", "readout": "readoutC"},
-			map[string]string{"condition": "conditionC", "readout": "readoutA"},
-			map[string]string{"condition": "conditionC", "readout": "readoutB"},
+			{"condition": "conditionA", "readout": "readoutA"},
+			{"condition": "conditionB", "readout": "readoutB"},
+			{"condition": "conditionA", "readout": "readoutC"},
+			{"condition": "conditionB", "readout": "readoutC"},
+			{"condition": "conditionC", "readout": "readoutA"},
+			{"condition": "conditionC", "readout": "readoutB"},
 		}
 		analysisType := "dotplot"
 
@@ -24,8 +24,8 @@ var _ = Describe("Validate data for minimum conditions", func() {
 
 	It("should return an error when data does not satisfy minimum conditions", func() {
 		data := []map[string]string{
-			map[string]string{"condition": "conditionA", "readout": "readoutA"},
-			map[string]string{"condition": "conditionA", "readout": "readoutC"},
+			{"condition": "conditionA", "readout": "readoutA"},
+			{"condition": "conditionA", "readout": "readoutC"},
 		}
 		analysisType := "dotplot"
 
@@ -47,12 +47,12 @@ var _ = Describe("Minimum required conditions", func() {
 var _ = Describe("Count unique conditions", func() {
 	It("should count conditions but return once minimum is reach", func() {
 		data := []map[string]string{
-			map[string]string{"condition": "conditionA", "readout": "readoutA"},
-			map[string]string{"condition": "conditionB", "readout": "readoutB"},
-			map[string]string{"condition": "conditionA", "readout": "readoutC"},
-			map[string]string{"condition": "conditionB", "readout": "readoutC"},
-			map[string]string{"condition": "conditionC", "readout": "readoutA"},
-			map[string]string{"condition": "conditionC", "readout": "readoutB"},
+			{"condition": "conditionA", "readout": "readoutA"},
+			{"condition": "conditionB", "readout": "readoutB"},
+			{"condition": "conditionA", "readout": "readoutC"},
+			{"condition": "conditionB", "readout": "readoutC"},
+			{"condition": "conditionC", "readout": "readoutA"},
+			{"condition": "conditionC", "readout": "readoutB"},
 		}
 		minimumRequiredConditions := 2
 		Expect(countUniqueConditions(data, minimumRequiredConditions)).To(Equal(2))
@@ -60,12 +60,12 @@ var _ = Describe("Count unique conditions", func() {
 
 	It("should return conditions length when minimum is not reached", func() {
 		data := []map[string]string{
-			map[string]string{"condition": "conditionA", "readout": "readoutA"},
-			map[string]string{"condition": "conditionB", "readout": "readoutB"},
-			map[string]string{"condition": "conditionA", "readout": "readoutC"},
-			map[string]string{"condition": "conditionB", "readout": "readoutC"},
-			map[string]string{"condition": "conditionC", "readout": "readoutA"},
-			map[string]string{"condition": "conditionC", "readout": "readoutB"},
+			{"condition": "conditionA", "readout": "readoutA"},
+			{"condition": "conditionB", "readout": "readoutB"},
+			{"condition": "conditionA", "readout": "readoutC"},
+			{"condition": "conditionB", "readout": "readoutC"},
+			{"condition": "conditionC", "readout": "readoutA"},
+			{"condition": "conditionC", "readout": "readoutB"},
 		}
 		minimumRequiredConditions := 4
 		Expect(countUniqueConditions(data, minimumRequiredConditions)).To(Equal(3))

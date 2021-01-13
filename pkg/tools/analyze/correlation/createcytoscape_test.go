@@ -8,8 +8,8 @@ import (
 	"github.com/spf13/afero"
 )
 
-var _ = Describe("Create folders", func() {
-	It("create default folders", func() {
+var _ = Describe("Create cytoscape file", func() {
+	It("should create dcytoscape file", func() {
 		oldFs := fs.Instance
 		defer func() { fs.Instance = oldFs }()
 		fs.Instance = afero.NewMemMapFs()

@@ -5,7 +5,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
-func FilterByAbundanceAndScore(analysis *types.Analysis) {
+func byAbundanceAndScore(analysis *types.Analysis) {
 	doesReadoutPassFilters := getAbundanceAndScoreFilter(analysis.Settings)
 
 	passingReadouts := make(map[string]map[string]bool, 0)

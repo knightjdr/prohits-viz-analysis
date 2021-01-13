@@ -6,89 +6,122 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Filter by conditions and readouts", func() {
+var _ = Describe("Filter by conditions and/or readouts", func() {
 	It("should filter out entries not satisfying both requested conditions and readouts", func() {
 		analysis := &types.Analysis{
 			Data: []map[string]string{
-				map[string]string{"condition": "conditionA", "readout": "readoutA"},
-				map[string]string{"condition": "conditionB", "readout": "readoutB"},
-				map[string]string{"condition": "conditionA", "readout": "readoutC"},
-				map[string]string{"condition": "conditionB", "readout": "readoutC"},
-				map[string]string{"condition": "conditionC", "readout": "readoutA"},
-				map[string]string{"condition": "conditionC", "readout": "readoutB"},
+				{"condition": "conditionA", "readout": "readoutA"},
+				{"condition": "conditionB", "readout": "readoutB"},
+				{"condition": "conditionA", "readout": "readoutC"},
+				{"condition": "conditionB", "readout": "readoutC"},
+				{"condition": "conditionC", "readout": "readoutA"},
+				{"condition": "conditionC", "readout": "readoutB"},
 			},
 			Settings: types.Settings{
-				ConditionClustering: "none",
-				ConditionList:       []string{"conditionA", "conditionB"},
-				ReadoutClustering:   "none",
-				ReadoutList:         []string{"readoutA", "readoutB"},
+				ConditionX: "conditionA",
+				ConditionY: "conditionC",
+				Type:       "condition-condition",
 			},
 		}
 
 		expected := []map[string]string{
-			map[string]string{"condition": "conditionA", "readout": "readoutA"},
-			map[string]string{"condition": "conditionB", "readout": "readoutB"},
+			{"condition": "conditionA", "readout": "readoutA"},
+			{"condition": "conditionA", "readout": "readoutC"},
+			{"condition": "conditionC", "readout": "readoutA"},
+			{"condition": "conditionC", "readout": "readoutB"},
 		}
 
-		filterByConditionsAndReadouts(analysis)
+		byConditionsAndReadouts(analysis)
 		Expect(analysis.Data).To(Equal(expected))
 	})
 
-	It("should filter by conditions only", func() {
-		analysis := &types.Analysis{
-			Data: []map[string]string{
-				map[string]string{"condition": "conditionA", "readout": "readoutA"},
-				map[string]string{"condition": "conditionB", "readout": "readoutB"},
-				map[string]string{"condition": "conditionA", "readout": "readoutC"},
-				map[string]string{"condition": "conditionB", "readout": "readoutC"},
-				map[string]string{"condition": "conditionC", "readout": "readoutA"},
-				map[string]string{"condition": "conditionC", "readout": "readoutB"},
-			},
-			Settings: types.Settings{
-				ConditionClustering: "none",
-				ConditionList:       []string{"conditionA", "conditionB"},
-				ReadoutClustering:   "hierarchical",
-				ReadoutList:         []string{"readoutA", "readoutB"},
-			},
-		}
+	Describe("Dotplot", func() {
+		It("should filter out entries not satisfying both requested conditions and readouts", func() {
+			analysis := &types.Analysis{
+				Data: []map[string]string{
+					{"condition": "conditionA", "readout": "readoutA"},
+					{"condition": "conditionB", "readout": "readoutB"},
+					{"condition": "conditionA", "readout": "readoutC"},
+					{"condition": "conditionB", "readout": "readoutC"},
+					{"condition": "conditionC", "readout": "readoutA"},
+					{"condition": "conditionC", "readout": "readoutB"},
+				},
+				Settings: types.Settings{
+					ConditionClustering: "none",
+					ConditionList:       []string{"conditionA", "conditionB"},
+					ReadoutClustering:   "none",
+					ReadoutList:         []string{"readoutA", "readoutB"},
+					Type:                "dotplot",
+				},
+			}
 
-		expected := []map[string]string{
-			map[string]string{"condition": "conditionA", "readout": "readoutA"},
-			map[string]string{"condition": "conditionB", "readout": "readoutB"},
-			map[string]string{"condition": "conditionA", "readout": "readoutC"},
-			map[string]string{"condition": "conditionB", "readout": "readoutC"},
-		}
+			expected := []map[string]string{
+				{"condition": "conditionA", "readout": "readoutA"},
+				{"condition": "conditionB", "readout": "readoutB"},
+			}
 
-		filterByConditionsAndReadouts(analysis)
-		Expect(analysis.Data).To(Equal(expected))
-	})
+			byConditionsAndReadouts(analysis)
+			Expect(analysis.Data).To(Equal(expected))
+		})
 
-	It("should filter by readouts only", func() {
-		analysis := &types.Analysis{
-			Data: []map[string]string{
-				map[string]string{"condition": "conditionA", "readout": "readoutA"},
-				map[string]string{"condition": "conditionB", "readout": "readoutB"},
-				map[string]string{"condition": "conditionA", "readout": "readoutC"},
-				map[string]string{"condition": "conditionB", "readout": "readoutC"},
-				map[string]string{"condition": "conditionC", "readout": "readoutA"},
-				map[string]string{"condition": "conditionC", "readout": "readoutB"},
-			},
-			Settings: types.Settings{
-				ConditionClustering: "hierarchical",
-				ConditionList:       []string{"conditionA", "conditionB"},
-				ReadoutClustering:   "none",
-				ReadoutList:         []string{"readoutA", "readoutB"},
-			},
-		}
+		It("should filter by conditions only", func() {
+			analysis := &types.Analysis{
+				Data: []map[string]string{
+					{"condition": "conditionA", "readout": "readoutA"},
+					{"condition": "conditionB", "readout": "readoutB"},
+					{"condition": "conditionA", "readout": "readoutC"},
+					{"condition": "conditionB", "readout": "readoutC"},
+					{"condition": "conditionC", "readout": "readoutA"},
+					{"condition": "conditionC", "readout": "readoutB"},
+				},
+				Settings: types.Settings{
+					ConditionClustering: "none",
+					ConditionList:       []string{"conditionA", "conditionB"},
+					ReadoutClustering:   "hierarchical",
+					ReadoutList:         []string{"readoutA", "readoutB"},
+					Type:                "dotplot",
+				},
+			}
 
-		expected := []map[string]string{
-			map[string]string{"condition": "conditionA", "readout": "readoutA"},
-			map[string]string{"condition": "conditionB", "readout": "readoutB"},
-			map[string]string{"condition": "conditionC", "readout": "readoutA"},
-			map[string]string{"condition": "conditionC", "readout": "readoutB"},
-		}
+			expected := []map[string]string{
+				{"condition": "conditionA", "readout": "readoutA"},
+				{"condition": "conditionB", "readout": "readoutB"},
+				{"condition": "conditionA", "readout": "readoutC"},
+				{"condition": "conditionB", "readout": "readoutC"},
+			}
 
-		filterByConditionsAndReadouts(analysis)
-		Expect(analysis.Data).To(Equal(expected))
+			byConditionsAndReadouts(analysis)
+			Expect(analysis.Data).To(Equal(expected))
+		})
+
+		It("should filter by readouts only", func() {
+			analysis := &types.Analysis{
+				Data: []map[string]string{
+					{"condition": "conditionA", "readout": "readoutA"},
+					{"condition": "conditionB", "readout": "readoutB"},
+					{"condition": "conditionA", "readout": "readoutC"},
+					{"condition": "conditionB", "readout": "readoutC"},
+					{"condition": "conditionC", "readout": "readoutA"},
+					{"condition": "conditionC", "readout": "readoutB"},
+				},
+				Settings: types.Settings{
+					ConditionClustering: "hierarchical",
+					ConditionList:       []string{"conditionA", "conditionB"},
+					ReadoutClustering:   "none",
+					ReadoutList:         []string{"readoutA", "readoutB"},
+					Type:                "dotplot",
+				},
+			}
+
+			expected := []map[string]string{
+				{"condition": "conditionA", "readout": "readoutA"},
+				{"condition": "conditionB", "readout": "readoutB"},
+				{"condition": "conditionC", "readout": "readoutA"},
+				{"condition": "conditionC", "readout": "readoutB"},
+			}
+
+			byConditionsAndReadouts(analysis)
+			Expect(analysis.Data).To(Equal(expected))
+		})
 	})
 })

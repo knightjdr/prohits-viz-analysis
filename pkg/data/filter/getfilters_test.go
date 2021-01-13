@@ -113,64 +113,75 @@ var _ = Describe("Define score filter", func() {
 })
 
 var _ = Describe("Define primary filter", func() {
-	It("should return PrimaryFilter value when Type is not correlation", func() {
-		settings := types.Settings{
-			ConditionScoreFilter: 0.02,
-			PrimaryFilter:        0.01,
-			ReadoutScoreFilter:   0.03,
-			ScoreType:            "lte",
-			Type:                 "dotplot",
-		}
+	Describe("Condition-condition", func() {
+		It("should return SecondaryFilter value", func() {
+			settings := types.Settings{
+				PrimaryFilter:   0.01,
+				SecondaryFilter: 0.05,
+				ScoreType:       "lte",
+				Type:            "condition-condition",
+			}
 
-		Expect(definePrimaryFilter(settings)).To(Equal(0.01))
+			Expect(defineUltimateFilter(settings)).To(Equal(0.05))
+		})
 	})
 
-	It("should return ConditionScoreFilter value when lte and Type is correlation", func() {
-		settings := types.Settings{
-			ConditionScoreFilter: 0.04,
-			PrimaryFilter:        0.01,
-			ReadoutScoreFilter:   0.02,
-			ScoreType:            "lte",
-			Type:                 "correlation",
-		}
+	Describe("Correlation", func() {
+		It("should return ConditionScoreFilter value when lte", func() {
+			settings := types.Settings{
+				ConditionScoreFilter: 0.04,
+				ReadoutScoreFilter:   0.02,
+				ScoreType:            "lte",
+				Type:                 "correlation",
+			}
 
-		Expect(definePrimaryFilter(settings)).To(Equal(0.04))
+			Expect(defineUltimateFilter(settings)).To(Equal(0.04))
+		})
+
+		It("should return ReadoutScoreFilter value when lte", func() {
+			settings := types.Settings{
+				ConditionScoreFilter: 0.02,
+				ReadoutScoreFilter:   0.03,
+				ScoreType:            "lte",
+				Type:                 "correlation",
+			}
+
+			Expect(defineUltimateFilter(settings)).To(Equal(0.03))
+		})
+
+		It("should return ConditionScoreFilter value when gte", func() {
+			settings := types.Settings{
+				ConditionScoreFilter: 0.03,
+				ReadoutScoreFilter:   0.04,
+				ScoreType:            "gte",
+				Type:                 "correlation",
+			}
+
+			Expect(defineUltimateFilter(settings)).To(Equal(0.03))
+		})
+
+		It("should return ReadoutScoreFilter value when gte", func() {
+			settings := types.Settings{
+				ConditionScoreFilter: 0.03,
+				ReadoutScoreFilter:   0.02,
+				ScoreType:            "gte",
+				Type:                 "correlation",
+			}
+
+			Expect(defineUltimateFilter(settings)).To(Equal(0.02))
+		})
 	})
 
-	It("should return ReadoutScoreFilter value when lte and Type is correlation", func() {
-		settings := types.Settings{
-			ConditionScoreFilter: 0.02,
-			PrimaryFilter:        0.01,
-			ReadoutScoreFilter:   0.03,
-			ScoreType:            "lte",
-			Type:                 "correlation",
-		}
+	Describe("Other", func() {
+		It("should return PrimaryFilter value", func() {
+			settings := types.Settings{
+				PrimaryFilter: 0.01,
+				ScoreType:     "lte",
+				Type:          "dotplot",
+			}
 
-		Expect(definePrimaryFilter(settings)).To(Equal(0.03))
-	})
-
-	It("should return ConditionScoreFilter value when gte and Type is correlation", func() {
-		settings := types.Settings{
-			ConditionScoreFilter: 0.03,
-			PrimaryFilter:        0.01,
-			ReadoutScoreFilter:   0.04,
-			ScoreType:            "gte",
-			Type:                 "correlation",
-		}
-
-		Expect(definePrimaryFilter(settings)).To(Equal(0.03))
-	})
-
-	It("should return ReadoutScoreFilter value when gte and Type is correlation", func() {
-		settings := types.Settings{
-			ConditionScoreFilter: 0.03,
-			PrimaryFilter:        0.01,
-			ReadoutScoreFilter:   0.02,
-			ScoreType:            "gte",
-			Type:                 "correlation",
-		}
-
-		Expect(definePrimaryFilter(settings)).To(Equal(0.02))
+			Expect(defineUltimateFilter(settings)).To(Equal(0.01))
+		})
 	})
 })
 

@@ -10,7 +10,7 @@ import (
 )
 
 var _ = Describe("Create folders", func() {
-	It("create default folders", func() {
+	It("should create default folders", func() {
 		oldFs := fs.Instance
 		defer func() { fs.Instance = oldFs }()
 		fs.Instance = afero.NewMemMapFs()
@@ -34,7 +34,7 @@ var _ = Describe("Create folders", func() {
 		Expect(exists).To(BeTrue(), "should create treeview folder")
 	})
 
-	It("create optional folders", func() {
+	It("should create optional folders", func() {
 		oldFs := fs.Instance
 		defer func() { fs.Instance = oldFs }()
 		fs.Instance = afero.NewMemMapFs()

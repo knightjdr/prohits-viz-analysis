@@ -1,4 +1,4 @@
-package dotplot
+package cc
 
 import (
 	. "github.com/onsi/ginkgo"
@@ -20,18 +20,12 @@ var _ = Describe("Create folders", func() {
 		settings := types.Settings{}
 
 		createFolders(settings)
-		exists, _ := afero.DirExists(fs.Instance, "cytoscape")
-		Expect(exists).To(BeTrue(), "should create cytoscape folder")
-		exists, _ = afero.DirExists(fs.Instance, "interactive")
+		exists, _ := afero.DirExists(fs.Instance, "interactive")
 		Expect(exists).To(BeTrue(), "should create interactive folder")
-		exists, _ = afero.DirExists(fs.Instance, "minimap")
-		Expect(exists).To(BeTrue(), "should create minimap folder")
 		exists, _ = afero.DirExists(fs.Instance, "other")
 		Expect(exists).To(BeTrue(), "should create other folder")
 		exists, _ = afero.DirExists(fs.Instance, "svg")
 		Expect(exists).To(BeTrue(), "should create svg folder")
-		exists, _ = afero.DirExists(fs.Instance, "treeview")
-		Expect(exists).To(BeTrue(), "should create treeview folder")
 	})
 
 	It("should create optional folders", func() {
@@ -42,14 +36,11 @@ var _ = Describe("Create folders", func() {
 		fs.Instance.MkdirAll("test", 0755)
 
 		settings := types.Settings{
-			Clustering: "biclustering",
-			Png:        true,
+			Png: true,
 		}
 
 		createFolders(settings)
-		exists, _ := afero.DirExists(fs.Instance, "biclustering")
-		Expect(exists).To(BeTrue(), "should create biclustering folder")
-		exists, _ = afero.DirExists(fs.Instance, "png")
+		exists, _ := afero.DirExists(fs.Instance, "png")
 		Expect(exists).To(BeTrue(), "should create png folder")
 	})
 })

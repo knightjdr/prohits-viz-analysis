@@ -6,6 +6,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/data/parser"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/data/transform"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/arguments"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/cc"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/correlation"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/dotplot"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/settings"
@@ -24,6 +25,8 @@ func Run() {
 	settings.Log(analysis.Settings)
 
 	switch analysis.Settings.Type {
+	case "condition-condition":
+		cc.Generate(analysis)
 	case "correlation":
 		correlation.Generate(analysis)
 	case "dotplot":
