@@ -1,4 +1,4 @@
-package heatmap
+package scatter
 
 import (
 	"encoding/json"
@@ -11,14 +11,8 @@ import (
 var _ = Describe("Settings", func() {
 	It("should parse settings", func() {
 		settings := map[string]interface{}{
-			"abundanceCap":    50,
-			"edgeColor":       "red",
-			"fillColor":       "blue",
-			"imageType":       "dotplot",
-			"invertColor":     true,
-			"minAbundance":    10,
-			"primaryFilter":   0.01,
-			"secondaryFilter": 0.05,
+			"abundanceCap": 50,
+			"imageType":    "scatter",
 		}
 
 		expectedString, _ := json.Marshal(settings)

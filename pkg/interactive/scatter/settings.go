@@ -1,4 +1,4 @@
-package heatmap
+package scatter
 
 import (
 	"encoding/json"

@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"github.com/knightjdr/prohits-viz-analysis/pkg/color"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/float"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/fs"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/svg/heatmap"
-	"github.com/knightjdr/prohits-viz-analysis/pkg/float"
 	"github.com/spf13/afero"
 )
 
@@ -78,7 +78,7 @@ func createScoreElement(svg *strings.Builder, data Legend, gradient []color.Spac
 
 func createLegendScoreSymbol(scoreType string) []string {
 	if scoreType == "gte" {
-		return []string{"≥", "≥", "<"}
+		return []string{"&#8805;", "&#8805;", "&lt;"}
 	}
-	return []string{"≤", "≤", ">"}
+	return []string{"&#8804;", "&#8804;", "&gt;"}
 }

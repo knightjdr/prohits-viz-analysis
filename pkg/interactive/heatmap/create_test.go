@@ -77,7 +77,7 @@ var _ = Describe("Create file", func() {
 		uri := "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAEElEQVR4nGJiYGAABAAA//8ADAADcZGLFwAAAABJRU5ErkJggg=="
 		expected := "{\n" +
 			"\t\"parameters\": {\"abundanceColumn\":\"AvgSpec\",\"analysisType\":\"dotplot\",\"clustering\":\"hierarchical\",\"clusteringMethod\":\"complete\",\"clusteringOptimize\":true,\"conditionColumn\":\"Bait\",\"controlColumn\":\"ctrl\",\"distance\":\"canberra\",\"files\":[\"file1\",\"file2\"],\"imageType\":\"heatmap\",\"logBase\":\"2\",\"minConditions\":0,\"mockConditionAbundance\":false,\"normalization\":\"total\",\"parsimoniousReadouts\":false,\"readoutColumn\":\"Prey\",\"scoreColumn\":\"bfdr\",\"scoreType\":\"lte\",\"xLabel\":\"Prey\",\"yLabel\":\"Bait\"},\n" +
-			"\t\"settings\": {\"main\":{\"current\":{\"abundanceCap\":50,\"fillColor\":\"blue\",\"imageType\":\"heatmap\",\"invertColor\":true,\"minAbundance\":10,\"primaryFilter\":0.01}}},\n" +
+			"\t\"settings\": {\"abundanceCap\":50,\"fillColor\":\"blue\",\"imageType\":\"heatmap\",\"invertColor\":true,\"minAbundance\":10,\"primaryFilter\":0.01},\n" +
 			"\t\"columnDB\": [\"bait1\",\"bait2\",\"bait3\"],\n" +
 			"\t\"rowDB\": [\n" +
 			"\t\t{\n" +

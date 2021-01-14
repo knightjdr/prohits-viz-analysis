@@ -2,8 +2,6 @@
 package cc
 
 import (
-	"fmt"
-
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
@@ -11,9 +9,9 @@ import (
 func Generate(analysis *types.Analysis) {
 	createFolders(analysis.Settings)
 
-	fmt.Print(analysis.Data)
+	scatterData := definePoints(analysis)
 
-	/*
-		createCorrelationImages(corrConditions, corrReadouts, analysis.Settings)
-		writeTrees(corrConditions, corrReadouts, analysis.Settings) */
+	createLegend(analysis.Settings)
+	createInteractive(scatterData, analysis.Settings)
+	writeData(scatterData, analysis.Settings)
 }

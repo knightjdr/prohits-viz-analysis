@@ -55,11 +55,11 @@ var _ = Describe("Draw dotplot legend", func() {
 			"\t<g>\n" +
 			"\t\t<text y=\"220\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">BFDR</text>\n" +
 			"\t\t<circle fill=\"none\" cy=\"165\" cx=\"50\" r=\"12\" stroke=\"#000000\" stroke-width=\"2\" />\n" +
-			"\t\t<text y=\"195\" x=\"50\" font-size=\"12\" text-anchor=\"middle\">≤ 0.01</text>\n" +
+			"\t\t<text y=\"195\" x=\"50\" font-size=\"12\" text-anchor=\"middle\">&#8804; 0.01</text>\n" +
 			"\t\t<circle fill=\"none\" cy=\"165\" cx=\"100\" r=\"12\" stroke=\"#3366ff\" stroke-width=\"2\" />\n" +
-			"\t\t<text y=\"195\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">≤ 0.05</text>\n" +
+			"\t\t<text y=\"195\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">&#8804; 0.05</text>\n" +
 			"\t\t<circle fill=\"none\" cy=\"165\" cx=\"150\" r=\"12\" stroke=\"#99b3ff\" stroke-width=\"2\" />\n" +
-			"\t\t<text y=\"195\" x=\"150\" font-size=\"12\" text-anchor=\"middle\">> 0.05</text>\n" +
+			"\t\t<text y=\"195\" x=\"150\" font-size=\"12\" text-anchor=\"middle\">&gt; 0.05</text>\n" +
 			"\t</g>\n" +
 			"</svg>\n"
 
@@ -107,11 +107,11 @@ var _ = Describe("Legend score graphic", func() {
 		expected := "\t<g>\n" +
 			"\t\t<text y=\"220\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">BFDR</text>\n" +
 			"\t\t<circle fill=\"none\" cy=\"165\" cx=\"50\" r=\"12\" stroke=\"#000000\" stroke-width=\"2\" />\n" +
-			"\t\t<text y=\"195\" x=\"50\" font-size=\"12\" text-anchor=\"middle\">≤ 0.01</text>\n" +
+			"\t\t<text y=\"195\" x=\"50\" font-size=\"12\" text-anchor=\"middle\">&#8804; 0.01</text>\n" +
 			"\t\t<circle fill=\"none\" cy=\"165\" cx=\"100\" r=\"12\" stroke=\"#3366ff\" stroke-width=\"2\" />\n" +
-			"\t\t<text y=\"195\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">≤ 0.05</text>\n" +
+			"\t\t<text y=\"195\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">&#8804; 0.05</text>\n" +
 			"\t\t<circle fill=\"none\" cy=\"165\" cx=\"150\" r=\"12\" stroke=\"#99b3ff\" stroke-width=\"2\" />\n" +
-			"\t\t<text y=\"195\" x=\"150\" font-size=\"12\" text-anchor=\"middle\">> 0.05</text>\n" +
+			"\t\t<text y=\"195\" x=\"150\" font-size=\"12\" text-anchor=\"middle\">&gt; 0.05</text>\n" +
 			"\t</g>\n"
 
 		var svg strings.Builder
@@ -122,13 +122,13 @@ var _ = Describe("Legend score graphic", func() {
 
 var _ = Describe("Create legend score symbols", func() {
 	It("should create a slice of symbols to use when score type is \"gte\"", func() {
-		expected := []string{"≥", "≥", "<"}
+		expected := []string{"&#8805;", "&#8805;", "&lt;"}
 
 		Expect(createLegendScoreSymbol("gte")).To(Equal(expected))
 	})
 
 	It("should create a slice of symbols to use when score type is \"lte\"", func() {
-		expected := []string{"≤", "≤", ">"}
+		expected := []string{"&#8804;", "&#8804;", "&gt;"}
 
 		Expect(createLegendScoreSymbol("lte")).To(Equal(expected))
 	})

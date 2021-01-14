@@ -14,6 +14,27 @@ type Matrices struct {
 	Conditions, Readouts    []string
 }
 
+// ScatterAxesLabels are labels for the x and y axis.
+type ScatterAxesLabels struct {
+	X string `json:"x"`
+	Y string `json:"y"`
+}
+
+// ScatterPlot contains data for a scatter plot
+type ScatterPlot struct {
+	Labels ScatterAxesLabels `json:"labels"`
+	Name   string            `json:"name"`
+	Points []ScatterPoint    `json:"points"`
+}
+
+// ScatterPoint contains data for a point on a scatter plot
+type ScatterPoint struct {
+	Color string  `json:"color"`
+	Label string  `json:"label"`
+	X     float64 `json:"x"`
+	Y     float64 `json:"y"`
+}
+
 // Settings contains tool-specific analysis settings.
 type Settings struct {
 	// Shared settings
