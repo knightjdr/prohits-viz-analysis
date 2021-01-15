@@ -14,4 +14,5 @@ func Generate(analysis *types.Analysis) {
 	createLegend(analysis.Settings)
 	createInteractive(scatterData, analysis.Settings)
 	writeData(scatterData, analysis.Settings)
+	writeImages(scatterData, analysis.Settings)
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
-// Dotplot object.
+// Dotplot properties.
 type Dotplot struct {
 	AbundanceCap    float64
 	Annotations     types.Annotations

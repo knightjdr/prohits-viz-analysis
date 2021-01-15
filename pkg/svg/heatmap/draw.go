@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/afero"
 )
 
-// Heatmap object.
+// Heatmap properties.
 type Heatmap struct {
 	AbundanceCap float64
 	Annotations  types.Annotations

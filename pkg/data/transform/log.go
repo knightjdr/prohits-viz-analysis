@@ -3,25 +3,29 @@ package transform
 import (
 	"math"
 
-	"github.com/knightjdr/prohits-viz-analysis/pkg/parse"
-	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/float"
 	customMath "github.com/knightjdr/prohits-viz-analysis/pkg/math"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/parse"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
 func logTransform(analysis *types.Analysis) {
-	base := analysis.Settings.LogBase
-	validLogValues := map[string]bool{
-		"2":  true,
-		"e":  true,
-		"10": true,
-	}
-	if _, ok := validLogValues[base]; !ok {
+	logBase := analysis.Settings.LogBase
+	tool := analysis.Settings.Type
+	if !shouldLogTransform(logBase, tool) {
 		return
 	}
 
-	logFunc := getLogFunction(base)
+	logFunc := getLogFunction(logBase)
 	adjustAbundanceByLog(analysis, logFunc)
+}
+
+func shouldLogTransform(logBase, tool string) bool {
+	if (logBase == "2" || logBase == "e" || logBase == "10") &&
+		(tool == "correlation" || tool == "dotplot") {
+		return true
+	}
+	return false
 }
 
 func getLogFunction(base string) func(float64) float64 {

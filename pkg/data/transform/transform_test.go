@@ -22,6 +22,7 @@ var _ = Describe("Transform abundance", func() {
 				LogBase:       "2",
 				Normalization: "total",
 				ReadoutLength: "PreyLength",
+				Type:          "dotplot",
 			},
 		}
 		expected := []map[string]string{
