@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/knightjdr/prohits-viz-analysis/pkg/stats"
+	"gonum.org/v1/gonum/stat"
 )
 
 // PipeSeparatedStringToMean parses a string containing pipe-separated float64 and returns average.
@@ -22,7 +22,7 @@ func PipeSeparatedStringToMean(str string) float64 {
 		}
 	}
 
-	return stats.MeanFloat(parsedFloats)
+	return stat.Mean(parsedFloats, nil)
 }
 
 // PipeSeparatedStringToArray parses a string containing pipe-separated float64 and returns array of values.

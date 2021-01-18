@@ -3,7 +3,7 @@ package correlation
 import (
 	goMath "math"
 
-	"github.com/knightjdr/prohits-viz-analysis/pkg/stats"
+	"gonum.org/v1/gonum/stat"
 )
 
 // Pearson performs correlation using the Pearson statistic.
@@ -11,8 +11,8 @@ func Pearson(x, y []float64) float64 {
 	n := int(goMath.Min(float64(len(x)), float64(len(y))))
 
 	mean := map[string]float64{
-		"x": stats.MeanFloat(x[0:n]),
-		"y": stats.MeanFloat(y[0:n]),
+		"x": stat.Mean(x[0:n], nil),
+		"y": stat.Mean(y[0:n], nil),
 	}
 
 	numerator := float64(0)

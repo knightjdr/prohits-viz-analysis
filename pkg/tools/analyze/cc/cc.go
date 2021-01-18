@@ -1,4 +1,4 @@
-// Package cc create a scatter plot between two conditions.
+// Package cc creates a scatter plot between two conditions.
 package cc
 
 import (
