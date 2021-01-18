@@ -29,7 +29,7 @@ type Ticks struct {
 // Initialize a scatter plot.
 func Initialize() *Scatter {
 	return &Scatter{
-		PlotSize: 1000,
+		PlotSize: 750,
 		XLabel:   "x",
 		YLabel:   "y",
 	}

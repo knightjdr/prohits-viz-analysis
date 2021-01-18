@@ -4,6 +4,7 @@ import (
 	"math"
 	"strconv"
 
+	"github.com/knightjdr/prohits-viz-analysis/pkg/float"
 	customMath "github.com/knightjdr/prohits-viz-analysis/pkg/math"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
@@ -144,12 +145,12 @@ func scaleData(scatter *Scatter, axisLength float64) {
 
 	scatter.Ticks.XLabel = make([]string, len(scatter.Ticks.X))
 	for i := range scatter.Ticks.X {
-		scatter.Ticks.XLabel[i] = strconv.FormatFloat(scatter.Ticks.X[i], 'f', -1, 64)
+		scatter.Ticks.XLabel[i] = float.RemoveTrailingZeros(scatter.Ticks.X[i])
 		scatter.Ticks.X[i] = scaleXValue(scatter.Ticks.X[i])
 	}
 	scatter.Ticks.YLabel = make([]string, len(scatter.Ticks.Y))
 	for i := range scatter.Ticks.Y {
-		scatter.Ticks.YLabel[i] = strconv.FormatFloat(scatter.Ticks.Y[i], 'f', -1, 64)
+		scatter.Ticks.YLabel[i] = float.RemoveTrailingZeros(scatter.Ticks.Y[i])
 		scatter.Ticks.Y[i] = scaleYValue(scatter.Ticks.Y[i])
 	}
 }

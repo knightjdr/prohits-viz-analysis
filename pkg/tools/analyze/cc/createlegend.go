@@ -2,8 +2,8 @@ package cc
 
 import (
 	"fmt"
-	"strconv"
 
+	"github.com/knightjdr/prohits-viz-analysis/pkg/float"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/svg"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/svg/scatter"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
@@ -20,18 +20,18 @@ func createLegend(settings types.Settings) {
 				"%s %s %s",
 				settings.Score,
 				scoreSymbols[0],
-				strconv.FormatFloat(settings.PrimaryFilter, 'f', -1, 64),
+				float.RemoveTrailingZeros(settings.PrimaryFilter),
 			),
 		},
 		{
 			"color": "#99ccff",
 			"text": fmt.Sprintf(
 				"%s %s %s %s %s",
-				strconv.FormatFloat(settings.PrimaryFilter, 'f', -1, 64),
+				float.RemoveTrailingZeros(settings.PrimaryFilter),
 				scoreSymbols[1],
 				settings.Score,
 				scoreSymbols[2],
-				strconv.FormatFloat(settings.SecondaryFilter, 'f', -1, 64),
+				float.RemoveTrailingZeros(settings.SecondaryFilter),
 			),
 		},
 	}
