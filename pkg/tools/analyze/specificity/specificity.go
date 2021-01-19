@@ -9,7 +9,11 @@ import (
 func Generate(analysis *types.Analysis) {
 	createFolders(analysis.Settings)
 
-	calculateSpecificity(analysis)
+	specificity := calculateSpecificity(analysis)
+	plotByCondition := formatDataForPlot(specificity, analysis.Settings)
 
 	createLegend(analysis.Settings)
+	createInteractive(plotByCondition, analysis.Settings)
+	writeData(specificity, analysis.Settings)
+	writeImages(plotByCondition, analysis.Settings)
 }

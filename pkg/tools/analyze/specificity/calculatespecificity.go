@@ -10,11 +10,11 @@ import (
 	"gonum.org/v1/gonum/stat"
 )
 
-func calculateSpecificity(analysis *types.Analysis) map[string]map[string]float64 {
+func calculateSpecificity(analysis *types.Analysis) map[string]map[string]map[string]float64 {
 	abundanceByReadout, noConditions := getAbundanceByReadout(analysis.Data)
 	specificity := calculateSpecificityByMetric(abundanceByReadout, noConditions, analysis.Settings.SpecificityMetric)
 
-	return specificity
+	return reshapeSpecifictyByCondition(specificity)
 }
 
 func getAbundanceByReadout(data []map[string]string) (map[string]map[string]map[string]float64, int) {
@@ -24,6 +24,9 @@ func getAbundanceByReadout(data []map[string]string) (map[string]map[string]map[
 		abundance := datum["abundance"]
 		condition := datum["condition"]
 		readout := datum["readout"]
+		score, _ := strconv.ParseFloat(datum["score"], 64)
+
+		conditions[condition] = true
 
 		if _, ok := abundanceByReadout[readout]; !ok {
 			abundanceByReadout[readout] = make(map[string]map[string]float64, 0)
@@ -42,20 +45,19 @@ func getAbundanceByReadout(data []map[string]string) (map[string]map[string]map[
 		abundanceByReadout[readout][condition] = map[string]float64{
 			"abundance":       stat.Mean(abundances, nil),
 			"reproducibility": reproducibility,
+			"score":           score,
 		}
-
-		conditions[condition] = true
 	}
 
 	return abundanceByReadout, len(conditions)
 }
 
-func calculateSpecificityByMetric(abundanceByReadout map[string]map[string]map[string]float64, noConditions int, metric string) map[string]map[string]float64 {
+func calculateSpecificityByMetric(abundanceByReadout map[string]map[string]map[string]float64, noConditions int, metric string) map[string]map[string]map[string]float64 {
 	defineSpecificity := getSpecificityMetric(metric, noConditions)
-	specificity := make(map[string]map[string]float64, len(abundanceByReadout))
+	specificity := make(map[string]map[string]map[string]float64, len(abundanceByReadout))
 
 	for readout, conditionData := range abundanceByReadout {
-		specificity[readout] = make(map[string]float64, len(conditionData))
+		specificity[readout] = make(map[string]map[string]float64, len(conditionData))
 		for condition := range conditionData {
 			specificity[readout][condition] = defineSpecificity(condition, conditionData)
 		}
@@ -63,9 +65,9 @@ func calculateSpecificityByMetric(abundanceByReadout map[string]map[string]map[s
 	return specificity
 }
 
-func getSpecificityMetric(metric string, noConditions int) func(condition string, abundanceByCondition map[string]map[string]float64) float64 {
+func getSpecificityMetric(metric string, noConditions int) func(condition string, abundanceByCondition map[string]map[string]float64) map[string]float64 {
 	if metric == "zscore" {
-		return func(condition string, abundanceByCondition map[string]map[string]float64) float64 {
+		return func(condition string, abundanceByCondition map[string]map[string]float64) map[string]float64 {
 			values := make([]float64, noConditions)
 			i := 0
 			for _, datum := range abundanceByCondition {
@@ -73,29 +75,42 @@ func getSpecificityMetric(metric string, noConditions int) func(condition string
 				i++
 			}
 			mean, sd := stat.MeanStdDev(values, nil)
+			specificity := 0.0
 			if sd != 0 {
-				return customMath.Round((abundanceByCondition[condition]["abundance"]-mean)/sd, 0.01)
+				specificity = customMath.Round((abundanceByCondition[condition]["abundance"]-mean)/sd, 0.01)
 			}
-			return 0
+			return map[string]float64{
+				"abundance":   abundanceByCondition[condition]["abundance"],
+				"score":       abundanceByCondition[condition]["score"],
+				"specificity": specificity,
+			}
 		}
 	}
 	if metric == "sscore" {
-		return func(condition string, abundanceByCondition map[string]map[string]float64) float64 {
+		return func(condition string, abundanceByCondition map[string]map[string]float64) map[string]float64 {
 			freq := float64(noConditions) / float64(len(abundanceByCondition))
 			adjustedAbundance := freq * abundanceByCondition[condition]["abundance"]
-			return customMath.Round(math.Sqrt(adjustedAbundance), 0.01)
+			return map[string]float64{
+				"abundance":   abundanceByCondition[condition]["abundance"],
+				"score":       abundanceByCondition[condition]["score"],
+				"specificity": customMath.Round(math.Sqrt(adjustedAbundance), 0.01),
+			}
 		}
 	}
 	if metric == "dscore" {
-		return func(condition string, abundanceByCondition map[string]map[string]float64) float64 {
+		return func(condition string, abundanceByCondition map[string]map[string]float64) map[string]float64 {
 			freq := float64(noConditions) / float64(len(abundanceByCondition))
 			multiplier := math.Pow(freq, abundanceByCondition[condition]["reproducibility"])
 			adjustedAbundance := multiplier * abundanceByCondition[condition]["abundance"]
-			return customMath.Round(math.Sqrt(adjustedAbundance), 0.01)
+			return map[string]float64{
+				"abundance":   abundanceByCondition[condition]["abundance"],
+				"score":       abundanceByCondition[condition]["score"],
+				"specificity": customMath.Round(math.Sqrt(adjustedAbundance), 0.01),
+			}
 		}
 	}
 	if metric == "wdscore" {
-		return func(condition string, abundanceByCondition map[string]map[string]float64) float64 {
+		return func(condition string, abundanceByCondition map[string]map[string]float64) map[string]float64 {
 			values := make([]float64, noConditions)
 			i := 0
 			for _, datum := range abundanceByCondition {
@@ -112,10 +127,14 @@ func getSpecificityMetric(metric string, noConditions int) func(condition string
 			weightedFrequency := freq * omega
 			multiplier := math.Pow(weightedFrequency, abundanceByCondition[condition]["reproducibility"])
 			adjustedAbundance := multiplier * abundanceByCondition[condition]["abundance"]
-			return customMath.Round(math.Sqrt(adjustedAbundance), 0.01)
+			return map[string]float64{
+				"abundance":   abundanceByCondition[condition]["abundance"],
+				"score":       abundanceByCondition[condition]["score"],
+				"specificity": customMath.Round(math.Sqrt(adjustedAbundance), 0.01),
+			}
 		}
 	}
-	return func(condition string, abundanceByCondition map[string]map[string]float64) float64 {
+	return func(condition string, abundanceByCondition map[string]map[string]float64) map[string]float64 {
 		values := make([]float64, noConditions-1)
 		i := 0
 		for key, datum := range abundanceByCondition {
@@ -126,6 +145,25 @@ func getSpecificityMetric(metric string, noConditions int) func(condition string
 		}
 		mean := stat.Mean(values, nil)
 		specificity := abundanceByCondition[condition]["abundance"] / mean
-		return customMath.Round(specificity, 0.01)
+		return map[string]float64{
+			"abundance":   abundanceByCondition[condition]["abundance"],
+			"score":       abundanceByCondition[condition]["score"],
+			"specificity": customMath.Round(specificity, 0.01),
+		}
 	}
+}
+
+func reshapeSpecifictyByCondition(specificity map[string]map[string]map[string]float64) map[string]map[string]map[string]float64 {
+	specificityByCondition := make(map[string]map[string]map[string]float64, 0)
+
+	for readout, readoutData := range specificity {
+		for condition, conditionData := range readoutData {
+			if _, ok := specificityByCondition[condition]; !ok {
+				specificityByCondition[condition] = make(map[string]map[string]float64, 0)
+			}
+			specificityByCondition[condition][readout] = conditionData
+		}
+	}
+
+	return specificityByCondition
 }

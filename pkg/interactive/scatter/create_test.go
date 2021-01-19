@@ -41,7 +41,7 @@ var _ = Describe("Create file", func() {
 					Labels: types.ScatterAxesLabels{X: "conditionX", Y: "conditionY"},
 					Name:   "condition-condition",
 					Points: []types.ScatterPoint{
-						{Label: "readoutA", X: 1, Y: 3, Color: "#0066cc"},
+						{Label: "readoutA", X: 1.0200001, Y: 3, Color: "#0066cc"},
 						{Label: "readoutB", X: 0, Y: 4, Color: "#99ccff"},
 						{Label: "readoutC", X: 2, Y: 0, Color: "#99ccff"},
 					},
@@ -58,7 +58,7 @@ var _ = Describe("Create file", func() {
 			"\t\"legend\": [{\"color\":\"#ff0000\",\"text\":\"point1\"},{\"color\":\"#00ff00\",\"text\":\"point2\"}],\n" +
 			"\t\"parameters\": {\"abundanceColumn\":\"AvgSpec\",\"analysisType\":\"condition-condition\",\"conditionColumn\":\"Bait\",\"controlColumn\":\"ctrl\",\"files\":[\"file1\",\"file2\"],\"imageType\":\"scatter\",\"mockConditionAbundance\":false,\"normalization\":\"total\",\"readoutColumn\":\"Prey\",\"scoreColumn\":\"bfdr\",\"scoreType\":\"lte\"},\n" +
 			"\t\"settings\": {\"logBase\":10,\"xFilter\":0,\"yFilter\":0},\n" +
-			"\t\"plots\": [{\"labels\":{\"x\":\"conditionX\",\"y\":\"conditionY\"},\"name\":\"condition-condition\",\"points\":[{\"color\":\"#0066cc\",\"label\":\"readoutA\",\"x\":1,\"y\":3},{\"color\":\"#99ccff\",\"label\":\"readoutB\",\"x\":0,\"y\":4},{\"color\":\"#99ccff\",\"label\":\"readoutC\",\"x\":2,\"y\":0}]}]\n" +
+			"\t\"plots\": [{\"labels\":{\"x\":\"conditionX\",\"y\":\"conditionY\"},\"name\":\"condition-condition\",\"points\":[{\"color\":\"#0066cc\",\"label\":\"readoutA\",\"x\":1.02,\"y\":3.00},{\"color\":\"#99ccff\",\"label\":\"readoutB\",\"x\":0.00,\"y\":4.00},{\"color\":\"#99ccff\",\"label\":\"readoutC\",\"x\":2.00,\"y\":0.00}]}]\n" +
 			"}\n"
 
 		Create(data)
