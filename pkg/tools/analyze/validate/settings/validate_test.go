@@ -3,7 +3,7 @@ package settings
 import (
 	"os"
 
-	"github.com/bouk/monkey"
+	"bou.ke/monkey"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/spf13/afero"

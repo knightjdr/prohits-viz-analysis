@@ -4,7 +4,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/bouk/monkey"
+	"bou.ke/monkey"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/fs"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 	. "github.com/onsi/ginkgo"

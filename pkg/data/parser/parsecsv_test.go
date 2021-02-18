@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/bouk/monkey"
+	"bou.ke/monkey"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/fs"
 	"github.com/spf13/afero"
 )
