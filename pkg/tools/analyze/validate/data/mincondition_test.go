@@ -35,8 +35,8 @@ var _ = Describe("Validate data for minimum conditions", func() {
 })
 
 var _ = Describe("Minimum required conditions", func() {
-	It("should return 1 for circheatmap", func() {
-		Expect(getMinimumRequiredConditions("circheatmap")).To(Equal(1))
+	It("should return 1 for scv", func() {
+		Expect(getMinimumRequiredConditions("scv")).To(Equal(1))
 	})
 
 	It("should return 2 for doplot", func() {

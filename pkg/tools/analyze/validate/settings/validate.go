@@ -11,14 +11,14 @@ import (
 // Validate user analysis settings.
 func Validate(analysis *types.Analysis) {
 	switch analysis.Settings.Type {
-	case "circheatmap":
-		validateCircHeatmapSettings(analysis)
 	case "condition-condition":
 		validateCCSettings(analysis)
 	case "correlation":
 		validateCorrelationSettings(analysis)
 	case "dotplot":
 		validateDotplotSettings(analysis)
+	case "scv":
+		validateSCVSettings(analysis)
 	case "specificity":
 		validateSpecificitySettings(analysis)
 	default:

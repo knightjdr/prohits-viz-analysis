@@ -13,7 +13,7 @@ import (
 )
 
 var _ = Describe("Setting validation", func() {
-	It("should validate circheatmap", func() {
+	It("should validate scv", func() {
 		analysis := &types.Analysis{
 			Settings: types.Settings{
 				Abundance:      "avgSpec",
@@ -24,7 +24,7 @@ var _ = Describe("Setting validation", func() {
 				Readout:        "prey",
 				ReadoutLength:  "preyLength",
 				Score:          "fdr",
-				Type:           "circheatmap",
+				Type:           "scv",
 			},
 		}
 
@@ -40,15 +40,16 @@ var _ = Describe("Setting validation", func() {
 				"score":         "fdr",
 			},
 			Settings: types.Settings{
-				Abundance:      "avgSpec",
-				Condition:      "bait",
-				Control:        "ctrl",
-				Files:          []string{"file.txt"},
-				OtherAbundance: []string{"column1", "column2"},
-				Readout:        "prey",
-				ReadoutLength:  "preyLength",
-				Score:          "fdr",
-				Type:           "circheatmap",
+				Abundance:                    "avgSpec",
+				Condition:                    "bait",
+				Control:                      "ctrl",
+				Files:                        []string{"file.txt"},
+				OtherAbundance:               []string{"column1", "column2"},
+				ParsimoniousReadoutFiltering: true,
+				Readout:                      "prey",
+				ReadoutLength:                "preyLength",
+				Score:                        "fdr",
+				Type:                         "scv",
 			},
 		}
 		Validate(analysis)

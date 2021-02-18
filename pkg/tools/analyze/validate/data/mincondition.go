@@ -17,10 +17,9 @@ func confirmMinimumConditions(data []map[string]string, analysisType string) (er
 func getMinimumRequiredConditions(analysisType string) int {
 	var minConditions int
 
-	switch analysisType {
-	case "circheatmap":
+	if analysisType == "scv" {
 		minConditions = 1
-	default:
+	} else {
 		minConditions = 2
 	}
 

@@ -39,6 +39,7 @@ type ScatterPoint struct {
 type Settings struct {
 	// Shared settings
 	Abundance                    string
+	AbundanceCap                 float64
 	Condition                    string
 	Control                      string
 	Files                        []string
@@ -58,15 +59,6 @@ type Settings struct {
 	SecondaryFilter              float64
 	Type                         string
 
-	// circheatmap
-	ConditionMap   string
-	Known          bool
-	KnownFile      string
-	OtherAbundance []string
-	Species        string
-	TissueFile     string
-	Tissues        []string
-
 	// condition-condition
 	ConditionX string
 	ConditionY string
@@ -82,7 +74,6 @@ type Settings struct {
 	UseReplicates             bool
 
 	// dotplot
-	AbundanceCap        float64
 	BiclusteringApprox  bool
 	Clustering          string
 	ClusteringMethod    string
@@ -99,6 +90,20 @@ type Settings struct {
 	YLabel              string
 	WriteDistance       bool
 	WriteHeatmap        bool
+
+	// scv
+	ConditionIDType    string
+	ConditionMapColumn string
+	ConditionMapFile   string
+	Known              string
+	OtherAbundance     []string
+	ProteinTissues     []string
+	ReadoutIDType      string
+	ReadoutMapColumn   string
+	ReadoutMapFile     string
+	RnaTissues         []string
+	Specificity        bool
+	VerticalHeatmap    bool
 
 	// specificity
 	SpecificityMetric string

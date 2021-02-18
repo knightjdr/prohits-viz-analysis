@@ -9,6 +9,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/cc"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/correlation"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/dotplot"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/scv"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/settings"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/specificity"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/analyze/validate/data"
@@ -32,6 +33,8 @@ func Run() {
 		correlation.Generate(analysis)
 	case "dotplot":
 		dotplot.Generate(analysis)
+	case "scv":
+		scv.Generate(analysis)
 	case "specificity":
 		specificity.Generate(analysis)
 	}
