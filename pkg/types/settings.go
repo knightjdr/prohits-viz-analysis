@@ -92,18 +92,20 @@ type Settings struct {
 	WriteHeatmap        bool
 
 	// scv
-	ConditionIDType    string
-	ConditionMapColumn string
-	ConditionMapFile   string
-	Known              string
-	OtherAbundance     []string
-	ProteinTissues     []string
-	ReadoutIDType      string
-	ReadoutMapColumn   string
-	ReadoutMapFile     string
-	RnaTissues         []string
-	Specificity        bool
-	VerticalHeatmap    bool
+	AbundanceFilterColumn string
+	ConditionIDType       string
+	ConditionMapColumn    string
+	ConditionMapFile      string
+	GeneFile              string
+	Known                 string
+	OtherAbundance        []string
+	ProteinTissues        []string
+	ReadoutIDType         string
+	ReadoutMapColumn      string
+	ReadoutMapFile        string
+	RnaTissues            []string
+	Specificity           bool
+	VerticalHeatmap       bool
 
 	// specificity
 	SpecificityMetric string

@@ -11,6 +11,59 @@ import (
 )
 
 var _ = Describe("Log", func() {
+	It("should log cc settings", func() {
+		oldFs := fs.Instance
+		defer func() { fs.Instance = oldFs }()
+		fs.Instance = afero.NewMemMapFs()
+
+		settings := types.Settings{
+			Abundance:       "abundanceColumn",
+			Condition:       "Bait",
+			ConditionX:      "condition1",
+			ConditionY:      "condition2",
+			Control:         "controlColumn",
+			Files:           []string{"/folder/file1.txt", "file2.txt"},
+			MinAbundance:    5.00,
+			Normalization:   "total",
+			PrimaryFilter:   0.01,
+			Readout:         "Prey",
+			ReadoutLength:   "readoutLengthColumn",
+			Score:           "scoreColumn",
+			ScoreType:       "lte",
+			SecondaryFilter: 0.05,
+			Type:            "condition-condition",
+		}
+
+		expected := "Analysis type: condition-condition\n\n" +
+			"Files used\n" +
+			"- file1.txt\n" +
+			"- file2.txt\n\n" +
+			"Columns used\n" +
+			"- abundance: abundanceColumn\n" +
+			"- condition: Bait\n" +
+			"- readout: Prey\n" +
+			"- score: scoreColumn\n" +
+			"- control: controlColumn\n" +
+			"- readout length: readoutLengthColumn\n\n" +
+			"Prey abundance transformations\n" +
+			"- control subtraction was performed\n" +
+			"- Prey length normalization was performed\n" +
+			"- Bait normalization was performed using total abundance\n\n" +
+			"Conditions\n" +
+			"- x-axis: condition1\n" +
+			"- y-axis: condition2\n\n" +
+			"Abundance\n" +
+			"- minimum abundance required: 5\n\n" +
+			"Scoring\n" +
+			"- smaller scores are better\n" +
+			"- primary filter: 0.01\n" +
+			"- secondary filter: 0.05\n\n"
+
+		Log(settings)
+		actual, _ := afero.ReadFile(fs.Instance, "log.txt")
+		Expect(string(actual)).To(Equal(expected))
+	})
+
 	It("should log correlation settings", func() {
 		oldFs := fs.Instance
 		defer func() { fs.Instance = oldFs }()
@@ -146,6 +199,117 @@ var _ = Describe("Log", func() {
 			"- distance metric: canberra\n" +
 			"- linkage method: complete\n" +
 			"- leaf clusters were optimized\n\n"
+
+		Log(settings)
+		actual, _ := afero.ReadFile(fs.Instance, "log.txt")
+		Expect(string(actual)).To(Equal(expected))
+	})
+
+	It("should log scv settings", func() {
+		oldFs := fs.Instance
+		defer func() { fs.Instance = oldFs }()
+		fs.Instance = afero.NewMemMapFs()
+
+		settings := types.Settings{
+			Abundance:             "abundanceColumn",
+			AbundanceCap:          10.00,
+			AbundanceFilterColumn: "abundanceColumn",
+			Condition:             "Bait",
+			ConditionIDType:       "symbol",
+			ConditionMapColumn:    "baitID",
+			Control:               "controlColumn",
+			Files:                 []string{"/folder/file1.txt", "file2.txt"},
+			Known:                 "interaction",
+			MinAbundance:          5.00,
+			Normalization:         "total",
+			PrimaryFilter:         0.01,
+			Readout:               "Prey",
+			ReadoutIDType:         "refseqp",
+			ReadoutLength:         "readoutLengthColumn",
+			ReadoutMapColumn:      "preyID",
+			Score:                 "scoreColumn",
+			ScoreType:             "lte",
+			Type:                  "scv",
+		}
+
+		expected := "Analysis type: scv\n\n" +
+			"Files used\n" +
+			"- file1.txt\n" +
+			"- file2.txt\n\n" +
+			"Columns used\n" +
+			"- abundance: abundanceColumn\n" +
+			"- condition: Bait\n" +
+			"- readout: Prey\n" +
+			"- score: scoreColumn\n" +
+			"- control: controlColumn\n" +
+			"- readout length: readoutLengthColumn\n\n" +
+			"Prey abundance transformations\n" +
+			"- control subtraction was performed\n" +
+			"- Prey length normalization was performed\n" +
+			"- Bait normalization was performed using total abundance\n\n" +
+			"Abundance\n" +
+			"- column for abundance filtering: abundanceColumn\n" +
+			"- minimum abundance required: 5\n" +
+			"- abundances were capped at 10 for visualization\n\n" +
+			"Scoring\n" +
+			"- smaller scores are better\n" +
+			"- primary filter: 0.01\n\n" +
+			"ID mapping\n" +
+			"- Bait ID type: symbol\n" +
+			"- Bait IDs were mapped by column: baitID\n" +
+			"- Prey ID type: refseqp\n" +
+			"- Prey IDs were mapped by column: preyID\n\n" +
+			"Known metric\n" +
+			"- Prey knownness was evaluated by: interaction\n\n"
+
+		Log(settings)
+		actual, _ := afero.ReadFile(fs.Instance, "log.txt")
+		Expect(string(actual)).To(Equal(expected))
+	})
+
+	It("should log specificity settings", func() {
+		oldFs := fs.Instance
+		defer func() { fs.Instance = oldFs }()
+		fs.Instance = afero.NewMemMapFs()
+
+		settings := types.Settings{
+			Abundance:         "abundanceColumn",
+			Condition:         "Bait",
+			Control:           "controlColumn",
+			Files:             []string{"/folder/file1.txt", "file2.txt"},
+			MinAbundance:      5.00,
+			Normalization:     "total",
+			PrimaryFilter:     0.01,
+			Readout:           "Prey",
+			ReadoutLength:     "readoutLengthColumn",
+			Score:             "scoreColumn",
+			ScoreType:         "lte",
+			SpecificityMetric: "fe",
+			Type:              "specificity",
+		}
+
+		expected := "Analysis type: specificity\n\n" +
+			"Files used\n" +
+			"- file1.txt\n" +
+			"- file2.txt\n\n" +
+			"Columns used\n" +
+			"- abundance: abundanceColumn\n" +
+			"- condition: Bait\n" +
+			"- readout: Prey\n" +
+			"- score: scoreColumn\n" +
+			"- control: controlColumn\n" +
+			"- readout length: readoutLengthColumn\n\n" +
+			"Prey abundance transformations\n" +
+			"- control subtraction was performed\n" +
+			"- Prey length normalization was performed\n" +
+			"- Bait normalization was performed using total abundance\n\n" +
+			"Metric\n" +
+			"- specificity metric: fe\n\n" +
+			"Abundance\n" +
+			"- minimum abundance required: 5\n\n" +
+			"Scoring\n" +
+			"- smaller scores are better\n" +
+			"- primary filter: 0.01\n\n"
 
 		Log(settings)
 		actual, _ := afero.ReadFile(fs.Instance, "log.txt")

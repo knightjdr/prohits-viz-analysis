@@ -10,9 +10,29 @@ import (
 	"github.com/spf13/afero"
 )
 
-// Read a csv file to a slice. Using the columnMap to map from column name to
+// ReadToMap reads a two column csv file to a map.
+func ReadToMap(filename string, sep rune) map[string]string {
+	file := openFile(filename)
+	reader := createReader(file, sep)
+
+	data := make(map[string]string, 0)
+
+	for {
+		line, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		log.CheckError(err, true)
+
+		data[line[0]] = line[1]
+	}
+
+	return data
+}
+
+// ReadToSliceViaHeader reads a csv file to a slice. Using the columnMap to map from column name to
 // row field.
-func Read(filename string, sep rune, columnMap map[string]string) []map[string]string {
+func ReadToSliceViaHeader(filename string, sep rune, columnMap map[string]string) []map[string]string {
 	file := openFile(filename)
 	reader := createReader(file, sep)
 

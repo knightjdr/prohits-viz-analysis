@@ -16,7 +16,6 @@ func validateSCVSettings(analysis *types.Analysis) {
 	}
 
 	analysis.Columns = appendOtherColumns(columnMap, otherColumns)
-	analysis.Settings.ParsimoniousReadoutFiltering = true
 }
 
 func appendOtherColumns(columnMap map[string]string, otherColumns []string) map[string]string {

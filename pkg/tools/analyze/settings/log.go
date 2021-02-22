@@ -22,6 +22,8 @@ func Log(settings types.Settings) {
 		logCorrelationSettings(&messages, settings)
 	case "dotplot":
 		logDotplotSettings(&messages, settings)
+	case "scv":
+		logSCVSettings(&messages, settings)
 	case "specificity":
 		logSpecificitySettings(&messages, settings)
 	}

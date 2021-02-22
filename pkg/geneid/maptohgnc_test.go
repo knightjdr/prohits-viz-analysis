@@ -32,10 +32,99 @@ var geneFile = `{
 		"symbol": "b",
 		"uniprotacc": ["P22222"],
 		"uniprotid": ["B_HUMAN"]
+	},
+	"3": {
+		"aliasSymbol": [],
+		"ensemblg": "ENSG00000000003",
+		"ensemblp": ["ENSP00000000003"],
+		"entrez": "",
+		"prevSymbol": [],
+		"refseqg": ["NM_000003"],
+		"refseqp": [],
+		"symbol": "c",
+		"uniprotacc": ["P33333"],
+		"uniprotid": ["C_HUMAN"]
 	}
 }`
 
-var _ = Describe("Maptohgnc", func() {
+var _ = Describe("Map to HGNC", func() {
+	Describe("map IDs to HGNC", func() {
+		It("should map ids", func() {
+			oldFs := fs.Instance
+			defer func() { fs.Instance = oldFs }()
+			fs.Instance = afero.NewMemMapFs()
+
+			filename := "test/gene-db.json"
+			fs.Instance.MkdirAll("test", 0755)
+			afero.WriteFile(fs.Instance, filename, []byte(geneFile), 0444)
+
+			ids := map[string]string{
+				"a": "111",
+				"b": "222",
+				"c": "333",
+			}
+			idType := "entrez"
+			settings := &HGNCsettings{
+				File: "test/gene-db.json",
+			}
+
+			expectedMapping := map[string]string{
+				"a": "1",
+				"b": "2",
+				"c": "",
+			}
+			expectedSettings := &HGNCsettings{
+				File: "test/gene-db.json",
+				DB: HGNCmap{
+					"1": {
+						AliasSymbol: []string{"A"},
+						Ensemblg:    "ENSG00000000001",
+						Ensemblp:    []string{"ENSP00000000001"},
+						Entrez:      "111",
+						PrevSymbol:  []string{"aa", "aaa"},
+						Refseqg:     []string{"NM_000001"},
+						Refseqp:     []string{"NP_000001"},
+						Symbol:      "a",
+						Uniprotacc:  []string{"P11111"},
+						Uniprotid:   []string{"A_HUMAN"},
+					},
+					"2": {
+						AliasSymbol: []string{},
+						Ensemblg:    "ENSG00000000002",
+						Ensemblp:    []string{"ENSP00000000002"},
+						Entrez:      "222",
+						PrevSymbol:  []string{},
+						Refseqg:     []string{"NM_000002"},
+						Refseqp:     []string{"NP_000002"},
+						Symbol:      "b",
+						Uniprotacc:  []string{"P22222"},
+						Uniprotid:   []string{"B_HUMAN"},
+					},
+					"3": {
+						AliasSymbol: []string{},
+						Ensemblg:    "ENSG00000000003",
+						Ensemblp:    []string{"ENSP00000000003"},
+						Entrez:      "",
+						PrevSymbol:  []string{},
+						Refseqg:     []string{"NM_000003"},
+						Refseqp:     []string{},
+						Symbol:      "c",
+						Uniprotacc:  []string{"P33333"},
+						Uniprotid:   []string{"C_HUMAN"},
+					},
+				},
+				IntermediateIDtoHGNC: map[string]string{
+					"111": "1",
+					"222": "2",
+				},
+			}
+
+			actualMapping, actualSettings := MapToHGNC(ids, idType, settings)
+			Expect(actualMapping).To(Equal(expectedMapping))
+			Expect(actualSettings).To(Equal(expectedSettings))
+		})
+	})
+
 	Describe("read gene id file", func() {
 		It("should read a json file", func() {
 			oldFs := fs.Instance
@@ -71,15 +160,27 @@ var _ = Describe("Maptohgnc", func() {
 					Uniprotacc:  []string{"P22222"},
 					Uniprotid:   []string{"B_HUMAN"},
 				},
+				"3": {
+					AliasSymbol: []string{},
+					Ensemblg:    "ENSG00000000003",
+					Ensemblp:    []string{"ENSP00000000003"},
+					Entrez:      "",
+					PrevSymbol:  []string{},
+					Refseqg:     []string{"NM_000003"},
+					Refseqp:     []string{},
+					Symbol:      "c",
+					Uniprotacc:  []string{"P33333"},
+					Uniprotid:   []string{"C_HUMAN"},
+				},
 			}
 			Expect(readGeneIDfile(filename)).To(Equal(expected))
 		})
 	})
 
-	Describe("Define ID parser", func() {
+	Describe("define ID parser for extracting IDs from file", func() {
 		It("should parse ensemlbg", func() {
 			idType := "ensemblg"
-			parser := defineIDParser(idType)
+			parser := defineParserForIDFromDB(idType)
 			ids := GeneIdentifiers{
 				Ensemblg: "ENSG00000000001",
 			}
@@ -90,7 +191,7 @@ var _ = Describe("Maptohgnc", func() {
 
 		It("should parse ensemlbp", func() {
 			idType := "ensemblp"
-			parser := defineIDParser(idType)
+			parser := defineParserForIDFromDB(idType)
 			ids := GeneIdentifiers{
 				Ensemblp: []string{"ENSP00000000001", "ENSP00000000011"},
 			}
@@ -101,7 +202,7 @@ var _ = Describe("Maptohgnc", func() {
 
 		It("should parse entrez", func() {
 			idType := "entrez"
-			parser := defineIDParser(idType)
+			parser := defineParserForIDFromDB(idType)
 			ids := GeneIdentifiers{
 				Entrez: "111",
 			}
@@ -112,7 +213,7 @@ var _ = Describe("Maptohgnc", func() {
 
 		It("should parse refseqg", func() {
 			idType := "refseqg"
-			parser := defineIDParser(idType)
+			parser := defineParserForIDFromDB(idType)
 			ids := GeneIdentifiers{
 				Refseqg: []string{"NM_000011", "NM_000001.1", "NM_000001.2"},
 			}
@@ -123,7 +224,7 @@ var _ = Describe("Maptohgnc", func() {
 
 		It("should parse refseqp", func() {
 			idType := "refseqp"
-			parser := defineIDParser(idType)
+			parser := defineParserForIDFromDB(idType)
 			ids := GeneIdentifiers{
 				Refseqp: []string{"NP_000011", "NP_000001.1", "NP_000001.2"},
 			}
@@ -134,7 +235,7 @@ var _ = Describe("Maptohgnc", func() {
 
 		It("should parse symbol", func() {
 			idType := "symbol"
-			parser := defineIDParser(idType)
+			parser := defineParserForIDFromDB(idType)
 			ids := GeneIdentifiers{
 				AliasSymbol: []string{"A", "AA"},
 				PrevSymbol:  []string{"aa"},
@@ -147,7 +248,7 @@ var _ = Describe("Maptohgnc", func() {
 
 		It("should parse uniprotacc", func() {
 			idType := "uniprotacc"
-			parser := defineIDParser(idType)
+			parser := defineParserForIDFromDB(idType)
 			ids := GeneIdentifiers{
 				Uniprotacc: []string{"P11111"},
 			}
@@ -158,7 +259,7 @@ var _ = Describe("Maptohgnc", func() {
 
 		It("should parse uniprotid", func() {
 			idType := "uniprotid"
-			parser := defineIDParser(idType)
+			parser := defineParserForIDFromDB(idType)
 			ids := GeneIdentifiers{
 				Uniprotid: []string{"A_HUMAN"},
 			}
@@ -174,6 +275,7 @@ var _ = Describe("Maptohgnc", func() {
 			db := HGNCmap{
 				"1": {Entrez: "111"},
 				"2": {Entrez: "222"},
+				"3": {Entrez: ""},
 			}
 
 			expected := map[string]string{
@@ -234,6 +336,35 @@ var _ = Describe("Maptohgnc", func() {
 				"d":  "4",
 			}
 			Expect(createIDtoHGNCmap(db, idType)).To(Equal(expected))
+		})
+	})
+
+	Describe("define formatter for intermediate IDs", func() {
+		It("should format entrez as is (i.e. unmodified)", func() {
+			idType := "entrez"
+			formatter := defineFormatterForIntermediateID(idType)
+			id := "111"
+
+			expected := "111"
+			Expect(formatter(id)).To(Equal((expected)))
+		})
+
+		It("should format refseqg by stripping version numbers", func() {
+			idType := "refseqg"
+			formatter := defineFormatterForIntermediateID(idType)
+			id := "NM_00001.1"
+
+			expected := "NM_00001"
+			Expect(formatter(id)).To(Equal((expected)))
+		})
+
+		It("should format refseqp by stripping version numbers", func() {
+			idType := "refseqp"
+			formatter := defineFormatterForIntermediateID(idType)
+			id := "NP_00001.1"
+
+			expected := "NP_00001"
+			Expect(formatter(id)).To(Equal((expected)))
 		})
 	})
 })

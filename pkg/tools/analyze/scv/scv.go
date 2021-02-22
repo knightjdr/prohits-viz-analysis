@@ -9,7 +9,9 @@ import (
 func Generate(analysis *types.Analysis) {
 	createFolders(analysis.Settings)
 
-	mapIDs(analysis)
+	idMaps := mapIDs(analysis)
+
+	writeMaps(idMaps, analysis.Settings)
 
 	/* specificity := calculateSpecificity(analysis)
 	plotByCondition := formatDataForPlot(specificity, analysis.Settings)

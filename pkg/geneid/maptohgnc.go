@@ -31,20 +31,26 @@ type HGNCmap map[string]GeneIdentifiers
 
 // HGNCsettings are configuration options for reading and mapping HGNC identifiers.
 type HGNCsettings struct {
-	File     string
-	DB       HGNCmap
-	IDtoHGNC map[string]string
+	File                 string
+	DB                   HGNCmap
+	IntermediateIDtoHGNC map[string]string
+	IntermediateIDType   string
 }
 
 // MapToHGNC maps identifiers to HGNC
-func MapToHGNC(ids map[string]string, idType string, settings *HGNCsettings) {
-	if settings.IDtoHGNC == nil && settings.DB == nil {
+func MapToHGNC(ids map[string]string, idType string, settings *HGNCsettings) (map[string]string, *HGNCsettings) {
+	if settings.IntermediateIDtoHGNC == nil && settings.DB == nil {
 		settings.DB = readGeneIDfile(settings.File)
-		settings.IDtoHGNC = createIDtoHGNCmap(settings.DB, idType)
+		settings.IntermediateIDtoHGNC = createIDtoHGNCmap(settings.DB, idType)
 	}
-	if settings.IDtoHGNC == nil {
-		settings.IDtoHGNC = createIDtoHGNCmap(settings.DB, idType)
+	if settings.IntermediateIDtoHGNC != nil && settings.IntermediateIDType != idType {
+		settings.IntermediateIDtoHGNC = createIDtoHGNCmap(settings.DB, idType)
 	}
+	settings.IntermediateIDType = idType
+
+	mapped := mapIDToHGNCviaIntermediate(ids, idType, settings.IntermediateIDtoHGNC)
+
+	return mapped, settings
 }
 
 func readGeneIDfile(filename string) HGNCmap {
@@ -62,11 +68,13 @@ func readGeneIDfile(filename string) HGNCmap {
 func createIDtoHGNCmap(db HGNCmap, idType string) map[string]string {
 	preliminaryMap := make(map[string]string, 0)
 
-	parser := defineIDParser(idType)
+	parser := defineParserForIDFromDB(idType)
 	for hgncID, geneIDs := range db {
 		parsed := parser(geneIDs)
 		for _, id := range parsed {
-			if _, ok := preliminaryMap[id]; !ok {
+			isNil := id == ""
+			_, isDupe := preliminaryMap[id]
+			if !isNil && !isDupe {
 				preliminaryMap[id] = hgncID
 			}
 		}
@@ -110,7 +118,7 @@ func createIDtoHGNCmap(db HGNCmap, idType string) map[string]string {
 	return consolidatedMap
 }
 
-func defineIDParser(idType string) func(GeneIdentifiers) []string {
+func defineParserForIDFromDB(idType string) func(GeneIdentifiers) []string {
 	if idType == "ensemblg" {
 		return func(geneIDs GeneIdentifiers) []string {
 			return []string{geneIDs.Ensemblg}
@@ -177,5 +185,33 @@ func defineIDParser(idType string) func(GeneIdentifiers) []string {
 
 	return func(geneIDs GeneIdentifiers) []string {
 		return []string{}
+	}
+}
+
+func mapIDToHGNCviaIntermediate(ids map[string]string, idType string, IntermediateIDtoHGNC map[string]string) map[string]string {
+	mapped := make(map[string]string, len(ids))
+
+	formatter := defineFormatterForIntermediateID(idType)
+	for sourceID, intermediateID := range ids {
+		id := formatter(intermediateID)
+		if _, ok := IntermediateIDtoHGNC[id]; ok {
+			mapped[sourceID] = IntermediateIDtoHGNC[id]
+		} else {
+			mapped[sourceID] = ""
+		}
+	}
+
+	return mapped
+}
+
+func defineFormatterForIntermediateID(idType string) func(string) string {
+	if idType == "refseqg" || idType == "refseqp" {
+		return func(id string) string {
+			return strings.Split(id, ".")[0]
+		}
+	}
+
+	return func(id string) string {
+		return id
 	}
 }

@@ -12,18 +12,38 @@ import (
 	"github.com/spf13/afero"
 )
 
-var csvText = `field1	field2	field3
-A	1	C
-D	2	F
-G	3	I
-`
-
-var _ = Describe("CSV reader", func() {
-	It("should read a csv file", func() {
+var _ = Describe("Read csv file to map", func() {
+	It("should read a two-column csv file to a map", func() {
 		oldFs := fs.Instance
 		defer func() { fs.Instance = oldFs }()
 		fs.Instance = afero.NewMemMapFs()
 
+		csvText := "A\t1\n" +
+			"B\t2\n" +
+			"C\t3\n"
+		fs.Instance.MkdirAll("test", 0755)
+		afero.WriteFile(fs.Instance, "test/csv.txt", []byte(csvText), 0444)
+
+		expected := map[string]string{
+			"A": "1",
+			"B": "2",
+			"C": "3",
+		}
+
+		Expect(ReadToMap("test/csv.txt", '\t')).To(Equal(expected))
+	})
+})
+
+var _ = Describe("Read csv file to slice via header", func() {
+	It("should read a csv file using a header for mapping to keys", func() {
+		oldFs := fs.Instance
+		defer func() { fs.Instance = oldFs }()
+		fs.Instance = afero.NewMemMapFs()
+
+		csvText := "field1\tfield2\tfield3\n" +
+			"A\t1\tC\n" +
+			"D\t2\tF\n" +
+			"G\t3\tI\n"
 		fs.Instance.MkdirAll("test", 0755)
 		afero.WriteFile(fs.Instance, "test/csv.txt", []byte(csvText), 0444)
 
@@ -38,7 +58,7 @@ var _ = Describe("CSV reader", func() {
 			{"field-1": "G", "field2": "3", "field-3": "I"},
 		}
 
-		Expect(Read("test/csv.txt", '\t', headerMap)).To(Equal(expected))
+		Expect(ReadToSliceViaHeader("test/csv.txt", '\t', headerMap)).To(Equal(expected))
 	})
 })
 

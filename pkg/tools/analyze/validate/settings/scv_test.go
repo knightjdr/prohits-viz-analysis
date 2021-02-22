@@ -11,15 +11,14 @@ var _ = Describe("SCV validation", func() {
 	It("should validate settings and append additional abundance columns to column map", func() {
 		analysis := &types.Analysis{
 			Settings: types.Settings{
-				Abundance:                    "avgSpec",
-				Condition:                    "bait",
-				Control:                      "ctrl",
-				Files:                        []string{"file.txt"},
-				OtherAbundance:               []string{"column1", "column2"},
-				ParsimoniousReadoutFiltering: false,
-				Readout:                      "prey",
-				ReadoutLength:                "preyLength",
-				Score:                        "fdr",
+				Abundance:      "avgSpec",
+				Condition:      "bait",
+				Control:        "ctrl",
+				Files:          []string{"file.txt"},
+				OtherAbundance: []string{"column1", "column2"},
+				Readout:        "prey",
+				ReadoutLength:  "preyLength",
+				Score:          "fdr",
 			},
 		}
 
@@ -35,15 +34,14 @@ var _ = Describe("SCV validation", func() {
 				"score":         "fdr",
 			},
 			Settings: types.Settings{
-				Abundance:                    "avgSpec",
-				Condition:                    "bait",
-				Control:                      "ctrl",
-				Files:                        []string{"file.txt"},
-				OtherAbundance:               []string{"column1", "column2"},
-				ParsimoniousReadoutFiltering: true,
-				Readout:                      "prey",
-				ReadoutLength:                "preyLength",
-				Score:                        "fdr",
+				Abundance:      "avgSpec",
+				Condition:      "bait",
+				Control:        "ctrl",
+				Files:          []string{"file.txt"},
+				OtherAbundance: []string{"column1", "column2"},
+				Readout:        "prey",
+				ReadoutLength:  "preyLength",
+				Score:          "fdr",
 			},
 		}
 		validateSCVSettings(analysis)
@@ -53,17 +51,16 @@ var _ = Describe("SCV validation", func() {
 	It("should validate settings and append abundance and map columns", func() {
 		analysis := &types.Analysis{
 			Settings: types.Settings{
-				Abundance:                    "avgSpec",
-				Condition:                    "bait",
-				ConditionMapColumn:           "baitid",
-				Control:                      "ctrl",
-				Files:                        []string{"file.txt"},
-				OtherAbundance:               []string{"column1", "column2"},
-				ParsimoniousReadoutFiltering: false,
-				Readout:                      "prey",
-				ReadoutLength:                "preyLength",
-				ReadoutMapColumn:             "preyid",
-				Score:                        "fdr",
+				Abundance:          "avgSpec",
+				Condition:          "bait",
+				ConditionMapColumn: "baitid",
+				Control:            "ctrl",
+				Files:              []string{"file.txt"},
+				OtherAbundance:     []string{"column1", "column2"},
+				Readout:            "prey",
+				ReadoutLength:      "preyLength",
+				ReadoutMapColumn:   "preyid",
+				Score:              "fdr",
 			},
 		}
 
@@ -81,17 +78,16 @@ var _ = Describe("SCV validation", func() {
 				"score":         "fdr",
 			},
 			Settings: types.Settings{
-				Abundance:                    "avgSpec",
-				Condition:                    "bait",
-				ConditionMapColumn:           "baitid",
-				Control:                      "ctrl",
-				Files:                        []string{"file.txt"},
-				OtherAbundance:               []string{"column1", "column2"},
-				ParsimoniousReadoutFiltering: true,
-				Readout:                      "prey",
-				ReadoutLength:                "preyLength",
-				ReadoutMapColumn:             "preyid",
-				Score:                        "fdr",
+				Abundance:          "avgSpec",
+				Condition:          "bait",
+				ConditionMapColumn: "baitid",
+				Control:            "ctrl",
+				Files:              []string{"file.txt"},
+				OtherAbundance:     []string{"column1", "column2"},
+				Readout:            "prey",
+				ReadoutLength:      "preyLength",
+				ReadoutMapColumn:   "preyid",
+				Score:              "fdr",
 			},
 		}
 		validateSCVSettings(analysis)

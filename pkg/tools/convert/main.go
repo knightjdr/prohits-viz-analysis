@@ -19,7 +19,7 @@ func File() {
 		"score":  "score",
 		"value":  "abundance",
 	}
-	csv := csv.Read(file, '\t', headerMap)
+	csv := csv.ReadToSliceViaHeader(file, '\t', headerMap)
 	settings := settings.Parse(csv)
 
 	matrices := createMatrices(&csv, settings.ScoreType)
