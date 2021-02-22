@@ -4,6 +4,7 @@ import (
 	"math"
 	"sort"
 
+	"github.com/knightjdr/prohits-viz-analysis/pkg/data/filter"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
@@ -18,28 +19,17 @@ func formatDataForPlot(data map[string]map[string]map[string]float64, settings t
 func filterData(data map[string]map[string]map[string]float64, settings types.Settings) map[string]map[string]map[string]float64 {
 	filtered := make(map[string]map[string]map[string]float64, 0)
 
-	passesFilter := getScoreFilterer(settings.ScoreType, settings.PrimaryFilter)
+	doesScorePassFilter := filter.DefineScoreFilter(settings)
 	for condition, conditionData := range data {
 		filtered[condition] = make(map[string]map[string]float64, 0)
 		for readout, readoutData := range conditionData {
-			if passesFilter(readoutData["score"]) {
+			if doesScorePassFilter(readoutData["score"]) {
 				filtered[condition][readout] = readoutData
 			}
 		}
 	}
 
 	return filtered
-}
-
-func getScoreFilterer(scoreType string, filter float64) func(score float64) bool {
-	if scoreType == "gte" {
-		return func(score float64) bool {
-			return score >= filter
-		}
-	}
-	return func(score float64) bool {
-		return score <= filter
-	}
 }
 
 func defineMaxPerCondition(data map[string]map[string]map[string]float64) map[string]float64 {

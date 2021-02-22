@@ -98,11 +98,14 @@ type Settings struct {
 	ConditionMapFile      string
 	GeneFile              string
 	Known                 string
+	KnownFile             string
 	OtherAbundance        []string
+	ProteinExpressionFile string
 	ProteinTissues        []string
 	ReadoutIDType         string
 	ReadoutMapColumn      string
 	ReadoutMapFile        string
+	RnaExpressionFile     string
 	RnaTissues            []string
 	Specificity           bool
 	VerticalHeatmap       bool

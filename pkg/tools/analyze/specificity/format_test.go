@@ -78,31 +78,6 @@ var _ = Describe("Format specificity data", func() {
 			Expect(filterData(data, settings)).To(Equal(expected))
 		})
 	})
-	Describe("define score filter", func() {
-		It("should filter for type gte", func() {
-			primaryFilter := 0.01
-			scoreType := "gte"
-			passesFilter := getScoreFilterer(scoreType, primaryFilter)
-
-			tests := []float64{0, 0.01, 0.02}
-			expected := []bool{false, true, true}
-			for i, test := range tests {
-				Expect(passesFilter(test)).To(Equal(expected[i]))
-			}
-		})
-
-		It("should filter for type lte", func() {
-			primaryFilter := 0.01
-			scoreType := "lte"
-			passesFilter := getScoreFilterer(scoreType, primaryFilter)
-
-			tests := []float64{0, 0.01, 0.02}
-			expected := []bool{true, true, false}
-			for i, test := range tests {
-				Expect(passesFilter(test)).To(Equal(expected[i]))
-			}
-		})
-	})
 
 	Describe("max per condition", func() {
 		It("should return the max (excluding infinity) per condition", func() {

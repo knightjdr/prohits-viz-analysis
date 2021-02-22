@@ -143,10 +143,10 @@ var _ = Describe("Map IDs", func() {
 			"c\tENSG00000000003\n"
 
 		dbFileName := "test/gene-db.json"
-		readoutFileName := "test/readout-map.txt"
 		fs.Instance.MkdirAll("test", 0755)
+		fs.Instance.MkdirAll("helper-files", 0755)
 		afero.WriteFile(fs.Instance, dbFileName, []byte(geneFile), 0444)
-		afero.WriteFile(fs.Instance, readoutFileName, []byte(readoutMapFile), 0444)
+		afero.WriteFile(fs.Instance, "helper-files/readout-map.txt", []byte(readoutMapFile), 0444)
 
 		analysis := &types.Analysis{
 			Data: []map[string]string{
@@ -162,7 +162,7 @@ var _ = Describe("Map IDs", func() {
 				GeneFile:           "test/gene-db.json",
 				ReadoutIDType:      "ensemblg",
 				ReadoutMapColumn:   "",
-				ReadoutMapFile:     "test/readout-map.txt",
+				ReadoutMapFile:     "readout-map.txt",
 			},
 		}
 
