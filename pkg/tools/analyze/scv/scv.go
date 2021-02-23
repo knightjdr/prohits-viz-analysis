@@ -15,8 +15,11 @@ func Generate(analysis *types.Analysis) {
 	addAbundance(data, analysis)
 	addExpression("protein", data, idMaps, analysis.Settings)
 	addExpression("rna", data, idMaps, analysis.Settings)
+	addSpecificity(data, analysis)
 
 	defineKnown(data, idMaps, analysis.Settings)
+
+	createLegend(analysis.Settings)
 
 	writeMaps(idMaps, analysis.Settings)
 

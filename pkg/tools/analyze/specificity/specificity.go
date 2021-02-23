@@ -2,6 +2,7 @@
 package specificity
 
 import (
+	"github.com/knightjdr/prohits-viz-analysis/pkg/specificity"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
@@ -9,7 +10,7 @@ import (
 func Generate(analysis *types.Analysis) {
 	createFolders(analysis.Settings)
 
-	specificity := calculateSpecificity(analysis)
+	specificity := specificity.Calculate(analysis)
 	plotByCondition := formatDataForPlot(specificity, analysis.Settings)
 
 	createLegend(analysis.Settings)
