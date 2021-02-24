@@ -8,20 +8,13 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/color"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/float"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/fs"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 	"github.com/spf13/afero"
 )
 
-// LegendElement contains settings for each metric in the circheatmap.
-type LegendElement struct {
-	Color     string
-	Max       float64
-	Min       float64
-	Attribute string
-}
-
 // Legend settings.
 type Legend struct {
-	Elements []LegendElement
+	Elements types.CircHeatmapLegend
 	Filename string
 	Known    string
 	Title    string
@@ -53,7 +46,7 @@ func calculateLegendHeight(noElements int, known string) int {
 }
 
 func createLegendHeader(svg *strings.Builder, height int) {
-	svg.WriteString(fmt.Sprintf("<svg  xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"210\" height=\"%[1]d\" viewBox=\"0 0 210 %[1]d\">\n", height))
+	svg.WriteString(fmt.Sprintf("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"210\" height=\"%[1]d\" viewBox=\"0 0 210 %[1]d\">\n", height))
 	svg.WriteString("\t<rect width=\"100%\" height=\"100%\" fill=\"white\" />\n")
 }
 
@@ -61,7 +54,7 @@ func createLegendTitle(svg *strings.Builder, title string) {
 	svg.WriteString(fmt.Sprintf("\t<text y=\"20\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">%s</text>\n", title))
 }
 
-func createLegendGradients(svg *strings.Builder, elements []LegendElement) {
+func createLegendGradients(svg *strings.Builder, elements types.CircHeatmapLegend) {
 	numColors := 101
 	halfColorIndex := int(math.Floor(float64(numColors) / 2))
 
@@ -102,23 +95,6 @@ func createLegendGradients(svg *strings.Builder, elements []LegendElement) {
 }
 
 func createLegendKnownBar(svg *strings.Builder, known string, height int) {
-	/* <g transform={`translate(0 ${gradientHeight + 70})`}>
-		<text
-			textAnchor="middle"
-			x="100"
-			y="0"
-		>
-			Known
-		</text>
-		<line
-			stroke="black"
-			strokeWidth="3"
-			x1="50"
-			x2="150"
-			y1="10"
-			y2="10"
-		/>
-	</g> */
 	if known != "" {
 		svg.WriteString(fmt.Sprintf(
 			"\t\t<g transform=\"translate(0 %d)\">\n"+

@@ -117,6 +117,7 @@ var _ = Describe("Map to HGNC", func() {
 					"111": "1",
 					"222": "2",
 				},
+				IntermediateIDType: "entrez",
 			}
 
 			actualMapping, actualSettings := MapToHGNC(ids, idType, settings)

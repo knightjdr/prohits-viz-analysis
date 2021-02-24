@@ -25,6 +25,7 @@ var _ = Describe("Draw condition-condition legend", func() {
 		}
 
 		expectedSVG := "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"200\" height=\"100\" viewBox=\"0 0 200 100\">\n" +
+			"\t<rect width=\"100%\" height=\"100%\" fill=\"white\" />\n" +
 			"\t<text y=\"20\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Bait-Bait</text>\n" +
 			"\t<circle cx=\"20\" cy=\"50\" fill=\"#0066cc\" r=\"6\" />\n" +
 			"\t<text font-size=\"12\" x=\"35\" y=\"54\">FDR &#8804; 0.01</text>\n" +

@@ -12,13 +12,16 @@ var _ = Describe("SCV validation", func() {
 		analysis := &types.Analysis{
 			Settings: types.Settings{
 				Abundance:      "avgSpec",
+				AbundanceCap:   50,
 				Condition:      "bait",
 				Control:        "ctrl",
 				Files:          []string{"file.txt"},
+				MinAbundance:   10,
 				OtherAbundance: []string{"column1", "column2"},
 				Readout:        "prey",
 				ReadoutLength:  "preyLength",
 				Score:          "fdr",
+				ScoreType:      "lte",
 			},
 		}
 
@@ -35,13 +38,16 @@ var _ = Describe("SCV validation", func() {
 			},
 			Settings: types.Settings{
 				Abundance:      "avgSpec",
+				AbundanceCap:   50,
 				Condition:      "bait",
 				Control:        "ctrl",
 				Files:          []string{"file.txt"},
+				MinAbundance:   10,
 				OtherAbundance: []string{"column1", "column2"},
 				Readout:        "prey",
 				ReadoutLength:  "preyLength",
 				Score:          "fdr",
+				ScoreType:      "lte",
 			},
 		}
 		validateSCVSettings(analysis)

@@ -35,6 +35,7 @@ func calculateLegendHeight(points []map[string]string) int {
 
 func createLegendHeader(svg *strings.Builder, height int) {
 	svg.WriteString(fmt.Sprintf("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"200\" height=\"%[1]d\" viewBox=\"0 0 200 %[1]d\">\n", height))
+	svg.WriteString("\t<rect width=\"100%\" height=\"100%\" fill=\"white\" />\n")
 }
 
 func createLegendTitle(svg *strings.Builder, title string) {

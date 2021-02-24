@@ -4,7 +4,6 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/knightjdr/prohits-viz-analysis/pkg/svg/circheatmap"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
@@ -19,7 +18,7 @@ var _ = Describe("Create scv legend", func() {
 			Specificity:    true,
 		}
 
-		expectedElements := []circheatmap.LegendElement{
+		expectedElements := types.CircHeatmapLegend{
 			{Attribute: "abundance", Color: "blue", Max: 50, Min: 0},
 			{Attribute: "foldChange", Color: "blue", Max: 50, Min: 0},
 			{Attribute: "Specificity", Color: "blue", Max: 50, Min: 0},

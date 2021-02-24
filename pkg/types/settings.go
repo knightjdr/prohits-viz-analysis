@@ -1,6 +1,8 @@
 // Package types contains type declarations.
 package types
 
+import "strconv"
+
 // Analysis files, file settings, analysis settings and column mapping.
 type Analysis struct {
 	Columns  map[string]string
@@ -8,10 +10,42 @@ type Analysis struct {
 	Settings Settings
 }
 
+// CircHeatmap is a circular heatmap plot
+type CircHeatmap struct {
+	Name     string               `json:"name"`
+	Readouts []CircHeatmapReadout `json:"readouts"`
+}
+
+// CircHeatmapReadout contains data on a readout for a circular heatmap
+type CircHeatmapReadout struct {
+	Known    bool                      `json:"known"`
+	Label    string                    `json:"label"`
+	Segments map[string]RoundedSegment `json:"segments"`
+}
+
+// CircHeatmapLegend is a slice of legend elements
+type CircHeatmapLegend []CircHeatmapLegendElement
+
+// CircHeatmapLegendElement contains settings for each metric in the circheatmap.
+type CircHeatmapLegendElement struct {
+	Attribute string  `json:"attribute"`
+	Color     string  `json:"color"`
+	Max       float64 `json:"max"`
+	Min       float64 `json:"min"`
+}
+
 // Matrices holds input data formatted as matrices.
 type Matrices struct {
 	Abundance, Ratio, Score [][]float64
 	Conditions, Readouts    []string
+}
+
+// RoundedSegment rounds circheatmap to a precision of 2
+type RoundedSegment float64
+
+// MarshalJSON rounds scatter points to a precision of 2 when exporting to JSON
+func (r RoundedSegment) MarshalJSON() ([]byte, error) {
+	return []byte(strconv.FormatFloat(float64(r), 'f', 2, 64)), nil
 }
 
 // ScatterAxesLabels are labels for the x and y axis.

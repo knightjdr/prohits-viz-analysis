@@ -17,17 +17,14 @@ func Generate(analysis *types.Analysis) {
 	addExpression("rna", data, idMaps, analysis.Settings)
 	addSpecificity(data, analysis)
 
-	defineKnown(data, idMaps, analysis.Settings)
+	known := defineKnown(data, idMaps, analysis.Settings)
 
-	createLegend(analysis.Settings)
+	legend := createLegend(analysis.Settings)
+	createInteractive(data, known, legend, analysis.Settings)
 
 	writeMaps(idMaps, analysis.Settings)
 
 	/*
-		specificity := calculateSpecificity(analysis)
-
-		createLegend(analysis.Settings)
-		createInteractive(plotByCondition, analysis.Settings)
 		writeData(specificity, analysis.Settings)
 		writeImages(plotByCondition, analysis.Settings)
 	*/

@@ -8,7 +8,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
-func createLegend(settings types.Settings) []circheatmap.LegendElement {
+func createLegend(settings types.Settings) types.CircHeatmapLegend {
 	metrics := map[string][]string{
 		"file":              defineFileMetrics(settings),
 		"proteinExpression": settings.ProteinTissues,
@@ -33,14 +33,14 @@ func defineFileMetrics(settings types.Settings) []string {
 	return metrics
 }
 
-func createElements(metrics map[string][]string, settings types.Settings) []circheatmap.LegendElement {
+func createElements(metrics map[string][]string, settings types.Settings) types.CircHeatmapLegend {
 	colorScheme := defineColorScheme(metrics)
 
-	elements := make([]circheatmap.LegendElement, 0)
+	elements := make(types.CircHeatmapLegend, 0)
 	for index, metric := range metrics["file"] {
 		elements = append(
 			elements,
-			circheatmap.LegendElement{
+			types.CircHeatmapLegendElement{
 				Attribute: metric,
 				Color:     colorScheme("file", index),
 				Max:       settings.AbundanceCap,
@@ -52,7 +52,7 @@ func createElements(metrics map[string][]string, settings types.Settings) []circ
 	for index, metric := range metrics["proteinExpression"] {
 		elements = append(
 			elements,
-			circheatmap.LegendElement{
+			types.CircHeatmapLegendElement{
 				Attribute: fmt.Sprintf("Protein expression - %s", metric),
 				Color:     colorScheme("proteinExpression", index),
 				Max:       7,
@@ -64,7 +64,7 @@ func createElements(metrics map[string][]string, settings types.Settings) []circ
 	for index, metric := range metrics["rnaExpression"] {
 		elements = append(
 			elements,
-			circheatmap.LegendElement{
+			types.CircHeatmapLegendElement{
 				Attribute: fmt.Sprintf("RNA expression - %s", metric),
 				Color:     colorScheme("rnaExpression", index),
 				Max:       50,
@@ -97,7 +97,7 @@ func defineColorScheme(metrics map[string][]string) func(string, int) string {
 	}
 }
 
-func writeLegend(elements []circheatmap.LegendElement, settings types.Settings) {
+func writeLegend(elements types.CircHeatmapLegend, settings types.Settings) {
 	legendData := circheatmap.Legend{
 		Elements: elements,
 		Filename: "svg/scv-legend.svg",

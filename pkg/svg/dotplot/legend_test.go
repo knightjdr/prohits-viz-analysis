@@ -33,6 +33,7 @@ var _ = Describe("Draw dotplot legend", func() {
 		}
 
 		expected := "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"200\" height=\"240\" viewBox=\"0 0 200 240\">\n" +
+			"\t<rect width=\"100%\" height=\"100%\" fill=\"white\" />\n" +
 			"\t<text y=\"20\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">dotplot title</text>\n" +
 			"\t<g>\n" +
 			"\t\t<rect fill=\"#ffffff\" y=\"30\" x=\"25\" width=\"25\" height=\"20\" />\n" +

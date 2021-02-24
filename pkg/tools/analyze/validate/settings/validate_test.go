@@ -45,7 +45,7 @@ var _ = Describe("Setting validation", func() {
 				Control:                      "ctrl",
 				Files:                        []string{"file.txt"},
 				OtherAbundance:               []string{"column1", "column2"},
-				ParsimoniousReadoutFiltering: true,
+				ParsimoniousReadoutFiltering: false,
 				Readout:                      "prey",
 				ReadoutLength:                "preyLength",
 				Score:                        "fdr",

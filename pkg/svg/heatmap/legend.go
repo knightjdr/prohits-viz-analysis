@@ -5,10 +5,10 @@ import (
 	"strings"
 
 	"github.com/knightjdr/prohits-viz-analysis/pkg/color"
-	"github.com/knightjdr/prohits-viz-analysis/pkg/fs"
-	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/float"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/fs"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/math"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 	"github.com/spf13/afero"
 )
 
@@ -42,6 +42,7 @@ func CreateLegend(data Legend) {
 // CreateLegendHeader writes the opening svg tag.
 func CreateLegendHeader(svg *strings.Builder) {
 	svg.WriteString("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" width=\"200\" height=\"240\" viewBox=\"0 0 200 240\">\n")
+	svg.WriteString("\t<rect width=\"100%\" height=\"100%\" fill=\"white\" />\n")
 }
 
 // CreateLegendTitle writes the legend title.
