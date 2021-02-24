@@ -22,10 +22,8 @@ func Generate(analysis *types.Analysis) {
 	legend := createLegend(analysis.Settings)
 	createInteractive(data, known, legend, analysis.Settings)
 
+	writeData(data, known, legend, analysis.Settings)
 	writeMaps(idMaps, analysis.Settings)
 
-	/*
-		writeData(specificity, analysis.Settings)
-		writeImages(plotByCondition, analysis.Settings)
-	*/
+	// writeImages(plotByCondition, analysis.Settings)
 }

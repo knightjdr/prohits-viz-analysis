@@ -10,6 +10,8 @@ import (
 func createInteractive(data map[string]map[string]map[string]float64, known map[string]map[string]bool, legend types.CircHeatmapLegend, settings types.Settings) {
 	conditions := getAndSortConditions(data)
 
+	writeKnownness := getKnownessInteractiveWriter(settings.Known, known)
+
 	plots := make([]types.CircHeatmap, len(conditions))
 	for i, condition := range conditions {
 		readouts := getAndSortReadouts(data[condition])
@@ -18,9 +20,8 @@ func createInteractive(data map[string]map[string]map[string]float64, known map[
 			Readouts: make([]types.CircHeatmapReadout, len(readouts)),
 		}
 		for j, readout := range readouts {
-			_, isKnown := known[condition][readout]
 			plots[i].Readouts[j] = types.CircHeatmapReadout{
-				Known:    isKnown,
+				Known:    writeKnownness(condition, readout),
 				Label:    readout,
 				Segments: make(map[string]types.RoundedSegment, len(legend)),
 			}
@@ -51,6 +52,17 @@ func getAndSortConditions(data map[string]map[string]map[string]float64) []strin
 	}
 	sort.Strings(conditions)
 	return conditions
+}
+
+func getKnownessInteractiveWriter(known string, knownMap map[string]map[string]bool) func(string, string) bool {
+	if known != "" && knownMap != nil {
+		return func(condition string, readout string) bool {
+			return knownMap[condition][readout]
+		}
+	}
+	return func(condition string, readout string) bool {
+		return false
+	}
 }
 
 func getAndSortReadouts(data map[string]map[string]float64) []string {

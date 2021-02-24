@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Legend", func() {
+var _ = Describe("Legend scatter", func() {
 	It("should parse legend and return string", func() {
 		legend := []map[string]string{
 			{"color": "#ff0000", "text": "point1"},
