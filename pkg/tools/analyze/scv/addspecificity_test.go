@@ -1,8 +1,6 @@
 package scv
 
 import (
-	"math"
-
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
@@ -56,7 +54,7 @@ var _ = Describe("Add specificity for SCV", func() {
 					"Specificity": 1.5,
 				},
 				"readoutZ": {
-					"Specificity": math.Inf(1),
+					"Specificity": 1.5,
 				},
 			},
 		}
