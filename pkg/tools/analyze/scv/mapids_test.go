@@ -162,7 +162,7 @@ var _ = Describe("Map IDs", func() {
 				GeneFile:           "test/gene-db.json",
 				ReadoutIDType:      "ensemblg",
 				ReadoutMapColumn:   "",
-				ReadoutMapFile:     "readout-map.txt",
+				ReadoutMapFile:     "helper-files/readout-map.txt",
 			},
 		}
 
