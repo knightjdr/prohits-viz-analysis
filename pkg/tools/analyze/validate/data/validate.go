@@ -13,18 +13,29 @@ import (
 	"strings"
 
 	"github.com/knightjdr/prohits-viz-analysis/pkg/log"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/slice"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
 // Validate is the entry point for error checking the input data.
-func Validate(analysis *types.Analysis) {
+func Validate(analysis *types.Analysis, toValidate []string) {
 	errs := make([]error, 0)
 
-	addError(&errs, confirmParsedData(analysis.Data))
-	addError(&errs, confirmMinimumConditions(analysis.Data, analysis.Settings.Type))
-	addError(&errs, confirmReadoutsHaveNames(analysis.Data))
-	addError(&errs, confirmScoreIsFloat(analysis.Data))
-	addError(&errs, confirmReadLengthIsInt(analysis.Data, analysis.Settings.ReadoutLength))
+	if slice.ContainsString("data", toValidate) {
+		addError(&errs, confirmParsedData(analysis.Data))
+	}
+	if slice.ContainsString("minConditions", toValidate) {
+		addError(&errs, confirmMinimumConditions(analysis.Data, analysis.Settings.Type))
+	}
+	if slice.ContainsString("readout", toValidate) {
+		addError(&errs, confirmReadoutsHaveNames(analysis.Data))
+	}
+	if slice.ContainsString("readoutLength", toValidate) {
+		addError(&errs, confirmReadLengthIsInt(analysis.Data, analysis.Settings.ReadoutLength))
+	}
+	if slice.ContainsString("score", toValidate) {
+		addError(&errs, confirmScoreIsFloat(analysis.Data))
+	}
 
 	if len(errs) > 0 {
 		log.WriteAndExit(joinErrors(errs))

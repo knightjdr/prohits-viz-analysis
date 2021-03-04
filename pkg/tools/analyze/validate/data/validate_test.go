@@ -31,20 +31,27 @@ var _ = Describe("Validate parsed data", func() {
 
 		analysis := &types.Analysis{
 			Data: []map[string]string{
-				map[string]string{"condition": "conditionA", "readout": "readoutA", "readoutLength": "10", "score": "0.1"},
-				map[string]string{"condition": "conditionB", "readout": "readoutB", "readoutLength": "15", "score": "0.01"},
-				map[string]string{"condition": "conditionA", "readout": "readoutC", "readoutLength": "25", "score": "0"},
-				map[string]string{"condition": "conditionB", "readout": "readoutC", "readoutLength": "7", "score": "0.05"},
-				map[string]string{"condition": "conditionC", "readout": "readoutA", "readoutLength": "8", "score": "0"},
-				map[string]string{"condition": "conditionC", "readout": "readoutB", "readoutLength": "12", "score": "0.01"},
+				{"condition": "conditionA", "readout": "readoutA", "readoutLength": "10", "score": "0.1"},
+				{"condition": "conditionB", "readout": "readoutB", "readoutLength": "15", "score": "0.01"},
+				{"condition": "conditionA", "readout": "readoutC", "readoutLength": "25", "score": "0"},
+				{"condition": "conditionB", "readout": "readoutC", "readoutLength": "7", "score": "0.05"},
+				{"condition": "conditionC", "readout": "readoutA", "readoutLength": "8", "score": "0"},
+				{"condition": "conditionC", "readout": "readoutB", "readoutLength": "12", "score": "0.01"},
 			},
 			Settings: types.Settings{
 				ReadoutLength: "PreyLength",
 				Type:          "dotplot",
 			},
 		}
+		toValidate := []string{
+			"data",
+			"minConditions",
+			"readout",
+			"readoutLength",
+			"score",
+		}
 
-		Expect(func() { Validate(analysis) }).To(Not(Panic()))
+		Expect(func() { Validate(analysis, toValidate) }).To(Not(Panic()))
 	})
 
 	It("should exit when there is no data", func() {
@@ -68,8 +75,15 @@ var _ = Describe("Validate parsed data", func() {
 				Type:          "dotplot",
 			},
 		}
+		toValidate := []string{
+			"data",
+			"minConditions",
+			"readout",
+			"readoutLength",
+			"score",
+		}
 
-		Expect(func() { Validate(analysis) }).To(Panic(), "should exit when there is no data to validate")
+		Expect(func() { Validate(analysis, toValidate) }).To(Panic(), "should exit when there is no data to validate")
 		logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
 		expected := "no parsed results satisfying filter criteria"
 		matched, _ := regexp.MatchString(expected, string(logfile))
@@ -92,16 +106,23 @@ var _ = Describe("Validate parsed data", func() {
 
 		analysis := &types.Analysis{
 			Data: []map[string]string{
-				map[string]string{"condition": "conditionA", "readout": "readoutA", "readoutLength": "10", "score": "NaN"},
-				map[string]string{"condition": "conditionA", "readout": "", "readoutLength": "17.3", "score": "0"},
+				{"condition": "conditionA", "readout": "readoutA", "readoutLength": "10", "score": "NaN"},
+				{"condition": "conditionA", "readout": "", "readoutLength": "17.3", "score": "0"},
 			},
 			Settings: types.Settings{
 				ReadoutLength: "PreyLength",
 				Type:          "dotplot",
 			},
 		}
+		toValidate := []string{
+			"data",
+			"minConditions",
+			"readout",
+			"readoutLength",
+			"score",
+		}
 
-		Expect(func() { Validate(analysis) }).To(Panic(), "should exit when there is no data to validate")
+		Expect(func() { Validate(analysis, toValidate) }).To(Panic(), "should exit when there is no data to validate")
 
 		logfile, _ := afero.ReadFile(fs.Instance, "error.txt")
 		expectedError := "there are not enough conditions for analysis, min: 2"
@@ -116,5 +137,44 @@ var _ = Describe("Validate parsed data", func() {
 		expectedError = "readout length column must contain integer values, offending value: 17.3"
 		matched, _ = regexp.MatchString(expectedError, string(logfile))
 		Expect(matched).To(BeTrue(), "should log error message about readout length type requirement")
+	})
+
+	It("should only validate requested settings", func() {
+		oldFs := fs.Instance
+		defer func() { fs.Instance = oldFs }()
+		fs.Instance = afero.NewMemMapFs()
+
+		fs.Instance.MkdirAll("test", 0755)
+		afero.WriteFile(fs.Instance, "error.txt", []byte(""), 0644)
+
+		fakeExit := func(int) {
+			panic("os.Exit called")
+		}
+		exitPatch := monkey.Patch(os.Exit, fakeExit)
+		defer exitPatch.Unpatch()
+
+		analysis := &types.Analysis{
+			Data: []map[string]string{
+				{"condition": "conditionA", "readout": "readoutA", "readoutLength": "10", "score": "0.1"},
+				{"condition": "conditionB", "readout": "readoutB", "readoutLength": "", "score": "0.01"},
+				{"condition": "conditionA", "readout": "readoutC", "readoutLength": "25", "score": "0"},
+				{"condition": "conditionB", "readout": "readoutC", "readoutLength": "7", "score": "0.05"},
+				{"condition": "conditionC", "readout": "readoutA", "readoutLength": "8", "score": "0"},
+				{"condition": "conditionC", "readout": "readoutB", "readoutLength": "12", "score": "0.01"},
+			},
+			Settings: types.Settings{
+				ReadoutLength: "PreyLength",
+				Type:          "dotplot",
+			},
+		}
+		toValidate := []string{
+			"data",
+			"minConditions",
+			"readout",
+			"score",
+		}
+
+		// ReadoutLength would fail validation if it was requested.
+		Expect(func() { Validate(analysis, toValidate) }).To(Not(Panic()))
 	})
 })
