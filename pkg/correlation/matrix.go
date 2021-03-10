@@ -65,11 +65,17 @@ func getStatistic(method string) func([]float64, []float64) float64 {
 
 func getDataFilter(matrix [][]float64, IgnoreSourceTargetMatches bool, columns, rows []string) func(int, int) ([]float64, []float64) {
 	if IgnoreSourceTargetMatches {
-		columnMap := slice.ConvertToIntMap(columns)
+		columnNameToIndicies := make(map[string][]int, 0)
+		for index, value := range columns {
+			if _, ok := columnNameToIndicies[value]; !ok {
+				columnNameToIndicies[value] = make([]int, 0)
+			}
+			columnNameToIndicies[value] = append(columnNameToIndicies[value], index)
+		}
 
 		addIndex := func(indices *[]int, name string) {
-			if _, ok := columnMap[name]; ok {
-				(*indices) = append((*indices), columnMap[name])
+			if _, ok := columnNameToIndicies[name]; ok {
+				(*indices) = append((*indices), columnNameToIndicies[name]...)
 			}
 		}
 
@@ -77,7 +83,8 @@ func getDataFilter(matrix [][]float64, IgnoreSourceTargetMatches bool, columns, 
 			ignoreIndices := make([]int, 0)
 			addIndex(&ignoreIndices, rows[i])
 			addIndex(&ignoreIndices, rows[j])
-			ignoreIndices = slice.ReverseInt(sort.IntSlice(ignoreIndices))
+			sort.Ints(ignoreIndices)
+			ignoreIndices = slice.ReverseInt(ignoreIndices)
 
 			x := make([]float64, len(matrix[i]))
 			copy(x, matrix[i])

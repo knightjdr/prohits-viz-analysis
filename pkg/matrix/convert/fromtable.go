@@ -11,6 +11,7 @@ type ConversionSettings struct {
 	KeepReps        bool
 	Resort          bool
 	ScoreType       string
+	SeparateRepsBy  string // one of "column" or "row"
 }
 
 // FromTable generates a 2D matrix of conditions v readouts (conditions = columns, readouts = rows).

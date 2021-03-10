@@ -1,6 +1,8 @@
 package correlation
 
 import (
+	"regexp"
+
 	"github.com/knightjdr/hclust"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/correlation"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/data/filter"
@@ -29,7 +31,9 @@ func correlateConditions(analysis *types.Analysis) *correlationData {
 
 	matrixSettings := convert.ConversionSettings{
 		CalculateRatios: false,
+		KeepReps:        analysis.Settings.UseReplicates,
 		ScoreType:       analysis.Settings.ScoreType,
+		SeparateRepsBy:  "row",
 	}
 	matrices := convert.FromTable(&analysis.Data, matrixSettings)
 
@@ -39,7 +43,7 @@ func correlateConditions(analysis *types.Analysis) *correlationData {
 		IgnoreSourceTargetMatches: analysis.Settings.IgnoreSourceTargetMatches,
 		Matrix:                    matrices.Abundance,
 		Method:                    analysis.Settings.Correlation,
-		Rows:                      matrices.Readouts,
+		Rows:                      stripReplicates(matrices.Readouts, analysis.Settings.UseReplicates),
 	}
 	correlationMatrix := corrData.Correlate()
 
@@ -62,13 +66,14 @@ func correlateReadouts(analysis *types.Analysis) *correlationData {
 
 	matrixSettings := convert.ConversionSettings{
 		CalculateRatios: false,
-		KeepReps:        true,
+		KeepReps:        analysis.Settings.UseReplicates,
 		ScoreType:       analysis.Settings.ScoreType,
+		SeparateRepsBy:  "column",
 	}
 	matrices := convert.FromTable(&analysis.Data, matrixSettings)
 
 	corrData := correlation.Data{
-		Columns:                   matrices.Readouts,
+		Columns:                   stripReplicates(matrices.Conditions, analysis.Settings.UseReplicates),
 		Dimension:                 "row",
 		IgnoreSourceTargetMatches: analysis.Settings.IgnoreSourceTargetMatches,
 		Matrix:                    matrices.Abundance,
@@ -81,4 +86,17 @@ func correlateReadouts(analysis *types.Analysis) *correlationData {
 		labels: matrices.Readouts,
 		matrix: correlationMatrix,
 	}
+}
+
+func stripReplicates(names []string, useReplicates bool) []string {
+	if useReplicates {
+		re := regexp.MustCompile("_R\\d$")
+
+		stripped := make([]string, len(names))
+		for i, name := range names {
+			stripped[i] = re.ReplaceAllString(name, "")
+		}
+		return stripped
+	}
+	return names
 }

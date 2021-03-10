@@ -41,7 +41,7 @@ func parseTable(table *[]map[string]string, settings ConversionSettings) *tableD
 func getRowParser(data *tableData, settings ConversionSettings) func(map[string]string) {
 	findWorseScore := getScoreTest(settings.ScoreType)
 
-	if settings.KeepReps {
+	if settings.KeepReps && settings.SeparateRepsBy == "column" {
 		return func(row map[string]string) {
 			abundances := parse.PipeSeparatedStringToArray(row["abundance"])
 			condition := row["condition"]
@@ -56,12 +56,37 @@ func getRowParser(data *tableData, settings ConversionSettings) func(map[string]
 
 			noReps := len(abundances)
 			for i := 0; i < noReps; i++ {
-				conditionRep := fmt.Sprintf("%sR%d", condition, i+1)
+				conditionRep := fmt.Sprintf("%s_R%d", condition, i+1)
 				if _, ok := data.conditions[conditionRep]; !ok {
 					data.conditions[conditionRep] = len(data.conditions)
 				}
 
 				data.readoutCondition[readoutCondition{readout, conditionRep}] = readoutData{abundance: abundances[i], score: score}
+			}
+		}
+	}
+
+	if settings.KeepReps && settings.SeparateRepsBy == "row" {
+		return func(row map[string]string) {
+			abundances := parse.PipeSeparatedStringToArray(row["abundance"])
+			condition := row["condition"]
+			readout := row["readout"]
+			score, _ := strconv.ParseFloat(row["score"], 64)
+
+			data.worstScore = findWorseScore(score, data.worstScore)
+
+			if _, ok := data.conditions[condition]; !ok {
+				data.conditions[condition] = len(data.conditions)
+			}
+
+			noReps := len(abundances)
+			for i := 0; i < noReps; i++ {
+				readoutRep := fmt.Sprintf("%s_R%d", readout, i+1)
+				if _, ok := data.readouts[readoutRep]; !ok {
+					data.readouts[readoutRep] = len(data.readouts)
+				}
+
+				data.readoutCondition[readoutCondition{readoutRep, condition}] = readoutData{abundance: abundances[i], score: score}
 			}
 		}
 	}
