@@ -2,6 +2,8 @@
 package correlation
 
 import (
+	"fmt"
+	"math"
 	"sort"
 
 	"github.com/knightjdr/prohits-viz-analysis/pkg/matrix"
@@ -37,6 +39,9 @@ func (data *Data) Correlate() [][]float64 {
 		for j := i + 1; j < n; j++ {
 			x, y := filterData(i, j)
 			value := calculateStatistic(x, y)
+			if math.IsNaN(value) {
+				fmt.Println(value, x, y)
+			}
 			correlation[i][j] = value
 			correlation[j][i] = value
 		}

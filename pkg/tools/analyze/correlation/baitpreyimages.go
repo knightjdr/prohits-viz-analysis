@@ -17,6 +17,8 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
+var conditionReadoutAbundanceCap float64 = 50
+
 func createBaitPreyImages(analysis *types.Analysis, conditionData, readoutData *correlationData) {
 	matrices := getConditionReadoutMatrices(analysis)
 
@@ -55,7 +57,7 @@ func createConditionReadoutSVG(matrix [][]float64, conditions, readouts []string
 	dims := dimensions.Calculate(matrix, conditions, readouts, false)
 
 	heatmap := svg.InitializeHeatmap()
-	heatmap.AbundanceCap = settings.AbundanceCap
+	heatmap.AbundanceCap = conditionReadoutAbundanceCap
 	heatmap.CellSize = dims.CellSize
 	heatmap.Columns = conditions
 	heatmap.FillColor = "blue"
@@ -82,8 +84,8 @@ func createConditionReadoutLegend(settings types.Settings) {
 		Filename:  fmt.Sprintf("svg/%s.svg", filename),
 		NumColors: 101,
 		Settings: types.Settings{
-			AbundanceCap: settings.AbundanceCap,
-			FillColor:    settings.FillColor,
+			AbundanceCap: conditionReadoutAbundanceCap,
+			FillColor:    "blue",
 			InvertColor:  settings.InvertColor,
 			MinAbundance: settings.ReadoutAbundanceFilter,
 		},
@@ -105,7 +107,7 @@ func createConditionReadoutPNG(matrix [][]float64, settings types.Settings) {
 			dims := dimensions.Calculate(downsampled, []string{}, []string{}, false)
 
 			heatmap := heatmapPNG.Initialize()
-			heatmap.AbundanceCap = settings.AbundanceCap
+			heatmap.AbundanceCap = conditionReadoutAbundanceCap
 			heatmap.CellSize = dims.CellSize
 			heatmap.ColorSpace = "blue"
 			heatmap.Height = dims.PlotHeight
@@ -128,7 +130,7 @@ func createConditionReadoutMinimap(matrix [][]float64, settings types.Settings) 
 			Abundance: matrix,
 		},
 		Settings: types.Settings{
-			AbundanceCap: settings.AbundanceCap,
+			AbundanceCap: conditionReadoutAbundanceCap,
 			FillColor:    "blue",
 			MinAbundance: settings.ReadoutAbundanceFilter,
 		},
@@ -149,7 +151,7 @@ func createConditionReadoutInteractive(matrix [][]float64, conditions, readouts 
 		Minimap:    fmt.Sprintf("minimap/%s.png", filehandle),
 		Parameters: settings,
 		Settings: map[string]interface{}{
-			"abundanceCap":  settings.AbundanceCap,
+			"abundanceCap":  conditionReadoutAbundanceCap,
 			"fillColor":     "blue",
 			"imageType":     "heatmap",
 			"minAbundance":  settings.ReadoutAbundanceFilter,

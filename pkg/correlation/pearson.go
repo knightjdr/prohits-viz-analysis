@@ -24,5 +24,11 @@ func Pearson(x, y []float64) float64 {
 		denominatorB += goMath.Pow(y[i]-mean["y"], 2)
 	}
 
+	// In the case of one variable have zero variance, the correlation is meaningless and 0/0
+	// or NaN will be returned. These cases are returned as 0 instead.
+	if denominatorA == 0 || denominatorB == 0 {
+		return 0
+	}
+
 	return numerator / (goMath.Sqrt(denominatorA) * goMath.Sqrt(denominatorB))
 }

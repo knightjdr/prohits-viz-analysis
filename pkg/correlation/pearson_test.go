@@ -20,9 +20,13 @@ var _ = Describe("Pearson method", func() {
 				"x": []float64{0.25, 5, 1, 3, 8},
 				"y": []float64{8, 4, 9, 0.33, 7},
 			},
+			{
+				"x": []float64{2, 2, 2},
+				"y": []float64{0, 0, 2},
+			},
 		}
 
-		expected := []float64{1, -0.915, -0.220}
+		expected := []float64{1, -0.915, -0.220, 0}
 
 		for i, test := range tests {
 			Expect(Pearson(test["x"], test["y"])).To(BeNumerically("~", expected[i], 0.001))
