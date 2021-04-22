@@ -14,6 +14,13 @@ var _ = Describe("Normalize slice", func() {
 		expected := []float64{1, 0.67, 0.03}
 		Expect(Slice(slice)).To(Equal(expected))
 	})
+
+	It("should normalize slice of zero values", func() {
+		slice := []float64{0, 0, 0}
+
+		expected := []float64{0, 0, 0}
+		Expect(Slice(slice)).To(Equal(expected))
+	})
 })
 
 var _ = Describe("Normalize matrix", func() {
@@ -22,12 +29,14 @@ var _ = Describe("Normalize matrix", func() {
 			{10, 5, 2},
 			{5, 20, 25},
 			{100, 67, 3},
+			{0, 0, 0},
 		}
 
 		expected := [][]float64{
 			{1, 0.5, 0.2},
 			{0.2, 0.8, 1},
 			{1, 0.67, 0.03},
+			{0, 0, 0},
 		}
 		Expect(Matrix(matrix)).To(Equal(expected))
 	})

@@ -14,9 +14,16 @@ func Slice(unnormalized []float64) (normalized []float64) {
 	}
 
 	normalized = make([]float64, len(unnormalized))
-	for i, value := range unnormalized {
-		normalized[i] = math.Round(value/max, 0.01)
+	if max > 0 {
+		for i, value := range unnormalized {
+			normalized[i] = math.Round(value/max, 0.01)
+		}
+	} else {
+		for i := range unnormalized {
+			normalized[i] = 0
+		}
 	}
+
 	return
 }
 
