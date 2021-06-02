@@ -20,10 +20,11 @@ func Generate(analysis *types.Analysis) {
 	known := defineKnown(data, idMaps, analysis.Settings)
 
 	legend := createLegend(analysis.Settings)
-	createInteractive(data, known, legend, analysis.Settings)
 
-	writeData(data, known, legend, analysis.Settings)
+	plots := createPlotData(data, known, legend, analysis.Settings)
+
+	createInteractive(plots, legend, analysis.Settings)
+	writeData(plots, legend, analysis.Settings)
 	writeMaps(idMaps, analysis.Settings)
-
-	// writeImages(plotByCondition, analysis.Settings)
+	writeImages(plots, legend, analysis.Settings)
 }

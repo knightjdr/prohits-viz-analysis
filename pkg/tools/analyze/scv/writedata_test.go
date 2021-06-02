@@ -17,19 +17,45 @@ var _ = Describe("Write scv data to file", func() {
 
 		fs.Instance.MkdirAll("other", 0755)
 
-		data := map[string]map[string]map[string]float64{
-			"conditionA": {
-				"readoutX": {"abundance": 1},
-				"readoutY": {"abundance": 4},
+		plots := []types.CircHeatmap{
+			{
+				Name: "conditionA",
+				Readouts: []types.CircHeatmapReadout{
+					{
+						Known: true,
+						Label: "readoutX",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 1,
+						},
+					},
+					{
+						Known: false,
+						Label: "readoutY",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 4,
+						},
+					},
+				},
 			},
-			"conditionB": {
-				"readoutX": {"abundance": 2},
-				"readoutY": {"abundance": 8},
+			{
+				Name: "conditionB",
+				Readouts: []types.CircHeatmapReadout{
+					{
+						Known: true,
+						Label: "readoutY",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 2,
+						},
+					},
+					{
+						Known: false,
+						Label: "readoutZ",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 6,
+						},
+					},
+				},
 			},
-		}
-		known := map[string]map[string]bool{
-			"conditionA": {"readoutX": true, "readoutY": false},
-			"conditionB": {"readoutX": true, "readoutY": true},
 		}
 		legend := types.CircHeatmapLegend{
 			{Attribute: "abundance", Color: "blue", Max: 50, Min: 0},
@@ -40,13 +66,13 @@ var _ = Describe("Write scv data to file", func() {
 			Readout:   "Prey",
 		}
 
-		writeData(data, known, legend, settings)
+		writeData(plots, legend, settings)
 
 		expected := "Bait\tPrey\tabundance\tknown interaction\n" +
 			"conditionA\treadoutX\t1.00\ttrue\n" +
 			"conditionA\treadoutY\t4.00\tfalse\n" +
-			"conditionB\treadoutX\t2.00\ttrue\n" +
-			"conditionB\treadoutY\t8.00\ttrue\n"
+			"conditionB\treadoutY\t2.00\ttrue\n" +
+			"conditionB\treadoutZ\t6.00\tfalse\n"
 
 		actual, _ := afero.ReadFile(fs.Instance, "other/scv-data.txt")
 		Expect(string(actual)).To(Equal(expected))
@@ -59,17 +85,46 @@ var _ = Describe("Write scv data to file", func() {
 
 		fs.Instance.MkdirAll("other", 0755)
 
-		data := map[string]map[string]map[string]float64{
-			"conditionA": {
-				"readoutX": {"abundance": 1},
-				"readoutY": {"abundance": 4},
+		plots := []types.CircHeatmap{
+			{
+				Name: "conditionA",
+				Readouts: []types.CircHeatmapReadout{
+					{
+						Known: false,
+						Label: "readoutY",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 4,
+						},
+					},
+					{
+						Known: false,
+						Label: "readoutX",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 1,
+						},
+					},
+				},
 			},
-			"conditionB": {
-				"readoutX": {"abundance": 2},
-				"readoutY": {"abundance": 8},
+			{
+				Name: "conditionB",
+				Readouts: []types.CircHeatmapReadout{
+					{
+						Known: false,
+						Label: "readoutZ",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 6,
+						},
+					},
+					{
+						Known: false,
+						Label: "readoutY",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 2,
+						},
+					},
+				},
 			},
 		}
-		var known map[string]map[string]bool = nil
 		legend := types.CircHeatmapLegend{
 			{Attribute: "abundance", Color: "blue", Max: 50, Min: 0},
 		}
@@ -79,13 +134,13 @@ var _ = Describe("Write scv data to file", func() {
 			Readout:   "Prey",
 		}
 
-		writeData(data, known, legend, settings)
+		writeData(plots, legend, settings)
 
 		expected := "Bait\tPrey\tabundance\n" +
-			"conditionA\treadoutX\t1.00\n" +
 			"conditionA\treadoutY\t4.00\n" +
-			"conditionB\treadoutX\t2.00\n" +
-			"conditionB\treadoutY\t8.00\n"
+			"conditionA\treadoutX\t1.00\n" +
+			"conditionB\treadoutZ\t6.00\n" +
+			"conditionB\treadoutY\t2.00\n"
 
 		actual, _ := afero.ReadFile(fs.Instance, "other/scv-data.txt")
 		Expect(string(actual)).To(Equal(expected))

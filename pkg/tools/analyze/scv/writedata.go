@@ -9,7 +9,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
-func writeData(data map[string]map[string]map[string]float64, known map[string]map[string]bool, legend types.CircHeatmapLegend, settings types.Settings) {
+func writeData(plots []types.CircHeatmap, legend types.CircHeatmapLegend, settings types.Settings) {
 	file, err := fs.Instance.Create("other/scv-data.txt")
 	log.CheckError(err, false)
 	if err != nil {
@@ -21,17 +21,15 @@ func writeData(data map[string]map[string]map[string]float64, known map[string]m
 
 	writeDataHeader(&buffer, legend, settings)
 
-	writeKnownness := getKnownessDataWriter(settings.Known, known)
+	writeKnownness := getKnownessDataWriter(settings.Known)
 
-	conditions := getAndSortConditions(data)
-	for _, condition := range conditions {
-		readouts := getAndSortReadouts(data[condition])
-		for _, readout := range readouts {
-			buffer.WriteString(fmt.Sprintf("%s\t%s", condition, readout))
+	for _, plot := range plots {
+		for _, readout := range plot.Readouts {
+			buffer.WriteString(fmt.Sprintf("%s\t%s", plot.Name, readout.Label))
 			for _, legendElement := range legend {
-				buffer.WriteString(fmt.Sprintf("\t%.2f", data[condition][readout][legendElement.Attribute]))
+				buffer.WriteString(fmt.Sprintf("\t%.2f", readout.Segments[legendElement.Attribute]))
 			}
-			writeKnownness(&buffer, condition, readout)
+			writeKnownness(&buffer, readout.Known)
 			buffer.WriteString("\n")
 		}
 	}
@@ -50,12 +48,12 @@ func writeDataHeader(buffer *strings.Builder, legend types.CircHeatmapLegend, se
 	buffer.WriteString("\n")
 }
 
-func getKnownessDataWriter(known string, knownMap map[string]map[string]bool) func(*strings.Builder, string, string) {
-	if known != "" && knownMap != nil {
-		return func(buffer *strings.Builder, condition string, readout string) {
-			buffer.WriteString(fmt.Sprintf("\t%t", knownMap[condition][readout]))
+func getKnownessDataWriter(known string) func(*strings.Builder, bool) {
+	if known != "" {
+		return func(buffer *strings.Builder, isKnown bool) {
+			buffer.WriteString(fmt.Sprintf("\t%t", isKnown))
 		}
 	}
-	return func(buffer *strings.Builder, condition string, readout string) {
+	return func(buffer *strings.Builder, isKnown bool) {
 	}
 }

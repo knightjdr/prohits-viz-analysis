@@ -2,6 +2,7 @@
 package svg
 
 import (
+	"github.com/knightjdr/prohits-viz-analysis/pkg/svg/circheatmap"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/svg/convert"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/svg/dotplot"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/svg/heatmap"
@@ -10,6 +11,9 @@ import (
 
 // ConvertToPNG converts an svg to a png using rsvg.
 var ConvertToPNG = convert.RSVG
+
+// InitializeCircHeatmap creates a circular heatmap. Draw the circular heatmap by calling the Draw() method
+var InitializeCircHeatmap = circheatmap.Initialize
 
 // InitializeDotplot creates a dotplot. Draw the dotplot by calling the Draw() method
 var InitializeDotplot = dotplot.Initialize

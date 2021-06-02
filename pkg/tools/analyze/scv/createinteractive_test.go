@@ -9,21 +9,52 @@ import (
 )
 
 var _ = Describe("Create interactive file for SCV", func() {
-	It("should create file with when knowness requested", func() {
+	It("should create file when knowness requested", func() {
 		oldFs := fs.Instance
 		defer func() { fs.Instance = oldFs }()
 		fs.Instance = afero.NewMemMapFs()
 
 		fs.Instance.MkdirAll("interactive", 0755)
 
-		data := map[string]map[string]map[string]float64{
-			"conditionA": {
-				"readoutX": {"abundance": 1},
-				"readoutY": {"abundance": 4},
+		plots := []types.CircHeatmap{
+			{
+				Name: "conditionA",
+				Readouts: []types.CircHeatmapReadout{
+					{
+						Known: true,
+						Label: "readoutX",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 1,
+						},
+					},
+					{
+						Known: false,
+						Label: "readoutY",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 4,
+						},
+					},
+				},
 			},
-		}
-		known := map[string]map[string]bool{
-			"conditionA": {"readoutX": true, "readoutY": false},
+			{
+				Name: "conditionB",
+				Readouts: []types.CircHeatmapReadout{
+					{
+						Known: true,
+						Label: "readoutY",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 2,
+						},
+					},
+					{
+						Known: false,
+						Label: "readoutZ",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 6,
+						},
+					},
+				},
+			},
 		}
 		legend := types.CircHeatmapLegend{
 			{Attribute: "abundance", Color: "blue", Max: 50, Min: 0},
@@ -45,29 +76,62 @@ var _ = Describe("Create interactive file for SCV", func() {
 			"\t\"circles\": {\"order\": [{\"attribute\":\"abundance\",\"color\":\"blue\",\"max\":50,\"min\":0}]},\n" +
 			"\t\"parameters\": {\"abundanceColumn\":\"AvgSpec\",\"analysisType\":\"scv\",\"conditionColumn\":\"Bait\",\"controlColumn\":\"ctrl\",\"files\":[\"file1\",\"file2\"],\"imageType\":\"circheatmap\",\"normalization\":\"total\",\"readoutColumn\":\"Prey\",\"scoreColumn\":\"bfdr\",\"scoreType\":\"lte\"},\n" +
 			"\t\"settings\": {\"sortByKnown\":true},\n" +
-			"\t\"plots\": [{\"name\":\"conditionA\",\"readouts\":[{\"known\":true,\"label\":\"readoutX\",\"segments\":{\"abundance\":1.00}},{\"known\":false,\"label\":\"readoutY\",\"segments\":{\"abundance\":4.00}}]}]\n" +
+			"\t\"plots\": [{\"name\":\"conditionA\",\"readouts\":[{\"known\":true,\"label\":\"readoutX\",\"segments\":{\"abundance\":1.00}},{\"known\":false,\"label\":\"readoutY\",\"segments\":{\"abundance\":4.00}}]},{\"name\":\"conditionB\",\"readouts\":[{\"known\":true,\"label\":\"readoutY\",\"segments\":{\"abundance\":2.00}},{\"known\":false,\"label\":\"readoutZ\",\"segments\":{\"abundance\":6.00}}]}]\n" +
 			"}\n"
 
-		createInteractive(data, known, legend, settings)
+		createInteractive(plots, legend, settings)
 
 		actual, _ := afero.ReadFile(fs.Instance, "interactive/scv.json")
 		Expect(string(actual)).To(Equal(expected))
 	})
 
-	It("should create file with when knowness not requested", func() {
+	It("should create file when knowness not requested", func() {
 		oldFs := fs.Instance
 		defer func() { fs.Instance = oldFs }()
 		fs.Instance = afero.NewMemMapFs()
 
 		fs.Instance.MkdirAll("interactive", 0755)
 
-		data := map[string]map[string]map[string]float64{
-			"conditionA": {
-				"readoutX": {"abundance": 1},
-				"readoutY": {"abundance": 4},
+		plots := []types.CircHeatmap{
+			{
+				Name: "conditionA",
+				Readouts: []types.CircHeatmapReadout{
+					{
+						Known: false,
+						Label: "readoutY",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 4,
+						},
+					},
+					{
+						Known: false,
+						Label: "readoutX",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 1,
+						},
+					},
+				},
+			},
+			{
+				Name: "conditionB",
+				Readouts: []types.CircHeatmapReadout{
+					{
+						Known: false,
+						Label: "readoutZ",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 6,
+						},
+					},
+					{
+						Known: false,
+						Label: "readoutY",
+						Segments: map[string]types.RoundedSegment{
+							"abundance": 2,
+						},
+					},
+				},
 			},
 		}
-		var known map[string]map[string]bool = nil
 		legend := types.CircHeatmapLegend{
 			{Attribute: "abundance", Color: "blue", Max: 50, Min: 0},
 		}
@@ -88,10 +152,10 @@ var _ = Describe("Create interactive file for SCV", func() {
 			"\t\"circles\": {\"order\": [{\"attribute\":\"abundance\",\"color\":\"blue\",\"max\":50,\"min\":0}]},\n" +
 			"\t\"parameters\": {\"abundanceColumn\":\"AvgSpec\",\"analysisType\":\"scv\",\"conditionColumn\":\"Bait\",\"controlColumn\":\"ctrl\",\"files\":[\"file1\",\"file2\"],\"imageType\":\"circheatmap\",\"normalization\":\"total\",\"readoutColumn\":\"Prey\",\"scoreColumn\":\"bfdr\",\"scoreType\":\"lte\"},\n" +
 			"\t\"settings\": {\"sortByKnown\":false},\n" +
-			"\t\"plots\": [{\"name\":\"conditionA\",\"readouts\":[{\"known\":false,\"label\":\"readoutX\",\"segments\":{\"abundance\":1.00}},{\"known\":false,\"label\":\"readoutY\",\"segments\":{\"abundance\":4.00}}]}]\n" +
+			"\t\"plots\": [{\"name\":\"conditionA\",\"readouts\":[{\"known\":false,\"label\":\"readoutY\",\"segments\":{\"abundance\":4.00}},{\"known\":false,\"label\":\"readoutX\",\"segments\":{\"abundance\":1.00}}]},{\"name\":\"conditionB\",\"readouts\":[{\"known\":false,\"label\":\"readoutZ\",\"segments\":{\"abundance\":6.00}},{\"known\":false,\"label\":\"readoutY\",\"segments\":{\"abundance\":2.00}}]}]\n" +
 			"}\n"
 
-		createInteractive(data, known, legend, settings)
+		createInteractive(plots, legend, settings)
 
 		actual, _ := afero.ReadFile(fs.Instance, "interactive/scv.json")
 		Expect(string(actual)).To(Equal(expected))
