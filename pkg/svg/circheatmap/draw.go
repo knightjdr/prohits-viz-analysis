@@ -11,7 +11,7 @@ import (
 )
 
 // Circular heat map properties
-type CircHeatmap struct {
+type CircHeatmapSVG struct {
 	Dimensions CircHeatmapDimensions
 	Legend     types.CircHeatmapLegend
 	Plot       types.CircHeatmap
@@ -23,12 +23,12 @@ type CircHeatmapDimensions struct {
 	Center    float64
 	PlotSize  float64 // height/width in pixels
 	Radius    float64 // radius of outermost drawing area
-	Thickness int     // thickness of each circle
+	Thickness float64 // thickness of each circle
 }
 
 // Initialize a circular heat map.
-func Initialize() *CircHeatmap {
-	return &CircHeatmap{
+func Initialize() *CircHeatmapSVG {
+	return &CircHeatmapSVG{
 		Dimensions: CircHeatmapDimensions{
 			Center:   375,
 			PlotSize: 750,
@@ -38,14 +38,14 @@ func Initialize() *CircHeatmap {
 }
 
 // SetThickness of each circle
-func (c *CircHeatmap) SetThickness() {
+func (c *CircHeatmapSVG) SetThickness() {
 	numCircles := float64(len(c.Legend))
 	radius := c.Dimensions.PlotSize / 2
-	c.Dimensions.Thickness = int(math.Floor(radius / (1 + (1.25 * numCircles))))
+	c.Dimensions.Thickness = math.Floor(radius / (1 + (1.25 * numCircles)))
 }
 
 // Draw a circular heatmap in svg format.
-func (c *CircHeatmap) Draw(filename string) {
+func (c *CircHeatmapSVG) Draw(filename string) {
 	file, err := fs.Instance.Create(filename)
 	log.CheckError(err, true)
 	defer file.Close()

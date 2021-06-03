@@ -14,7 +14,7 @@ var _ = Describe("Write header", func() {
 			svg.WriteString(str)
 		}
 
-		c := &CircHeatmap{
+		c := &CircHeatmapSVG{
 			Dimensions: CircHeatmapDimensions{
 				Center:   500,
 				PlotSize: 1000,

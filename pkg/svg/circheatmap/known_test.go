@@ -15,7 +15,7 @@ var _ = Describe("Write known circle", func() {
 			svg.WriteString(str)
 		}
 
-		c := &CircHeatmap{
+		c := &CircHeatmapSVG{
 			Dimensions: CircHeatmapDimensions{
 				Radius: 200,
 			},
@@ -66,7 +66,7 @@ var _ = Describe("Write known circle", func() {
 			svg.WriteString(str)
 		}
 
-		c := &CircHeatmap{
+		c := &CircHeatmapSVG{
 			Dimensions: CircHeatmapDimensions{
 				Radius: 200,
 			},
@@ -119,7 +119,7 @@ var _ = Describe("Write known circle", func() {
 			svg.WriteString(str)
 		}
 
-		c := &CircHeatmap{
+		c := &CircHeatmapSVG{
 			Dimensions: CircHeatmapDimensions{
 				Radius: 200,
 			},

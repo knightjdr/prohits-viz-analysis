@@ -15,7 +15,7 @@ type pathParameters struct {
 	Y      float64
 }
 
-func writeKnown(c *CircHeatmap, writeString func(string)) {
+func writeKnown(c *CircHeatmapSVG, writeString func(string)) {
 	if c.ShowKnown {
 		path := definePath(c.Plot.Readouts, c.Dimensions.Radius)
 
