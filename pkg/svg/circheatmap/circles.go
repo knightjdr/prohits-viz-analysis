@@ -39,9 +39,11 @@ type SegmentPath struct {
 func writeCircles(c *CircHeatmapSVG, writeString func(string)) {
 	reformatted := reformatCircHeatmapData(c)
 
+	writeString("\t\t<g>\n")
 	for _, circle := range reformatted {
 		writeCircle(circle, writeString)
 	}
+	writeString("\t\t</g>\n")
 }
 
 func reformatCircHeatmapData(c *CircHeatmapSVG) []Circle {
@@ -74,9 +76,11 @@ func writeCircle(c Circle, writeString func(string)) {
 
 	segments := defineSegments(colors, radii)
 
+	writeString("\t\t\t<g>\n")
 	for _, segment := range segments {
 		drawSegment(segment, radii, writeString)
 	}
+	writeString("\t\t\t</g>\n")
 }
 
 func createGradient(gradientColor string) []color.Space {
@@ -159,28 +163,28 @@ func defineSegments(colors []string, radii map[string]float64) []Segment {
 
 func drawSegment(segment Segment, radii map[string]float64, writeString func(string)) {
 	path := fmt.Sprintf(
-		"M %f %f A %f %f 0 %d 1 %f %f L %f %f A %f %f 0 %d 0 %f %f Z",
-		segment.A.X,
-		segment.A.Y,
-		radii["outer"],
-		radii["outer"],
+		"M %s %s A %s %s 0 %d 1 %s %s L %s %s A %s %s 0 %d 0 %s %s Z",
+		float.RemoveTrailingZeros(customMath.Round(segment.A.X, 0.01)),
+		float.RemoveTrailingZeros(customMath.Round(segment.A.Y, 0.01)),
+		float.RemoveTrailingZeros(customMath.Round(radii["outer"], 0.01)),
+		float.RemoveTrailingZeros(customMath.Round(radii["outer"], 0.01)),
 		segment.B.Arc,
-		segment.B.X,
-		segment.B.Y,
-		segment.C.X,
-		segment.C.Y,
-		radii["inner"],
-		radii["inner"],
+		float.RemoveTrailingZeros(customMath.Round(segment.B.X, 0.01)),
+		float.RemoveTrailingZeros(customMath.Round(segment.B.Y, 0.01)),
+		float.RemoveTrailingZeros(customMath.Round(segment.C.X, 0.01)),
+		float.RemoveTrailingZeros(customMath.Round(segment.C.Y, 0.01)),
+		float.RemoveTrailingZeros(customMath.Round(radii["inner"], 0.01)),
+		float.RemoveTrailingZeros(customMath.Round(radii["inner"], 0.01)),
 		segment.D.Arc,
-		segment.D.X,
-		segment.D.Y,
+		float.RemoveTrailingZeros(customMath.Round(segment.D.X, 0.01)),
+		float.RemoveTrailingZeros(customMath.Round(segment.D.Y, 0.01)),
 	)
 
-	writeString("\t\t<g transform=\"scale(0.85)\">\n")
+	writeString("\t\t\t\t<g transform=\"scale(0.85)\">\n")
 	writeString(fmt.Sprintf(
-		"\t\t\t<path d=\"%s\" fill=\"%s\" stroke=\"#f5f5f5\" strokeLinejoin=\"round\" strokeWidth=\"2\"/>\n",
+		"\t\t\t\t\t<path d=\"%s\" fill=\"%s\" stroke=\"#f5f5f5\" strokeLinejoin=\"round\" strokeWidth=\"2\"/>\n",
 		path,
 		segment.Fill,
 	))
-	writeString("\t\t</g>\n")
+	writeString("\t\t\t\t</g>\n")
 }
