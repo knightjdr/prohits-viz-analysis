@@ -1,4 +1,4 @@
-package convert
+package heatmap
 
 import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/minimap"
