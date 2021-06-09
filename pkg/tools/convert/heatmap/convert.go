@@ -3,6 +3,7 @@ package heatmap
 
 import (
 	"path/filepath"
+	"strings"
 
 	"github.com/knightjdr/prohits-viz-analysis/pkg/files"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/fs"
@@ -10,6 +11,7 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/tools/convert/heatmap/settings"
 )
 
+// Convert a heatmap or dotplot file to json format.
 func Convert(filename string) {
 	headerMap := map[string]string{
 		"column": "condition",
@@ -23,7 +25,9 @@ func Convert(filename string) {
 	matrices := createMatrices(&csv, settings.ScoreType)
 	files.CreateFolders([]string{"interactive", "minimap"})
 	createMinimap(matrices, settings)
-	createInteractive(matrices, settings)
+
+	fileid := strings.Split(filename, ".txt")[0]
+	createInteractive(matrices, settings, fileid)
 
 	mapFolder := filepath.Join(".", "minimap")
 	fs.Instance.RemoveAll(mapFolder)

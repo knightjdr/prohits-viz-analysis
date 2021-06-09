@@ -1,15 +1,17 @@
 package heatmap
 
 import (
+	"fmt"
+
 	"github.com/knightjdr/prohits-viz-analysis/pkg/interactive"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
-func createInteractive(matrices *types.Matrices, parameters types.Settings) {
+func createInteractive(matrices *types.Matrices, parameters types.Settings, fileid string) {
 	settings := defineSettings(parameters)
 	data := &interactive.HeatmapData{
 		AnalysisType: parameters.Type,
-		Filename:     "interactive/image.json",
+		Filename:     fmt.Sprintf("interactive/%s.json", fileid),
 		Matrices:     matrices,
 		Minimap:      "./minimap/minimap.png",
 		Parameters:   parameters,
