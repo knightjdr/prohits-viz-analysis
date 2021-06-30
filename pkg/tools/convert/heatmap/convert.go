@@ -3,7 +3,6 @@ package heatmap
 
 import (
 	"path/filepath"
-	"strings"
 
 	"github.com/knightjdr/prohits-viz-analysis/pkg/files"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/fs"
@@ -23,10 +22,10 @@ func Convert(filename string) {
 	settings := settings.Parse(csv)
 
 	matrices := createMatrices(&csv, settings.ScoreType)
-	files.CreateFolders([]string{"interactive", "minimap"})
+	files.CreateFolders([]string{"minimap"})
 	createMinimap(matrices, settings)
 
-	fileid := strings.Split(filename, ".txt")[0]
+	fileid := files.ParseBaseNameWithoutExtension(filename)
 	createInteractive(matrices, settings, fileid)
 
 	mapFolder := filepath.Join(".", "minimap")

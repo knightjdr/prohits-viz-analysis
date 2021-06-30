@@ -20,7 +20,6 @@ var _ = Describe("Convert scatter plot", func() {
 			"AMOTL2\t7.5\t4.48\t6\tred\n"
 
 		fs.Instance.MkdirAll("test", 0755)
-		fs.Instance.MkdirAll("interactive", 0755)
 		afero.WriteFile(fs.Instance, "test/file.txt", []byte(fileContents), 0444)
 
 		Convert("test/file.txt")
@@ -37,7 +36,7 @@ var _ = Describe("Convert scatter plot", func() {
 			"{\"color\":\"red\",\"label\":\"AMOTL2\",\"x\":7.50,\"y\":4.48}]}]" +
 			"\n}\n"
 
-		actual, _ := afero.ReadFile(fs.Instance, "interactive/file.json")
+		actual, _ := afero.ReadFile(fs.Instance, "file.json")
 		Expect(string(actual)).To(Equal(expected))
 	})
 
@@ -52,7 +51,6 @@ var _ = Describe("Convert scatter plot", func() {
 			"AMOTL2\t7.5\t4.48\t6\t#0066cc\n"
 
 		fs.Instance.MkdirAll("test", 0755)
-		fs.Instance.MkdirAll("interactive", 0755)
 		afero.WriteFile(fs.Instance, "test/file.txt", []byte(fileContents), 0444)
 
 		Convert("test/file.txt")
@@ -68,7 +66,7 @@ var _ = Describe("Convert scatter plot", func() {
 			"{\"color\":\"#509afb\",\"label\":\"AMOTL1\",\"x\":59.00,\"y\":4.18}," +
 			"{\"color\":\"#0066cc\",\"label\":\"AMOTL2\",\"x\":7.50,\"y\":4.48}]}]\n}\n"
 
-		actual, _ := afero.ReadFile(fs.Instance, "interactive/file.json")
+		actual, _ := afero.ReadFile(fs.Instance, "file.json")
 		Expect(string(actual)).To(Equal(expected))
 	})
 })

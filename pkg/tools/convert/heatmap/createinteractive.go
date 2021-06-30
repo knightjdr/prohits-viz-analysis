@@ -11,7 +11,7 @@ func createInteractive(matrices *types.Matrices, parameters types.Settings, file
 	settings := defineSettings(parameters)
 	data := &interactive.HeatmapData{
 		AnalysisType: parameters.Type,
-		Filename:     fmt.Sprintf("interactive/%s.json", fileid),
+		Filename:     fmt.Sprintf("%s.json", fileid),
 		Matrices:     matrices,
 		Minimap:      "./minimap/minimap.png",
 		Parameters:   parameters,

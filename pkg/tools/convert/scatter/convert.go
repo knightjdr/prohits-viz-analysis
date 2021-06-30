@@ -2,9 +2,6 @@
 package scatter
 
 import (
-	"path"
-	"strings"
-
 	"github.com/knightjdr/prohits-viz-analysis/pkg/files"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/fs"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/log"
@@ -15,8 +12,7 @@ import (
 func Convert(filename string) {
 	format := determineFormat(filename)
 
-	files.CreateFolders([]string{"interactive"})
-	fileid := strings.Split(path.Base(filename), ".txt")[0]
+	fileid := files.ParseBaseNameWithoutExtension(filename)
 
 	legend := []map[string]string{}
 	plots := []types.ScatterPlot{}

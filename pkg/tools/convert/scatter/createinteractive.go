@@ -10,7 +10,7 @@ import (
 func createInteractive(plots []types.ScatterPlot, settings types.Settings, legend []map[string]string, filename string) {
 	interactiveData := &interactive.ScatterData{
 		AnalysisType: settings.Type,
-		Filename:     fmt.Sprintf("interactive/%s.json", filename),
+		Filename:     fmt.Sprintf("%s.json", filename),
 		Legend:       legend,
 		Parameters:   settings,
 		Plots:        plots,
