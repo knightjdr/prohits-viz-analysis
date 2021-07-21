@@ -16,7 +16,7 @@ func nestedClustering() map[string][]string {
 }
 
 func runNestedCluster() {
-	cmdStr := "docker run -v $(pwd):/files/ nestedcluster -m biclustering/matrix.txt -p biclustering/parameters.txt"
+	cmdStr := "docker run --rm -v $(pwd):/files/ nestedcluster -m biclustering/matrix.txt -p biclustering/parameters.txt"
 
 	cmd := exec.Command(
 		"/bin/sh",
