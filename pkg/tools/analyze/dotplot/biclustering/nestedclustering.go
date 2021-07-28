@@ -46,12 +46,13 @@ func moveFiles() {
 	fs.Instance.Rename("NestedClusters", "biclustering/NestedClusters")
 	fs.Instance.Rename("NestedMu", "biclustering/NestedMu")
 	fs.Instance.Rename("NestedSigma2", "biclustering/NestedSigma2")
+	fs.Instance.Rename("OPTclusters", "biclustering/OPTclusters")
 	fs.Instance.Rename("stats.pdf", "biclustering/stats.pdf")
 	fs.Instance.RemoveAll("OPTclusters")
 }
 
 func getClusteringOrder() map[string][]string {
-	order := make(map[string][]string, 0)
+	order := make(map[string][]string)
 
 	file, err := fs.Instance.Open("biclustering/clustered-matrix.txt")
 	log.CheckError(err, true)
