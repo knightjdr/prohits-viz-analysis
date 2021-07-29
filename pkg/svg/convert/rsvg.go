@@ -12,7 +12,7 @@ import (
 // RSVG converts an svg to PNG using rsvg-convert.
 func RSVG(svg, targetFileName, bgColor string) {
 	cmdStr := fmt.Sprintf(
-		"docker run --rm -v $(pwd):/files/ rsvg --format=png --output=%s --background-color=%s --unlimited %s",
+		"docker run --rm -v $(pwd):/files/ --user $(id -u):$(id -g) rsvg --format=png --output=%s --background-color=%s --unlimited %s",
 		targetFileName,
 		bgColor,
 		svg,
