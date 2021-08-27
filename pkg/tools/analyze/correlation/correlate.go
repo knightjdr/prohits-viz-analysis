@@ -90,7 +90,7 @@ func correlateReadouts(analysis *types.Analysis) *correlationData {
 
 func stripReplicates(names []string, useReplicates bool) []string {
 	if useReplicates {
-		re := regexp.MustCompile("_R\\d$")
+		re := regexp.MustCompile(`_R\d$`)
 
 		stripped := make([]string, len(names))
 		for i, name := range names {

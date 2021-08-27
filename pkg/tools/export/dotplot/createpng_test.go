@@ -31,14 +31,14 @@ var _ = Describe("Create PNG", func() {
 			Markers: types.Markers{
 				Color: "#000000",
 				List: map[string]types.Marker{
-					"a": types.Marker{Height: 1, Width: 2, X: 0.25, Y: 0.5},
+					"a": {Height: 1, Width: 2, X: 0.25, Y: 0.5},
 				},
 			},
 			Settings: types.Settings{
-				AbundanceCap:    4,
 				EdgeColor:       "blue",
 				FillColor:       "blue",
-				MinAbundance:    0,
+				FillMax:         4,
+				FillMin:         0,
 				PrimaryFilter:   0.01,
 				ScoreType:       "lte",
 				SecondaryFilter: 0.05,
@@ -126,10 +126,10 @@ var _ = Describe("Create PNG", func() {
 
 		data := &heatmap.Heatmap{
 			Settings: types.Settings{
-				AbundanceCap:    4,
 				EdgeColor:       "blue",
 				FillColor:       "blue",
-				MinAbundance:    0,
+				FillMax:         4,
+				FillMin:         0,
 				PrimaryFilter:   0.01,
 				ScoreType:       "lte",
 				SecondaryFilter: 0.05,

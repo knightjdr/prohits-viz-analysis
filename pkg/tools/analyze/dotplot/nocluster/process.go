@@ -11,10 +11,12 @@ import (
 func Process(analysis *types.Analysis) {
 	matrixSettings := convert.ConversionSettings{
 		CalculateRatios: true,
+		RatioDimension:  analysis.Settings.RatioDimension,
 		ScoreType:       analysis.Settings.ScoreType,
 	}
 	matrices := convert.FromTable(&analysis.Data, matrixSettings)
 
+	analysis.Settings = hierarchical.AdjustSettings(analysis.Settings, matrices.Abundance)
 	orderedData := order(matrices, analysis)
 	sortedMatrices := sortMatrices(matrices, orderedData)
 

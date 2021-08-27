@@ -24,6 +24,7 @@ func defineSettings(parameters types.Settings) map[string]interface{} {
 	if parameters.Type == "dotplot" {
 		return map[string]interface{}{
 			"abundanceCap":    parameters.AbundanceCap,
+			"abundanceType":   parameters.AbundanceType,
 			"edgeColor":       parameters.EdgeColor,
 			"fillColor":       parameters.FillColor,
 			"imageType":       "dotplot",
@@ -35,6 +36,7 @@ func defineSettings(parameters types.Settings) map[string]interface{} {
 	}
 	return map[string]interface{}{
 		"abundanceCap":  parameters.AbundanceCap,
+		"abundanceType": parameters.AbundanceType,
 		"fillColor":     parameters.FillColor,
 		"imageType":     "heatmap",
 		"invertColor":   parameters.InvertColor,

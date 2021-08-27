@@ -20,8 +20,8 @@ var _ = Describe("Draw heatmap legend", func() {
 			Filename:  "legend.svg",
 			NumColors: 6,
 			Settings: types.Settings{
-				AbundanceCap: 50,
 				FillColor:    "blue",
+				FillMax:      50,
 				MinAbundance: 0,
 			},
 			Title: "heatmap title",
@@ -83,7 +83,7 @@ var _ = Describe("Legend fill gradient", func() {
 		data := Legend{
 			NumColors: 6,
 			Settings: types.Settings{
-				AbundanceCap: 50,
+				FillMax:      50,
 				MinAbundance: 0,
 			},
 		}

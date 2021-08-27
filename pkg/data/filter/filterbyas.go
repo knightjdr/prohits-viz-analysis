@@ -8,7 +8,7 @@ import (
 func byAbundanceAndScore(analysis *types.Analysis) {
 	doesReadoutPassFilters := getAbundanceAndScoreFilter(analysis.Settings)
 
-	passingReadouts := make(map[string]map[string]bool, 0)
+	passingReadouts := make(map[string]map[string]bool)
 	for _, row := range analysis.Data {
 		abundance := parse.PipeSeparatedStringToMean(row["abundance"])
 		score := parse.Score(row["score"])

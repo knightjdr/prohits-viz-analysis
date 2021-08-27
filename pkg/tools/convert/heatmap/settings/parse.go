@@ -29,10 +29,7 @@ func parseSettings(csv []map[string]string) *jsonSettings {
 }
 
 func hasJSONSettings(csv []map[string]string) bool {
-	if string([]rune(csv[0]["params"])[0]) == "{" {
-		return true
-	}
-	return false
+	return string([]rune(csv[0]["params"])[0]) == "{"
 }
 
 func parseJSON(settings *jsonSettings, csv []map[string]string) {

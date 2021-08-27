@@ -11,14 +11,14 @@ func inferDotplotSettings(csv []map[string]string, settings *types.Settings) {
 	settings.EdgeColor = "blue"
 
 	min, max := findMinMax(csv)
-	setFillAndMinAbundance(min, settings)
-	setAbundanceCap(min, max, settings, true)
+	setAbundanceType(min, settings)
+	setFillParameters(min, max, settings)
 }
 
 func inferHeatmapSettings(csv []map[string]string, settings *types.Settings) {
 	min, max := findMinMax(csv)
-	setFillAndMinAbundance(min, settings)
-	setAbundanceCap(min, max, settings, false)
+	setAbundanceType(min, settings)
+	setFillParameters(min, max, settings)
 }
 
 func findMinMax(csv []map[string]string) (float64, float64) {
@@ -37,20 +37,32 @@ func findMinMax(csv []map[string]string) (float64, float64) {
 	return min, max
 }
 
-func setFillAndMinAbundance(min float64, settings *types.Settings) {
+func setAbundanceType(min float64, settings *types.Settings) {
 	if min >= 0 {
+		settings.AbundanceType = "positive"
 		settings.FillColor = "blue"
-		settings.MinAbundance = 0
 	} else {
+		settings.AbundanceType = "bidirectional"
 		settings.FillColor = "blueRed"
-		settings.MinAbundance = math.Floor(min)
 	}
 }
 
-func setAbundanceCap(min, max float64, settings *types.Settings, isDotplot bool) {
-	if isDotplot && min >= 0 {
-		settings.AbundanceCap = float64(50)
-	} else {
-		settings.AbundanceCap = float64(math.Ceil(max))
+func setFillParameters(min, max float64, settings *types.Settings) {
+	settings.MinAbundance = 0
+	if min >= 0 && max > 1 {
+		settings.AbundanceCap = 50
+		settings.FillMax = 50
+		settings.FillMin = 0
+		return
 	}
+	if min >= 0 && max <= 1 {
+		settings.AbundanceCap = 1
+		settings.FillMax = 1
+		settings.FillMin = 0
+		return
+	}
+	ceiling := math.Ceil(max)
+	settings.AbundanceCap = ceiling
+	settings.FillMax = ceiling
+	settings.FillMin = math.Floor(min)
 }

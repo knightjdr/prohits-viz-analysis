@@ -10,19 +10,20 @@ import (
 
 // Dotplot properties.
 type Dotplot struct {
-	AbundanceCap    float64
+	Abundance       string
 	Annotations     types.Annotations
 	BoundingBox     bool
 	CellSize        int
 	Columns         []string
 	EdgeColor       string
 	FillColor       string
+	FillMax         float64
+	FillMin         float64
 	FontSize        int
 	Invert          bool
 	LeftMargin      int
 	Markers         types.Markers
 	Matrices        *types.Matrices
-	MinAbundance    float64
 	NumColors       int
 	PlotHeight      int
 	PlotWidth       int

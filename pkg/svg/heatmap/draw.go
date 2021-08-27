@@ -10,26 +10,26 @@ import (
 
 // Heatmap properties.
 type Heatmap struct {
-	AbundanceCap float64
-	Annotations  types.Annotations
-	CellSize     int
-	Columns      []string
-	FillColor    string
-	FontSize     int
-	Invert       bool
-	LeftMargin   int
-	Markers      types.Markers
-	Matrix       [][]float64
-	MinAbundance float64
-	NumColors    int
-	PlotHeight   int
-	PlotWidth    int
-	Rows         []string
-	SvgHeight    int
-	SvgWidth     int
-	TopMargin    int
-	XLabel       string
-	YLabel       string
+	Annotations types.Annotations
+	CellSize    int
+	Columns     []string
+	FillColor   string
+	FillMax     float64
+	FillMin     float64
+	FontSize    int
+	Invert      bool
+	LeftMargin  int
+	Markers     types.Markers
+	Matrix      [][]float64
+	NumColors   int
+	PlotHeight  int
+	PlotWidth   int
+	Rows        []string
+	SvgHeight   int
+	SvgWidth    int
+	TopMargin   int
+	XLabel      string
+	YLabel      string
 }
 
 // Initialize a heatmap.

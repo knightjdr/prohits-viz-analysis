@@ -2,9 +2,11 @@ package biclustering
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	"github.com/knightjdr/prohits-viz-analysis/pkg/fs"
+	matrixMath "github.com/knightjdr/prohits-viz-analysis/pkg/matrix/math"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 	"github.com/spf13/afero"
 )
@@ -12,7 +14,7 @@ import (
 // generateMatrix filters and formats a data matrix for the biclustering
 // script. It will only keep readouts found in at least two conditions with the
 // minimum criteria and will normalize all values by the max value * 10
-// (not sure why this normalization is done - taking it frmo HW's script).
+// (not sure why this normalization is done - taking it from HW's script).
 func generateMatrix(matrices *types.Matrices, minAbundance float64) []string {
 	abundance := make([][]float64, 0)
 	readouts := make([]string, 0)
@@ -20,7 +22,7 @@ func generateMatrix(matrices *types.Matrices, minAbundance float64) []string {
 	for i, row := range matrices.Abundance {
 		conditionCount := 0
 		for _, value := range row {
-			if value >= minAbundance {
+			if math.Abs(value) >= minAbundance {
 				conditionCount++
 				if conditionCount > 1 {
 					abundance = append(abundance, row)
@@ -53,20 +55,13 @@ func generateMatrix(matrices *types.Matrices, minAbundance float64) []string {
 }
 
 func normalizeMatrix(matrix [][]float64) [][]float64 {
-	maxValue := float64(0)
-	for _, row := range matrix {
-		for _, value := range row {
-			if value > maxValue {
-				maxValue = value
-			}
-		}
-	}
+	_, max := matrixMath.MinMax(matrix)
 
 	normalized := make([][]float64, len(matrix))
 	for i, row := range matrix {
 		normalized[i] = make([]float64, len(row))
 		for j, value := range row {
-			normalized[i][j] = (value * 10) / maxValue
+			normalized[i][j] = (value * 10) / max
 		}
 	}
 

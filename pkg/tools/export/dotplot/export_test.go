@@ -28,7 +28,7 @@ var jsonText = `{
 			}
 		}
 	},
-	"settings": {"abundanceCap":4,"edgeColor":"blue","fillColor":"blue","imageType":"dotplot","minAbundance":0,"primaryFilter":0.01,"secondaryFilter":0.05,"scoreType":"lte","xLabel":"Bait","yLabel":"Prey"},
+	"settings": {"abundanceCap":4,"abundanceType":"positive","edgeColor":"blue","fillColor":"blue","imageType":"dotplot","minAbundance":0,"primaryFilter":0.01,"secondaryFilter":0.05,"scoreType":"lte","xLabel":"Bait","yLabel":"Prey"},
 	"columnDB": ["bait1", "bait2", "bait3", "bait4"],
 	"columnOrder": [0, 1, 2, 3],
 	"rowOrder": [0, 1, 2, 3],

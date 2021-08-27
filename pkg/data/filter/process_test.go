@@ -22,6 +22,7 @@ var _ = Describe("Process", func() {
 			Settings: types.Settings{
 				ConditionClustering: "none",
 				ConditionList:       []string{"conditionA", "conditionB"},
+				Clustering:          "none",
 				MinAbundance:        10,
 				PrimaryFilter:       0.05,
 				ReadoutClustering:   "none",
@@ -41,6 +42,7 @@ var _ = Describe("Process", func() {
 			Settings: types.Settings{
 				ConditionClustering: "none",
 				ConditionList:       []string{"conditionA", "conditionB"},
+				Clustering:          "none",
 				MinAbundance:        10,
 				PrimaryFilter:       0.05,
 				ReadoutClustering:   "none",

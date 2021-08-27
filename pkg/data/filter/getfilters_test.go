@@ -20,6 +20,19 @@ var _ = Describe("Define abundance and score filter", func() {
 		Expect(filter(11, 0.06)).To(BeFalse(), "should return false when only abundance passes filter")
 		Expect(filter(9, 0.04)).To(BeFalse(), "should return false when only score passes filter")
 	})
+
+	It("should return a function for filtering by abundance and score compatible with negative abundances", func() {
+		settings := types.Settings{
+			MinAbundance:  10,
+			PrimaryFilter: 0.05,
+			ScoreType:     "lte",
+		}
+
+		filter := getAbundanceAndScoreFilter(settings)
+		Expect(filter(-11, 0.04)).To(BeTrue(), "should return true when both abundance and score pass filters")
+		Expect(filter(-11, 0.06)).To(BeFalse(), "should return false when only abundance passes filter")
+		Expect(filter(-9, 0.04)).To(BeFalse(), "should return false when only score passes filter")
+	})
 })
 
 var _ = Describe("Define condition and readout filter", func() {

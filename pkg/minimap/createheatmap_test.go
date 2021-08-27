@@ -27,8 +27,8 @@ var _ = Describe("Draw heatmap", func() {
 				},
 			},
 			Settings: types.Settings{
-				AbundanceCap: 50,
 				FillColor:    "blue",
+				FillMax:      50,
 				InvertColor:  false,
 				MinAbundance: 0,
 			},

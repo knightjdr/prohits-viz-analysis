@@ -36,7 +36,7 @@ func getCellFiller(img *image.RGBA, h *Heatmap) func(int, int, float64) {
 }
 
 func getGradientIndex(h *Heatmap) func(float64) int {
-	mapToRange := float.GetRange(h.MinAbundance, h.AbundanceCap, 0, float64(h.NumColors-1))
+	mapToRange := float.GetRange(h.FillMin, h.FillMax, 0, float64(h.NumColors-1))
 	return func(value float64) int {
 		outputValue := mapToRange(value)
 		return int(math.Round(outputValue))

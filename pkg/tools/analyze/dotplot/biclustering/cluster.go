@@ -10,10 +10,13 @@ import (
 // Cluster data.
 func Cluster(analysis *types.Analysis) {
 	matrixSettings := convert.ConversionSettings{
-		ScoreType: analysis.Settings.ScoreType,
+		CalculateRatios: true,
+		RatioDimension:  analysis.Settings.RatioDimension,
+		ScoreType:       analysis.Settings.ScoreType,
 	}
 	matrices := convert.FromTable(&analysis.Data, matrixSettings)
 
+	analysis.Settings = hierarchical.AdjustSettings(analysis.Settings, matrices.Abundance)
 	setParameters(len(matrices.Conditions), analysis.Settings)
 	orderedData := order(matrices, analysis.Settings.MinAbundance)
 	sortedMatrices := sortMatrices(matrices, orderedData)

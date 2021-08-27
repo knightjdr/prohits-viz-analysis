@@ -76,13 +76,13 @@ func CreateFillGradient(svg *strings.Builder, data Legend, gradient []color.Spac
 	svg.WriteString(
 		fmt.Sprintf(
 			"\t<text y=\"65\" x=\"175\" font-size=\"12\" text-anchor=\"middle\">%s</text>\n",
-			float.RemoveTrailingZeros(data.Settings.AbundanceCap),
+			float.RemoveTrailingZeros(data.Settings.FillMax),
 		),
 	)
 	svg.WriteString(
 		fmt.Sprintf(
 			"\t<text y=\"65\" x=\"25\" font-size=\"12\" text-anchor=\"middle\">%s</text>\n",
-			float.RemoveTrailingZeros(data.Settings.MinAbundance),
+			float.RemoveTrailingZeros(data.Settings.FillMin),
 		),
 	)
 }

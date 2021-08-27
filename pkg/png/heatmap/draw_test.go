@@ -18,10 +18,10 @@ var _ = Describe("Draw heatmap", func() {
 		fs.Instance.MkdirAll("test", 0755)
 
 		h := Initialize()
-		h.AbundanceCap = 50
 		h.CellSize = 2
+		h.FillMax = 50
+		h.FillMin = 0
 		h.Height = 4
-		h.MinAbundance = 0
 		h.NumColors = 11
 		h.Width = 4
 

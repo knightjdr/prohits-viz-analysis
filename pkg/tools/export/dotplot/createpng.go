@@ -20,15 +20,15 @@ func createPNG(data *heatmap.Heatmap, matrices *types.Matrices, settings Setting
 		dims := dimensions.Calculate(matrices.Abundance, []string{}, []string{}, false)
 
 		image := png.InitializeHeatmap()
-		image.AbundanceCap = data.Settings.AbundanceCap
 		image.Annotations = data.Annotations
 		image.ColorSpace = data.Settings.FillColor
 		image.CellSize = dims.CellSize
+		image.FillMax = data.Settings.FillMax
+		image.FillMin = data.Settings.FillMin
 		image.FontPath = settings.FontPath
 		image.Height = dims.PlotHeight
 		image.Invert = data.Settings.InvertColor
 		image.Markers = data.Markers
-		image.MinAbundance = data.Settings.MinAbundance
 		image.Width = dims.PlotWidth
 
 		image.Draw(matrices.Abundance, "png/dotplot.png")

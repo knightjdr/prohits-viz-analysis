@@ -2,8 +2,6 @@
 package correlation
 
 import (
-	"fmt"
-	"math"
 	"sort"
 
 	"github.com/knightjdr/prohits-viz-analysis/pkg/matrix"
@@ -39,9 +37,6 @@ func (data *Data) Correlate() [][]float64 {
 		for j := i + 1; j < n; j++ {
 			x, y := filterData(i, j)
 			value := calculateStatistic(x, y)
-			if math.IsNaN(value) {
-				fmt.Println(value, x, y)
-			}
 			correlation[i][j] = value
 			correlation[j][i] = value
 		}
@@ -70,7 +65,7 @@ func getStatistic(method string) func([]float64, []float64) float64 {
 
 func getDataFilter(matrix [][]float64, IgnoreSourceTargetMatches bool, columns, rows []string) func(int, int) ([]float64, []float64) {
 	if IgnoreSourceTargetMatches {
-		columnNameToIndicies := make(map[string][]int, 0)
+		columnNameToIndicies := make(map[string][]int)
 		for index, value := range columns {
 			if _, ok := columnNameToIndicies[value]; !ok {
 				columnNameToIndicies[value] = make([]int, 0)

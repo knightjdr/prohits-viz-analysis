@@ -40,15 +40,15 @@ func createCorrelationSVG(data *correlationData, settings types.Settings, label 
 	dims := dimensions.Calculate(data.matrix, data.sortedLabels, data.sortedLabels, false)
 
 	heatmap := svg.InitializeHeatmap()
-	heatmap.AbundanceCap = 1
 	heatmap.CellSize = dims.CellSize
 	heatmap.Columns = data.sortedLabels
 	heatmap.FillColor = settings.FillColor
+	heatmap.FillMax = 1
+	heatmap.FillMin = -1
 	heatmap.FontSize = dims.FontSize
 	heatmap.Invert = settings.InvertColor
 	heatmap.LeftMargin = dims.LeftMargin
 	heatmap.Matrix = data.matrix
-	heatmap.MinAbundance = -1
 	heatmap.PlotHeight = dims.PlotHeight
 	heatmap.PlotWidth = dims.PlotWidth
 	heatmap.Rows = data.sortedLabels
@@ -68,10 +68,10 @@ func createCorrelationLegend(settings types.Settings, label string) {
 		Filename:  fmt.Sprintf("svg/%s.svg", filename),
 		NumColors: 101,
 		Settings: types.Settings{
-			AbundanceCap: 1,
-			FillColor:    settings.FillColor,
-			InvertColor:  settings.InvertColor,
-			MinAbundance: -1,
+			FillColor:   settings.FillColor,
+			FillMax:     1,
+			FillMin:     -1,
+			InvertColor: settings.InvertColor,
 		},
 		Title: fmt.Sprintf("Correlation - %s", label),
 	}
@@ -90,12 +90,12 @@ func createPNG(matrix [][]float64, settings types.Settings, label string) {
 		dims := dimensions.Calculate(downsampled, []string{}, []string{}, false)
 
 		heatmap := heatmapPNG.Initialize()
-		heatmap.AbundanceCap = 1
 		heatmap.CellSize = dims.CellSize
 		heatmap.ColorSpace = settings.FillColor
+		heatmap.FillMax = 1
+		heatmap.FillMin = -1
 		heatmap.Height = dims.PlotHeight
 		heatmap.Invert = settings.InvertColor
-		heatmap.MinAbundance = -1
 		heatmap.Width = dims.PlotWidth
 
 		heatmap.Draw(downsampled, outfile)
@@ -113,10 +113,10 @@ func createCorrelationMinimap(data *correlationData, settings types.Settings, la
 			Abundance: data.matrix,
 		},
 		Settings: types.Settings{
-			AbundanceCap: 1,
-			FillColor:    settings.FillColor,
-			InvertColor:  settings.InvertColor,
-			MinAbundance: -1,
+			FillColor:   settings.FillColor,
+			FillMax:     1,
+			FillMin:     -1,
+			InvertColor: settings.InvertColor,
 		},
 	}
 	minimap.Create(minimapData)
@@ -135,10 +135,11 @@ func createCorrelationInteractive(data *correlationData, settings types.Settings
 		Parameters: settings,
 		Settings: map[string]interface{}{
 			"abundanceCap":  1,
+			"abundanceType": "bidirectional",
 			"fillColor":     settings.FillColor,
 			"imageType":     "heatmap",
 			"invertColor":   settings.InvertColor,
-			"minAbundance":  -1,
+			"minAbundance":  0,
 			"primaryFilter": 0,
 		},
 	}

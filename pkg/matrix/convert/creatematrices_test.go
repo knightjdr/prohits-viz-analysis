@@ -37,6 +37,7 @@ var _ = Describe("Create matrices", func() {
 		}
 		settings := ConversionSettings{
 			CalculateRatios: true,
+			RatioDimension:  "diameter",
 		}
 
 		expected := &types.Matrices{
@@ -134,6 +135,43 @@ var _ = Describe("Add ratio matrix", func() {
 				{5, 2, 14.3},
 				{23, 17.8, 0},
 				{10, 0, 7},
+				{0.1, 1, -2},
+			},
+			Conditions: []string{"condition1", "condition2", "condition3"},
+			Readouts:   []string{"readout1", "readout2", "readout3"},
+			Score: [][]float64{
+				{0.01, 0.01, 0.08},
+				{0, 0.01, 0.08},
+				{0.02, 0.08, 0.01},
+				{0.5, 0.1, 0},
+			},
+		}
+		settings := ConversionSettings{
+			CalculateRatios: true,
+			RatioDimension:  "diameter",
+		}
+
+		expected := [][]float64{
+			{0.35, 0.14, 1},
+			{1, 0.77, 0},
+			{1, 0, 0.7},
+			{0.05, 0.5, 1},
+		}
+
+		addRatioMatrix(matrices, settings)
+		for i, row := range matrices.Ratio {
+			for j, value := range row {
+				Expect(value).To(BeNumerically("~", expected[i][j], 0.01))
+			}
+		}
+	})
+
+	It("should add matrix adjusting values for area calculation", func() {
+		matrices := &types.Matrices{
+			Abundance: [][]float64{
+				{5, 2, 14.3},
+				{23, 17.8, 0},
+				{10, 0, 7},
 			},
 			Conditions: []string{"condition1", "condition2", "condition3"},
 			Readouts:   []string{"readout1", "readout2", "readout3"},
@@ -145,18 +183,19 @@ var _ = Describe("Add ratio matrix", func() {
 		}
 		settings := ConversionSettings{
 			CalculateRatios: true,
+			RatioDimension:  "area",
 		}
 
 		expected := [][]float64{
-			{0.35, 0.14, 1},
-			{1, 0.77, 0},
-			{1, 0, 0.7},
+			{0.592, 0.374, 1},
+			{1, 0.877, 0},
+			{1, 0, 0.837},
 		}
 
 		addRatioMatrix(matrices, settings)
 		for i, row := range matrices.Ratio {
 			for j, value := range row {
-				Expect(value).To(BeNumerically("~", expected[i][j], 0.01))
+				Expect(value).To(BeNumerically("~", expected[i][j], 0.001))
 			}
 		}
 	})

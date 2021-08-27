@@ -33,13 +33,13 @@ var _ = Describe("Kendall method", func() {
 var _ = Describe("Dense rank", func() {
 	It("should return the dense rank for a slice", func() {
 		tests := [][]float64{
-			[]float64{1, 2, 3, 3, 4, 4, 1},
-			[]float64{1, 1, 3, 3, 4, 4, 4},
+			{1, 2, 3, 3, 4, 4, 1},
+			{1, 1, 3, 3, 4, 4, 4},
 		}
 
 		expected := [][]int{
-			[]int{1, 2, 3, 3, 4, 4, 5},
-			[]int{1, 1, 2, 2, 3, 3, 3},
+			{1, 2, 3, 3, 4, 4, 5},
+			{1, 1, 2, 2, 3, 3, 3},
 		}
 
 		for i, test := range tests {
@@ -51,8 +51,8 @@ var _ = Describe("Dense rank", func() {
 var _ = Describe("Count rank ties", func() {
 	It("should return the dense rank for a slice", func() {
 		tests := [][]int{
-			[]int{1, 2, 3, 3, 4, 4, 5},
-			[]int{1, 1, 2, 2, 3, 3, 3},
+			{1, 2, 3, 3, 4, 4, 5},
+			{1, 1, 2, 2, 3, 3, 3},
 		}
 
 		expected := []int{2, 5}
@@ -66,8 +66,8 @@ var _ = Describe("Count rank ties", func() {
 var _ = Describe("Count ties", func() {
 	It("should return the dense rank for a slice", func() {
 		tests := [][]int{
-			[]int{1, 2, 3, 3, 4, 4, 5},
-			[]int{1, 1, 2, 2, 3, 3, 3},
+			{1, 2, 3, 3, 4, 4, 5},
+			{1, 1, 2, 2, 3, 3, 3},
 		}
 
 		expected := []int{29, 11}
@@ -92,8 +92,8 @@ var _ = Describe("Get diff between non ties", func() {
 		}
 
 		expected := [][]int{
-			[]int{1, 1, 2, 2, 1},
-			[]int{1, 1, 1, 1, 2, 1},
+			{1, 1, 2, 2, 1},
+			{1, 1, 1, 1, 2, 1},
 		}
 
 		for i, test := range tests {
@@ -136,8 +136,8 @@ var _ = Describe("Diff between non ties", func() {
 		}
 
 		expected := [][]int{
-			[]int{1, 1, 2, 2, 1},
-			[]int{1, 1, 1, 1, 2, 1},
+			{1, 1, 2, 2, 1},
+			{1, 1, 1, 1, 2, 1},
 		}
 		for i, test := range tests {
 			Expect(getDiffNonTies(test["x"], test["y"])).To(Equal(expected[i]))

@@ -19,7 +19,6 @@ var _ = Describe("Draw a dotplot", func() {
 		fs.Instance.MkdirAll("test", 0755)
 
 		dotplot := Initialize()
-		dotplot.AbundanceCap = 50
 		dotplot.Annotations = types.Annotations{
 			FontSize: 15,
 			List: map[string]types.Annotation{
@@ -32,6 +31,7 @@ var _ = Describe("Draw a dotplot", func() {
 		dotplot.BoundingBox = true
 		dotplot.CellSize = 20
 		dotplot.Columns = []string{"bait1", "bait2", "bait3"}
+		dotplot.FillMax = 50
 		dotplot.LeftMargin = 50
 		dotplot.Markers = types.Markers{
 			Color: "#000000",

@@ -27,13 +27,13 @@ var _ = Describe("Create PNG", func() {
 			Markers: types.Markers{
 				Color: "#000000",
 				List: map[string]types.Marker{
-					"a": types.Marker{Height: 1, Width: 2, X: 0.25, Y: 0.5},
+					"a": {Height: 1, Width: 2, X: 0.25, Y: 0.5},
 				},
 			},
 			Settings: types.Settings{
-				AbundanceCap: 4,
-				FillColor:    "blue",
-				MinAbundance: 0,
+				FillColor: "blue",
+				FillMax:   4,
+				FillMin:   0,
 			},
 		}
 		matrices := &types.Matrices{
@@ -67,9 +67,9 @@ var _ = Describe("Create PNG", func() {
 
 		data := &Heatmap{
 			Settings: types.Settings{
-				AbundanceCap: 4,
-				FillColor:    "blue",
-				MinAbundance: 0,
+				FillColor: "blue",
+				FillMax:   4,
+				FillMin:   0,
 			},
 		}
 		matrices := &types.Matrices{

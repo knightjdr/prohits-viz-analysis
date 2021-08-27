@@ -13,17 +13,17 @@ func createSVG(data *Heatmap, matrices *types.Matrices) {
 	dims := dimensions.Calculate(matrices.Abundance, matrices.Conditions, matrices.Readouts, false)
 
 	image := svg.InitializeHeatmap()
-	image.AbundanceCap = data.Settings.AbundanceCap
 	image.Annotations = data.Annotations
 	image.CellSize = dims.CellSize
 	image.Columns = matrices.Conditions
 	image.FillColor = data.Settings.FillColor
+	image.FillMax = data.Settings.FillMax
+	image.FillMin = data.Settings.FillMin
 	image.FontSize = dims.FontSize
 	image.Invert = data.Settings.InvertColor
 	image.LeftMargin = dims.LeftMargin
 	image.Markers = data.Markers
 	image.Matrix = matrices.Abundance
-	image.MinAbundance = data.Settings.MinAbundance
 	image.PlotHeight = dims.PlotHeight
 	image.PlotWidth = dims.PlotWidth
 	image.Rows = matrices.Readouts

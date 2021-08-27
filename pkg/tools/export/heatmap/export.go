@@ -3,6 +3,7 @@ package heatmap
 
 import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/downsample"
+	heatmapColor "github.com/knightjdr/prohits-viz-analysis/pkg/heatmap/color"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/matrix/frontend"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
@@ -24,6 +25,7 @@ func Export(filename string, settings Settings) {
 		Readouts:   frontend.GetRowNames(data.RowDB, data.RowOrder),
 	}
 
+	heatmapColor.SetFillLimits(&data.Settings)
 	if settings.Format == "png" || downsample.Should(matrices.Abundance, settings.DownsampleThreshold) {
 		createPNG(data, matrices, settings)
 	} else {

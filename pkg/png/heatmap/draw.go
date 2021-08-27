@@ -11,17 +11,17 @@ import (
 
 // Heatmap object.
 type Heatmap struct {
-	AbundanceCap float64
-	Annotations  types.Annotations
-	CellSize     int
-	ColorSpace   string
-	FontPath     string
-	Height       int
-	Invert       bool
-	Markers      types.Markers
-	MinAbundance float64
-	NumColors    int
-	Width        int
+	Annotations types.Annotations
+	CellSize    int
+	ColorSpace  string
+	FillMax     float64
+	FillMin     float64
+	FontPath    string
+	Height      int
+	Invert      bool
+	Markers     types.Markers
+	NumColors   int
+	Width       int
 }
 
 // Initialize a heatmap.

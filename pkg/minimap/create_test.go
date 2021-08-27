@@ -40,9 +40,9 @@ var _ = Describe("Create minimap", func() {
 				},
 			},
 			Settings: types.Settings{
-				AbundanceCap:    50,
 				EdgeColor:       "blue",
 				FillColor:       "blue",
+				FillMax:         50,
 				InvertColor:     false,
 				MinAbundance:    0,
 				PrimaryFilter:   0.01,
@@ -84,8 +84,8 @@ var _ = Describe("Create minimap", func() {
 				},
 			},
 			Settings: types.Settings{
-				AbundanceCap: 50,
 				FillColor:    "blue",
+				FillMax:      50,
 				InvertColor:  false,
 				MinAbundance: 0,
 			},

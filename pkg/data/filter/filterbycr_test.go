@@ -47,6 +47,7 @@ var _ = Describe("Filter by conditions and/or readouts", func() {
 					{"condition": "conditionC", "readout": "readoutB"},
 				},
 				Settings: types.Settings{
+					Clustering:          "none",
 					ConditionClustering: "none",
 					ConditionList:       []string{"conditionA", "conditionB"},
 					ReadoutClustering:   "none",
@@ -75,6 +76,7 @@ var _ = Describe("Filter by conditions and/or readouts", func() {
 					{"condition": "conditionC", "readout": "readoutB"},
 				},
 				Settings: types.Settings{
+					Clustering:          "none",
 					ConditionClustering: "none",
 					ConditionList:       []string{"conditionA", "conditionB"},
 					ReadoutClustering:   "hierarchical",
@@ -105,6 +107,7 @@ var _ = Describe("Filter by conditions and/or readouts", func() {
 					{"condition": "conditionC", "readout": "readoutB"},
 				},
 				Settings: types.Settings{
+					Clustering:          "none",
 					ConditionClustering: "hierarchical",
 					ConditionList:       []string{"conditionA", "conditionB"},
 					ReadoutClustering:   "none",

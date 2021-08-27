@@ -33,13 +33,13 @@ var _ = Describe("Spearman method", func() {
 var _ = Describe("Rank array for spearman", func() {
 	It("should calculate correlation coefficient", func() {
 		tests := [][]float64{
-			[]float64{2, 4.5, 6, 4.5, 3},
-			[]float64{5, 5, 5, 3, 8, 3.5},
+			{2, 4.5, 6, 4.5, 3},
+			{5, 5, 5, 3, 8, 3.5},
 		}
 
 		expected := [][]float64{
-			[]float64{1, 3.5, 5, 3.5, 2},
-			[]float64{4, 4, 4, 1, 6, 2},
+			{1, 3.5, 5, 3.5, 2},
+			{4, 4, 4, 1, 6, 2},
 		}
 
 		for i, test := range tests {

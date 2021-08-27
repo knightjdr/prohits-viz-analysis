@@ -25,16 +25,16 @@ func createDotplotSVG(data *SortedData, settings types.Settings) {
 	dims := dimensions.Calculate(data.Matrices.Abundance, data.Matrices.Conditions, data.Matrices.Readouts, false)
 
 	dotplot := svg.InitializeDotplot()
-	dotplot.AbundanceCap = settings.AbundanceCap
 	dotplot.CellSize = dims.CellSize
 	dotplot.Columns = data.Matrices.Conditions
 	dotplot.EdgeColor = settings.EdgeColor
 	dotplot.FillColor = settings.FillColor
+	dotplot.FillMax = settings.FillMax
+	dotplot.FillMin = settings.FillMin
 	dotplot.FontSize = dims.FontSize
 	dotplot.Invert = settings.InvertColor
 	dotplot.LeftMargin = dims.LeftMargin
 	dotplot.Matrices = data.Matrices
-	dotplot.MinAbundance = settings.MinAbundance
 	dotplot.PlotHeight = dims.PlotHeight
 	dotplot.PlotWidth = dims.PlotWidth
 	dotplot.PrimaryFilter = settings.PrimaryFilter
@@ -81,8 +81,11 @@ func createDotplotInteractive(data *SortedData, settings types.Settings) {
 		Parameters:   settings,
 		Settings: map[string]interface{}{
 			"abundanceCap":    settings.AbundanceCap,
+			"abundanceType":   settings.AbundanceType,
 			"edgeColor":       settings.EdgeColor,
 			"fillColor":       settings.FillColor,
+			"fillMax":         settings.FillMax,
+			"fillMin":         settings.FillMin,
 			"imageType":       "dotplot",
 			"invertColor":     settings.InvertColor,
 			"minAbundance":    settings.MinAbundance,

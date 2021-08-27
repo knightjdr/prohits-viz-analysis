@@ -35,10 +35,10 @@ func createHeatmapPNG(matrix [][]float64, settings types.Settings) {
 func createDistancePNG(data *SortedData, settings types.Settings) {
 	if settings.WriteDistance {
 		distanceSettings := types.Settings{
-			AbundanceCap: 1,
-			FillColor:    settings.FillColor,
-			InvertColor:  true,
-			MinAbundance: 0,
+			FillColor:   settings.FillColor,
+			FillMax:     1,
+			FillMin:     0,
+			InvertColor: true,
 		}
 		writeHeatmapPNG(data.ConditionDist, distanceSettings, fmt.Sprintf("%[1]s-%[1]s", settings.Condition))
 		writeHeatmapPNG(data.ReadoutDist, distanceSettings, fmt.Sprintf("%[1]s-%[1]s", settings.Readout))
@@ -55,12 +55,12 @@ func writeHeatmapPNG(matrix [][]float64, settings types.Settings, filehandle str
 		dims := dimensions.Calculate(downsampled, []string{}, []string{}, false)
 
 		heatmap := heatmap.Initialize()
-		heatmap.AbundanceCap = settings.AbundanceCap
 		heatmap.CellSize = dims.CellSize
 		heatmap.ColorSpace = settings.FillColor
+		heatmap.FillMax = settings.FillMax
+		heatmap.FillMin = settings.FillMin
 		heatmap.Height = dims.PlotHeight
 		heatmap.Invert = settings.InvertColor
-		heatmap.MinAbundance = settings.MinAbundance
 		heatmap.Width = dims.PlotWidth
 
 		filename := fmt.Sprintf("png/%s.png", filehandle)

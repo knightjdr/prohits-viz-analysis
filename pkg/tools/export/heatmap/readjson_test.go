@@ -32,7 +32,7 @@ var jsonText = `{
 		}
 	],
 	"settings": {
-		"abundanceCap": 50,
+		"fillMax": 50,
 		"scoreType": "lte"
 	}
 }`
@@ -57,8 +57,8 @@ var _ = Describe("Read JSON", func() {
 			},
 			RowOrder: []int{0, 1, 3},
 			Settings: types.Settings{
-				AbundanceCap: 50,
-				ScoreType:    "lte",
+				FillMax:   50,
+				ScoreType: "lte",
 			},
 		}
 		Expect(ReadJSON("test/file.json")).To(Equal(expected))

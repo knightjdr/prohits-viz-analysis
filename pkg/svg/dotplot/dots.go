@@ -12,7 +12,7 @@ func writeDots(d *Dotplot, writeString func(string)) {
 	parameters := defineParameters(d)
 
 	convertScoreToIndex := defineScoreConverter(d, d.NumColors)
-	convertValueToIndex := float.GetRange(d.MinAbundance, d.AbundanceCap, 0, 100)
+	convertValueToIndex := float.GetRange(d.FillMin, d.FillMax, 0, 100)
 
 	writeString(fmt.Sprintf("\t<g id=\"minimap\" transform=\"translate(%d, %d)\">\n", d.LeftMargin, d.TopMargin))
 	for i, row := range d.Matrices.Abundance {

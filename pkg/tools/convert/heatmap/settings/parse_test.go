@@ -10,7 +10,7 @@ import (
 var _ = Describe("Parse", func() {
 	It("should parse, convert and infer settings", func() {
 		csv := []map[string]string{
-			{"values": "5", "params": `{
+			{"abundance": "5", "params": `{
 					"type": "dotplot",
 					"xAxis": "Prey",
 					"yAxis": "Bait",
@@ -22,16 +22,19 @@ var _ = Describe("Parse", func() {
 					"invert": 1
 				}`,
 			},
-			{"values": "1"},
-			{"values": "23.8"},
-			{"values": "7.5"},
+			{"abundance": "1"},
+			{"abundance": "23.8"},
+			{"abundance": "7.5"},
 		}
 
 		expected := types.Settings{
 			Abundance:       "AvgSpec",
 			AbundanceCap:    50,
+			AbundanceType:   "positive",
 			EdgeColor:       "blue",
 			FillColor:       "blue",
+			FillMax:         50,
+			FillMin:         0,
 			InvertColor:     true,
 			MinAbundance:    0,
 			PrimaryFilter:   0.01,
@@ -49,7 +52,7 @@ var _ = Describe("Parse", func() {
 var _ = Describe("Parse settings", func() {
 	It("should parse JSON settings", func() {
 		csv := []map[string]string{
-			{"values": "5", "params": `{
+			{"abundance": "5", "params": `{
 					"type": "dotplot",
 					"xAxis": "Prey",
 					"yAxis": "Bait",

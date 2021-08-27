@@ -13,22 +13,22 @@ func order(matrices *types.Matrices, minAbundance float64) hierarchical.HclustDa
 
 	orderedData := hierarchical.HclustData{
 		Dendrogram: map[string][]hclust.SubCluster{
-			"condition": []hclust.SubCluster{},
-			"readout":   []hclust.SubCluster{},
+			"condition": {},
+			"readout":   {},
 		},
 		Distance: map[string][][]float64{
-			"condition": [][]float64{},
-			"readout":   [][]float64{},
+			"condition": {},
+			"readout":   {},
 		},
 		NormalizedDistance: map[string][][]float64{
-			"condition": [][]float64{},
-			"readout":   [][]float64{},
+			"condition": {},
+			"readout":   {},
 		},
 		Tree: map[string]hclust.TreeLayout{
-			"condition": hclust.TreeLayout{
+			"condition": {
 				Order: order["condition"],
 			},
-			"readout": hclust.TreeLayout{
+			"readout": {
 				Order: append(order["readout"], singles...),
 			},
 		},

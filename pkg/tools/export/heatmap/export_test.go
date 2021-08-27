@@ -31,7 +31,7 @@ var jsonText = `{
 			}
 		}
 	},
-	"settings": {"abundanceCap":4,"fillColor":"blue","imageType":"heatmap","minAbundance":0,"xLabel":"Bait","yLabel":"Prey"},
+	"settings": {"abundanceCap":4,"abundanceType":"positive","fillColor":"blue","imageType":"heatmap","minAbundance":0,"xLabel":"Bait","yLabel":"Prey"},
 	"columnDB": ["bait1", "bait2", "bait3", "bait4"],
 	"columnOrder": [0, 1, 2, 3],
 	"rowOrder": [0, 1, 2, 3],

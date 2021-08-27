@@ -10,12 +10,12 @@ func createHeatmap(data *Data) {
 	dims := dimensions.Calculate(matrix, []string{}, []string{}, true)
 
 	image := png.InitializeHeatmap()
-	image.AbundanceCap = data.Settings.AbundanceCap
 	image.ColorSpace = data.Settings.FillColor
 	image.CellSize = dims.CellSize
+	image.FillMax = data.Settings.FillMax
+	image.FillMin = data.Settings.FillMin
 	image.Height = dims.PlotHeight
 	image.Invert = data.Settings.InvertColor
-	image.MinAbundance = data.Settings.MinAbundance
 	image.Width = dims.PlotWidth
 
 	image.Draw(matrix, data.Filename)

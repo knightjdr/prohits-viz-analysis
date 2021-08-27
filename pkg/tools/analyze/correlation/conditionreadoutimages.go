@@ -2,13 +2,16 @@ package correlation
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/knightjdr/hclust"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/data/filter"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/downsample"
+	heatmapColor "github.com/knightjdr/prohits-viz-analysis/pkg/heatmap/color"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/heatmap/dimensions"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/interactive"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/matrix/convert"
+	matrixMath "github.com/knightjdr/prohits-viz-analysis/pkg/matrix/math"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/minimap"
 	heatmapPNG "github.com/knightjdr/prohits-viz-analysis/pkg/png/heatmap"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/svg"
@@ -17,20 +20,46 @@ import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
-var conditionReadoutAbundanceCap float64 = 50
-
 func createBaitPreyImages(analysis *types.Analysis, conditionData, readoutData *correlationData) {
 	matrices := getConditionReadoutMatrices(analysis)
 
 	matrix, _ := hclust.Sort(matrices.Abundance, matrices.Conditions, conditionData.sortedLabels, "column")
 	matrix, _ = hclust.Sort(matrix, matrices.Readouts, readoutData.sortedLabels, "row")
 
-	createConditionReadoutSVG(matrix, conditionData.sortedLabels, readoutData.sortedLabels, analysis.Settings)
-	createConditionReadoutLegend(analysis.Settings)
-	createConditionReadoutPNG(matrix, analysis.Settings)
-	createConditionReadoutMinimap(matrix, analysis.Settings)
-	createConditionReadoutInteractive(matrix, conditionData.sortedLabels, readoutData.sortedLabels, analysis.Settings)
-	createConditionReadoutTreeview(matrix, conditionData, readoutData, analysis.Settings)
+	settings := adjustConditionReadoutSettings(analysis.Settings, matrix)
+
+	createConditionReadoutSVG(matrix, conditionData.sortedLabels, readoutData.sortedLabels, settings)
+	createConditionReadoutLegend(settings, matrix)
+	createConditionReadoutPNG(matrix, settings)
+	createConditionReadoutMinimap(matrix, settings)
+	createConditionReadoutInteractive(matrix, conditionData.sortedLabels, readoutData.sortedLabels, settings)
+	createConditionReadoutTreeview(matrix, conditionData, readoutData, settings)
+}
+
+func adjustConditionReadoutSettings(settings types.Settings, matrix [][]float64) types.Settings {
+	adjusted := settings
+
+	min, max := matrixMath.MinMax(matrix)
+	if math.Abs(min) > max {
+		max = math.Abs(min)
+	}
+	abundanceCap := math.Ceil(max)
+
+	defaultCap := float64(50)
+	if abundanceCap > defaultCap {
+		abundanceCap = defaultCap
+	}
+
+	adjusted.AbundanceType = matrixMath.DefineValues(matrix)
+	adjusted.AbundanceCap = abundanceCap
+	adjusted.AutomaticallySetFill = true
+	adjusted.MinAbundance = settings.ReadoutAbundanceFilter
+	adjusted.PrimaryFilter = settings.ReadoutScoreFilter
+
+	heatmapColor.SetFillLimits(&adjusted)
+	heatmapColor.AdjustFillColor(&adjusted)
+
+	return adjusted
 }
 
 func getConditionReadoutMatrices(analysis *types.Analysis) *types.Matrices {
@@ -57,14 +86,15 @@ func createConditionReadoutSVG(matrix [][]float64, conditions, readouts []string
 	dims := dimensions.Calculate(matrix, conditions, readouts, false)
 
 	heatmap := svg.InitializeHeatmap()
-	heatmap.AbundanceCap = conditionReadoutAbundanceCap
 	heatmap.CellSize = dims.CellSize
 	heatmap.Columns = conditions
-	heatmap.FillColor = "blue"
+	heatmap.FillColor = settings.FillColor
+	heatmap.FillMax = settings.FillMax
+	heatmap.FillMin = settings.FillMin
 	heatmap.FontSize = dims.FontSize
+	heatmap.Invert = settings.InvertColor
 	heatmap.LeftMargin = dims.LeftMargin
 	heatmap.Matrix = matrix
-	heatmap.MinAbundance = settings.ReadoutAbundanceFilter
 	heatmap.PlotHeight = dims.PlotHeight
 	heatmap.PlotWidth = dims.PlotWidth
 	heatmap.Rows = readouts
@@ -77,17 +107,17 @@ func createConditionReadoutSVG(matrix [][]float64, conditions, readouts []string
 	heatmap.Draw(fmt.Sprintf("svg/%s-%s.svg", settings.Condition, settings.Readout))
 }
 
-func createConditionReadoutLegend(settings types.Settings) {
+func createConditionReadoutLegend(settings types.Settings, matrix [][]float64) {
 	filename := fmt.Sprintf("%s-%s-legend", settings.Condition, settings.Readout)
 
 	legendData := heatmap.Legend{
 		Filename:  fmt.Sprintf("svg/%s.svg", filename),
 		NumColors: 101,
 		Settings: types.Settings{
-			AbundanceCap: conditionReadoutAbundanceCap,
-			FillColor:    "blue",
-			InvertColor:  settings.InvertColor,
-			MinAbundance: settings.ReadoutAbundanceFilter,
+			FillColor:   settings.FillColor,
+			FillMax:     settings.FillMax,
+			FillMin:     settings.FillMin,
+			InvertColor: settings.InvertColor,
 		},
 		Title: settings.Abundance,
 	}
@@ -107,11 +137,12 @@ func createConditionReadoutPNG(matrix [][]float64, settings types.Settings) {
 			dims := dimensions.Calculate(downsampled, []string{}, []string{}, false)
 
 			heatmap := heatmapPNG.Initialize()
-			heatmap.AbundanceCap = conditionReadoutAbundanceCap
 			heatmap.CellSize = dims.CellSize
-			heatmap.ColorSpace = "blue"
+			heatmap.ColorSpace = settings.FillColor
+			heatmap.FillMax = settings.FillMax
+			heatmap.FillMin = settings.FillMin
+			heatmap.Invert = settings.InvertColor
 			heatmap.Height = dims.PlotHeight
-			heatmap.MinAbundance = settings.ReadoutAbundanceFilter
 			heatmap.Width = dims.PlotWidth
 
 			heatmap.Draw(downsampled, outfile)
@@ -130,9 +161,10 @@ func createConditionReadoutMinimap(matrix [][]float64, settings types.Settings) 
 			Abundance: matrix,
 		},
 		Settings: types.Settings{
-			AbundanceCap: conditionReadoutAbundanceCap,
-			FillColor:    "blue",
-			MinAbundance: settings.ReadoutAbundanceFilter,
+			FillColor:   settings.FillColor,
+			FillMax:     settings.FillMax,
+			FillMin:     settings.FillMin,
+			InvertColor: settings.InvertColor,
 		},
 	}
 	minimap.Create(minimapData)
@@ -140,6 +172,7 @@ func createConditionReadoutMinimap(matrix [][]float64, settings types.Settings) 
 
 func createConditionReadoutInteractive(matrix [][]float64, conditions, readouts []string, settings types.Settings) {
 	filehandle := fmt.Sprintf("%s-%s", settings.Condition, settings.Readout)
+
 	interactiveData := &interactive.HeatmapData{
 		AnalysisType: "heatmap",
 		Filename:     fmt.Sprintf("interactive/%s.json", filehandle),
@@ -151,11 +184,13 @@ func createConditionReadoutInteractive(matrix [][]float64, conditions, readouts 
 		Minimap:    fmt.Sprintf("minimap/%s.png", filehandle),
 		Parameters: settings,
 		Settings: map[string]interface{}{
-			"abundanceCap":  conditionReadoutAbundanceCap,
-			"fillColor":     "blue",
+			"abundanceCap":  settings.AbundanceCap,
+			"abundanceType": settings.AbundanceType,
+			"fillColor":     settings.FillColor,
 			"imageType":     "heatmap",
-			"minAbundance":  settings.ReadoutAbundanceFilter,
-			"primaryFilter": 0,
+			"invertColor":   settings.InvertColor,
+			"minAbundance":  settings.MinAbundance,
+			"primaryFilter": settings.PrimaryFilter,
 		},
 	}
 	interactiveData.Parameters.XLabel = settings.Condition

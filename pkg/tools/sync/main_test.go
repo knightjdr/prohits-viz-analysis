@@ -12,7 +12,7 @@ import (
 
 var dataText = `{
 	"imageType": "heatmap",
-	"settings": {"abundanceCap":4,"fillColor":"blue","imageType":"heatmap","minAbundance":0,"xLabel":"Bait","yLabel":"Prey"},
+	"settings": {"abundanceCap":4,"abundanceType":"positive","fillColor":"blue","imageType":"heatmap","minAbundance":0,"xLabel":"Bait","yLabel":"Prey"},
 	"columnOrder": [0, 1, 2, 3],
 	"rowOrder": [0, 1, 2, 3],
 	"rowDB": [

@@ -17,10 +17,7 @@ func convert(fileSettings *jsonSettings) types.Settings {
 }
 
 func invertColorToBool(invertColor int) bool {
-	if invertColor == 1 {
-		return true
-	}
-	return false
+	return invertColor == 1
 }
 
 func scoreTypeToBool(scoreType int) string {

@@ -16,11 +16,11 @@ var _ = Describe("Dots", func() {
 		}
 
 		d := &Dotplot{
-			AbundanceCap: 50,
-			CellSize:     20,
-			EdgeColor:    "blue",
-			FillColor:    "blue",
-			LeftMargin:   50,
+			CellSize:   20,
+			EdgeColor:  "blue",
+			FillColor:  "blue",
+			FillMax:    50,
+			LeftMargin: 50,
 			Matrices: &types.Matrices{
 				Abundance: [][]float64{
 					{25, 5, 50.2},

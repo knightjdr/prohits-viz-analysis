@@ -55,7 +55,7 @@ func parseCorrelationParameters(settings types.Settings) map[string]interface{} 
 }
 
 func parseHeatmapParamaters(imageType string, settings types.Settings) map[string]interface{} {
-	return map[string]interface{}{
+	parameters := map[string]interface{}{
 		"abundanceColumn":        settings.Abundance,
 		"analysisType":           settings.Type,
 		"clustering":             settings.Clustering,
@@ -77,4 +77,8 @@ func parseHeatmapParamaters(imageType string, settings types.Settings) map[strin
 		"xLabel":                 settings.XLabel,
 		"yLabel":                 settings.YLabel,
 	}
+	if imageType == "dotplot" {
+		parameters["ratioDimension"] = settings.RatioDimension
+	}
+	return parameters
 }

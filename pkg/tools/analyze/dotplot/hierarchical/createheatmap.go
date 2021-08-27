@@ -21,15 +21,15 @@ func createHeatmapSVG(data *SortedData, settings types.Settings) {
 	dims := dimensions.Calculate(data.Matrices.Abundance, data.Matrices.Conditions, data.Matrices.Readouts, false)
 
 	heatmap := svg.InitializeHeatmap()
-	heatmap.AbundanceCap = settings.AbundanceCap
 	heatmap.CellSize = dims.CellSize
 	heatmap.Columns = data.Matrices.Conditions
 	heatmap.FillColor = settings.FillColor
+	heatmap.FillMax = settings.FillMax
+	heatmap.FillMin = settings.FillMin
 	heatmap.FontSize = dims.FontSize
 	heatmap.Invert = settings.InvertColor
 	heatmap.LeftMargin = dims.LeftMargin
 	heatmap.Matrix = data.Matrices.Abundance
-	heatmap.MinAbundance = settings.MinAbundance
 	heatmap.PlotHeight = dims.PlotHeight
 	heatmap.PlotWidth = dims.PlotWidth
 	heatmap.Rows = data.Matrices.Readouts

@@ -17,10 +17,13 @@ var _ = Describe("Infer dotplot settings", func() {
 		settings := types.Settings{}
 
 		expected := types.Settings{
-			AbundanceCap: 50,
-			EdgeColor:    "blue",
-			FillColor:    "blue",
-			MinAbundance: 0,
+			AbundanceCap:  50,
+			AbundanceType: "positive",
+			EdgeColor:     "blue",
+			FillColor:     "blue",
+			FillMax:       50,
+			FillMin:       0,
+			MinAbundance:  0,
 		}
 		inferDotplotSettings(csv, &settings)
 		Expect(settings).To(Equal(expected))
@@ -38,9 +41,12 @@ var _ = Describe("Infer heatmap settings", func() {
 		settings := types.Settings{}
 
 		expected := types.Settings{
-			AbundanceCap: 24,
-			FillColor:    "blueRed",
-			MinAbundance: -2,
+			AbundanceCap:  24,
+			AbundanceType: "bidirectional",
+			FillColor:     "blueRed",
+			FillMax:       24,
+			FillMin:       -2,
+			MinAbundance:  0,
 		}
 		inferHeatmapSettings(csv, &settings)
 		Expect(settings).To(Equal(expected))
@@ -64,57 +70,60 @@ var _ = Describe("Find min and max", func() {
 	})
 })
 
-var _ = Describe("Set file and min abundance", func() {
-	It("should fill and min abundance for image with only non-negative values", func() {
+var _ = Describe("Set abundance type", func() {
+	It("should abundance type and fill for image with only non-negative values", func() {
 		min := float64(1)
 		settings := types.Settings{}
 
-		setFillAndMinAbundance(min, &settings)
+		setAbundanceType(min, &settings)
+		Expect(settings.AbundanceType).To(Equal("positive"), "should set abundance type")
 		Expect(settings.FillColor).To(Equal("blue"), "should set fill color")
-		Expect(settings.MinAbundance).To(Equal(float64(0)), "should set min abundance")
 	})
 
-	It("should fill and min abundance for image with negative values", func() {
+	It("should abundance type and fill for image with negative values", func() {
 		min := float64(-1.5)
 		settings := types.Settings{}
 
-		setFillAndMinAbundance(min, &settings)
+		setAbundanceType(min, &settings)
+		Expect(settings.AbundanceType).To(Equal("bidirectional"), "should set abundance type")
 		Expect(settings.FillColor).To(Equal("blueRed"), "should set fill color")
-		Expect(settings.MinAbundance).To(Equal(float64(-2)), "should set min abundance")
 	})
 })
 
-var _ = Describe("Set abundance cap", func() {
-	It("should set value to 50 for dotplot images with min of 0 or greater", func() {
-		isDotplot := true
+var _ = Describe("Set fill parameters", func() {
+	It("should set parameters for images with non-negative numbers and max > 1", func() {
 		max := float64(10)
 		min := float64(0)
 		settings := types.Settings{}
 
-		expected := float64(50)
-		setAbundanceCap(min, max, &settings, isDotplot)
-		Expect(settings.AbundanceCap).To(Equal(expected))
+		setFillParameters(min, max, &settings)
+		Expect(settings.AbundanceCap).To(Equal(float64(50)), "should set abundance cap")
+		Expect(settings.FillMax).To(Equal(float64(50)), "should set fill max")
+		Expect(settings.FillMin).To(Equal(float64(0)), "should set fill min")
+		Expect(settings.MinAbundance).To(Equal(float64(0)), "should set min abundance")
 	})
 
-	It("should set value to max arg for dotplot images with min less than zero", func() {
-		isDotplot := true
-		max := float64(10)
-		min := float64(-1)
+	It("should set parameters for images with non-negative numbers and max <= 1", func() {
+		max := float64(1)
+		min := float64(0)
 		settings := types.Settings{}
 
-		expected := float64(10)
-		setAbundanceCap(min, max, &settings, isDotplot)
-		Expect(settings.AbundanceCap).To(Equal(expected))
+		setFillParameters(min, max, &settings)
+		Expect(settings.AbundanceCap).To(Equal(float64(1)), "should set abundance cap")
+		Expect(settings.FillMax).To(Equal(float64(1)), "should set fill max")
+		Expect(settings.FillMin).To(Equal(float64(0)), "should set fill min")
+		Expect(settings.MinAbundance).To(Equal(float64(0)), "should set min abundance")
 	})
 
-	It("should set value to max arg for heatmap images", func() {
-		isDotplot := false
-		max := float64(10)
-		min := float64(-1)
+	It("should set parameters for images containing negative numbers", func() {
+		max := float64(0.98)
+		min := float64(-0.99)
 		settings := types.Settings{}
 
-		expected := float64(10)
-		setAbundanceCap(min, max, &settings, isDotplot)
-		Expect(settings.AbundanceCap).To(Equal(expected))
+		setFillParameters(min, max, &settings)
+		Expect(settings.AbundanceCap).To(Equal(float64(1)), "should set abundance cap")
+		Expect(settings.FillMax).To(Equal(float64(1)), "should set fill max")
+		Expect(settings.FillMin).To(Equal(float64(-1)), "should set fill min")
+		Expect(settings.MinAbundance).To(Equal(float64(0)), "should set min abundance")
 	})
 })

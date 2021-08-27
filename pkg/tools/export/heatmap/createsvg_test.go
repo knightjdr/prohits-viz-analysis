@@ -28,11 +28,11 @@ var _ = Describe("Create SVG", func() {
 				},
 			},
 			Settings: types.Settings{
-				AbundanceCap: 4,
-				FillColor:    "blue",
-				MinAbundance: 0,
-				XLabel:       "Bait",
-				YLabel:       "Prey",
+				FillColor: "blue",
+				FillMax:   4,
+				FillMin:   0,
+				XLabel:    "Bait",
+				YLabel:    "Prey",
 			},
 		}
 		matrices := &types.Matrices{

@@ -30,22 +30,24 @@ func CreateLegend(data Legend) {
 	fillGradient, edgeGradient := createGradients(gradientData)
 	heatmap.CreateFillGradient(&svg, data, fillGradient)
 
-	createAbundanceElement(&svg)
+	createAbundanceElement(&svg, data.Settings.Abundance)
 	createScoreElement(&svg, data, edgeGradient)
 
 	svg.WriteString("</svg>\n")
 	afero.WriteFile(fs.Instance, data.Filename, []byte(svg.String()), 0644)
 }
 
-func createAbundanceElement(svg *strings.Builder) {
-	svg.WriteString("\t<g>\n" +
-		"\t\t<circle fill=\"#000000\" cy=\"100\" cx=\"60\" r=\"6\" />\n" +
-		"\t\t<circle fill=\"#000000\" cy=\"100\" cx=\"135\" r=\"12\" />\n" +
-		"\t\t<line fill=\"none\" stroke=\"#000000\" stroke-width=\"1\" x1=\"70\" y1=\"100\" x2=\"119\" y2=\"100\"/>\n" +
-		"\t\t<polygon fill=\"#000000\" points=\"110,96 112,100 110,104 119,100\"/>\n" +
-		"\t\t<text y=\"130\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Relative abundance</text>\n" +
-		"\t</g>\n",
-	)
+func createAbundanceElement(svg *strings.Builder, abundanceName string) {
+	svg.WriteString(fmt.Sprintf(
+		"\t<g>\n"+
+			"\t\t<circle fill=\"#000000\" cy=\"100\" cx=\"60\" r=\"6\" />\n"+
+			"\t\t<circle fill=\"#000000\" cy=\"100\" cx=\"135\" r=\"12\" />\n"+
+			"\t\t<line fill=\"none\" stroke=\"#000000\" stroke-width=\"1\" x1=\"70\" y1=\"100\" x2=\"119\" y2=\"100\"/>\n"+
+			"\t\t<polygon fill=\"#000000\" points=\"110,96 112,100 110,104 119,100\"/>\n"+
+			"\t\t<text y=\"130\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Relative %s</text>\n"+
+			"\t</g>\n",
+		abundanceName,
+	))
 }
 
 func createScoreElement(svg *strings.Builder, data Legend, gradient []color.Space) {

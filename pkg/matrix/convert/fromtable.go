@@ -9,6 +9,7 @@ import (
 type ConversionSettings struct {
 	CalculateRatios bool
 	KeepReps        bool
+	RatioDimension  string
 	Resort          bool
 	ScoreType       string
 	SeparateRepsBy  string // one of "column" or "row"

@@ -74,9 +74,14 @@ type Settings struct {
 	// Shared settings
 	Abundance                    string
 	AbundanceCap                 float64
+	AbundanceType                string
+	AutomaticallySetFill         bool
 	Condition                    string
 	Control                      string
 	Files                        []string
+	FillColor                    string
+	FillMax                      float64
+	FillMin                      float64
 	LogBase                      string
 	MinAbundance                 float64
 	MinConditions                int
@@ -116,8 +121,8 @@ type Settings struct {
 	ConditionList       []string
 	Distance            string
 	EdgeColor           string
-	FillColor           string
 	InvertColor         bool
+	RatioDimension      string
 	ReadoutClustering   string
 	ReadoutList         []string
 	XLabel              string

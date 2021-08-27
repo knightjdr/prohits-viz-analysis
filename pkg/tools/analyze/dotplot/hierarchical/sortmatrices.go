@@ -2,7 +2,6 @@ package hierarchical
 
 import (
 	"github.com/knightjdr/hclust"
-	"github.com/knightjdr/prohits-viz-analysis/pkg/normalize"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
@@ -27,10 +26,10 @@ func sortMatrices(matrices *types.Matrices, clusteredData HclustData) *SortedDat
 	sorted.ConditionDist, _ = hclust.Sort(sorted.ConditionDist, matrices.Conditions, sorted.Matrices.Conditions, "row")
 	sorted.ReadoutDist, _ = hclust.Sort(clusteredData.NormalizedDistance["readout"], matrices.Readouts, sorted.Matrices.Readouts, "column")
 	sorted.ReadoutDist, _ = hclust.Sort(sorted.ReadoutDist, matrices.Readouts, sorted.Matrices.Readouts, "row")
+	sorted.Matrices.Ratio, _ = hclust.Sort(matrices.Ratio, matrices.Conditions, sorted.Matrices.Conditions, "column")
+	sorted.Matrices.Ratio, _ = hclust.Sort(sorted.Matrices.Ratio, matrices.Readouts, sorted.Matrices.Readouts, "row")
 	sorted.Matrices.Score, _ = hclust.Sort(matrices.Score, matrices.Conditions, sorted.Matrices.Conditions, "column")
 	sorted.Matrices.Score, _ = hclust.Sort(sorted.Matrices.Score, matrices.Readouts, sorted.Matrices.Readouts, "row")
-
-	sorted.Matrices.Ratio = normalize.Matrix(sorted.Matrices.Abundance)
 
 	return sorted
 

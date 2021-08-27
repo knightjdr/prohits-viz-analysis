@@ -37,9 +37,9 @@ var _ = Describe("Draw dotplot", func() {
 				},
 			},
 			Settings: types.Settings{
-				AbundanceCap:    50,
 				EdgeColor:       "blue",
 				FillColor:       "blue",
+				FillMax:         50,
 				InvertColor:     false,
 				MinAbundance:    0,
 				PrimaryFilter:   0.01,

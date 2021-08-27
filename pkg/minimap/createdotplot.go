@@ -15,14 +15,14 @@ func createDotplot(data *Data) {
 	dims := dimensions.Calculate(data.Matrices.Abundance, []string{}, []string{}, true)
 
 	image := svg.InitializeDotplot()
-	image.AbundanceCap = data.Settings.AbundanceCap
 	image.BoundingBox = false
 	image.CellSize = dims.CellSize
 	image.EdgeColor = data.Settings.EdgeColor
 	image.FillColor = data.Settings.FillColor
+	image.FillMax = data.Settings.FillMax
+	image.FillMin = data.Settings.FillMin
 	image.Invert = data.Settings.InvertColor
 	image.Matrices = data.Matrices
-	image.MinAbundance = data.Settings.MinAbundance
 	image.PlotHeight = dims.PlotHeight
 	image.PlotWidth = dims.PlotWidth
 	image.PrimaryFilter = data.Settings.PrimaryFilter

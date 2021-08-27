@@ -10,10 +10,12 @@ import (
 func Cluster(analysis *types.Analysis) {
 	matrixSettings := convert.ConversionSettings{
 		CalculateRatios: true,
+		RatioDimension:  analysis.Settings.RatioDimension,
 		ScoreType:       analysis.Settings.ScoreType,
 	}
 	matrices := convert.FromTable(&analysis.Data, matrixSettings)
 
+	analysis.Settings = AdjustSettings(analysis.Settings, matrices.Abundance)
 	clusteredData := cluster(matrices, analysis.Settings)
 	sortedMatrices := sortMatrices(matrices, clusteredData)
 

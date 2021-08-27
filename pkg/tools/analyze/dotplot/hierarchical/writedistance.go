@@ -37,15 +37,15 @@ func createDistanceSVG(matrix [][]float64, labels []string, settings types.Setti
 	filename := fmt.Sprintf("svg/%[1]s-%[1]s.svg", filehandle)
 
 	heatmap := svg.InitializeHeatmap()
-	heatmap.AbundanceCap = 1
 	heatmap.CellSize = dims.CellSize
 	heatmap.Columns = labels
-	heatmap.FillColor = settings.FillColor
+	heatmap.FillColor = "blue"
+	heatmap.FillMax = 1
+	heatmap.FillMin = 0
 	heatmap.FontSize = dims.FontSize
 	heatmap.Invert = true
 	heatmap.LeftMargin = dims.LeftMargin
 	heatmap.Matrix = matrix
-	heatmap.MinAbundance = 0
 	heatmap.PlotHeight = dims.PlotHeight
 	heatmap.PlotWidth = dims.PlotWidth
 	heatmap.Rows = labels
@@ -63,10 +63,10 @@ func createDistanceLegend(settings types.Settings, title string) {
 		Filename:  fmt.Sprintf("svg/%s-distance-legend.svg", title),
 		NumColors: 101,
 		Settings: types.Settings{
-			AbundanceCap: 1,
-			FillColor:    settings.FillColor,
-			InvertColor:  true,
-			MinAbundance: 0,
+			FillColor:   "blue",
+			FillMax:     1,
+			FillMin:     0,
+			InvertColor: true,
 		},
 		Title: fmt.Sprintf("Distance - %s", title),
 	}
@@ -82,10 +82,10 @@ func createDistanceMinimap(matrix [][]float64, settings types.Settings, title st
 			Abundance: matrix,
 		},
 		Settings: types.Settings{
-			AbundanceCap: 1,
-			FillColor:    settings.FillColor,
-			InvertColor:  true,
-			MinAbundance: 0,
+			FillColor:   "blue",
+			FillMax:     1,
+			FillMin:     0,
+			InvertColor: true,
 		},
 	}
 	minimap.Create(minimapData)
@@ -104,7 +104,10 @@ func createDistanceInteractive(matrix [][]float64, labels []string, settings typ
 		Parameters: settings,
 		Settings: map[string]interface{}{
 			"abundanceCap":  1,
-			"fillColor":     settings.FillColor,
+			"abundanceType": "positive",
+			"fillColor":     "blue",
+			"fillMax":       1,
+			"fillMin":       0,
 			"imageType":     "heatmap",
 			"invertColor":   true,
 			"minAbundance":  0,

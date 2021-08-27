@@ -3,6 +3,7 @@ package sync
 
 import (
 	"github.com/knightjdr/prohits-viz-analysis/pkg/files"
+	heatmapColor "github.com/knightjdr/prohits-viz-analysis/pkg/heatmap/color"
 	createMinimap "github.com/knightjdr/prohits-viz-analysis/pkg/minimap"
 )
 
@@ -11,6 +12,7 @@ func Minimap() {
 	jsonFile := parseArguments()
 
 	data := readJSON(jsonFile)
+	heatmapColor.SetFillLimits(&data.Settings)
 	matrices := createMatrices(data)
 
 	files.CreateFolders([]string{"minimap"})
@@ -21,5 +23,6 @@ func Minimap() {
 		Matrices:            matrices,
 		Settings:            data.Settings,
 	}
+
 	createMinimap.Create(minimapData)
 }

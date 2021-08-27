@@ -29,10 +29,10 @@ var _ = Describe("Create SVG", func() {
 				},
 			},
 			Settings: types.Settings{
-				AbundanceCap:    4,
 				EdgeColor:       "blue",
 				FillColor:       "blue",
-				MinAbundance:    0,
+				FillMax:         4,
+				FillMin:         0,
 				PrimaryFilter:   0.01,
 				ScoreType:       "lte",
 				SecondaryFilter: 0.05,

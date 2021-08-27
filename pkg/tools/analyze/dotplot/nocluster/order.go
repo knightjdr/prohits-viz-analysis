@@ -18,24 +18,24 @@ type orderParameters struct {
 func order(matrices *types.Matrices, analysis *types.Analysis) hierarchical.HclustData {
 	orderedData := hierarchical.HclustData{
 		Dendrogram: map[string][]hclust.SubCluster{
-			"condition": []hclust.SubCluster{},
-			"readout":   []hclust.SubCluster{},
+			"condition": {},
+			"readout":   {},
 		},
 		Distance: map[string][][]float64{
-			"condition": [][]float64{},
-			"readout":   [][]float64{},
+			"condition": {},
+			"readout":   {},
 		},
 		NormalizedDistance: map[string][][]float64{
-			"condition": [][]float64{},
-			"readout":   [][]float64{},
+			"condition": {},
+			"readout":   {},
 		},
 		Tree: map[string]hclust.TreeLayout{
-			"condition": hclust.TreeLayout{},
-			"readout":   hclust.TreeLayout{},
+			"condition": {},
+			"readout":   {},
 		},
 		UnsortedNames: map[string][]string{
-			"condition": []string{},
-			"readout":   []string{},
+			"condition": {},
+			"readout":   {},
 		},
 	}
 

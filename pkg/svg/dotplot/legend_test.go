@@ -20,10 +20,11 @@ var _ = Describe("Draw dotplot legend", func() {
 			Filename:  "legend.svg",
 			NumColors: 6,
 			Settings: types.Settings{
-				AbundanceCap:    50,
+				Abundance:       "AvgSpec",
 				EdgeColor:       "blue",
 				FillColor:       "blue",
-				MinAbundance:    0,
+				FillMax:         50,
+				FillMin:         0,
 				PrimaryFilter:   0.01,
 				Score:           "BFDR",
 				ScoreType:       "lte",
@@ -51,7 +52,7 @@ var _ = Describe("Draw dotplot legend", func() {
 			"\t\t<circle fill=\"#000000\" cy=\"100\" cx=\"135\" r=\"12\" />\n" +
 			"\t\t<line fill=\"none\" stroke=\"#000000\" stroke-width=\"1\" x1=\"70\" y1=\"100\" x2=\"119\" y2=\"100\"/>\n" +
 			"\t\t<polygon fill=\"#000000\" points=\"110,96 112,100 110,104 119,100\"/>\n" +
-			"\t\t<text y=\"130\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Relative abundance</text>\n" +
+			"\t\t<text y=\"130\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Relative AvgSpec</text>\n" +
 			"\t</g>\n" +
 			"\t<g>\n" +
 			"\t\t<text y=\"220\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">BFDR</text>\n" +
@@ -77,11 +78,11 @@ var _ = Describe("Legend abundance graphic", func() {
 			"\t\t<circle fill=\"#000000\" cy=\"100\" cx=\"135\" r=\"12\" />\n" +
 			"\t\t<line fill=\"none\" stroke=\"#000000\" stroke-width=\"1\" x1=\"70\" y1=\"100\" x2=\"119\" y2=\"100\"/>\n" +
 			"\t\t<polygon fill=\"#000000\" points=\"110,96 112,100 110,104 119,100\"/>\n" +
-			"\t\t<text y=\"130\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Relative abundance</text>\n" +
+			"\t\t<text y=\"130\" x=\"100\" font-size=\"12\" text-anchor=\"middle\">Relative AvgSpec</text>\n" +
 			"\t</g>\n"
 
 		var svg strings.Builder
-		createAbundanceElement(&svg)
+		createAbundanceElement(&svg, "AvgSpec")
 		Expect(svg.String()).To(Equal(expected))
 	})
 })

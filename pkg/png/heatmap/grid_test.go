@@ -15,10 +15,10 @@ var _ = Describe("Draw grid", func() {
 		img := image.NewRGBA(image.Rectangle{image.Point{0, 0}, image.Point{4, 4}})
 
 		h := Initialize()
-		h.AbundanceCap = 50
 		h.CellSize = 2
+		h.FillMax = 50
+		h.FillMin = 0
 		h.Height = 4
-		h.MinAbundance = 0
 		h.NumColors = 11
 		h.Width = 4
 
@@ -40,9 +40,9 @@ var _ = Describe("Draw grid", func() {
 var _ = Describe("Get gradient index", func() {
 	It("should return a function for computing the slice index", func() {
 		h := &Heatmap{
-			AbundanceCap: 50,
-			MinAbundance: 0,
-			NumColors:    11,
+			FillMax:   50,
+			FillMin:   0,
+			NumColors: 11,
 		}
 
 		testFunc := getGradientIndex(h)

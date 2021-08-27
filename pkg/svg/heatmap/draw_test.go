@@ -19,7 +19,6 @@ var _ = Describe("Draw", func() {
 		fs.Instance.MkdirAll("test", 0755)
 
 		heatmap := Initialize()
-		heatmap.AbundanceCap = 50
 		heatmap.Annotations = types.Annotations{
 			FontSize: 15,
 			List: map[string]types.Annotation{
@@ -31,6 +30,7 @@ var _ = Describe("Draw", func() {
 		}
 		heatmap.CellSize = 20
 		heatmap.Columns = []string{"bait1", "bait2", "bait3"}
+		heatmap.FillMax = 50
 		heatmap.LeftMargin = 50
 		heatmap.Markers = types.Markers{
 			Color: "#000000",

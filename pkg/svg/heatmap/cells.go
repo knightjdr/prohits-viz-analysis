@@ -9,7 +9,7 @@ import (
 func writeCells(h *Heatmap, writeString func(string)) {
 	colorGradient := createGradient(h)
 
-	convertValueToIndex := float.GetRange(h.MinAbundance, h.AbundanceCap, 0, 100)
+	convertValueToIndex := float.GetRange(h.FillMin, h.FillMax, 0, 100)
 
 	writeString(fmt.Sprintf("\t<g id=\"minimap\" transform=\"translate(%d, %d)\">\n", h.LeftMargin, h.TopMargin))
 

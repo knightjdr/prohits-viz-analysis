@@ -20,14 +20,14 @@ var _ = Describe("Write cells", func() {
 			{5, 2.3, 8},
 		}
 		h := &Heatmap{
-			AbundanceCap: 50,
-			CellSize:     20,
-			FillColor:    "blueBlack",
-			LeftMargin:   50,
-			Matrix:       matrix,
-			MinAbundance: 0,
-			NumColors:    101,
-			TopMargin:    50,
+			CellSize:   20,
+			FillColor:  "blueBlack",
+			FillMax:    50,
+			FillMin:    0,
+			LeftMargin: 50,
+			Matrix:     matrix,
+			NumColors:  101,
+			TopMargin:  50,
 		}
 
 		expected := "\t<g id=\"minimap\" transform=\"translate(50, 50)\">\n" +

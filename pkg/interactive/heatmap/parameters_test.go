@@ -70,6 +70,55 @@ var _ = Describe("Parameters", func() {
 		Expect(parseParameters("correlation", settings)).To(Equal(expected))
 	})
 
+	It("should parse settings for dotplot and return string", func() {
+		settings := types.Settings{
+			Abundance:          "AvgSpec",
+			Clustering:         "hierarchical",
+			ClusteringMethod:   "complete",
+			ClusteringOptimize: true,
+			Condition:          "Bait",
+			Control:            "ctrl",
+			Distance:           "canberra",
+			Files:              []string{"file1", "file2"},
+			LogBase:            "2",
+			Normalization:      "total",
+			RatioDimension:     "area",
+			Readout:            "Prey",
+			Score:              "bfdr",
+			ScoreType:          "lte",
+			Type:               "dotplot",
+			XLabel:             "Prey",
+			YLabel:             "Bait",
+		}
+
+		expectedParameters := map[string]interface{}{
+			"abundanceColumn":        "AvgSpec",
+			"analysisType":           "dotplot",
+			"clustering":             "hierarchical",
+			"clusteringMethod":       "complete",
+			"clusteringOptimize":     true,
+			"conditionColumn":        "Bait",
+			"controlColumn":          "ctrl",
+			"distance":               "canberra",
+			"files":                  []string{"file1", "file2"},
+			"imageType":              "dotplot",
+			"logBase":                "2",
+			"minConditions":          0,
+			"mockConditionAbundance": false,
+			"normalization":          "total",
+			"parsimoniousReadouts":   false,
+			"readoutColumn":          "Prey",
+			"scoreColumn":            "bfdr",
+			"scoreType":              "lte",
+			"xLabel":                 "Prey",
+			"yLabel":                 "Bait",
+			"ratioDimension":         "area",
+		}
+		expectedString, _ := json.Marshal(expectedParameters)
+		expected := fmt.Sprintf("\"parameters\": %s", expectedString)
+		Expect(parseParameters("dotplot", settings)).To(Equal(expected))
+	})
+
 	It("should parse settings for heatmap and return string", func() {
 		settings := types.Settings{
 			Abundance:          "AvgSpec",

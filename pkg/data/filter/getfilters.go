@@ -1,6 +1,8 @@
 package filter
 
 import (
+	"math"
+
 	"github.com/knightjdr/prohits-viz-analysis/pkg/slice"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
@@ -26,7 +28,7 @@ func getConditionAndReadoutFilter(settings types.Settings) func(string, string) 
 func defineAbundanceFilter(settings types.Settings) func(float64) bool {
 	minAbundance := defineMinAbundance(settings)
 	return func(abundance float64) bool {
-		return abundance >= minAbundance
+		return math.Abs(abundance) >= minAbundance
 	}
 }
 

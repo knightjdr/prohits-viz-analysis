@@ -9,6 +9,7 @@ func byConditionsAndReadouts(analysis *types.Analysis) {
 		filterDataByConditions(analysis)
 	}
 	if analysis.Settings.Type == "dotplot" &&
+		analysis.Settings.Clustering == "none" &&
 		(analysis.Settings.ConditionClustering == "none" || analysis.Settings.ReadoutClustering == "none") {
 		filterDataByConditionsAndReadouts(analysis)
 	}
