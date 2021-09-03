@@ -65,6 +65,7 @@ func createLegendGradients(svg *strings.Builder, elements types.CircHeatmapLegen
 		}
 		gradientFill := colorSettings.CreateColorGradient()
 
+		gradientName := strings.ReplaceAll(element.Attribute, " ", "")
 		svg.WriteString(fmt.Sprintf("\t\t<g transform=\"translate(0 %d)\">\n", i*50))
 		svg.WriteString(fmt.Sprintf(
 			"\t\t\t<defs>\n"+
@@ -74,7 +75,7 @@ func createLegendGradients(svg *strings.Builder, elements types.CircHeatmapLegen
 				"\t\t\t\t\t<stop offset=\"100%%\" stop-color=\"%s\" />\n"+
 				"\t\t\t\t</linearGradient>\n"+
 				"\t\t\t</defs>\n",
-			element.Attribute,
+			gradientName,
 			gradientFill[0].Hex,
 			gradientFill[halfColorIndex].Hex,
 			gradientFill[numColors-1].Hex,
@@ -86,7 +87,7 @@ func createLegendGradients(svg *strings.Builder, elements types.CircHeatmapLegen
 				"\t\t\t\t<text x=\"20\" y=\"45\" text-anchor=\"end\">%s</text>\n"+
 				"\t\t\t\t<text x=\"180\" y=\"45\" text-anchor=\"start\">%s</text>\n"+
 				"\t\t\t</g>\n",
-			element.Attribute,
+			gradientName,
 			float.RemoveTrailingZeros(element.Min),
 			float.RemoveTrailingZeros(element.Max),
 		))

@@ -20,8 +20,5 @@ func createInteractive(plots []types.CircHeatmap, legend types.CircHeatmapLegend
 }
 
 func shownKnownElement(known string) bool {
-	if known != "" {
-		return true
-	}
-	return false
+	return known != ""
 }

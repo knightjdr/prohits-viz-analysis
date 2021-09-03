@@ -28,14 +28,14 @@ func defineKnownInteraction(data map[string]map[string]map[string]float64, idMap
 	var interactions map[string][]string
 	json.Unmarshal(bytes, &interactions)
 
-	known := make(map[string]map[string]bool, 0)
+	known := make(map[string]map[string]bool)
 	for condition, conditionData := range data {
-		known[condition] = make(map[string]bool, 0)
+		known[condition] = make(map[string]bool)
 
 		mappedCondition := idMaps["condition"][condition]
 		_, conditionHasInteractionData := interactions[mappedCondition]
 
-		lookup := make(map[string]bool, 0)
+		lookup := make(map[string]bool)
 		if conditionHasInteractionData {
 			lookup = slice.ConvertToBoolMap(interactions[mappedCondition])
 		}

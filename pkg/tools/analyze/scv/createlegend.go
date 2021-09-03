@@ -3,26 +3,53 @@ package scv
 import (
 	"fmt"
 
+	heatmapColor "github.com/knightjdr/prohits-viz-analysis/pkg/heatmap/color"
+	customMath "github.com/knightjdr/prohits-viz-analysis/pkg/math"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/svg"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/svg/circheatmap"
 	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
 )
 
-func createLegend(settings types.Settings) types.CircHeatmapLegend {
-	metrics := map[string][]string{
-		"file":              defineFileMetrics(settings),
-		"proteinExpression": settings.ProteinTissues,
-		"rnaExpression":     settings.RnaTissues,
-	}
-
-	elements := createElements(metrics, settings)
+func createLegend(data map[string]map[string]map[string]float64, settings types.Settings) types.CircHeatmapLegend {
+	elements := make([]types.CircHeatmapLegendElement, 0)
+	addFileMetrics(&elements, data, settings)
+	addProteinExpression(&elements, settings.ProteinTissues)
+	addRNAExpression(&elements, settings.RnaTissues)
 
 	writeLegend(elements, settings)
 
 	return elements
 }
 
-func defineFileMetrics(settings types.Settings) []string {
+func addProteinExpression(elements *[]types.CircHeatmapLegendElement, proteinTissues []string) {
+	for _, metric := range proteinTissues {
+		*elements = append(
+			*elements,
+			types.CircHeatmapLegendElement{
+				Attribute: fmt.Sprintf("Protein expression - %s", metric),
+				Color:     "red",
+				Max:       7,
+				Min:       0,
+			},
+		)
+	}
+}
+
+func addRNAExpression(elements *[]types.CircHeatmapLegendElement, rnaTissues []string) {
+	for _, metric := range rnaTissues {
+		*elements = append(
+			*elements,
+			types.CircHeatmapLegendElement{
+				Attribute: fmt.Sprintf("RNA expression - %s", metric),
+				Color:     "green",
+				Max:       50,
+				Min:       0,
+			},
+		)
+	}
+}
+
+func addFileMetrics(elements *[]types.CircHeatmapLegendElement, data map[string]map[string]map[string]float64, settings types.Settings) {
 	metrics := []string{settings.Abundance}
 	metrics = append(metrics, settings.OtherAbundance...)
 
@@ -30,71 +57,46 @@ func defineFileMetrics(settings types.Settings) []string {
 		metrics = append(metrics, "Specificity")
 	}
 
-	return metrics
-}
+	for _, metric := range metrics {
+		metricSettings := types.Settings{
+			AbundanceCap:         settings.AbundanceCap,
+			AbundanceType:        defineValues(data, metric),
+			AutomaticallySetFill: true,
+			MinAbundance:         settings.MinAbundance,
+		}
+		heatmapColor.SetFillLimits(&metricSettings)
+		heatmapColor.AdjustFillColor(&metricSettings)
 
-func createElements(metrics map[string][]string, settings types.Settings) types.CircHeatmapLegend {
-	colorScheme := defineColorScheme(metrics)
-
-	elements := make(types.CircHeatmapLegend, 0)
-	for index, metric := range metrics["file"] {
-		elements = append(
-			elements,
+		*elements = append(
+			*elements,
 			types.CircHeatmapLegendElement{
 				Attribute: metric,
-				Color:     colorScheme("file", index),
-				Max:       settings.AbundanceCap,
-				Min:       settings.MinAbundance,
+				Color:     metricSettings.FillColor,
+				Max:       metricSettings.FillMax,
+				Min:       metricSettings.FillMin,
 			},
 		)
 	}
-
-	for index, metric := range metrics["proteinExpression"] {
-		elements = append(
-			elements,
-			types.CircHeatmapLegendElement{
-				Attribute: fmt.Sprintf("Protein expression - %s", metric),
-				Color:     colorScheme("proteinExpression", index),
-				Max:       7,
-				Min:       0,
-			},
-		)
-	}
-
-	for index, metric := range metrics["rnaExpression"] {
-		elements = append(
-			elements,
-			types.CircHeatmapLegendElement{
-				Attribute: fmt.Sprintf("RNA expression - %s", metric),
-				Color:     colorScheme("rnaExpression", index),
-				Max:       50,
-				Min:       0,
-			},
-		)
-	}
-
-	return elements
 }
 
-func defineColorScheme(metrics map[string][]string) func(string, int) string {
-	if len(metrics["rnaExpression"]) > 0 || len(metrics["proteinExpression"]) > 0 {
-		return func(metricType string, index int) string {
-			if metricType == "proteinExpression" {
-				return "red"
-			}
-			if metricType == "rnaExpression" {
-				return "green"
-			}
-			return "blue"
+func defineValues(data map[string]map[string]map[string]float64, metric string) string {
+	values := make([]float64, 0)
+	for _, conditionData := range data {
+		for _, readoutData := range conditionData {
+			values = append(values, readoutData[metric])
 		}
 	}
-	return func(metricType string, index int) string {
-		colors := []string{"blue", "red", "green", "grey"}
-		if index <= 2 {
-			return colors[index]
-		}
-		return colors[3]
+
+	max := customMath.MaxSliceFloat(values)
+	min := customMath.MinSliceFloat(values)
+
+	if max > 0 && min < 0 {
+		return "bidirectional"
 	}
+	if max <= 0 && min < 0 {
+		return "negative"
+	}
+	return "positive"
 }
 
 func writeLegend(elements types.CircHeatmapLegend, settings types.Settings) {

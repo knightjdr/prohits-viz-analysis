@@ -11,7 +11,7 @@ func Generate(analysis *types.Analysis) {
 
 	idMaps := mapIDs(analysis)
 
-	data := make(map[string]map[string]map[string]float64, 0)
+	data := make(map[string]map[string]map[string]float64)
 	addAbundance(data, analysis)
 	addExpression("protein", data, idMaps, analysis.Settings)
 	addExpression("rna", data, idMaps, analysis.Settings)
@@ -19,7 +19,7 @@ func Generate(analysis *types.Analysis) {
 
 	known := defineKnown(data, idMaps, analysis.Settings)
 
-	legend := createLegend(analysis.Settings)
+	legend := createLegend(data, analysis.Settings)
 
 	plots := createPlotData(data, known, legend, analysis.Settings)
 
