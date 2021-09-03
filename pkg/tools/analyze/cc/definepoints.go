@@ -23,8 +23,8 @@ func createDictOfReadoutsToData(analysis *types.Analysis) (map[string]map[string
 
 	initializeDatum := defineDataInitializer(analysis.Settings.ScoreType, analysis.Settings.SecondaryFilter)
 
-	data := make(map[string]map[string]float64, 0)
-	readoutDict := make(map[string]bool, 0)
+	data := make(map[string]map[string]float64)
+	readoutDict := make(map[string]bool)
 	for _, datum := range analysis.Data {
 		abundance := datum["abundance"]
 		condition := datum["condition"]
