@@ -43,6 +43,40 @@ var _ = Describe("Format specificity data", func() {
 		Expect(formatDataForPlot(data, settings)).To(Equal(expected))
 	})
 
+	It("should format data for plot included negative values", func() {
+		data := map[string]map[string]map[string]float64{
+			"a": {
+				"x": {"abundance": -10, "score": 0.01, "specificity": -0.67},
+				"y": {"abundance": 20, "score": 0.01, "specificity": 2.67},
+			},
+			"b": {
+				"x": {"abundance": -30, "score": 0, "specificity": 6},
+			},
+			"c": {
+				"y": {"abundance": 15, "score": 0.02, "specificity": 1.5},
+				"z": {"abundance": 25, "score": 0.01, "specificity": math.Inf(1)},
+			},
+		}
+		settings := types.Settings{
+			PrimaryFilter: 0.01,
+			ScoreType:     "lte",
+		}
+
+		expected := map[string][]types.ScatterPoint{
+			"a": {
+				{Color: "#dfcd06", Label: "x", X: -10, Y: -0.67},
+				{Color: "#dfcd06", Label: "y", X: 20, Y: 2.67},
+			},
+			"b": {
+				{Color: "#dfcd06", Label: "x", X: -30, Y: 6},
+			},
+			"c": {
+				{Color: "#6e97ff", Label: "z", X: 25, Y: 100},
+			},
+		}
+		Expect(formatDataForPlot(data, settings)).To(Equal(expected))
+	})
+
 	Describe("filter data", func() {
 		It("should return data filtered by score", func() {
 			data := map[string]map[string]map[string]float64{

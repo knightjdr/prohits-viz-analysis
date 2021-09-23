@@ -20,7 +20,7 @@ func Calculate(analysis *types.Analysis) map[string]map[string]map[string]float6
 }
 
 func getAbundanceByReadout(data []map[string]string) (map[string]map[string]map[string]float64, int) {
-	abundanceByReadout := make(map[string]map[string]map[string]float64, 0)
+	abundanceByReadout := make(map[string]map[string]map[string]float64)
 	conditions := make(map[string]bool)
 	for _, datum := range data {
 		abundance := datum["abundance"]
@@ -31,7 +31,7 @@ func getAbundanceByReadout(data []map[string]string) (map[string]map[string]map[
 		conditions[condition] = true
 
 		if _, ok := abundanceByReadout[readout]; !ok {
-			abundanceByReadout[readout] = make(map[string]map[string]float64, 0)
+			abundanceByReadout[readout] = make(map[string]map[string]float64)
 		}
 
 		abundances := make([]float64, 0)
@@ -39,7 +39,7 @@ func getAbundanceByReadout(data []map[string]string) (map[string]map[string]map[
 		for _, strValue := range strings.Split(abundance, "|") {
 			value, _ := strconv.ParseFloat(strValue, 64)
 			abundances = append(abundances, value)
-			if value > 0 {
+			if value != 0 {
 				reproducibility++
 			}
 		}
@@ -91,7 +91,7 @@ func getSpecificityMetric(metric string, noConditions int) func(condition string
 	if metric == "sscore" {
 		return func(condition string, abundanceByCondition map[string]map[string]float64) map[string]float64 {
 			freq := float64(noConditions) / float64(len(abundanceByCondition))
-			adjustedAbundance := freq * abundanceByCondition[condition]["abundance"]
+			adjustedAbundance := freq * math.Abs(abundanceByCondition[condition]["abundance"])
 			return map[string]float64{
 				"abundance":   abundanceByCondition[condition]["abundance"],
 				"score":       abundanceByCondition[condition]["score"],
@@ -103,7 +103,7 @@ func getSpecificityMetric(metric string, noConditions int) func(condition string
 		return func(condition string, abundanceByCondition map[string]map[string]float64) map[string]float64 {
 			freq := float64(noConditions) / float64(len(abundanceByCondition))
 			multiplier := math.Pow(freq, abundanceByCondition[condition]["reproducibility"])
-			adjustedAbundance := multiplier * abundanceByCondition[condition]["abundance"]
+			adjustedAbundance := multiplier * math.Abs(abundanceByCondition[condition]["abundance"])
 			return map[string]float64{
 				"abundance":   abundanceByCondition[condition]["abundance"],
 				"score":       abundanceByCondition[condition]["score"],
@@ -116,7 +116,7 @@ func getSpecificityMetric(metric string, noConditions int) func(condition string
 			values := make([]float64, noConditions)
 			i := 0
 			for _, datum := range abundanceByCondition {
-				values[i] = datum["abundance"]
+				values[i] = math.Abs(datum["abundance"])
 				i++
 			}
 			mean, sd := stat.MeanStdDev(values, nil)
@@ -128,7 +128,7 @@ func getSpecificityMetric(metric string, noConditions int) func(condition string
 			freq := float64(noConditions) / float64(len(abundanceByCondition))
 			weightedFrequency := freq * omega
 			multiplier := math.Pow(weightedFrequency, abundanceByCondition[condition]["reproducibility"])
-			adjustedAbundance := multiplier * abundanceByCondition[condition]["abundance"]
+			adjustedAbundance := multiplier * math.Abs(abundanceByCondition[condition]["abundance"])
 			return map[string]float64{
 				"abundance":   abundanceByCondition[condition]["abundance"],
 				"score":       abundanceByCondition[condition]["score"],
@@ -141,12 +141,12 @@ func getSpecificityMetric(metric string, noConditions int) func(condition string
 		i := 0
 		for key, datum := range abundanceByCondition {
 			if key != condition {
-				values[i] = datum["abundance"]
+				values[i] = math.Abs(datum["abundance"])
 				i++
 			}
 		}
 		mean := stat.Mean(values, nil)
-		specificity := abundanceByCondition[condition]["abundance"] / mean
+		specificity := math.Abs(abundanceByCondition[condition]["abundance"] / mean)
 		return map[string]float64{
 			"abundance":   abundanceByCondition[condition]["abundance"],
 			"score":       abundanceByCondition[condition]["score"],
@@ -156,12 +156,12 @@ func getSpecificityMetric(metric string, noConditions int) func(condition string
 }
 
 func reshapeSpecifictyByCondition(specificity map[string]map[string]map[string]float64) map[string]map[string]map[string]float64 {
-	specificityByCondition := make(map[string]map[string]map[string]float64, 0)
+	specificityByCondition := make(map[string]map[string]map[string]float64)
 
 	for readout, readoutData := range specificity {
 		for condition, conditionData := range readoutData {
 			if _, ok := specificityByCondition[condition]; !ok {
-				specificityByCondition[condition] = make(map[string]map[string]float64, 0)
+				specificityByCondition[condition] = make(map[string]map[string]float64)
 			}
 			specificityByCondition[condition][readout] = conditionData
 		}

@@ -46,7 +46,7 @@ var _ = Describe("Calculate specificity", func() {
 	})
 
 	Describe("get abundance by readout", func() {
-		It("should get abundance and reproducibilty by readout and condition", func() {
+		It("should get abundance and reproducibility by readout and condition", func() {
 			data := []map[string]string{
 				{"condition": "a", "readout": "x", "abundance": "10", "score": "0.01"},
 				{"condition": "a", "readout": "y", "abundance": "20", "score": "0.01"},
@@ -76,7 +76,7 @@ var _ = Describe("Calculate specificity", func() {
 
 		})
 
-		It("should get abundance and reproducibilty by readout and condition with a pipe-separated list", func() {
+		It("should get abundance and reproducibility by readout and condition with a pipe-separated list", func() {
 			data := []map[string]string{
 				{"condition": "a", "readout": "x", "abundance": "10|0", "score": "0.01"},
 				{"condition": "a", "readout": "y", "abundance": "20|2", "score": "0.01"},
@@ -103,6 +103,36 @@ var _ = Describe("Calculate specificity", func() {
 			actualAbundanceByReadout, actualNoCondition := getAbundanceByReadout(data)
 			Expect(actualAbundanceByReadout).To(Equal(expectedAbundanceByReadout), "should return abundance by readout and condition")
 			Expect(actualNoCondition).To(Equal(expectedNoCondition), "should return the number of conditions")
+		})
+
+		It("should handle negative abundances and return by readout and condition", func() {
+			data := []map[string]string{
+				{"condition": "a", "readout": "x", "abundance": "-10", "score": "0.01"},
+				{"condition": "a", "readout": "y", "abundance": "-20", "score": "0.01"},
+				{"condition": "b", "readout": "x", "abundance": "30", "score": "0"},
+				{"condition": "c", "readout": "y", "abundance": "15", "score": "0.02"},
+				{"condition": "c", "readout": "z", "abundance": "25", "score": "0.01"},
+			}
+
+			expectedAbundanceByReadout := map[string]map[string]map[string]float64{
+				"x": {
+					"a": {"abundance": -10, "reproducibility": 1, "score": 0.01},
+					"b": {"abundance": 30, "reproducibility": 1, "score": 0},
+				},
+				"y": {
+					"a": {"abundance": -20, "reproducibility": 1, "score": 0.01},
+					"c": {"abundance": 15, "reproducibility": 1, "score": 0.02},
+				},
+				"z": {
+					"c": {"abundance": 25, "reproducibility": 1, "score": 0.01},
+				},
+			}
+			expectedNoCondition := 3
+
+			actualAbundanceByReadout, actualNoCondition := getAbundanceByReadout(data)
+			Expect(actualAbundanceByReadout).To(Equal(expectedAbundanceByReadout), "should return abundance by readout and condition")
+			Expect(actualNoCondition).To(Equal(expectedNoCondition), "should return the number of conditions")
+
 		})
 	})
 
@@ -144,6 +174,18 @@ var _ = Describe("Calculate specificity", func() {
 					"d": {"abundance": 50},
 				},
 			},
+			{
+				condition: "a",
+				values: map[string]map[string]float64{
+					"a": {
+						"abundance":       -100,
+						"reproducibility": 2,
+						"score":           0.01,
+					},
+					"b": {"abundance": 20},
+					"d": {"abundance": -50},
+				},
+			},
 		}
 
 		It("should calculate specificity as fe (fold enrichment) when none supplied", func() {
@@ -154,6 +196,7 @@ var _ = Describe("Calculate specificity", func() {
 				{"abundance": 10, "score": 0.01, "specificity": math.Inf(1)},
 				{"abundance": 10, "score": 0.01, "specificity": 0.3},
 				{"abundance": 100, "score": 0.01, "specificity": 4.29},
+				{"abundance": -100, "score": 0.01, "specificity": 4.29},
 			}
 			for i, test := range tests {
 				Expect(definespecificity(test.condition, test.values)).To(Equal(expected[i]))
@@ -168,6 +211,7 @@ var _ = Describe("Calculate specificity", func() {
 				{"abundance": 10, "score": 0.01, "specificity": math.Inf(1)},
 				{"abundance": 10, "score": 0.01, "specificity": 0.3},
 				{"abundance": 100, "score": 0.01, "specificity": 4.29},
+				{"abundance": -100, "score": 0.01, "specificity": 4.29},
 			}
 			for i, test := range tests {
 				Expect(definespecificity(test.condition, test.values)).To(Equal(expected[i]))
@@ -182,6 +226,7 @@ var _ = Describe("Calculate specificity", func() {
 				{"abundance": 10, "score": 0.01, "specificity": 1.5},
 				{"abundance": 10, "score": 0.01, "specificity": -1.02},
 				{"abundance": 100, "score": 0.01, "specificity": 1.32},
+				{"abundance": -100, "score": 0.01, "specificity": -1.26},
 			}
 			for i, test := range tests {
 				Expect(definespecificity(test.condition, test.values)).To(Equal(expected[i]))
@@ -196,6 +241,7 @@ var _ = Describe("Calculate specificity", func() {
 				{"abundance": 10, "score": 0.01, "specificity": 6.32},
 				{"abundance": 10, "score": 0.01, "specificity": 3.16},
 				{"abundance": 100, "score": 0.01, "specificity": 11.55},
+				{"abundance": -100, "score": 0.01, "specificity": 11.55},
 			}
 			for i, test := range tests {
 				Expect(definespecificity(test.condition, test.values)).To(Equal(expected[i]))
@@ -210,6 +256,7 @@ var _ = Describe("Calculate specificity", func() {
 				{"abundance": 10, "score": 0.01, "specificity": 12.65},
 				{"abundance": 10, "score": 0.01, "specificity": 3.16},
 				{"abundance": 100, "score": 0.01, "specificity": 13.33},
+				{"abundance": -100, "score": 0.01, "specificity": 13.33},
 			}
 			for i, test := range tests {
 				Expect(definespecificity(test.condition, test.values)).To(Equal(expected[i]))
@@ -224,6 +271,7 @@ var _ = Describe("Calculate specificity", func() {
 				{"abundance": 10, "score": 0.01, "specificity": 25.30},
 				{"abundance": 10, "score": 0.01, "specificity": 3.16},
 				{"abundance": 100, "score": 0.01, "specificity": 13.64},
+				{"abundance": -100, "score": 0.01, "specificity": 13.64},
 			}
 			for i, test := range tests {
 				Expect(definespecificity(test.condition, test.values)).To(Equal(expected[i]))
