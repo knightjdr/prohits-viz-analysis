@@ -10,12 +10,37 @@ import (
 
 // Scatter plot properties
 type Scatter struct {
+	Axes     Axes
 	LogBase  string
 	Plot     []types.ScatterPoint
 	PlotSize float64 // Height/width in pixels
 	Ticks    Ticks
 	XLabel   string
 	YLabel   string
+}
+
+type boundaries struct {
+	x boundary
+	y boundary
+}
+
+type boundary struct {
+	max float64
+	min float64
+}
+
+// Axes lines
+type Axes struct {
+	X Line
+	Y Line
+}
+
+// Line for scatterplot
+type Line struct {
+	X1 float64
+	X2 float64
+	Y1 float64
+	Y2 float64
 }
 
 // Ticks for axes
