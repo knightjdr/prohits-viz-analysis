@@ -35,8 +35,15 @@ var _ = Describe("Draw", func() {
 			"\t<rect width=\"100%\" height=\"100%\" fill=\"white\" />\n" +
 			"\t<g transform=\"translate(0 50)\">\n" +
 			"\t\t<g transform=\"translate(100 0)\">\n" +
-			"\t\t\t<circle cx=\"50\" cy=\"0\" fill=\"#ff0000\" r=\"4\"><title>point1</title></circle>\n" +
-			"\t\t\t<circle cx=\"85\" cy=\"66.67\" fill=\"#00ff00\" r=\"4\"><title>point2</title></circle>\n" +
+			"\t\t\t<defs>\n" +
+			"\t\t\t\t<clipPath id=\"plot_points_clip\">\n" +
+			"\t\t\t\t\t<rect height=\"100\" width=\"100\" x=\"0\" y=\"0\" />\n" +
+			"\t\t\t\t</clipPath>\n" +
+			"\t\t\t</defs>\n" +
+			"\t\t\t<g clip-path=\"url(#plot_points_clip)\">\n" +
+			"\t\t\t\t<circle cx=\"50\" cy=\"0\" fill=\"#ff0000\" r=\"4\"><title>point1</title></circle>\n" +
+			"\t\t\t\t<circle cx=\"85\" cy=\"66.67\" fill=\"#00ff00\" r=\"4\"><title>point2</title></circle>\n" +
+			"\t\t\t</g>\n" +
 			"\t\t</g>\n" +
 			"\t\t<g>\n" +
 			"\t\t\t<g transform=\"translate(100 0)\">\n" +
