@@ -146,7 +146,10 @@ func getSpecificityMetric(metric string, noConditions int) func(condition string
 			}
 		}
 		mean := stat.Mean(values, nil)
-		specificity := math.Abs(abundanceByCondition[condition]["abundance"] / mean)
+		specificity := float64(0)
+		if math.Abs(abundanceByCondition[condition]["abundance"]) > 0 {
+			specificity = math.Abs(abundanceByCondition[condition]["abundance"] / mean)
+		}
 		return map[string]float64{
 			"abundance":   abundanceByCondition[condition]["abundance"],
 			"score":       abundanceByCondition[condition]["score"],
