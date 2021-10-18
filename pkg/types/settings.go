@@ -30,6 +30,7 @@ type CircHeatmapLegend []CircHeatmapLegendElement
 type CircHeatmapLegendElement struct {
 	Attribute string  `json:"attribute"`
 	Color     string  `json:"color"`
+	Filter    float64 `json:"filter"`
 	Max       float64 `json:"max"`
 	Min       float64 `json:"min"`
 }

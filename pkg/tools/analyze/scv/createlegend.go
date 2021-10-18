@@ -2,6 +2,7 @@ package scv
 
 import (
 	"fmt"
+	"math"
 
 	heatmapColor "github.com/knightjdr/prohits-viz-analysis/pkg/heatmap/color"
 	customMath "github.com/knightjdr/prohits-viz-analysis/pkg/math"
@@ -28,6 +29,7 @@ func addProteinExpression(elements *[]types.CircHeatmapLegendElement, proteinTis
 			types.CircHeatmapLegendElement{
 				Attribute: fmt.Sprintf("Protein expression - %s", metric),
 				Color:     "red",
+				Filter:    0,
 				Max:       7,
 				Min:       0,
 			},
@@ -42,6 +44,7 @@ func addRNAExpression(elements *[]types.CircHeatmapLegendElement, rnaTissues []s
 			types.CircHeatmapLegendElement{
 				Attribute: fmt.Sprintf("RNA expression - %s", metric),
 				Color:     "green",
+				Filter:    0,
 				Max:       50,
 				Min:       0,
 			},
@@ -58,11 +61,16 @@ func addFileMetrics(elements *[]types.CircHeatmapLegendElement, data map[string]
 	}
 
 	for _, metric := range metrics {
+		minAbundance := settings.MinAbundance
+		if metric == "Specificity" {
+			minAbundance = 0
+		}
+
 		metricSettings := types.Settings{
 			AbundanceCap:         settings.AbundanceCap,
 			AbundanceType:        defineValues(data, metric),
 			AutomaticallySetFill: true,
-			MinAbundance:         settings.MinAbundance,
+			MinAbundance:         minAbundance,
 		}
 		heatmapColor.SetFillLimits(&metricSettings)
 		heatmapColor.AdjustFillColor(&metricSettings)
@@ -72,6 +80,7 @@ func addFileMetrics(elements *[]types.CircHeatmapLegendElement, data map[string]
 			types.CircHeatmapLegendElement{
 				Attribute: metric,
 				Color:     metricSettings.FillColor,
+				Filter:    math.Abs(minAbundance),
 				Max:       metricSettings.FillMax,
 				Min:       metricSettings.FillMin,
 			},

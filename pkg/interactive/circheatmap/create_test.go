@@ -19,7 +19,7 @@ var _ = Describe("Create file for scv", func() {
 		data := &Data{
 			Filename: "test/scv.json",
 			Legend: types.CircHeatmapLegend{
-				{Attribute: "abundance", Color: "blue", Max: 50, Min: 0},
+				{Attribute: "abundance", Color: "blue", Filter: 0, Max: 50, Min: 0},
 			},
 			Parameters: types.Settings{
 				Abundance:     "AvgSpec",
@@ -59,7 +59,7 @@ var _ = Describe("Create file for scv", func() {
 		}
 
 		expected := "{\n" +
-			"\t\"circles\": {\"order\": [{\"attribute\":\"abundance\",\"color\":\"blue\",\"max\":50,\"min\":0}]},\n" +
+			"\t\"circles\": {\"order\": [{\"attribute\":\"abundance\",\"color\":\"blue\",\"filter\":0,\"max\":50,\"min\":0}]},\n" +
 			"\t\"parameters\": {\"abundanceColumn\":\"AvgSpec\",\"analysisType\":\"scv\",\"conditionColumn\":\"Bait\",\"controlColumn\":\"ctrl\",\"files\":[\"file1\",\"file2\"],\"imageType\":\"circheatmap\",\"normalization\":\"total\",\"readoutColumn\":\"Prey\",\"scoreColumn\":\"bfdr\",\"scoreType\":\"lte\"},\n" +
 			"\t\"settings\": {\"sortByKnown\":true},\n" +
 			"\t\"plots\": [{\"name\":\"conditionA\",\"readouts\":[{\"known\":true,\"label\":\"readoutX\",\"segments\":{\"attribute1\":1.00}},{\"known\":false,\"label\":\"readoutY\",\"segments\":{\"attribute1\":4.00}}]}]\n" +

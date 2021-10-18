@@ -46,6 +46,7 @@ var _ = Describe("Create scv legend", func() {
 		settings := types.Settings{
 			Abundance:      "Abundance",
 			AbundanceCap:   50,
+			MinAbundance:   2,
 			OtherAbundance: []string{"LogFoldChange"},
 			ProteinTissues: []string{"U2OS"},
 			RnaTissues:     []string{"HEK-293", "HeLa"},
@@ -53,12 +54,48 @@ var _ = Describe("Create scv legend", func() {
 		}
 
 		expectedElements := types.CircHeatmapLegend{
-			{Attribute: "Abundance", Color: "blue", Max: 50, Min: 0},
-			{Attribute: "LogFoldChange", Color: "blueRed", Max: 50, Min: -50},
-			{Attribute: "Specificity", Color: "blue", Max: 50, Min: 0},
-			{Attribute: "Protein expression - U2OS", Color: "red", Max: 7, Min: 0},
-			{Attribute: "RNA expression - HEK-293", Color: "green", Max: 50, Min: 0},
-			{Attribute: "RNA expression - HeLa", Color: "green", Max: 50, Min: 0},
+			{
+				Attribute: "Abundance",
+				Color:     "blue",
+				Filter:    2,
+				Max:       50,
+				Min:       2,
+			},
+			{
+				Attribute: "LogFoldChange",
+				Color:     "blueRed",
+				Filter:    2,
+				Max:       50,
+				Min:       -50,
+			},
+			{
+				Attribute: "Specificity",
+				Color:     "blue",
+				Filter:    0,
+				Max:       50,
+				Min:       0,
+			},
+			{
+				Attribute: "Protein expression - U2OS",
+				Color:     "red",
+				Filter:    0,
+				Max:       7,
+				Min:       0,
+			},
+			{
+				Attribute: "RNA expression - HEK-293",
+				Color:     "green",
+				Filter:    0,
+				Max:       50,
+				Min:       0,
+			},
+			{
+				Attribute: "RNA expression - HeLa",
+				Color:     "green",
+				Filter:    0,
+				Max:       50,
+				Min:       0,
+			},
 		}
 
 		actualElements := createLegend(data, settings)

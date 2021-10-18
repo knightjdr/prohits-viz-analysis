@@ -65,6 +65,7 @@ var _ = Describe("Create interactive file for SCV", func() {
 			Control:       "ctrl",
 			Files:         []string{"file1", "file2"},
 			Known:         "interaction",
+			MinAbundance:  0,
 			Normalization: "total",
 			Readout:       "Prey",
 			Score:         "bfdr",
@@ -73,7 +74,7 @@ var _ = Describe("Create interactive file for SCV", func() {
 		}
 
 		expected := "{\n" +
-			"\t\"circles\": {\"order\": [{\"attribute\":\"abundance\",\"color\":\"blue\",\"max\":50,\"min\":0}]},\n" +
+			"\t\"circles\": {\"order\": [{\"attribute\":\"abundance\",\"color\":\"blue\",\"filter\":0,\"max\":50,\"min\":0}]},\n" +
 			"\t\"parameters\": {\"abundanceColumn\":\"AvgSpec\",\"analysisType\":\"scv\",\"conditionColumn\":\"Bait\",\"controlColumn\":\"ctrl\",\"files\":[\"file1\",\"file2\"],\"imageType\":\"circheatmap\",\"normalization\":\"total\",\"readoutColumn\":\"Prey\",\"scoreColumn\":\"bfdr\",\"scoreType\":\"lte\"},\n" +
 			"\t\"settings\": {\"sortByKnown\":true},\n" +
 			"\t\"plots\": [{\"name\":\"conditionA\",\"readouts\":[{\"known\":true,\"label\":\"readoutX\",\"segments\":{\"abundance\":1.00}},{\"known\":false,\"label\":\"readoutY\",\"segments\":{\"abundance\":4.00}}]},{\"name\":\"conditionB\",\"readouts\":[{\"known\":true,\"label\":\"readoutY\",\"segments\":{\"abundance\":2.00}},{\"known\":false,\"label\":\"readoutZ\",\"segments\":{\"abundance\":6.00}}]}]\n" +
@@ -141,6 +142,7 @@ var _ = Describe("Create interactive file for SCV", func() {
 			Control:       "ctrl",
 			Files:         []string{"file1", "file2"},
 			Known:         "",
+			MinAbundance:  0,
 			Normalization: "total",
 			Readout:       "Prey",
 			Score:         "bfdr",
@@ -149,7 +151,7 @@ var _ = Describe("Create interactive file for SCV", func() {
 		}
 
 		expected := "{\n" +
-			"\t\"circles\": {\"order\": [{\"attribute\":\"abundance\",\"color\":\"blue\",\"max\":50,\"min\":0}]},\n" +
+			"\t\"circles\": {\"order\": [{\"attribute\":\"abundance\",\"color\":\"blue\",\"filter\":0,\"max\":50,\"min\":0}]},\n" +
 			"\t\"parameters\": {\"abundanceColumn\":\"AvgSpec\",\"analysisType\":\"scv\",\"conditionColumn\":\"Bait\",\"controlColumn\":\"ctrl\",\"files\":[\"file1\",\"file2\"],\"imageType\":\"circheatmap\",\"normalization\":\"total\",\"readoutColumn\":\"Prey\",\"scoreColumn\":\"bfdr\",\"scoreType\":\"lte\"},\n" +
 			"\t\"settings\": {\"sortByKnown\":false},\n" +
 			"\t\"plots\": [{\"name\":\"conditionA\",\"readouts\":[{\"known\":false,\"label\":\"readoutY\",\"segments\":{\"abundance\":4.00}},{\"known\":false,\"label\":\"readoutX\",\"segments\":{\"abundance\":1.00}}]},{\"name\":\"conditionB\",\"readouts\":[{\"known\":false,\"label\":\"readoutZ\",\"segments\":{\"abundance\":6.00}},{\"known\":false,\"label\":\"readoutY\",\"segments\":{\"abundance\":2.00}}]}]\n" +
