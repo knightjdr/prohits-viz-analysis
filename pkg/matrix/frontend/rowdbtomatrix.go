@@ -1,7 +1,10 @@
 // Package frontend creates matrices from frontend format.
 package frontend
 
-import "github.com/knightjdr/prohits-viz-analysis/pkg/types"
+import (
+	customMath "github.com/knightjdr/prohits-viz-analysis/pkg/math"
+	"github.com/knightjdr/prohits-viz-analysis/pkg/types"
+)
 
 // Row contains heatmap row information.
 type Row struct {
@@ -31,7 +34,7 @@ func CreateHeatmapMatrix(db []Row, order map[string][]int) [][]float64 {
 }
 
 // CreateDotplotMatrices from row database.
-func CreateDotplotMatrices(db []Row, order map[string][]int) *types.Matrices {
+func CreateDotplotMatrices(db []Row, order map[string][]int, resetRatios bool) *types.Matrices {
 	matrices := &types.Matrices{
 		Abundance: make([][]float64, len(order["rows"])),
 		Ratio:     make([][]float64, len(order["rows"])),
@@ -46,6 +49,13 @@ func CreateDotplotMatrices(db []Row, order map[string][]int) *types.Matrices {
 			matrices.Abundance[i][j] = db[rowIndex].Data[columnIndex].Value
 			matrices.Ratio[i][j] = db[rowIndex].Data[columnIndex].Ratio
 			matrices.Score[i][j] = db[rowIndex].Data[columnIndex].Score
+		}
+
+		if resetRatios {
+			maxAbundance := customMath.MaxSliceFloat(matrices.Abundance[i])
+			for j, abundance := range matrices.Abundance[i] {
+				matrices.Ratio[i][j] = customMath.Round(abundance/maxAbundance, 0.01)
+			}
 		}
 	}
 

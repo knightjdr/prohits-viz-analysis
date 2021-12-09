@@ -19,7 +19,7 @@ type Settings struct {
 func Export(filename string, settings Settings) {
 	data := heatmap.ReadJSON(filename)
 
-	matrices := frontend.CreateDotplotMatrices(data.RowDB, map[string][]int{"columns": data.ColumnOrder, "rows": data.RowOrder})
+	matrices := frontend.CreateDotplotMatrices(data.RowDB, map[string][]int{"columns": data.ColumnOrder, "rows": data.RowOrder}, data.Settings.ResetRatios)
 	matrices.Conditions = frontend.GetColumnNames(data.ColumnDB, data.ColumnOrder)
 	matrices.Readouts = frontend.GetRowNames(data.RowDB, data.RowOrder)
 

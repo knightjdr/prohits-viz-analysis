@@ -13,5 +13,5 @@ func createMatrices(data *minimap) *types.Matrices {
 		}
 	}
 
-	return frontend.CreateDotplotMatrices(data.RowDB, map[string][]int{"columns": data.ColumnOrder, "rows": data.RowOrder})
+	return frontend.CreateDotplotMatrices(data.RowDB, map[string][]int{"columns": data.ColumnOrder, "rows": data.RowOrder}, data.Settings.ResetRatios)
 }

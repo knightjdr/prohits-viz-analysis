@@ -24,7 +24,7 @@ var _ = Describe("Create SVG", func() {
 			Markers: types.Markers{
 				Color: "#000000",
 				List: map[string]types.Marker{
-					"a": types.Marker{Height: 1, Width: 2, X: 0.25, Y: 0.5},
+					"a": {Height: 1, Width: 2, X: 0.25, Y: 0.5},
 				},
 			},
 			Settings: types.Settings{

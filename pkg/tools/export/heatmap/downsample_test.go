@@ -19,7 +19,7 @@ var _ = Describe("Downsample", func() {
 			Markers: types.Markers{
 				Color: "#000000",
 				List: map[string]types.Marker{
-					"a": types.Marker{Height: 3, Width: 4, X: 0.25, Y: 0.5},
+					"a": {Height: 3, Width: 4, X: 0.25, Y: 0.5},
 				},
 			},
 		}
@@ -44,7 +44,7 @@ var _ = Describe("Downsample", func() {
 			Markers: types.Markers{
 				Color: "#000000",
 				List: map[string]types.Marker{
-					"a": types.Marker{Height: 3, Width: 4, X: 0.25, Y: 0.5},
+					"a": {Height: 3, Width: 4, X: 0.25, Y: 0.5},
 				},
 			},
 		}
@@ -74,7 +74,7 @@ var _ = Describe("Downsample", func() {
 			Markers: types.Markers{
 				Color: "#000000",
 				List: map[string]types.Marker{
-					"a": types.Marker{Height: 3, Width: 4, X: 0.25, Y: 0.5},
+					"a": {Height: 3, Width: 4, X: 0.25, Y: 0.5},
 				},
 			},
 		}
@@ -99,7 +99,7 @@ var _ = Describe("Downsample", func() {
 			Markers: types.Markers{
 				Color: "#000000",
 				List: map[string]types.Marker{
-					"a": types.Marker{Height: 2, Width: 2, X: 0.125, Y: 0.25},
+					"a": {Height: 2, Width: 2, X: 0.125, Y: 0.25},
 				},
 			},
 		}

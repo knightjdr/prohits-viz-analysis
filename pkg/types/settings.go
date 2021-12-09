@@ -126,6 +126,7 @@ type Settings struct {
 	RatioDimension      string
 	ReadoutClustering   string
 	ReadoutList         []string
+	ResetRatios         bool
 	XLabel              string
 	YLabel              string
 	WriteDistance       bool
