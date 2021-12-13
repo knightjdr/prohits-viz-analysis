@@ -34,6 +34,29 @@ var _ = Describe("Read csv file to map", func() {
 	})
 })
 
+var _ = Describe("Read csv file to a map of slices", func() {
+	It("should read a two-column csv file to a map", func() {
+		oldFs := fs.Instance
+		defer func() { fs.Instance = oldFs }()
+		fs.Instance = afero.NewMemMapFs()
+
+		csvText := "A\t1\n" +
+			"B\t2\n" +
+			"B\t3\n" +
+			"C\t3\n"
+		fs.Instance.MkdirAll("test", 0755)
+		afero.WriteFile(fs.Instance, "test/csv.txt", []byte(csvText), 0444)
+
+		expected := map[string][]string{
+			"A": {"1"},
+			"B": {"2", "3"},
+			"C": {"3"},
+		}
+
+		Expect(ReadToSliceMap("test/csv.txt", '\t')).To(Equal(expected))
+	})
+})
+
 var _ = Describe("Read csv file to slice via header", func() {
 	It("should read a csv file using a header for mapping to keys", func() {
 		oldFs := fs.Instance
