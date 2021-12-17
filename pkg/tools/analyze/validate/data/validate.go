@@ -24,6 +24,9 @@ func Validate(analysis *types.Analysis, toValidate []string) {
 	if slice.ContainsString("data", toValidate) {
 		addError(&errs, confirmParsedData(analysis.Data))
 	}
+	if slice.ContainsString("header", toValidate) {
+		addError(&errs, checkForDuplicateHeader(analysis.Data, analysis.Settings))
+	}
 	if slice.ContainsString("minConditions", toValidate) {
 		addError(&errs, confirmMinimumConditions(analysis.Data, analysis.Settings.Type))
 	}

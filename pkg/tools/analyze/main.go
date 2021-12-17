@@ -20,7 +20,7 @@ func Run() {
 	analysis := arguments.Parse()
 
 	parser.Read(analysis, false)
-	data.Validate(analysis, []string{"readoutLength"})
+	data.Validate(analysis, []string{"header", "readoutLength"})
 	transform.Abundance(analysis)
 	filter.Process(analysis)
 	data.Validate(

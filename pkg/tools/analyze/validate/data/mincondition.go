@@ -27,7 +27,7 @@ func getMinimumRequiredConditions(analysisType string) int {
 }
 
 func countUniqueConditions(data []map[string]string, minimumRequiredConditions int) int {
-	conditions := make(map[string]bool, 0)
+	conditions := make(map[string]bool)
 
 	for _, row := range data {
 		condition := row["condition"]
